@@ -1,0 +1,350 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		184C295A1569E19900852B35 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 184C29591569E19900852B35 /* UIKit.framework */; };
+		184C295C1569E19900852B35 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 184C295B1569E19900852B35 /* Foundation.framework */; };
+		184C295E1569E19900852B35 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 184C295D1569E19900852B35 /* CoreGraphics.framework */; };
+		184C29641569E19900852B35 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 184C29621569E19900852B35 /* InfoPlist.strings */; };
+		184C29661569E19900852B35 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C29651569E19900852B35 /* main.m */; };
+		184C296A1569E19900852B35 /* EZAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C29691569E19900852B35 /* EZAppDelegate.m */; };
+		184C296D1569E19900852B35 /* EZRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C296C1569E19900852B35 /* EZRootViewController.m */; };
+		184C29701569E19900852B35 /* EZDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C296F1569E19900852B35 /* EZDataViewController.m */; };
+		184C29731569E19900852B35 /* EZModelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C29721569E19900852B35 /* EZModelController.m */; };
+		184C29761569E19900852B35 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 184C29741569E19900852B35 /* MainStoryboard.storyboard */; };
+		184C297F1569E71A00852B35 /* EZTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C297E1569E71A00852B35 /* EZTask.m */; };
+		184C29821569EE5900852B35 /* EZTaskScheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C29811569EE5900852B35 /* EZTaskScheduler.m */; };
+		184C29851569EF8900852B35 /* EZScheduledTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C29841569EF8900852B35 /* EZScheduledTask.m */; };
+		184C2988156A162100852B35 /* EZAvailableTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2987156A162100852B35 /* EZAvailableTime.m */; };
+		184C298D156A27B600852B35 /* EZTaskStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C298C156A27B600852B35 /* EZTaskStore.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		184C29551569E19900852B35 /* SqueezitProto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SqueezitProto.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		184C29591569E19900852B35 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		184C295B1569E19900852B35 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		184C295D1569E19900852B35 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		184C29611569E19900852B35 /* SqueezitProto-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SqueezitProto-Info.plist"; sourceTree = "<group>"; };
+		184C29631569E19900852B35 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		184C29651569E19900852B35 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		184C29671569E19900852B35 /* SqueezitProto-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SqueezitProto-Prefix.pch"; sourceTree = "<group>"; };
+		184C29681569E19900852B35 /* EZAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EZAppDelegate.h; sourceTree = "<group>"; };
+		184C29691569E19900852B35 /* EZAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EZAppDelegate.m; sourceTree = "<group>"; };
+		184C296B1569E19900852B35 /* EZRootViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EZRootViewController.h; sourceTree = "<group>"; };
+		184C296C1569E19900852B35 /* EZRootViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EZRootViewController.m; sourceTree = "<group>"; };
+		184C296E1569E19900852B35 /* EZDataViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EZDataViewController.h; sourceTree = "<group>"; };
+		184C296F1569E19900852B35 /* EZDataViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EZDataViewController.m; sourceTree = "<group>"; };
+		184C29711569E19900852B35 /* EZModelController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EZModelController.h; sourceTree = "<group>"; };
+		184C29721569E19900852B35 /* EZModelController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EZModelController.m; sourceTree = "<group>"; };
+		184C29751569E19900852B35 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
+		184C297D1569E71A00852B35 /* EZTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTask.h; sourceTree = "<group>"; };
+		184C297E1569E71A00852B35 /* EZTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTask.m; sourceTree = "<group>"; };
+		184C29801569EE5900852B35 /* EZTaskScheduler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTaskScheduler.h; sourceTree = "<group>"; };
+		184C29811569EE5900852B35 /* EZTaskScheduler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTaskScheduler.m; sourceTree = "<group>"; };
+		184C29831569EF8900852B35 /* EZScheduledTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZScheduledTask.h; sourceTree = "<group>"; };
+		184C29841569EF8900852B35 /* EZScheduledTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZScheduledTask.m; sourceTree = "<group>"; };
+		184C2986156A162100852B35 /* EZAvailableTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAvailableTime.h; sourceTree = "<group>"; };
+		184C2987156A162100852B35 /* EZAvailableTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAvailableTime.m; sourceTree = "<group>"; };
+		184C298A156A175800852B35 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		184C298B156A27B600852B35 /* EZTaskStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTaskStore.h; sourceTree = "<group>"; };
+		184C298C156A27B600852B35 /* EZTaskStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTaskStore.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		184C29521569E19900852B35 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				184C295A1569E19900852B35 /* UIKit.framework in Frameworks */,
+				184C295C1569E19900852B35 /* Foundation.framework in Frameworks */,
+				184C295E1569E19900852B35 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		184C294A1569E19800852B35 = {
+			isa = PBXGroup;
+			children = (
+				184C295F1569E19900852B35 /* SqueezitProto */,
+				184C29581569E19900852B35 /* Frameworks */,
+				184C29561569E19900852B35 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		184C29561569E19900852B35 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				184C29551569E19900852B35 /* SqueezitProto.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		184C29581569E19900852B35 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				184C29591569E19900852B35 /* UIKit.framework */,
+				184C295B1569E19900852B35 /* Foundation.framework */,
+				184C295D1569E19900852B35 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		184C295F1569E19900852B35 /* SqueezitProto */ = {
+			isa = PBXGroup;
+			children = (
+				184C298E156A296F00852B35 /* Utility */,
+				184C2989156A172D00852B35 /* Constants */,
+				184C297C1569E6D800852B35 /* Task objects */,
+				184C29681569E19900852B35 /* EZAppDelegate.h */,
+				184C29691569E19900852B35 /* EZAppDelegate.m */,
+				184C296B1569E19900852B35 /* EZRootViewController.h */,
+				184C296C1569E19900852B35 /* EZRootViewController.m */,
+				184C296E1569E19900852B35 /* EZDataViewController.h */,
+				184C296F1569E19900852B35 /* EZDataViewController.m */,
+				184C29711569E19900852B35 /* EZModelController.h */,
+				184C29721569E19900852B35 /* EZModelController.m */,
+				184C29741569E19900852B35 /* MainStoryboard.storyboard */,
+				184C29601569E19900852B35 /* Supporting Files */,
+			);
+			path = SqueezitProto;
+			sourceTree = "<group>";
+		};
+		184C29601569E19900852B35 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				184C29611569E19900852B35 /* SqueezitProto-Info.plist */,
+				184C29621569E19900852B35 /* InfoPlist.strings */,
+				184C29651569E19900852B35 /* main.m */,
+				184C29671569E19900852B35 /* SqueezitProto-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		184C297C1569E6D800852B35 /* Task objects */ = {
+			isa = PBXGroup;
+			children = (
+				184C297D1569E71A00852B35 /* EZTask.h */,
+				184C297E1569E71A00852B35 /* EZTask.m */,
+				184C29801569EE5900852B35 /* EZTaskScheduler.h */,
+				184C29811569EE5900852B35 /* EZTaskScheduler.m */,
+				184C29831569EF8900852B35 /* EZScheduledTask.h */,
+				184C29841569EF8900852B35 /* EZScheduledTask.m */,
+				184C2986156A162100852B35 /* EZAvailableTime.h */,
+				184C2987156A162100852B35 /* EZAvailableTime.m */,
+				184C298B156A27B600852B35 /* EZTaskStore.h */,
+				184C298C156A27B600852B35 /* EZTaskStore.m */,
+			);
+			name = "Task objects";
+			sourceTree = "<group>";
+		};
+		184C2989156A172D00852B35 /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				184C298A156A175800852B35 /* Constants.h */,
+			);
+			name = Constants;
+			sourceTree = "<group>";
+		};
+		184C298E156A296F00852B35 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Utility;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		184C29541569E19900852B35 /* SqueezitProto */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 184C29791569E19900852B35 /* Build configuration list for PBXNativeTarget "SqueezitProto" */;
+			buildPhases = (
+				184C29511569E19900852B35 /* Sources */,
+				184C29521569E19900852B35 /* Frameworks */,
+				184C29531569E19900852B35 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SqueezitProto;
+			productName = SqueezitProto;
+			productReference = 184C29551569E19900852B35 /* SqueezitProto.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		184C294C1569E19800852B35 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = EZ;
+				LastUpgradeCheck = 0430;
+			};
+			buildConfigurationList = 184C294F1569E19800852B35 /* Build configuration list for PBXProject "SqueezitProto" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 184C294A1569E19800852B35;
+			productRefGroup = 184C29561569E19900852B35 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				184C29541569E19900852B35 /* SqueezitProto */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		184C29531569E19900852B35 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				184C29641569E19900852B35 /* InfoPlist.strings in Resources */,
+				184C29761569E19900852B35 /* MainStoryboard.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		184C29511569E19900852B35 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				184C29661569E19900852B35 /* main.m in Sources */,
+				184C296A1569E19900852B35 /* EZAppDelegate.m in Sources */,
+				184C296D1569E19900852B35 /* EZRootViewController.m in Sources */,
+				184C29701569E19900852B35 /* EZDataViewController.m in Sources */,
+				184C29731569E19900852B35 /* EZModelController.m in Sources */,
+				184C297F1569E71A00852B35 /* EZTask.m in Sources */,
+				184C29821569EE5900852B35 /* EZTaskScheduler.m in Sources */,
+				184C29851569EF8900852B35 /* EZScheduledTask.m in Sources */,
+				184C2988156A162100852B35 /* EZAvailableTime.m in Sources */,
+				184C298D156A27B600852B35 /* EZTaskStore.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		184C29621569E19900852B35 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				184C29631569E19900852B35 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		184C29741569E19900852B35 /* MainStoryboard.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				184C29751569E19900852B35 /* en */,
+			);
+			name = MainStoryboard.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		184C29771569E19900852B35 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		184C29781569E19900852B35 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		184C297A1569E19900852B35 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SqueezitProto/SqueezitProto-Prefix.pch";
+				INFOPLIST_FILE = "SqueezitProto/SqueezitProto-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		184C297B1569E19900852B35 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SqueezitProto/SqueezitProto-Prefix.pch";
+				INFOPLIST_FILE = "SqueezitProto/SqueezitProto-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		184C294F1569E19800852B35 /* Build configuration list for PBXProject "SqueezitProto" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				184C29771569E19900852B35 /* Debug */,
+				184C29781569E19900852B35 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		184C29791569E19900852B35 /* Build configuration list for PBXNativeTarget "SqueezitProto" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				184C297A1569E19900852B35 /* Debug */,
+				184C297B1569E19900852B35 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 184C294C1569E19800852B35 /* Project object */;
+}
