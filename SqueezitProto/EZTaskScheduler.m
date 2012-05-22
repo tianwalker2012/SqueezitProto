@@ -15,7 +15,9 @@
 
 @interface EZTaskScheduler(private)
 
-- (EZScheduledTask*) getTaskFromList:(NSArray*)tasks timeSlot:(EZAvailableTime*)timeSlot exclusiveList:(NSArray*)exclusive;
+- (EZScheduledTask*) getTaskFromList:(NSArray*)tasks timeSlot:(EZAvailableTime*)timeSlot;
+
+- (NSMutableArray*) tasksRemovedExclusive:(NSArray*)tasks exclusiveList:(NSArray*)exclusive;
 
 - (BOOL) contain:(NSArray*)list object:(id)obj;
 
@@ -35,24 +37,41 @@
 // It turn out 2 places to determine what inside the exclusive list.
 // Within this method, I have to increase the exclusive list as task get selected.
 // 
-- (NSArray*) scheduleTaskByBulk:(EZAvailableTime*)timeSlot exclusiveList:(NSArray*)exclusive
+- (NSArray*) scheduleTaskByBulk:(EZAvailableTime*)timeSlot exclusiveList:(NSArray*)exclusive tasks:(NSArray*)tasks
 {
     NSMutableArray* res = [[NSMutableArray alloc] init];
-    NSMutableArray* exclusiveMut = [[NSMutableArray alloc] initWithArray:exclusive];
+    //NSMutableArray* exclusiveMut = [[NSMutableArray alloc] initWithArray:exclusive];
     EZAvailableTime* timeSlotMut = [[EZAvailableTime alloc] init:timeSlot];
-    NSArray* tasks = [EZTaskStore getTasks:timeSlot.environmentTraits];
     //Tasks should be available for this time slot.
     NSLog(@"Tasks count:%i",[tasks count]);
+    NSMutableArray* tasksMut = [self tasksRemovedExclusive:tasks exclusiveList:exclusive];
+    
     while(true){
-        EZScheduledTask* task = [self getTaskFromList:tasks timeSlot:timeSlotMut exclusiveList:exclusiveMut];
+        EZScheduledTask* task = [self getTaskFromList:tasksMut timeSlot:timeSlotMut];
         
         if(task){
-            [exclusiveMut addObject:task];
+            //[exclusiveMut addObject:task];
+            [tasksMut removeObject:task.task];
             [res addObject:task];
         } else { // No available tasks
             break;
         }
     }
+    return res;
+}
+
+//Remove the exclusive tasks from the tasks list 
+//So that all the tasks with the list are good to go
+- (NSMutableArray*) tasksRemovedExclusive:(NSArray*)tasks exclusiveList:(NSArray*)exclusive
+{
+    NSMutableArray* res = [[NSMutableArray alloc] initWithCapacity:[tasks count]];
+    for(int i = 0; i < [tasks count]; i++){
+        EZTask* tk = (EZTask*)[tasks objectAtIndex:i];
+        if(![exclusive containsObject:tk]){
+            [res addObject:tk];
+        }
+    }
+    
     return res;
 }
 
@@ -65,14 +84,14 @@
 //Add logic to add padding time later.
 //Focus on the main logic now.
 
-- (EZScheduledTask*) getTaskFromList:(NSArray*)tasks timeSlot:(EZAvailableTime*)timeSlot exclusiveList:(NSArray*)exclusive
+- (EZScheduledTask*) getTaskFromList:(NSArray*)tasks timeSlot:(EZAvailableTime*)timeSlot
 {
     EZScheduledTask* res = nil;
     int maxTry = 2*[tasks count];
     for(int i = 0; i< maxTry; i++){
         int selected = arc4random()%[tasks count];
         EZTask* tk = [tasks objectAtIndex:selected];
-        if(timeSlot.duration > tk.duration && ![self contain:exclusive object:tk]){
+        if(timeSlot.duration > tk.duration){
             res = [[EZScheduledTask alloc] init];
             res.task = tk;
             int actualDur = tk.maxDuration;

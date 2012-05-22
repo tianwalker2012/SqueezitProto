@@ -22,6 +22,7 @@
 		184C29851569EF8900852B35 /* EZScheduledTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C29841569EF8900852B35 /* EZScheduledTask.m */; };
 		184C2988156A162100852B35 /* EZAvailableTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2987156A162100852B35 /* EZAvailableTime.m */; };
 		184C298D156A27B600852B35 /* EZTaskStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C298C156A27B600852B35 /* EZTaskStore.m */; };
+		184C2991156B36D200852B35 /* EZTestSuite.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2990156B36D200852B35 /* EZTestSuite.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +54,8 @@
 		184C298A156A175800852B35 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		184C298B156A27B600852B35 /* EZTaskStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTaskStore.h; sourceTree = "<group>"; };
 		184C298C156A27B600852B35 /* EZTaskStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTaskStore.m; sourceTree = "<group>"; };
+		184C298F156B36D100852B35 /* EZTestSuite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTestSuite.h; sourceTree = "<group>"; };
+		184C2990156B36D200852B35 /* EZTestSuite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTestSuite.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +143,8 @@
 				184C2987156A162100852B35 /* EZAvailableTime.m */,
 				184C298B156A27B600852B35 /* EZTaskStore.h */,
 				184C298C156A27B600852B35 /* EZTaskStore.m */,
+				184C298F156B36D100852B35 /* EZTestSuite.h */,
+				184C2990156B36D200852B35 /* EZTestSuite.m */,
 			);
 			name = "Task objects";
 			sourceTree = "<group>";
@@ -232,6 +237,7 @@
 				184C29851569EF8900852B35 /* EZScheduledTask.m in Sources */,
 				184C2988156A162100852B35 /* EZAvailableTime.m in Sources */,
 				184C298D156A27B600852B35 /* EZTaskStore.m in Sources */,
+				184C2991156B36D200852B35 /* EZTestSuite.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

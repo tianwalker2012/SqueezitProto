@@ -8,13 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
-@class ScheduledTask, EZAvailableTime;
+@class EZScheduledTask, EZAvailableTime;
 
 @interface EZTaskScheduler : NSObject
 
 // The exlusive list mean, do NOT choose from those already choosed
-- (ScheduledTask*) scheduleTask:(NSDate*)startTime duration:(int)duration exclusiveList:(NSArray*)exclusive;
+- (EZScheduledTask*) scheduleTask:(NSDate*)startTime duration:(int)duration exclusiveList:(NSArray*)exclusive;
 
 // Will select multiple task to assign, actually, I think, I actually need this method a lot.
-- (NSArray*) scheduleTaskByBulk:(EZAvailableTime*)timeSlot exclusiveList:(NSArray*)exclusive;
+- (NSArray*) scheduleTaskByBulk:(EZAvailableTime*)timeSlot exclusiveList:(NSArray*)exclusive tasks:(NSArray*)tasks;
 @end

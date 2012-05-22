@@ -7,6 +7,7 @@
 //
 
 #import "EZAppDelegate.h"
+#import "EZTestSuite.h"
 
 @implementation EZAppDelegate
 
@@ -14,6 +15,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [EZTestSuite testSchedule];
     // Override point for customization after application launch.
     return YES;
 }
