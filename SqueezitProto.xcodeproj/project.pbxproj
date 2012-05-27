@@ -23,6 +23,14 @@
 		184C2988156A162100852B35 /* EZAvailableTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2987156A162100852B35 /* EZAvailableTime.m */; };
 		184C298D156A27B600852B35 /* EZTaskStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C298C156A27B600852B35 /* EZTaskStore.m */; };
 		184C2991156B36D200852B35 /* EZTestSuite.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2990156B36D200852B35 /* EZTestSuite.m */; };
+		184C29D5156C933300852B35 /* EZScheduledDay.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C29D4156C933300852B35 /* EZScheduledDay.m */; };
+		184C29D8156C947A00852B35 /* EZAvailableDay.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C29D7156C947900852B35 /* EZAvailableDay.m */; };
+		184C29DD156CE21E00852B35 /* EZScheduledTaskController.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C29DB156CE21E00852B35 /* EZScheduledTaskController.m */; };
+		184C29DE156CE21E00852B35 /* EZScheduledTaskController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 184C29DC156CE21E00852B35 /* EZScheduledTaskController.xib */; };
+		184C29E1156FB29400852B35 /* EZAlarmUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C29E0156FB29400852B35 /* EZAlarmUtility.m */; };
+		184C29E415708E6F00852B35 /* EZQuotasResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C29E315708E6D00852B35 /* EZQuotasResult.m */; };
+		184C29E71570925C00852B35 /* EZQuotas.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C29E61570925B00852B35 /* EZQuotas.m */; };
+		184C29EA1570C1F900852B35 /* EZTaskHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C29E91570C1F900852B35 /* EZTaskHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +64,21 @@
 		184C298C156A27B600852B35 /* EZTaskStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTaskStore.m; sourceTree = "<group>"; };
 		184C298F156B36D100852B35 /* EZTestSuite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTestSuite.h; sourceTree = "<group>"; };
 		184C2990156B36D200852B35 /* EZTestSuite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTestSuite.m; sourceTree = "<group>"; };
+		184C29D3156C933200852B35 /* EZScheduledDay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZScheduledDay.h; sourceTree = "<group>"; };
+		184C29D4156C933300852B35 /* EZScheduledDay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZScheduledDay.m; sourceTree = "<group>"; };
+		184C29D6156C947900852B35 /* EZAvailableDay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAvailableDay.h; sourceTree = "<group>"; };
+		184C29D7156C947900852B35 /* EZAvailableDay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAvailableDay.m; sourceTree = "<group>"; };
+		184C29DA156CE21E00852B35 /* EZScheduledTaskController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZScheduledTaskController.h; sourceTree = "<group>"; };
+		184C29DB156CE21E00852B35 /* EZScheduledTaskController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZScheduledTaskController.m; sourceTree = "<group>"; };
+		184C29DC156CE21E00852B35 /* EZScheduledTaskController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZScheduledTaskController.xib; sourceTree = "<group>"; };
+		184C29DF156FB29400852B35 /* EZAlarmUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAlarmUtility.h; sourceTree = "<group>"; };
+		184C29E0156FB29400852B35 /* EZAlarmUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAlarmUtility.m; sourceTree = "<group>"; };
+		184C29E215708E6C00852B35 /* EZQuotasResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZQuotasResult.h; sourceTree = "<group>"; };
+		184C29E315708E6D00852B35 /* EZQuotasResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZQuotasResult.m; sourceTree = "<group>"; };
+		184C29E51570925A00852B35 /* EZQuotas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZQuotas.h; sourceTree = "<group>"; };
+		184C29E61570925B00852B35 /* EZQuotas.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZQuotas.m; sourceTree = "<group>"; };
+		184C29E81570C1F800852B35 /* EZTaskHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTaskHelper.h; sourceTree = "<group>"; };
+		184C29E91570C1F900852B35 /* EZTaskHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTaskHelper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +125,7 @@
 		184C295F1569E19900852B35 /* SqueezitProto */ = {
 			isa = PBXGroup;
 			children = (
+				184C29D9156CE1C800852B35 /* Controllers */,
 				184C298E156A296F00852B35 /* Utility */,
 				184C2989156A172D00852B35 /* Constants */,
 				184C297C1569E6D800852B35 /* Task objects */,
@@ -145,6 +169,16 @@
 				184C298C156A27B600852B35 /* EZTaskStore.m */,
 				184C298F156B36D100852B35 /* EZTestSuite.h */,
 				184C2990156B36D200852B35 /* EZTestSuite.m */,
+				184C29D3156C933200852B35 /* EZScheduledDay.h */,
+				184C29D4156C933300852B35 /* EZScheduledDay.m */,
+				184C29D6156C947900852B35 /* EZAvailableDay.h */,
+				184C29D7156C947900852B35 /* EZAvailableDay.m */,
+				184C29E215708E6C00852B35 /* EZQuotasResult.h */,
+				184C29E315708E6D00852B35 /* EZQuotasResult.m */,
+				184C29E51570925A00852B35 /* EZQuotas.h */,
+				184C29E61570925B00852B35 /* EZQuotas.m */,
+				184C29E81570C1F800852B35 /* EZTaskHelper.h */,
+				184C29E91570C1F900852B35 /* EZTaskHelper.m */,
 			);
 			name = "Task objects";
 			sourceTree = "<group>";
@@ -160,8 +194,20 @@
 		184C298E156A296F00852B35 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				184C29DF156FB29400852B35 /* EZAlarmUtility.h */,
+				184C29E0156FB29400852B35 /* EZAlarmUtility.m */,
 			);
 			name = Utility;
+			sourceTree = "<group>";
+		};
+		184C29D9156CE1C800852B35 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				184C29DA156CE21E00852B35 /* EZScheduledTaskController.h */,
+				184C29DB156CE21E00852B35 /* EZScheduledTaskController.m */,
+				184C29DC156CE21E00852B35 /* EZScheduledTaskController.xib */,
+			);
+			name = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -217,6 +263,7 @@
 			files = (
 				184C29641569E19900852B35 /* InfoPlist.strings in Resources */,
 				184C29761569E19900852B35 /* MainStoryboard.storyboard in Resources */,
+				184C29DE156CE21E00852B35 /* EZScheduledTaskController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -238,6 +285,13 @@
 				184C2988156A162100852B35 /* EZAvailableTime.m in Sources */,
 				184C298D156A27B600852B35 /* EZTaskStore.m in Sources */,
 				184C2991156B36D200852B35 /* EZTestSuite.m in Sources */,
+				184C29D5156C933300852B35 /* EZScheduledDay.m in Sources */,
+				184C29D8156C947A00852B35 /* EZAvailableDay.m in Sources */,
+				184C29DD156CE21E00852B35 /* EZScheduledTaskController.m in Sources */,
+				184C29E1156FB29400852B35 /* EZAlarmUtility.m in Sources */,
+				184C29E415708E6F00852B35 /* EZQuotasResult.m in Sources */,
+				184C29E71570925C00852B35 /* EZQuotas.m in Sources */,
+				184C29EA1570C1F900852B35 /* EZTaskHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

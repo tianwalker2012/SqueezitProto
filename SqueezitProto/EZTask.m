@@ -9,17 +9,25 @@
 #import "EZTask.h"
 
 @implementation EZTask
-@synthesize name, description, duration, maxDuration, fixedTime, fixedDate, time, date;
+@synthesize name, duration, maxDuration, fixedTime, fixedDate, time, date, envTraits, quotas;
 
-- (id) initWithName:(NSString*) nm description:(NSString*) ds duration:(int)dur
+- (id) initWithName:(NSString*) nm duration:(int)dur maxDur:(int)mdur envTraits:(EZEnvironmentTraits)traits
 {
     self = [super init];
     self.name = nm;
-    self.description = ds;
     self.duration = dur;
-    self.maxDuration = dur;
+    self.maxDuration = mdur;
+    self.envTraits = traits;
     return self;
+
 }
 
+// Will use utID later.
+// Now will only use name to compare.
+// I love it. 
+- (BOOL) isEqual:(EZTask*)task
+{
+    return [self.name compare:task.name] == NSOrderedSame;
+}
 
 @end

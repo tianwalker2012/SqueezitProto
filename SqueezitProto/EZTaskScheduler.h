@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class EZScheduledTask, EZAvailableTime;
+@class EZScheduledTask, EZAvailableTime, EZQuotasResult, EZQuotas, EZAvailableDay;
 
 @interface EZTaskScheduler : NSObject
 
@@ -17,4 +17,25 @@
 
 // Will select multiple task to assign, actually, I think, I actually need this method a lot.
 - (NSArray*) scheduleTaskByBulk:(EZAvailableTime*)timeSlot exclusiveList:(NSArray*)exclusive tasks:(NSArray*)tasks;
+
+
+//The purpose of this method is to schedule tasks which have quotas. 
+//What's the meaning?
+//It will modify the available time based on the statistic collected. 
+//Then use the time to allocate the tasks.
+- (EZQuotasResult*) scheduleQuotasTask:(NSArray*)tasks date:(NSDate*)date avDay:(EZAvailableDay*)avDay;
+
+//Normally this task will be called. 
+- (NSArray*) scheduleTaskByDate:(NSDate*)date exclusiveList:(NSArray*)exclusive;
+
+- (NSArray*) scheduleRandomTask:(NSDate*)date avTimes:(NSArray*)avTimes exclusiveList:(NSArray*)exlusive;
+
+//According to the quotas and current data will get all the history date out.
+- (int) calcHistoryTime:(EZQuotas*)quotas date:(NSDate*)date;
+
+//Change task, will be called when user not satisfied one task
+// What if I got zero tasks?
+// Then ask user to take a vacation.
+- (NSArray*) changeScheduledTask:(EZScheduledTask*)change;
+
 @end

@@ -31,6 +31,10 @@
     return self;
 }
 
+- (id) duplicate
+{
+    return [[EZAvailableTime alloc] init:self];
+}
 
 - (void) adjustStartTime:(int)increasedMinutes
 {

@@ -11,6 +11,7 @@
 #import "EZModelController.h"
 
 #import "EZDataViewController.h"
+#import "EZScheduledTaskController.h"
 
 @interface EZRootViewController ()
 @property (readonly, strong, nonatomic) EZModelController *modelController;
@@ -34,9 +35,10 @@
     [self.pageViewController setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:NULL];
 
     self.pageViewController.dataSource = self.modelController;
-
-    [self addChildViewController:self.pageViewController];
-    [self.view addSubview:self.pageViewController.view];
+    scheduleController = [[EZScheduledTaskController alloc] initWithStyle:UITableViewStylePlain];
+    
+    [self addChildViewController:scheduleController];
+    [self.view addSubview:scheduleController.view];
 
     // Set the page view controller's bounds using an inset rect so that self's view is visible around the edges of the pages.
     CGRect pageViewRect = self.view.bounds;

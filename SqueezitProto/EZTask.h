@@ -7,11 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Constants.h"
+
+@class EZQuotas;
 
 @interface EZTask : NSObject {
     NSString* name;
-
-    NSString* description;
 
     //In minutes, which mean minimum duration.
     //If it is zero mean, I only need a notification for this thing. Doesn't require available time span.
@@ -24,24 +25,33 @@
     BOOL fixedTime;
     
     //The purpose of this field is that, I want this task to start at my specified date.
+    //Make the normal functionality possible
     BOOL fixedDate;
+    
+    //The requirement for the environment
+    EZEnvironmentTraits envTraits;
     
     NSDate* time;
     NSDate* date;
+    
+    //For important task, I have minimum time quota on some period of time
+    EZQuotas* quotas;
 
 }
 
 @property (strong, nonatomic) NSString* name;
-@property (strong, nonatomic) NSString* description;
 @property (assign, nonatomic) int duration;
 @property (assign, nonatomic) int maxDuration;
 @property (assign, nonatomic) BOOL fixedTime;
 @property (assign, nonatomic) BOOL fixedDate;
 @property (strong, nonatomic) NSDate* time;
 @property (strong, nonatomic) NSDate* date;
+@property (assign, nonatomic) EZEnvironmentTraits envTraits;
+@property (strong, nonatomic) EZQuotas* quotas;
 
 
-- (id) initWithName:(NSString*) name description:(NSString*) description duration:(int)duration;
+- (id) initWithName:(NSString*) nm duration:(int)dur maxDur:(int)mdur envTraits:(EZEnvironmentTraits)traits;
 
+- (BOOL) isEqual:(EZTask*)task;
 
 @end

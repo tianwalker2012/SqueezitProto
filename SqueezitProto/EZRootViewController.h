@@ -8,7 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface EZRootViewController : UIViewController <UIPageViewControllerDelegate>
+@class EZScheduledTaskController;
+
+@interface EZRootViewController : UIViewController <UIPageViewControllerDelegate> {
+    EZScheduledTaskController* scheduleController;
+}
 
 @property (strong, nonatomic) UIPageViewController *pageViewController;
 

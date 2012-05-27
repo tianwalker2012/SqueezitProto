@@ -16,6 +16,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [EZTestSuite testSchedule];
+    
+    
     // Override point for customization after application launch.
     return YES;
 }
