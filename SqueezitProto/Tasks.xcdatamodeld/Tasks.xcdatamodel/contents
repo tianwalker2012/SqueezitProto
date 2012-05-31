@@ -12,6 +12,10 @@
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="startTime" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
+    <entity name="MImageOwner" representedClassName="MImageOwner" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="thumbNail" optional="YES" attributeType="Transformable" valueTransformerName="ImageToDataTransformer" syncable="YES"/>
+    </entity>
     <entity name="MQuotas" representedClassName="MZQuotas" syncable="YES">
         <attribute name="cycleLength" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="cycleStartDate" optional="YES" attributeType="Date" syncable="YES"/>
@@ -22,6 +26,7 @@
         <attribute name="startDate" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
     <entity name="MScheduledTask" representedClassName="MZScheduledTask" syncable="YES">
+        <attribute name="alarmNotification" optional="YES" attributeType="Transformable" valueTransformerName="NotificationConverter" syncable="YES"/>
         <attribute name="duration" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="envTraits" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="startTime" optional="YES" attributeType="Date" syncable="YES"/>
@@ -42,8 +47,9 @@
         <element name="MTaskGroup" positionX="160" positionY="192" width="128" height="75"/>
         <element name="MTask" positionX="160" positionY="192" width="128" height="120"/>
         <element name="MQuotas" positionX="160" positionY="192" width="128" height="150"/>
-        <element name="MScheduledTask" positionX="160" positionY="192" width="128" height="105"/>
+        <element name="MScheduledTask" positionX="160" positionY="192" width="128" height="120"/>
         <element name="MAvailableTime" positionX="160" positionY="192" width="128" height="105"/>
         <element name="MAvailableDay" positionX="160" positionY="192" width="128" height="105"/>
+        <element name="MImageOwner" positionX="160" positionY="192" width="128" height="75"/>
     </elements>
 </model>

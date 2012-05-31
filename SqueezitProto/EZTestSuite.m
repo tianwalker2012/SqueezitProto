@@ -25,6 +25,7 @@
 #import "MTaskGroup.h"
 #import "MQuotas.h"
 #import "MScheduledTask.h"
+#import "MImageOwner.h"
 
 #define TestValue 60*20
 
@@ -181,6 +182,39 @@ typedef void(^TestBlock)(id obj);
     [storedGroup.managedObjectContext refreshObject:storedGroup mergeChanges:NO];
     assert([storedGroup.name compare:@"Brand New"] == NSOrderedSame);
     
+    MImageOwner* iowner = [accessor create:[MImageOwner class]];
+    iowner.name = @"Tian ge";
+    iowner.thumbNail = @"Dog Picture";
+    [accessor store:iowner];
+    MImageOwner* storedOwner = [[accessor fetchAll:[MImageOwner class] sortField:nil] objectAtIndex:0];
+    assert([storedOwner.thumbNail compare:@"Dog Picture"] == NSOrderedSame);
+    
+    UILocalNotification* note = [[UILocalNotification alloc] init];
+    note.fireDate = [NSDate stringToDate:@"yyyyMMdd>HHmmss" dateString:@"20120531>202020"];
+    
+    NSData* data = [NSKeyedArchiver archivedDataWithRootObject:note];
+    
+    UILocalNotification* localNote = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    EZDEBUG(@"Recovered Notification:%@",localNote);
+    
+    assert([localNote.fireDate isEqualToDate:note.fireDate]);
+    
+    
+    MScheduledTask* schTask = [accessor create:[MScheduledTask class]];
+    MTask* subTask = [accessor create:[MTask class]];
+    subTask.name = @"Taiji";
+    subTask.duration = [[NSNumber alloc] initWithInt:20];
+    schTask.task = subTask;
+    schTask.startTime = [NSDate stringToDate:@"yyyyMMdd" dateString:@"20120601"];
+    schTask.alarmNotification = [[UILocalNotification alloc] init];
+    schTask.alarmNotification.fireDate = [NSDate stringToDate:@"yyyyMMdd" dateString:@"20120701"];
+    [accessor store:schTask];
+    
+    NSArray* scheduleTasks = [accessor fetchAll:[MScheduledTask class] sortField:@"duration"];
+    assert([scheduleTasks count] == 1);
+    MScheduledTask* storedSchTask = [scheduleTasks objectAtIndex:0];
+    
+    assert([storedSchTask.alarmNotification.fireDate isEqualToDate:schTask.alarmNotification.fireDate]);
     
 }
 

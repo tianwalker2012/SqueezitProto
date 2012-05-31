@@ -44,6 +44,7 @@
 		184C2AC2157759CB00852B35 /* MAvailableDay.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2AC1157759CB00852B35 /* MAvailableDay.m */; };
 		184C2AC5157759CF00852B35 /* MTaskGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2AC4157759CF00852B35 /* MTaskGroup.m */; };
 		184C2AC8157759D000852B35 /* MTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2AC7157759CF00852B35 /* MTask.m */; };
+		184C2ACB157768DB00852B35 /* MImageOwner.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2ACA157768DA00852B35 /* MImageOwner.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -105,16 +106,18 @@
 		184C2AA21577209500852B35 /* EZCoreAccessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZCoreAccessor.m; sourceTree = "<group>"; };
 		184C2AB7157759C700852B35 /* MQuotas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQuotas.h; sourceTree = "<group>"; };
 		184C2AB8157759C700852B35 /* MQuotas.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQuotas.m; sourceTree = "<group>"; };
-		184C2ABA157759C900852B35 /* MScheduledTask.h */ = {isa = PBXFileReference; fileEncoding = 4; path = MScheduledTask.h; sourceTree = "<group>"; };
+		184C2ABA157759C900852B35 /* MScheduledTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MScheduledTask.h; sourceTree = "<group>"; };
 		184C2ABB157759C900852B35 /* MScheduledTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MScheduledTask.m; sourceTree = "<group>"; };
-		184C2ABD157759CA00852B35 /* MAvailableTime.h */ = {isa = PBXFileReference; fileEncoding = 4; path = MAvailableTime.h; sourceTree = "<group>"; };
+		184C2ABD157759CA00852B35 /* MAvailableTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAvailableTime.h; sourceTree = "<group>"; };
 		184C2ABE157759CA00852B35 /* MAvailableTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAvailableTime.m; sourceTree = "<group>"; };
 		184C2AC0157759CB00852B35 /* MAvailableDay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAvailableDay.h; sourceTree = "<group>"; };
 		184C2AC1157759CB00852B35 /* MAvailableDay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAvailableDay.m; sourceTree = "<group>"; };
 		184C2AC3157759CC00852B35 /* MTaskGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTaskGroup.h; sourceTree = "<group>"; };
 		184C2AC4157759CF00852B35 /* MTaskGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTaskGroup.m; sourceTree = "<group>"; };
-		184C2AC6157759CF00852B35 /* MTask.h */ = {isa = PBXFileReference; fileEncoding = 4; path = MTask.h; sourceTree = "<group>"; };
+		184C2AC6157759CF00852B35 /* MTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTask.h; sourceTree = "<group>"; };
 		184C2AC7157759CF00852B35 /* MTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTask.m; sourceTree = "<group>"; };
+		184C2AC9157768DA00852B35 /* MImageOwner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MImageOwner.h; sourceTree = "<group>"; };
+		184C2ACA157768DA00852B35 /* MImageOwner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MImageOwner.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -272,6 +275,8 @@
 				184C2AC4157759CF00852B35 /* MTaskGroup.m */,
 				184C2AC6157759CF00852B35 /* MTask.h */,
 				184C2AC7157759CF00852B35 /* MTask.m */,
+				184C2AC9157768DA00852B35 /* MImageOwner.h */,
+				184C2ACA157768DA00852B35 /* MImageOwner.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -388,6 +393,7 @@
 				184C2AC2157759CB00852B35 /* MAvailableDay.m in Sources */,
 				184C2AC5157759CF00852B35 /* MTaskGroup.m in Sources */,
 				184C2AC8157759D000852B35 /* MTask.m in Sources */,
+				184C2ACB157768DB00852B35 /* MImageOwner.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
