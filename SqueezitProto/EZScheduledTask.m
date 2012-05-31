@@ -11,7 +11,7 @@
 #import "EZTaskHelper.h"
 
 @implementation EZScheduledTask
-@synthesize startTime, duration, task, envTraits, description;
+@synthesize startTime, duration, task, envTraits, alarmNotification;
 
 - (NSString*) detail
 {

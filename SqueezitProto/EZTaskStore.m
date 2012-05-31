@@ -13,6 +13,7 @@
 #import "EZAvailableDay.h"
 #import "EZScheduledDay.h"
 #import "EZTaskHelper.h"
+#import "EZQuotas.h"
 
 @interface EZTaskStore(private)
 
@@ -27,6 +28,21 @@
 // I love it.
 - (void) fillTestData 
 {
+    
+    EZTask* design = [[EZTask alloc] initWithName:@"App design" duration:40 maxDur:90 envTraits:EZ_ENV_FLOWING];
+    NSDate* startDate = [NSDate stringToDate:@"yyyyMMdd" dateString:@"20120528"];
+    EZQuotas* designQuotas = [[EZQuotas alloc] init:startDate quotas:630 type:WeekCycle cycleStartDate:nil cycleLength:7];
+    design.quotas = designQuotas;
+    
+    
+    EZTask* iosTask = [[EZTask alloc] initWithName:@"iOS development" duration:40 maxDur:120 envTraits:EZ_ENV_FLOWING];
+    EZQuotas* iosQuotas = [[EZQuotas alloc] init:startDate quotas:1260 type:WeekCycle cycleStartDate:nil cycleLength:7];
+    iosTask.quotas = iosQuotas;
+    
+    EZTask* codeReading = [[EZTask alloc] initWithName:@"Code reading" duration:40 maxDur:90 envTraits:EZ_ENV_FLOWING];
+    EZQuotas* codeReadingQuotas = [[EZQuotas alloc] init:startDate quotas:420 type:WeekCycle cycleStartDate:nil cycleLength:7];
+    codeReading.quotas = codeReadingQuotas;
+    
      NSArray* tks = [NSArray arrayWithObjects:
                      //Fitting tasks
                      [[EZTask alloc] initWithName:@"Tai ji" duration:15 maxDur:90 envTraits:EZ_ENV_FITTING],
@@ -34,9 +50,9 @@
                      [[EZTask alloc] initWithName:@"Swimming" duration:60 maxDur:150 envTraits:EZ_ENV_FITTING],
                      
                      //Flowing tasks
-                     [[EZTask alloc] initWithName:@"App design" duration:40 maxDur:90 envTraits:EZ_ENV_FLOWING],
-                     [[EZTask alloc] initWithName:@"iOS development" duration:40 maxDur:120 envTraits:EZ_ENV_FITTING],
-                     [[EZTask alloc] initWithName:@"Code reading" duration:40 maxDur:90 envTraits:EZ_ENV_FITTING],
+                     iosTask,
+                     codeReading,
+                     design,
                      
                      //Reading tasks
                      [[EZTask alloc] initWithName:@"Hacker News" duration:15 maxDur:30 envTraits:EZ_ENV_READING],
@@ -62,15 +78,15 @@
     [self.tasks addObjectsFromArray:tks];
     EZAvailableDay* avDays = [[EZAvailableDay alloc] initWithName:@"Default setting" weeks:ALLDAYS];
     NSArray* avTimes = [NSArray arrayWithObjects:
-                        [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm:ss" dateString:@"05:30:00"] description:@"大便时段" duration:30 environment:EZ_ENV_READING],
-                        [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm:ss" dateString:@"06:00:00"] description:@"Morning reading" duration:60 environment:EZ_ENV_READING|EZ_ENV_LISTENING],
-                        [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm:ss" dateString:@"07:00:00"] description:@"晨练" duration:90 environment:EZ_ENV_FITTING],
-                        [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm:ss" dateString:@"09:00:00"] description:@"Walk to Metro" duration:25 environment:EZ_ENV_LISTENING],
-                        [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm:ss" dateString:@"09:30:00"] description:@"Metro" duration:30 environment:EZ_ENV_READING],
-                        [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm:ss" dateString:@"10:15:00"] description:@"Morning flow" duration:135 environment:EZ_ENV_FLOWING|EZ_ENV_READING],
-                        [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm:ss" dateString:@"14:00:00"] description:@"Afternoon flow" duration:240 environment:EZ_ENV_FLOWING|EZ_ENV_READING],
-                        [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm:ss" dateString:@"19:15:00"] description:@"After dinner" duration:60 environment:EZ_ENV_SOCIALING],
-                         [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm:ss" dateString:@"20:30:00"] description:@"Night hours" duration:105 environment:EZ_ENV_FLOWING|EZ_ENV_LISTENING|EZ_ENV_READING]
+                        [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm:ss" dateString:@"05:30:00"] name:@"大便时段" duration:30 environment:EZ_ENV_READING],
+                        [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm:ss" dateString:@"06:00:00"] name:@"Morning reading" duration:60 environment:EZ_ENV_READING|EZ_ENV_LISTENING],
+                        [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm:ss" dateString:@"07:00:00"] name:@"晨练" duration:90 environment:EZ_ENV_FITTING],
+                        [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm:ss" dateString:@"09:00:00"] name:@"Walk to Metro" duration:25 environment:EZ_ENV_LISTENING],
+                        [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm:ss" dateString:@"09:30:00"] name:@"Metro" duration:30 environment:EZ_ENV_READING],
+                        [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm:ss" dateString:@"10:15:00"] name:@"Morning flow" duration:135 environment:EZ_ENV_FLOWING|EZ_ENV_READING],
+                        [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm:ss" dateString:@"14:00:00"] name:@"Afternoon flow" duration:240 environment:EZ_ENV_FLOWING|EZ_ENV_READING],
+                        [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm:ss" dateString:@"19:15:00"] name:@"After dinner" duration:60 environment:EZ_ENV_SOCIALING],
+                         [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm:ss" dateString:@"20:30:00"] name:@"Night hours" duration:105 environment:EZ_ENV_FLOWING|EZ_ENV_LISTENING|EZ_ENV_READING]
                         , nil];
     [avDays.availableTimes addObjectsFromArray:avTimes];
     [self.availableDays addObject:avDays];
@@ -109,18 +125,33 @@
 - (int) getTaskTime:(EZTask*)task start:(NSDate*)start end:(NSDate*)end
 {
     int res = 0;
-    for(EZScheduledTask* schTask in storedScheduledTasks){
-        if([schTask.task isEqual:task] && [schTask.startTime InBetweenDays:start end:end]){
-            res += schTask.duration;
+    for(NSArray* schArrs in [storedScheduledTasks allValues]){
+        for(EZScheduledTask* schTask in schArrs){
+            if([schTask.task isEqual:task] && [schTask.startTime InBetweenDays:start end:end]){
+                res += schTask.duration;
+            }
         }
     }
     return res;
 }
 
+//Keep it simple and stupid.
+//But for my functionality to work, I need NSMutableArray.
+//Start do it now. 
+//Keep it as simple and stupid as possible.
+//Make the behavior like following
+//If the list have nothing exist, will create the mutableArray.
+//If already exist will be Append. Cool. 
 - (void) storeScheduledTask:(NSArray*)stasks date:(NSDate*)date
 {
     NSString* keyStr = [date stringWithFormat:@"yyyyMMdd"];
-    [storedScheduledTasks setObject:stasks forKey:keyStr];
+    NSMutableArray* storeTasks = [storedScheduledTasks objectForKey:keyStr];
+    if(storeTasks){
+        [storeTasks addObjectsFromArray:stasks];
+    }else{
+        storeTasks = [NSMutableArray arrayWithArray:stasks];
+        [storedScheduledTasks setObject:storeTasks forKey:keyStr];
+    }
 }
 
 + (EZTaskStore*) getInstance

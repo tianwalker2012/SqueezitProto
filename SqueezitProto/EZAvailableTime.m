@@ -9,15 +9,16 @@
 #import "EZAvailableTime.h"
 
 @implementation EZAvailableTime
-@synthesize start, duration, environmentTraits, description;
+@synthesize start, duration, envTraits, name;
 
-- (id) init:(NSDate*)st description:(NSString*)ds duration:(int)dur environment:(int)env
+- (id) init:(NSDate*)st name:(NSString*)nm duration:(int)dur environment:(int)env
 {
     self = [super init];
     self.start = st;
-    self.description = ds;
+    //self.description = ds;
+    self.name = nm;
     self.duration = dur;
-    self.environmentTraits = env;
+    self.envTraits = env;
     return self;
 }
 
@@ -25,9 +26,10 @@
 {
     self = [super init];
     self.start = at.start;
-    self.description = at.description;
+    self.name = at.name;
+    //self.description = at.description;
     self.duration = at.duration;
-    self.environmentTraits = at.environmentTraits;
+    self.envTraits = at.envTraits;
     return self;
 }
 

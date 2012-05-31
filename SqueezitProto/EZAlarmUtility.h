@@ -11,6 +11,10 @@
 
 @interface EZAlarmUtility : NSObject
 
++ (void) setupAlarmBulk:(NSArray*)tasks;
+
++ (void) cancelAlarmBulk:(NSArray*)tasks;
+
 //Setup the alarm for task
 + (void) setupAlarm:(EZScheduledTask*)task;
 

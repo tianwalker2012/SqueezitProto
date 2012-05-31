@@ -31,6 +31,12 @@
 		184C29E415708E6F00852B35 /* EZQuotasResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C29E315708E6D00852B35 /* EZQuotasResult.m */; };
 		184C29E71570925C00852B35 /* EZQuotas.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C29E61570925B00852B35 /* EZQuotas.m */; };
 		184C29EA1570C1F900852B35 /* EZTaskHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C29E91570C1F900852B35 /* EZTaskHelper.m */; };
+		184C29ED1573651F00852B35 /* EZScheduledTaskDetailCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C29EC1573651E00852B35 /* EZScheduledTaskDetailCtrl.m */; };
+		184C29EF1573697800852B35 /* EZScheduledTaskDetailCtrl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 184C29EE1573697700852B35 /* EZScheduledTaskDetailCtrl.xib */; };
+		184C29F61574769400852B35 /* EZReleaseDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C29F51574769300852B35 /* EZReleaseDetector.m */; };
+		184C29F91575C7C400852B35 /* EZTaskList.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C29F81575C7C000852B35 /* EZTaskList.m */; };
+		184C2A7A15770F7F00852B35 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 184C2A7915770F7E00852B35 /* CoreData.framework */; };
+		184C2A811577101100852B35 /* Tasks.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 184C2A7F1577101100852B35 /* Tasks.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -79,6 +85,15 @@
 		184C29E61570925B00852B35 /* EZQuotas.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZQuotas.m; sourceTree = "<group>"; };
 		184C29E81570C1F800852B35 /* EZTaskHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTaskHelper.h; sourceTree = "<group>"; };
 		184C29E91570C1F900852B35 /* EZTaskHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTaskHelper.m; sourceTree = "<group>"; };
+		184C29EB1573651E00852B35 /* EZScheduledTaskDetailCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZScheduledTaskDetailCtrl.h; sourceTree = "<group>"; };
+		184C29EC1573651E00852B35 /* EZScheduledTaskDetailCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZScheduledTaskDetailCtrl.m; sourceTree = "<group>"; };
+		184C29EE1573697700852B35 /* EZScheduledTaskDetailCtrl.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZScheduledTaskDetailCtrl.xib; sourceTree = "<group>"; };
+		184C29F41574769300852B35 /* EZReleaseDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZReleaseDetector.h; sourceTree = "<group>"; };
+		184C29F51574769300852B35 /* EZReleaseDetector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZReleaseDetector.m; sourceTree = "<group>"; };
+		184C29F71575C7BB00852B35 /* EZTaskList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTaskList.h; sourceTree = "<group>"; };
+		184C29F81575C7C000852B35 /* EZTaskList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTaskList.m; sourceTree = "<group>"; };
+		184C2A7915770F7E00852B35 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		184C2A801577101100852B35 /* Tasks.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Tasks.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +101,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				184C2A7A15770F7F00852B35 /* CoreData.framework in Frameworks */,
 				184C295A1569E19900852B35 /* UIKit.framework in Frameworks */,
 				184C295C1569E19900852B35 /* Foundation.framework in Frameworks */,
 				184C295E1569E19900852B35 /* CoreGraphics.framework in Frameworks */,
@@ -115,6 +131,7 @@
 		184C29581569E19900852B35 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				184C2A7915770F7E00852B35 /* CoreData.framework */,
 				184C29591569E19900852B35 /* UIKit.framework */,
 				184C295B1569E19900852B35 /* Foundation.framework */,
 				184C295D1569E19900852B35 /* CoreGraphics.framework */,
@@ -125,6 +142,7 @@
 		184C295F1569E19900852B35 /* SqueezitProto */ = {
 			isa = PBXGroup;
 			children = (
+				184C2A7B15770F9F00852B35 /* Models */,
 				184C29D9156CE1C800852B35 /* Controllers */,
 				184C298E156A296F00852B35 /* Utility */,
 				184C2989156A172D00852B35 /* Constants */,
@@ -179,6 +197,8 @@
 				184C29E61570925B00852B35 /* EZQuotas.m */,
 				184C29E81570C1F800852B35 /* EZTaskHelper.h */,
 				184C29E91570C1F900852B35 /* EZTaskHelper.m */,
+				184C29F71575C7BB00852B35 /* EZTaskList.h */,
+				184C29F81575C7C000852B35 /* EZTaskList.m */,
 			);
 			name = "Task objects";
 			sourceTree = "<group>";
@@ -196,6 +216,8 @@
 			children = (
 				184C29DF156FB29400852B35 /* EZAlarmUtility.h */,
 				184C29E0156FB29400852B35 /* EZAlarmUtility.m */,
+				184C29F41574769300852B35 /* EZReleaseDetector.h */,
+				184C29F51574769300852B35 /* EZReleaseDetector.m */,
 			);
 			name = Utility;
 			sourceTree = "<group>";
@@ -206,8 +228,19 @@
 				184C29DA156CE21E00852B35 /* EZScheduledTaskController.h */,
 				184C29DB156CE21E00852B35 /* EZScheduledTaskController.m */,
 				184C29DC156CE21E00852B35 /* EZScheduledTaskController.xib */,
+				184C29EB1573651E00852B35 /* EZScheduledTaskDetailCtrl.h */,
+				184C29EC1573651E00852B35 /* EZScheduledTaskDetailCtrl.m */,
+				184C29EE1573697700852B35 /* EZScheduledTaskDetailCtrl.xib */,
 			);
 			name = Controllers;
+			sourceTree = "<group>";
+		};
+		184C2A7B15770F9F00852B35 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				184C2A7F1577101100852B35 /* Tasks.xcdatamodeld */,
+			);
+			name = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -264,6 +297,7 @@
 				184C29641569E19900852B35 /* InfoPlist.strings in Resources */,
 				184C29761569E19900852B35 /* MainStoryboard.storyboard in Resources */,
 				184C29DE156CE21E00852B35 /* EZScheduledTaskController.xib in Resources */,
+				184C29EF1573697800852B35 /* EZScheduledTaskDetailCtrl.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,6 +326,10 @@
 				184C29E415708E6F00852B35 /* EZQuotasResult.m in Sources */,
 				184C29E71570925C00852B35 /* EZQuotas.m in Sources */,
 				184C29EA1570C1F900852B35 /* EZTaskHelper.m in Sources */,
+				184C29ED1573651F00852B35 /* EZScheduledTaskDetailCtrl.m in Sources */,
+				184C29F61574769400852B35 /* EZReleaseDetector.m in Sources */,
+				184C29F91575C7C400852B35 /* EZTaskList.m in Sources */,
+				184C2A811577101100852B35 /* Tasks.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -405,6 +443,19 @@
 			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		184C2A7F1577101100852B35 /* Tasks.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				184C2A801577101100852B35 /* Tasks.xcdatamodel */,
+			);
+			currentVersion = 184C2A801577101100852B35 /* Tasks.xcdatamodel */;
+			path = Tasks.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 184C294C1569E19800852B35 /* Project object */;
 }

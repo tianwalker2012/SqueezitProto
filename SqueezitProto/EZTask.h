@@ -48,6 +48,7 @@
 @property (strong, nonatomic) NSDate* date;
 @property (assign, nonatomic) EZEnvironmentTraits envTraits;
 @property (strong, nonatomic) EZQuotas* quotas;
+@property (strong, nonatomic) NSString* soundName;
 
 
 - (id) initWithName:(NSString*) nm duration:(int)dur maxDur:(int)mdur envTraits:(EZEnvironmentTraits)traits;

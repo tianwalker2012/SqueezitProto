@@ -17,6 +17,10 @@
 #import "EZQuotas.h"
 #import "EZTaskHelper.h"
 
+//Block definition, maybe useful very soon.
+//typedef NSComparisonResult (^NSComparator)(id obj1, id obj2);
+
+
 @interface EZTaskScheduler(private)
 
 - (EZScheduledTask*) getTaskFromList:(NSArray*)tasks timeSlot:(EZAvailableTime*)timeSlot;
@@ -29,25 +33,56 @@
 
 - (void) addExclusive:(NSMutableArray*)exclusive tasks:(NSArray*)tasks;
 
+- (EZAvailableTime*) createAvTimeFromScheduledTask:(EZScheduledTask*)schTask;
+
 @end
 
 @implementation EZTaskScheduler
 
+//Singleton
++ (EZTaskScheduler*) getInstance
+{
+    static EZTaskScheduler* instance;
+    if(!instance){
+        instance = [[EZTaskScheduler alloc] init];
+    }
+    return instance;
+}
+
+- (EZAvailableTime*) createAvTimeFromScheduledTask:(EZScheduledTask*)schTask
+{
+    EZAvailableTime* res = [[EZAvailableTime alloc] init:schTask.startTime name:schTask.task.name duration:schTask.duration environment:schTask.envTraits];
+    return res;
+}
 
 
+- (NSArray*) rescheduleTask:(EZScheduledTask*)schTask existTasks:(NSArray*)schTasks
+{
+    EZAvailableTime* avTime = [self createAvTimeFromScheduledTask:schTask];
+    NSMutableArray* exclusive = [[NSMutableArray alloc] initWithCapacity:[schTasks count]];
+    [self addExclusive:exclusive tasks:schTasks];
+    return [self scheduleTaskByBulk:avTime exclusiveList:exclusive tasks:[EZTaskStore getInstance].tasks];
+}
 //Why do we need this?
 //We need to collect the history date to help us calculate how many time we should 
 //Assign today. 
 - (int) calcHistoryTime:(EZTask*)task date:(NSDate*)date
 {
 
-    NSDate* historyStart = [EZTaskHelper calcHistoryBegin:task.quotas date:date];
+    NSDictionary* histResult = [EZTaskHelper calcHistoryBegin:task.quotas date:date];
+    NSDate* historyStart = [histResult objectForKey:@"beginDate"];
+    int padDay = [(NSNumber*)[histResult objectForKey:@"padDays"] intValue];
     if([historyStart equalWith:date format:@"yyyyMMdd"]){
         //Mean there is 
         return 0;
     }
     EZTaskStore* store = [EZTaskStore getInstance];
-    int taskTime = [store getTaskTime:task start:historyStart end:[date adjustDays:-1]];  
+    int taskTime = [store getTaskTime:task start:historyStart end:[date adjustDays:-1]];
+    //This is only for the cases of the first iteration of the quotas.
+    //But we need to handle this cases since this case happen a lot. 
+    if(padDay > 0){
+        taskTime += (task.quotas.quotasPerCycle/task.quotas.cycleLength) * padDay;
+    }
     return taskTime;
 }
 
@@ -61,7 +96,7 @@
         if(totalAmount <= 0){ //Allocated enough time.
             break;
         }
-        if((time.environmentTraits & task.envTraits) != task.envTraits){
+        if((time.envTraits & task.envTraits) != task.envTraits){
             //Not meet the requirements
             continue;
         }
@@ -73,11 +108,12 @@
             int actualAmount = MIN(maxDur, time.duration);
             EZScheduledTask* schTask = [[EZScheduledTask alloc] init];
             schTask.duration = actualAmount;
-            schTask.envTraits = task.envTraits;
+            schTask.envTraits = time.envTraits;
             schTask.startTime = time.start;
             schTask.task = task;
             [res addObject:schTask];
             time.duration = time.duration - actualAmount;
+            time.start = [time.start adjustMinutes:actualAmount];
             totalAmount -= actualAmount;
         }else{
             EZDEBUG(@"Not meet the minimum duration requirements:%@,Mini:%i,available Amount:%i",time.description,miniDur,time.duration);
@@ -97,15 +133,11 @@
 - (EZQuotasResult*) scheduleQuotasTask:(NSArray*)tasks date:(NSDate*)date avDay:(EZAvailableDay*)avDay
 {
     EZQuotasResult* res = [[EZQuotasResult alloc] init];
-    EZTaskStore* store = [EZTaskStore getInstance];
+    //EZTaskStore* store = [EZTaskStore getInstance];
     //EZAvailableDay* avDay = [store getAvailableDay:date];
-    EZDEBUG(@"Before iterate task list");
     for(EZTask* tk in tasks){
-        EZDEBUG(@"In the iteration,%@",tk);
         if(tk.quotas){
-            EZDEBUG(@"Task have quotas, %@",tk.quotas);
             int historyTime = [self calcHistoryTime:tk date:date];
-            EZDEBUG(@"HistoryTime:%i", historyTime);
             if(historyTime >= tk.quotas.quotasPerCycle){
                 //Already completed the required task, so no special treatment now.
                 continue;
@@ -113,7 +145,9 @@
             int remain = tk.quotas.quotasPerCycle - historyTime;
             int avg = remain/[EZTaskHelper cycleRemains:tk.quotas date:date];
             int amount = avg * 1.1;
-            res.scheduledTasks = [self allocTimeForTasks:tk avTimes:avDay.availableTimes amount:amount date:date];
+            NSArray* scts = [self allocTimeForTasks:tk avTimes:avDay.availableTimes amount:amount date:date];
+            [res.scheduledTasks addObjectsFromArray:scts];
+            EZDEBUG(@"%@:remain:%i,avg:%i,currentAmount:%i,createdTask:%i",tk.name,remain,avg,amount,[scts count]);
         }
     }
     res.availableDay = avDay;
@@ -142,19 +176,21 @@
     EZTaskStore* store = [EZTaskStore getInstance];
     NSMutableArray* res = [[NSMutableArray alloc] init];
     NSMutableArray* exclusiveTasks = [NSMutableArray arrayWithArray:exclusive]; 
-    EZDEBUG(@"Available Time count:%i",[avDay.availableTimes count]);
+    //EZDEBUG(@"Available Time count:%i",[avDay.availableTimes count]);
     for(EZAvailableTime* avTime in avDay.availableTimes){
         avTime.start = [self combineDate:date time:avTime.start];
         NSArray* scheduledTasks = [self scheduleTaskByBulk:avTime exclusiveList:exclusiveTasks tasks:store.tasks];
         [self addExclusive:exclusiveTasks tasks:scheduledTasks];
-        EZDEBUG(@"add %i tasks to %@(%@)",[scheduledTasks count],avTime.description,[avTime.start stringWithFormat:@"yyyy-MM-dd HH:mm:ss"]);
+        //EZDEBUG(@"add %i tasks to %@(%@)",[scheduledTasks count],avTime.description,[avTime.start stringWithFormat:@"yyyy-MM-dd HH:mm:ss"]);
         [res addObjectsFromArray:scheduledTasks];
     }
+    
     return res;
 }
 
 
-
+// Now this function meet my requirements.
+// Let's test on the really equipment, see how's going. 
 - (NSArray*) scheduleTaskByDate:(NSDate*)date exclusiveList:(NSArray*)exclusive 
 {
     EZTaskStore* store = [EZTaskStore getInstance];
@@ -171,7 +207,8 @@
     
     [res addObjectsFromArray:qres.scheduledTasks];
     [res addObjectsFromArray:[self scheduleRandomTask:date avDay:day exclusiveList:exclusiveMut]];
-    return res;
+    
+    return [self sort:res];
     
 }
 
@@ -180,7 +217,7 @@
 // Then ask user to take a vacation.
 - (NSArray*) changeScheduledTask:(EZScheduledTask*)change exclusiveList:(NSArray*)exclusive
 {
-    EZAvailableTime* avTime = [[EZAvailableTime alloc] init:change.startTime description:change.description duration:change.duration environment:change.envTraits];
+    EZAvailableTime* avTime = [[EZAvailableTime alloc] init:change.startTime name:change.task.name duration:change.duration environment:change.envTraits];
     EZTaskStore* store = [EZTaskStore getInstance];
     return [self scheduleTaskByBulk:avTime exclusiveList:exclusive tasks:store.tasks];
 }
@@ -202,9 +239,9 @@
     //NSMutableArray* exclusiveMut = [[NSMutableArray alloc] initWithArray:exclusive];
     EZAvailableTime* timeSlotMut = [[EZAvailableTime alloc] init:timeSlot];
     //Tasks should be available for this time slot.
-    NSLog(@"Tasks count:%i, exclusive task count:%i",[tasks count],[exclusive count]);
-    NSMutableArray* tasksMut = [self tasksRemovedExclusive:tasks exclusiveList:exclusive envTraits:timeSlot.environmentTraits];
-    NSLog(@"Removed tasks count %i",[tasksMut count]);
+    //NSLog(@"Tasks count:%i, exclusive task count:%i",[tasks count],[exclusive count]);
+    NSMutableArray* tasksMut = [self tasksRemovedExclusive:tasks exclusiveList:exclusive envTraits:timeSlot.envTraits];
+    //NSLog(@"Removed tasks count %i",[tasksMut count]);
     
     while(true){
         EZScheduledTask* task = [self getTaskFromList:tasksMut timeSlot:timeSlotMut];
@@ -217,6 +254,7 @@
             break;
         }
     }
+    EZDEBUG(@"Allocate %i tasks for duration:%i",[res count], timeSlot.duration);
     return res;
 }
 
@@ -255,7 +293,7 @@
         }
     }
     if([filteredTasks count] == 0){
-        EZDEBUG(@"Find no task for timeSlot:%@",timeSlot);
+        EZDEBUG(@"Find no task for timeSlot:%@,Duration:%i",timeSlot,timeSlot.duration);
         return res;
     }
     int selected = arc4random()%[filteredTasks count];
@@ -268,11 +306,22 @@
     }
     res.duration = actualDur;
     res.startTime = timeSlot.start;
-    res.envTraits = timeSlot.environmentTraits;
-    res.description = timeSlot.description;
+    res.envTraits = timeSlot.envTraits;
+    //res.description = timeSlot.description;
     timeSlot.duration = timeSlot.duration - actualDur;
     [timeSlot adjustStartTime:actualDur];
+    EZDEBUG(@"Find task:%@, duration:%i, remain time:%i", tk.name, res.duration, timeSlot.duration);
     return res;
+}
+
+
+- (NSArray*) sort:(NSArray *)schTasks
+{
+    return [schTasks sortedArrayUsingComparator:^(id obj1, id obj2){
+        EZScheduledTask* task1 = (EZScheduledTask*)obj1;
+        EZScheduledTask* task2 = (EZScheduledTask*)obj2;
+        return [task1.startTime compare:task2.startTime];
+    }];
 }
 
 - (BOOL) contain:(NSArray*)list object:(id)objin

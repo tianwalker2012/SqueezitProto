@@ -35,6 +35,13 @@
     return [[NSDate alloc] initWithTimeIntervalSince1970:curDays*SecondsPerDay];
 }
 
+- (NSDate*) adjustMinutes:(int)minutes
+{
+    NSTimeInterval seconds = [self timeIntervalSince1970];
+    seconds += minutes*60;
+    return [[NSDate alloc] initWithTimeIntervalSince1970:seconds];
+}
+
 - (EZWeekDayValue) weekDay
 {
     return 1 << ([self orgWeekDay] - 1);
@@ -102,7 +109,7 @@
 {
     int res = 0;
     for(EZAvailableTime* avTime in aDay.availableTimes){
-       if((avTime.environmentTraits & envTraits) == envTraits){
+       if((avTime.envTraits & envTraits) == envTraits){
             res += avTime.duration;
         }
     }
@@ -110,11 +117,9 @@
 }
 
 //It could have many cases, so I only have a natural week and a customized cases figure out so far
-+ (NSDate*) calcHistoryBegin:(EZQuotas*)quotas date:(NSDate*)date
++ (NSDictionary*) calcHistoryBegin:(EZQuotas*)quotas date:(NSDate*)date
 {
     NSDate* res;
-    EZDEBUG(@"Enter historyBegin");
-    EZDEBUG(@"quotas cycleTime:%i", quotas.cycleType);
     switch (quotas.cycleType) {
         case CustomizedCycle: {
             int beginDay = [quotas.cycleStartDay convertDays];
@@ -137,7 +142,16 @@
             break;
     }
     
-    return res;
+    //If actual start day later than cycle days, then the 
+    //History data will collect from the actual start day.
+    int paddingDay = 0;
+    if([res convertDays] < [quotas.startDay convertDays]){
+        paddingDay = [quotas.startDay convertDays] - [res convertDays];
+        res = quotas.startDay;
+        EZDEBUG(@"Padding day:%i",paddingDay);
+    }
+
+    return [NSDictionary dictionaryWithObjectsAndKeys:res, @"beginDate", [NSNumber numberWithInt:paddingDay], @"padDays", nil];
 }
 
 

@@ -18,8 +18,64 @@
 #import "EZQuotas.h"
 #import "EZQuotasResult.h"
 #import "EZTaskHelper.h"
+#import "EZReleaseDetector.h"
 
 #define TestValue 60*20
+
+//Block definition
+//No copy and paste, typing every code by your hand. Learn with your whole body.
+typedef void(^TestBlock)(id obj);
+
+
+@interface WeakReferObject : NSObject
+//@property(, nonatomic) id referred;
+@property(strong, nonatomic) TestBlock strongRef;
+@property(strong, nonatomic) EZReleaseDetector* strongRed;
+@end
+
+@implementation WeakReferObject
+
+- (void) dealloc
+{
+    EZDEBUG(@"WeakReferObject dealloc");
+}
+//@synthesize referred;
+@synthesize strongRef, strongRed;
+@end
+
+@interface TestObject1 : NSObject
+
+- (NSArray*) generateArray;
+
+- (TestBlock) createBlock;
+
+@end
+
+
+@implementation TestObject1
+
+- (NSArray*) generateArray
+{
+    return [NSArray arrayWithObject:@"Coolguy"];
+}
+
+- (TestBlock) createBlock
+{
+    EZReleaseDetector* dectector = [[EZReleaseDetector alloc] initWithName:@"Released" hasStackTrace:TRUE];
+    static int count = 0;
+    
+    return ^(id obj){ 
+        EZDEBUG(@"Time %i,Check name:%@",count,dectector.name);
+        if(count == 0){
+            assert(dectector != nil);
+        } else {
+            assert(dectector != nil);
+        }
+        ++ count;
+    };
+}
+
+@end
 
 @interface EZTestSuite(private)
 
@@ -35,6 +91,12 @@
 + (void) testTestData;
 + (void) testQuotasTask;
 + (void) testQuotasWithHistory;
++ (void) testIndexPath;
++ (void) testTimeIntervelSinceNow;
++ (void) testMethodAsProperty;
++ (void) testBlockMemory;
++ (WeakReferObject*) withBlockCall:(EZReleaseDetector*)dect;
++ (WeakReferObject*) withDetector:(EZReleaseDetector*)dect;
 @end
 
 @implementation EZTestSuite
@@ -54,8 +116,10 @@
     [EZTestSuite testTestData];
     [EZTestSuite testQuotasTask];
     [EZTestSuite testQuotasWithHistory];
-    
-    
+    [EZTestSuite testIndexPath];
+    [EZTestSuite testTimeIntervelSinceNow];
+    [EZTestSuite testMethodAsProperty];
+    [EZTestSuite testBlockMemory];
     //Clear all the test data.
     //In the future what should I do with this.
     //Seems in this case, we need the test case ready
@@ -64,10 +128,143 @@
     
 }
 
-//
++ (WeakReferObject*) withBlockCall:(EZReleaseDetector*)dect
+{
+    WeakReferObject* res = [[WeakReferObject alloc] init];
+    //res.referred = dect;
+    res.strongRef = ^(id obj){
+        EZDEBUG(@"Value %@",dect.name);  
+    };
+    return res;
+}
+
+//The purpose of this method is to check what's the root cause for this behave.
+//You just have limitless time to explore the myth of iOS. Take your time and enjoy doing it.
+//Digging into the core.
++ (WeakReferObject*) withDetector:(EZReleaseDetector*)dect
+{
+    WeakReferObject* res = [[WeakReferObject alloc] init];
+    res.strongRed = dect;
+    return res;
+}
+
++ (void) testBlockMemory
+{
+    static int deallocCount = 0;
+    EZReleaseDetector* dect = [[EZReleaseDetector alloc] initWithName:@"CoolRelease" hasStackTrace:false];
+    dect.block = ^(){
+        ++deallocCount;
+    };
+    dect = nil;
+    assert(deallocCount == 1);
+    
+    dect = [[EZReleaseDetector alloc] initWithName:@"CoolRelease" hasStackTrace:NO];
+    dect.block = ^(){
+        ++deallocCount;
+    };
+    WeakReferObject* weakRef = [self withBlockCall:dect];
+    dect = nil;
+    EZReleaseDetector* red = [[EZReleaseDetector alloc] initWithName:@"StrongRelease" hasStackTrace:NO];
+    red.block = ^(){
+        EZDEBUG(@"Strong get dealloced");
+        ++deallocCount;
+    };
+    weakRef.strongRed = red;
+    red = nil;
+    assert(deallocCount == 1);
+    //weakRef.strongRef = nil;
+    weakRef = nil;//Why this not work?
+    EZDEBUG(@"If the weak make any difference");
+    //assert(deallocCount == 2);
+    
+    WeakReferObject* directWeak = [[WeakReferObject alloc] init];
+    EZReleaseDetector* red2 = [[EZReleaseDetector alloc] initWithName:@"Red2" hasStackTrace:YES];
+    directWeak.strongRed = red2;
+    red2.block = ^(){
+        EZDEBUG(@"Red2 get released");
+    };
+    red2 = nil;
+    directWeak = nil;
+    EZDEBUG(@"DirectWeak should be released");  
+    
+    static int dcount = 0;
+    EZReleaseDetector* dect3 = [[EZReleaseDetector alloc] initWithName:@"Red3" hasStackTrace:YES];
+    dect3.block = ^(){
+        ++dcount;
+    };
+    WeakReferObject* funcWeak = [self withDetector:dect3]; 
+    funcWeak = nil;
+    assert(dcount == 1);
+    //WeakReferObject* 
+    
+}
+
++ (void) testMethodAsProperty
+{
+    TestObject1* tobj1 = [[TestObject1 alloc] init];
+    assert([@"Coolguy" isEqualToString:[tobj1.generateArray objectAtIndex:0]]);
+}
+
++ (void) testTimeIntervelSinceNow
+{
+    NSDate* yesterday = [NSDate stringToDate:@"yyyyMMdd" dateString:@"20120528"];
+    //Make the test case work whenever and wherever you run it.
+    //Mean you should carry your env with you
+    NSDate* tomorrow = [[NSDate date] adjustDays:1];
+    assert([yesterday timeIntervalSinceNow] < 0);
+    assert([tomorrow timeIntervalSinceNow] > 0);
+}
+// IndexPath is a puzzle last for very long time. 
+// It will not be a puzzle to me any more.
+// I will figure it out 
++ (void) testIndexPath
+{
+    //NSIndexPath* ip1 = [[NSIndexPath alloc] initWithIndex:1];
+    NSUInteger iarr[2];
+    iarr[0] = 2; iarr[1] = 5;
+    NSIndexPath* ip1 = [[NSIndexPath alloc] initWithIndexes:iarr length:2];
+    EZDEBUG(@"Row for index 1 is:%i, section is:%i",ip1.row, ip1.section);
+
+}
+
+// Describe the task cases and my expectation.
+// This is a complicated test cases
+// This is a natural 1 week cycle.(Customize cyle don't exist this issue)
+// 21 hours quotas.
+// Today is Friday
+// We have Wendesday and Thursday's history date.
+// Wednesday have 2 and Thursday have 1
+// Actual start at Wednesday.
+// So the history Time should be
+// 3*3+3 = 12.
+// 4.5 = 5
+
 + (void) testQuotasWithHistory
 {
-    EZDEBUG(@"Will test quotasWithHistory");
+    EZTaskScheduler* scheduler = [[EZTaskScheduler alloc] init];
+    EZTaskStore* store = [EZTaskStore getInstance];
+    [store clean];
+    EZTask* task = [[EZTask alloc] initWithName:@"iOS programming" duration:60 maxDur:120 envTraits:EZ_ENV_FLOWING];
+    
+    NSDate* actualStart = [NSDate stringToDate:@"yyyyMMdd" dateString:@"20120523"];
+    task.quotas = [[EZQuotas alloc] init:actualStart quotas:21 type:WeekCycle cycleStartDate:nil cycleLength:7];
+    NSDate* today = [NSDate stringToDate:@"yyyyMMdd" dateString:@"20120525"];
+    
+    
+    EZScheduledTask* ios1 = [[EZScheduledTask alloc] init];
+    ios1.task = task;
+    ios1.startTime = [NSDate stringToDate:@"yyyyMMdd" dateString:@"20120523"];
+    ios1.duration = 2;
+    [store storeScheduledTask:[NSArray arrayWithObject:ios1] date:ios1.startTime];
+    
+    EZScheduledTask* ios2 = [[EZScheduledTask alloc] init];
+    ios2.task = task;
+    ios2.startTime = [NSDate stringToDate:@"yyyyMMdd" dateString:@"20120524"];
+    ios2.duration = 1;
+    [store storeScheduledTask:[NSArray arrayWithObject:ios2] date:ios2.startTime];
+     
+    int historyTime = [scheduler calcHistoryTime:task date:today];
+    assert(historyTime == 12);
 }
 
 //The simplest Quotas test cases
@@ -76,9 +273,9 @@
     EZTaskStore* store = [EZTaskStore getInstance];
     [store clean];
     EZAvailableDay* avDay = [[EZAvailableDay alloc] initWithName:@"All Time" weeks:ALLDAYS];
-    EZAvailableTime* time1 = [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm" dateString:@"06:00"] description:@"Taiji time" duration:120 environment:EZ_ENV_FITTING];
-    EZAvailableTime* time2 = [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm" dateString:@"08:00"] description:@"Programming time" duration:90 environment:EZ_ENV_FLOWING];
-    EZAvailableTime* time3 = [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm" dateString:@"10:00"] description:@"Reading and Thinking" duration:120 environment:EZ_ENV_FLOWING|EZ_ENV_READING];
+    EZAvailableTime* time1 = [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm" dateString:@"06:00"] name:@"Taiji time" duration:120 environment:EZ_ENV_FITTING];
+    EZAvailableTime* time2 = [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm" dateString:@"08:00"] name:@"Programming time" duration:90 environment:EZ_ENV_FLOWING];
+    EZAvailableTime* time3 = [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm" dateString:@"10:00"] name:@"Reading and Thinking" duration:120 environment:EZ_ENV_FLOWING|EZ_ENV_READING];
     [avDay.availableTimes addObjectsFromArray:[NSArray arrayWithObjects:time1, time2, time3, nil]];
     [store.availableDays addObject:avDay];
     EZTask* task1 = [[EZTask alloc] initWithName:@"programming" duration:80 maxDur:80 envTraits:EZ_ENV_FLOWING];
@@ -125,7 +322,7 @@
     EZAvailableDay* aDay = [[EZAvailableDay alloc] init];
     aDay.assignedWeeks = ALLDAYS;
     NSDate* startTime = [NSDate date];
-    EZAvailableTime* avTime = [[EZAvailableTime alloc] init:startTime description:@"Taiji time" duration:150 environment:EZ_ENV_FITTING];
+    EZAvailableTime* avTime = [[EZAvailableTime alloc] init:startTime name:@"Taiji time" duration:150 environment:EZ_ENV_FITTING];
     [aDay.availableTimes addObject:avTime];
     [ets.availableDays addObject:aDay];
     EZTaskScheduler* scheduler = [[EZTaskScheduler alloc] init];
@@ -155,9 +352,9 @@
     
     NSDate* startTime2 = [NSDate stringToDate:@"yyyy-MM-dd HH:mm:ss" dateString:@"2012-05-25 07:10:00"];
     
-    EZAvailableTime* av1 = [[EZAvailableTime alloc] init:startTime1 description:@"Practice" duration:5 environment:EZ_ENV_FITTING];
+    EZAvailableTime* av1 = [[EZAvailableTime alloc] init:startTime1 name:@"Practice" duration:5 environment:EZ_ENV_FITTING];
     
-    EZAvailableTime* av2 = [[EZAvailableTime alloc] init:startTime2 description:@"Reading" duration:5 environment:EZ_ENV_READING];
+    EZAvailableTime* av2 = [[EZAvailableTime alloc] init:startTime2 name:@"Reading" duration:5 environment:EZ_ENV_READING];
     EZAvailableDay* availableDay = [[EZAvailableDay alloc] init];
     availableDay.assignedWeeks = ALLDAYS;
     [availableDay.availableTimes addObjectsFromArray:[NSArray arrayWithObjects:av1, av2, nil]];
@@ -334,7 +531,7 @@
 {
     NSLog(@"My second test");
     NSDate* startTime = [NSDate date];
-    EZAvailableTime* avTime = [[EZAvailableTime alloc] init:startTime description:@"Test scheduler" duration:13 environment:EZ_ENV_NONE];
+    EZAvailableTime* avTime = [[EZAvailableTime alloc] init:startTime name:@"Test scheduler" duration:13 environment:EZ_ENV_NONE];
     EZTaskScheduler* scheduler = [[EZTaskScheduler alloc] init];
     // NSArray* tasks = [EZTaskStore getTasks:avTime.environmentTraits];
     
@@ -379,7 +576,7 @@
 + (void) testMainCase
 {
     NSLog(@"My first home made test");
-    EZAvailableTime* avTime = [[EZAvailableTime alloc] init:[NSDate date] description:@"Test scheduler" duration:10 environment:EZ_ENV_NONE];
+    EZAvailableTime* avTime = [[EZAvailableTime alloc] init:[NSDate date] name:@"Test scheduler" duration:10 environment:EZ_ENV_NONE];
     EZTaskScheduler* scheduler = [[EZTaskScheduler alloc] init];
     // NSArray* tasks = [EZTaskStore getTasks:avTime.environmentTraits];
     NSArray* tasks = [NSArray arrayWithObjects:[[EZTask alloc]initWithName:@"small" duration:1 maxDur:1 envTraits:EZ_ENV_NONE],

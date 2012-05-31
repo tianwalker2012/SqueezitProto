@@ -24,6 +24,9 @@
 - (NSString*) stringWithFormat:(NSString*)format;
 
 - (NSDate*) adjustDays:(int)days;
+
+- (NSDate*) adjustMinutes:(int)minutes;
+
 //True mean they are equal with the format, False mean not equal. 
 - (BOOL) equalWith:(NSDate*)date format:(NSString*)format;
 
@@ -44,7 +47,7 @@
 //Calculate the beginning date for current cycle,
 //So that we have the information that from when we start collect history data
 //We collect history data for the purpose of calculating the remaining time
-+ (NSDate*) calcHistoryBegin:(EZQuotas*)quotas date:(NSDate*)date;
++ (NSDictionary*) calcHistoryBegin:(EZQuotas*)quotas date:(NSDate*)date;
 
 //Calculate how many days still left for in current cycle
 + (int) cycleRemains:(EZQuotas*)quotas date:(NSDate*)date;

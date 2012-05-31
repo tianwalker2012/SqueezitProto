@@ -14,14 +14,14 @@
 //The purpose to have a clean code is to enjoy the programming.
 @interface EZQuotasResult : NSObject {
     NSArray* exclusiveTasks;
-    NSArray* schduledTasks;
+    NSMutableArray* schduledTasks;
     EZAvailableDay* availableDay;
 }
 
 - (id) init:(NSArray*)schTasks exclusive:(NSArray*)exclusive aDay:(EZAvailableDay*)aDay;
 
 @property (strong, nonatomic) NSArray* exclusiveTasks;
-@property (strong, nonatomic) NSArray* scheduledTasks;
+@property (strong, nonatomic) NSMutableArray* scheduledTasks;
 @property (strong, nonatomic) EZAvailableDay* availableDay;
 
 @end

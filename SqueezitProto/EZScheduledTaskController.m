@@ -7,11 +7,13 @@
 //
 
 #import "EZScheduledTaskController.h"
+#import "EZScheduledTaskDetailCtrl.h"
 #import "EZScheduledTask.h"
 #import "EZTaskScheduler.h"
 #import "EZTask.h"
 #import "EZTaskStore.h"
 #import "EZTaskHelper.h"
+#import "EZAlarmUtility.h"
 
 @interface EZScheduledTaskController ()
 
@@ -31,21 +33,38 @@
     [self becomeFirstResponder];
 }
 
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    //Yes is 1, what about cancel, cancel is 0?
+    
+    EZDEBUG(@"The clicked button:%i",buttonIndex);
+    if(buttonIndex == 1){
+        [self rescheduleTasks];
+    }
+}
+
 - (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
 {
     //EZDEBUG(@"Get motion event:%i",motion);
     if(motion == UIEventSubtypeMotionShake){
         EZDEBUG(@"I encounter shake event");
+        if(scheduledTasks){
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Shakeduler" message:@"Are you sure you want reschedule?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Yes", nil];
+            [alert show];
+        }else{
         //message.text = @"Shaked";
-        [self rescheduleTasks];
+            [self rescheduleTasks];
+        }
     }
     
 }
 
 - (void) rescheduleTasks
 {
-    EZTaskScheduler* scheduler = [[EZTaskScheduler alloc] init];
+    EZTaskScheduler* scheduler = [EZTaskScheduler getInstance];
     scheduledTasks = [scheduler scheduleTaskByDate:currentDate exclusiveList:nil];
+    [EZAlarmUtility setupAlarmBulk:scheduledTasks];
     [self.tableView reloadData];
     [self cancelShakeMessage];
     
@@ -61,7 +80,7 @@
     return self;
 }
 
-- (void) presentShakeMessage
+- (void) presentShakeMessage:(NSString*)msg
 {
     if(!shakeMessage){
         shakeMessage = [[UIView alloc] initWithFrame:self.view.bounds];
@@ -72,8 +91,10 @@
         message.center = shakeMessage.center;
         //message.font = [[UIFont alloc] init];
         message.textAlignment = UITextAlignmentCenter;
-        message.text = @"摇一摇按排任务";
+        message.text = msg;
         [shakeMessage addSubview:message];
+    }else{
+        message.text = msg;
     }
     [self.view addSubview:shakeMessage];
 }
@@ -83,6 +104,34 @@
 - (void) cancelShakeMessage
 {
     [shakeMessage removeFromSuperview];
+}
+
+- (void) deleteRow:(NSIndexPath*)indexPath
+{
+    [self.tableView beginUpdates];
+
+    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+    
+    [self.tableView endUpdates];
+}
+
+//Add rows to replace the old rows
+- (void) replaceRow:(NSIndexPath*)indexPath
+{
+    [self.tableView beginUpdates];
+    
+    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+    NSMutableArray* insertedPaths = [[NSMutableArray alloc] init];
+    for(int i = 0; i < [repalceTasks count]; i++){
+        NSUInteger iarr[2];
+        iarr[0] = indexPath.section;
+        iarr[1] = indexPath.row + i;
+        NSIndexPath* path = [[NSIndexPath alloc] initWithIndexes:iarr length:2];
+        [insertedPaths addObject:path];
+    }
+    //[insertedPaths addObject:indexPath];
+    [self.tableView insertRowsAtIndexPaths:insertedPaths withRowAnimation:UITableViewRowAnimationRight];
+    [self.tableView endUpdates];
 }
 
 - (void)viewDidLoad
@@ -98,7 +147,7 @@
     //scheduledTasks = [scheduler scheduleTaskByDate:currentDate exclusiveList:nil];
     scheduledTasks = [store getScheduledTaskByDate:currentDate];
     if(!scheduledTasks){
-        [self presentShakeMessage];
+        [self presentShakeMessage:@"Shake shake"];
     }
     
     // Uncomment the following line to preserve selection between presentations.
@@ -143,7 +192,8 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"ContentCell"];
     }
     EZScheduledTask* task = [scheduledTasks objectAtIndex:indexPath.row];
-    cell.textLabel.text = task.task.name;
+    
+    cell.textLabel.text = [NSString stringWithFormat:@"%@(%@)",task.task.name,(task.alarmNotification?@"setup alarm":@"no alarm")];
     NSDate* endTime = [NSDate dateWithTimeInterval:task.duration*60 sinceDate:task.startTime];
     cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ - %@",[task.startTime stringWithFormat:@"HH:mm"],[endTime stringWithFormat:@"HH:mm"]];
     
@@ -196,12 +246,61 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
+        
+    EZScheduledTaskDetailCtrl* detailViewController = [[EZScheduledTaskDetailCtrl alloc] initWithNibName:@"EZScheduledTaskDetailCtrl" bundle:nil];
+    EZScheduledTask* task = [scheduledTasks objectAtIndex:indexPath.row];
+    detailViewController.schTask = task; 
+    //detailViewController.row = indexPath.row;
+    detailViewController.indexPath = indexPath;
+    detailViewController.deleteOp = ^(NSIndexPath* path){
+        EZDEBUG(@"DeleteOp get called");
+        EZScheduledTask* delTask = [scheduledTasks objectAtIndex:path.row];
+        [EZAlarmUtility cancelAlarm:delTask];
+        NSMutableArray* mutArr = [NSMutableArray arrayWithArray:self.scheduledTasks];
+        [mutArr removeObjectAtIndex:path.row];
+        self.scheduledTasks = mutArr;
+        //How to animate more precisely.
+        //[self.tableView reloadData];
+        [self dismissModalViewControllerAnimated:YES];
+        [self performSelector:@selector(deleteRow:) withObject:path afterDelay:0.3];
+        //[self deleteRow:path];
+    };
+    
+    detailViewController.reschuduleOp = ^(NSIndexPath* path){
+        EZDEBUG(@"RescheduleOp get called");
+        NSMutableArray* mutArr = [NSMutableArray arrayWithArray:self.scheduledTasks];
+        EZScheduledTask* schTask = [mutArr objectAtIndex:path.row];
+        
+        NSArray* schTasks = [[EZTaskScheduler getInstance] rescheduleTask:schTask existTasks:scheduledTasks];
+        if([schTasks count] > 0){
+            [EZAlarmUtility cancelAlarm:[mutArr objectAtIndex:path.row]];
+            [EZAlarmUtility setupAlarmBulk:schTasks];
+            [mutArr removeObjectAtIndex:path.row];
+            [mutArr addObjectsFromArray:schTasks];
+            [mutArr sortUsingComparator:^(id obj1, id obj2) {
+                EZScheduledTask* task1 = obj1;
+                EZScheduledTask* task2 = obj2;
+                return [task1.startTime compare:task2.startTime];
+                
+            }];
+            self.scheduledTasks = mutArr;
+            //[self.tableView reloadData];
+            [self dismissModalViewControllerAnimated:YES];
+            repalceTasks = schTasks;
+            [self performSelector:@selector(replaceRow:) withObject:path afterDelay:0.3];
+        }else{
+            EZDEBUG(@"Could not find replacement for:%@",[schTask detail]);
+        }
+        
+    };
+    
+    //The purpose of this is to provide a bar to anchor the button and the title.
+    UIViewController* dummyRoot = [[UIViewController alloc] init];
+    UINavigationController* nav = [[UINavigationController alloc] initWithRootViewController:dummyRoot];
+    [nav pushViewController:detailViewController animated:NO];
+    // ...
      // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
+    [self presentModalViewController:nav animated:YES];
 }
 
 @end

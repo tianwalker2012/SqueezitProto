@@ -17,7 +17,7 @@
     EZTask* task;
     //When I change the tasks I need this traits
     EZEnvironmentTraits envTraits;
-    NSString* description;
+//    NSString* description;
 }
 
 - (NSString*) detail;
@@ -26,6 +26,7 @@
 @property(strong, nonatomic) EZTask* task;
 @property(assign, nonatomic) int duration;
 @property(assign, nonatomic) EZEnvironmentTraits envTraits;
-@property(strong, nonatomic) NSString* description;
+//@property(strong, nonatomic) NSString* description;
+@property(strong, nonatomic) UILocalNotification* alarmNotification;
 
 @end

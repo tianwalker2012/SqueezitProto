@@ -11,11 +11,19 @@
 @implementation EZQuotasResult
 @synthesize scheduledTasks, availableDay, exclusiveTasks;
 
+- (id) init
+{
+    self = [super init];
+    self.scheduledTasks = [[NSMutableArray alloc] init]; 
+    return self;
+}
+
+
 - (id) init:(NSArray*)schTasks exclusive:(NSArray*)exclusive aDay:(EZAvailableDay*)aDay
 {
     self = [super init];
     self.availableDay = aDay;
-    self.scheduledTasks = schTasks;
+    self.scheduledTasks = [NSMutableArray arrayWithArray:schTasks];
     self.exclusiveTasks = exclusive;
     return self;
 }

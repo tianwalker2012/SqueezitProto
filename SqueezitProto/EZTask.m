@@ -9,7 +9,7 @@
 #import "EZTask.h"
 
 @implementation EZTask
-@synthesize name, duration, maxDuration, fixedTime, fixedDate, time, date, envTraits, quotas;
+@synthesize name, duration, maxDuration, fixedTime, fixedDate, time, date, envTraits, quotas, soundName;
 
 - (id) initWithName:(NSString*) nm duration:(int)dur maxDur:(int)mdur envTraits:(EZEnvironmentTraits)traits
 {
@@ -18,6 +18,8 @@
     self.duration = dur;
     self.maxDuration = mdur;
     self.envTraits = traits;
+    //Task can choose it's own name, I love it.
+    self.soundName = UILocalNotificationDefaultSoundName;
     return self;
 
 }
