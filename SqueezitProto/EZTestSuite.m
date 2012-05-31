@@ -19,6 +19,12 @@
 #import "EZQuotasResult.h"
 #import "EZTaskHelper.h"
 #import "EZReleaseDetector.h"
+#import "EZCoreAccessor.h"
+#import "MAvailableDay.h"
+#import "MTask.h"
+#import "MTaskGroup.h"
+#import "MQuotas.h"
+#import "MScheduledTask.h"
 
 #define TestValue 60*20
 
@@ -97,6 +103,9 @@ typedef void(^TestBlock)(id obj);
 + (void) testBlockMemory;
 + (WeakReferObject*) withBlockCall:(EZReleaseDetector*)dect;
 + (WeakReferObject*) withDetector:(EZReleaseDetector*)dect;
+
++ (void) testSimpleData;
+
 @end
 
 @implementation EZTestSuite
@@ -119,12 +128,59 @@ typedef void(^TestBlock)(id obj);
     [EZTestSuite testIndexPath];
     [EZTestSuite testTimeIntervelSinceNow];
     [EZTestSuite testMethodAsProperty];
-    [EZTestSuite testBlockMemory];
+    //[EZTestSuite testBlockMemory];
+    [EZTestSuite testSimpleData];
     //Clear all the test data.
     //In the future what should I do with this.
     //Seems in this case, we need the test case ready
     //If it involve the test data cleanup.
     [[EZTaskStore getInstance] clean];
+    
+}
+
++ (void) testSimpleData 
+{
+    NSString* testDB = @"TestTasks.sqlite";
+    [EZCoreAccessor cleanDB:testDB];
+    
+    EZCoreAccessor* accessor = [[EZCoreAccessor alloc] initWithDBName:testDB modelName:CoreModelName];
+    MAvailableDay* day = (MAvailableDay*)[accessor create:[MAvailableDay class]];
+    EZDEBUG(@"Instanciated %@", day);
+    assert(day != nil);
+    day.date = [NSDate stringToDate:@"yyyyMMdd" dateString:@"20120601"];
+    [accessor store:day];
+    NSArray* days = [accessor fetchAll:[day class] sortField:@"name"];
+    EZDEBUG(@"The count is:%i",[days count]);
+    assert([days count] == 1);
+    
+    MTaskGroup* group = [accessor create:[MTaskGroup class]];
+    group.name = @"Gym";
+    
+    MTask* task = [accessor create:[MTask class]];
+    task.name = @"Taiji";
+    EZDEBUG(@"Task ID detail %@, hash %i",task.objectID, task.objectID.hash);
+    [group addTasksObject:task];
+    [accessor store:group];
+    NSArray* groups = [accessor fetchAll:[MTaskGroup class] sortField:nil];
+    assert([groups count] == 1);
+    
+    MTaskGroup* storedGroup = [groups objectAtIndex:0];
+    assert([storedGroup.tasks count] == 1);
+    
+    MTask* fetchedTask = [storedGroup.tasks anyObject];
+    assert([fetchedTask.name compare:task.name] == NSOrderedSame);
+    //Test refresh
+    
+    task.name = @"Play cool";
+    [accessor store:task];
+    [task.managedObjectContext refreshObject:fetchedTask mergeChanges:YES];
+    assert([fetchedTask.name compare:@"Play cool"] == NSOrderedSame);
+    
+    group.name = @"Brand New";
+    [accessor store:group];
+    [storedGroup.managedObjectContext refreshObject:storedGroup mergeChanges:NO];
+    assert([storedGroup.name compare:@"Brand New"] == NSOrderedSame);
+    
     
 }
 
@@ -194,7 +250,10 @@ typedef void(^TestBlock)(id obj);
     };
     WeakReferObject* funcWeak = [self withDetector:dect3]; 
     funcWeak = nil;
-    assert(dcount == 1);
+    //The reason, is because when a object passed outside, it will be autorelease.
+    //By autorelease mean that It will get released by the end of the call stack.
+    assert(dcount == 0);
+    //assert(dcount == 1);
     //WeakReferObject* 
     
 }

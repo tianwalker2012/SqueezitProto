@@ -37,6 +37,13 @@
 		184C29F91575C7C400852B35 /* EZTaskList.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C29F81575C7C000852B35 /* EZTaskList.m */; };
 		184C2A7A15770F7F00852B35 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 184C2A7915770F7E00852B35 /* CoreData.framework */; };
 		184C2A811577101100852B35 /* Tasks.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 184C2A7F1577101100852B35 /* Tasks.xcdatamodeld */; };
+		184C2AA31577209500852B35 /* EZCoreAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2AA21577209500852B35 /* EZCoreAccessor.m */; };
+		184C2AB9157759C700852B35 /* MQuotas.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2AB8157759C700852B35 /* MQuotas.m */; };
+		184C2ABC157759CA00852B35 /* MScheduledTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2ABB157759C900852B35 /* MScheduledTask.m */; };
+		184C2ABF157759CA00852B35 /* MAvailableTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2ABE157759CA00852B35 /* MAvailableTime.m */; };
+		184C2AC2157759CB00852B35 /* MAvailableDay.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2AC1157759CB00852B35 /* MAvailableDay.m */; };
+		184C2AC5157759CF00852B35 /* MTaskGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2AC4157759CF00852B35 /* MTaskGroup.m */; };
+		184C2AC8157759D000852B35 /* MTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2AC7157759CF00852B35 /* MTask.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -94,6 +101,20 @@
 		184C29F81575C7C000852B35 /* EZTaskList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTaskList.m; sourceTree = "<group>"; };
 		184C2A7915770F7E00852B35 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		184C2A801577101100852B35 /* Tasks.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Tasks.xcdatamodel; sourceTree = "<group>"; };
+		184C2AA11577209500852B35 /* EZCoreAccessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZCoreAccessor.h; sourceTree = "<group>"; };
+		184C2AA21577209500852B35 /* EZCoreAccessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZCoreAccessor.m; sourceTree = "<group>"; };
+		184C2AB7157759C700852B35 /* MQuotas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQuotas.h; sourceTree = "<group>"; };
+		184C2AB8157759C700852B35 /* MQuotas.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQuotas.m; sourceTree = "<group>"; };
+		184C2ABA157759C900852B35 /* MScheduledTask.h */ = {isa = PBXFileReference; fileEncoding = 4; path = MScheduledTask.h; sourceTree = "<group>"; };
+		184C2ABB157759C900852B35 /* MScheduledTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MScheduledTask.m; sourceTree = "<group>"; };
+		184C2ABD157759CA00852B35 /* MAvailableTime.h */ = {isa = PBXFileReference; fileEncoding = 4; path = MAvailableTime.h; sourceTree = "<group>"; };
+		184C2ABE157759CA00852B35 /* MAvailableTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAvailableTime.m; sourceTree = "<group>"; };
+		184C2AC0157759CB00852B35 /* MAvailableDay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAvailableDay.h; sourceTree = "<group>"; };
+		184C2AC1157759CB00852B35 /* MAvailableDay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAvailableDay.m; sourceTree = "<group>"; };
+		184C2AC3157759CC00852B35 /* MTaskGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTaskGroup.h; sourceTree = "<group>"; };
+		184C2AC4157759CF00852B35 /* MTaskGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTaskGroup.m; sourceTree = "<group>"; };
+		184C2AC6157759CF00852B35 /* MTask.h */ = {isa = PBXFileReference; fileEncoding = 4; path = MTask.h; sourceTree = "<group>"; };
+		184C2AC7157759CF00852B35 /* MTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTask.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +163,8 @@
 		184C295F1569E19900852B35 /* SqueezitProto */ = {
 			isa = PBXGroup;
 			children = (
+				184C2AA415774C6500852B35 /* TestCases */,
+				184C2AA01577206800852B35 /* CoreDataUtility */,
 				184C2A7B15770F9F00852B35 /* Models */,
 				184C29D9156CE1C800852B35 /* Controllers */,
 				184C298E156A296F00852B35 /* Utility */,
@@ -185,8 +208,6 @@
 				184C2987156A162100852B35 /* EZAvailableTime.m */,
 				184C298B156A27B600852B35 /* EZTaskStore.h */,
 				184C298C156A27B600852B35 /* EZTaskStore.m */,
-				184C298F156B36D100852B35 /* EZTestSuite.h */,
-				184C2990156B36D200852B35 /* EZTestSuite.m */,
 				184C29D3156C933200852B35 /* EZScheduledDay.h */,
 				184C29D4156C933300852B35 /* EZScheduledDay.m */,
 				184C29D6156C947900852B35 /* EZAvailableDay.h */,
@@ -239,8 +260,38 @@
 			isa = PBXGroup;
 			children = (
 				184C2A7F1577101100852B35 /* Tasks.xcdatamodeld */,
+				184C2AB7157759C700852B35 /* MQuotas.h */,
+				184C2AB8157759C700852B35 /* MQuotas.m */,
+				184C2ABA157759C900852B35 /* MScheduledTask.h */,
+				184C2ABB157759C900852B35 /* MScheduledTask.m */,
+				184C2ABD157759CA00852B35 /* MAvailableTime.h */,
+				184C2ABE157759CA00852B35 /* MAvailableTime.m */,
+				184C2AC0157759CB00852B35 /* MAvailableDay.h */,
+				184C2AC1157759CB00852B35 /* MAvailableDay.m */,
+				184C2AC3157759CC00852B35 /* MTaskGroup.h */,
+				184C2AC4157759CF00852B35 /* MTaskGroup.m */,
+				184C2AC6157759CF00852B35 /* MTask.h */,
+				184C2AC7157759CF00852B35 /* MTask.m */,
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		184C2AA01577206800852B35 /* CoreDataUtility */ = {
+			isa = PBXGroup;
+			children = (
+				184C2AA11577209500852B35 /* EZCoreAccessor.h */,
+				184C2AA21577209500852B35 /* EZCoreAccessor.m */,
+			);
+			name = CoreDataUtility;
+			sourceTree = "<group>";
+		};
+		184C2AA415774C6500852B35 /* TestCases */ = {
+			isa = PBXGroup;
+			children = (
+				184C2990156B36D200852B35 /* EZTestSuite.m */,
+				184C298F156B36D100852B35 /* EZTestSuite.h */,
+			);
+			name = TestCases;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -330,6 +381,13 @@
 				184C29F61574769400852B35 /* EZReleaseDetector.m in Sources */,
 				184C29F91575C7C400852B35 /* EZTaskList.m in Sources */,
 				184C2A811577101100852B35 /* Tasks.xcdatamodeld in Sources */,
+				184C2AA31577209500852B35 /* EZCoreAccessor.m in Sources */,
+				184C2AB9157759C700852B35 /* MQuotas.m in Sources */,
+				184C2ABC157759CA00852B35 /* MScheduledTask.m in Sources */,
+				184C2ABF157759CA00852B35 /* MAvailableTime.m in Sources */,
+				184C2AC2157759CB00852B35 /* MAvailableDay.m in Sources */,
+				184C2AC5157759CF00852B35 /* MTaskGroup.m in Sources */,
+				184C2AC8157759D000852B35 /* MTask.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

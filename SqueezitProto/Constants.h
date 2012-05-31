@@ -27,6 +27,11 @@ EZDEBUG(xx, ##__VA_ARGS__); \
 
 #define SecondsPerDay 86400
 
+#define CoreDBName @"Tasks.sqlite"
+#define CoreModelName @"Tasks"
+
+#define CoreFetchResultCache @"Root"
+
 typedef enum EZEnvironmentTraits {
     EZ_ENV_NONE = 0,
     EZ_ENV_FITTING = 1,

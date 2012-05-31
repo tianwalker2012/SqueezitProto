@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1171" systemVersion="11D50" minimumToolsVersion="Xcode 4.1" macOSVersion="Automatic" iOSVersion="Automatic">
-    <entity name="EZAvailableDay" syncable="YES">
+    <entity name="MAvailableDay" representedClassName="MAvailableDay" syncable="YES">
         <attribute name="assignedWeeks" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="availableTimes" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EZAvailableTime" syncable="YES"/>
+        <relationship name="availableTimes" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="MAvailableTime" syncable="YES"/>
     </entity>
-    <entity name="EZAvailableTime" syncable="YES">
+    <entity name="MAvailableTime" representedClassName="MZAvailableTime" syncable="YES">
         <attribute name="duration" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="envTraits" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="startTime" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
-    <entity name="EZQuotas" syncable="YES">
+    <entity name="MQuotas" representedClassName="MZQuotas" syncable="YES">
         <attribute name="cycleLength" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="cycleStartDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="cycleType" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -21,29 +21,29 @@
         <attribute name="quotasPerCycle" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="startDate" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
-    <entity name="EZScheduledTask" syncable="YES">
+    <entity name="MScheduledTask" representedClassName="MZScheduledTask" syncable="YES">
         <attribute name="duration" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="envTraits" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="startTime" optional="YES" attributeType="Date" syncable="YES"/>
-        <relationship name="task" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="EZTask" syncable="YES"/>
+        <relationship name="task" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="MTask" syncable="YES"/>
     </entity>
-    <entity name="EZTask" syncable="YES">
+    <entity name="MTask" representedClassName="MZTask" syncable="YES">
         <attribute name="duration" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="envTraits" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="maxDuration" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="quotas" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="EZQuotas" syncable="YES"/>
+        <relationship name="quotas" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="MQuotas" syncable="YES"/>
     </entity>
-    <entity name="EZTaskGroup" syncable="YES">
+    <entity name="MTaskGroup" representedClassName="MTaskGroup" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="tasks" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="EZTask" syncable="YES"/>
+        <relationship name="tasks" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="MTask" syncable="YES"/>
     </entity>
     <elements>
-        <element name="EZTaskGroup" positionX="160" positionY="192" width="128" height="75"/>
-        <element name="EZTask" positionX="160" positionY="192" width="128" height="120"/>
-        <element name="EZQuotas" positionX="160" positionY="192" width="128" height="150"/>
-        <element name="EZScheduledTask" positionX="160" positionY="192" width="128" height="105"/>
-        <element name="EZAvailableTime" positionX="160" positionY="192" width="128" height="105"/>
-        <element name="EZAvailableDay" positionX="160" positionY="192" width="128" height="105"/>
+        <element name="MTaskGroup" positionX="160" positionY="192" width="128" height="75"/>
+        <element name="MTask" positionX="160" positionY="192" width="128" height="120"/>
+        <element name="MQuotas" positionX="160" positionY="192" width="128" height="150"/>
+        <element name="MScheduledTask" positionX="160" positionY="192" width="128" height="105"/>
+        <element name="MAvailableTime" positionX="160" positionY="192" width="128" height="105"/>
+        <element name="MAvailableDay" positionX="160" positionY="192" width="128" height="105"/>
     </elements>
 </model>
