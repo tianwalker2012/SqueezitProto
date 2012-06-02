@@ -14,6 +14,7 @@
 @interface MTaskGroup : NSManagedObject
 
 @property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSDate* createdTime;
 @property (nonatomic, retain) NSSet *tasks;
 @end
 

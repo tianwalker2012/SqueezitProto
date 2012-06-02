@@ -61,7 +61,7 @@
     EZAvailableTime* avTime = [self createAvTimeFromScheduledTask:schTask];
     NSMutableArray* exclusive = [[NSMutableArray alloc] initWithCapacity:[schTasks count]];
     [self addExclusive:exclusive tasks:schTasks];
-    return [self scheduleTaskByBulk:avTime exclusiveList:exclusive tasks:[EZTaskStore getInstance].tasks];
+    return [self scheduleTaskByBulk:avTime exclusiveList:exclusive tasks:[[EZTaskStore getInstance] getAllTasks]];
 }
 //Why do we need this?
 //We need to collect the history date to help us calculate how many time we should 
@@ -179,7 +179,7 @@
     //EZDEBUG(@"Available Time count:%i",[avDay.availableTimes count]);
     for(EZAvailableTime* avTime in avDay.availableTimes){
         avTime.start = [self combineDate:date time:avTime.start];
-        NSArray* scheduledTasks = [self scheduleTaskByBulk:avTime exclusiveList:exclusiveTasks tasks:store.tasks];
+        NSArray* scheduledTasks = [self scheduleTaskByBulk:avTime exclusiveList:exclusiveTasks tasks:[store getAllTasks]];
         [self addExclusive:exclusiveTasks tasks:scheduledTasks];
         //EZDEBUG(@"add %i tasks to %@(%@)",[scheduledTasks count],avTime.description,[avTime.start stringWithFormat:@"yyyy-MM-dd HH:mm:ss"]);
         [res addObjectsFromArray:scheduledTasks];
@@ -200,7 +200,7 @@
         EZDEBUG(@"Didn't find schedule for %@",[date stringWithFormat:@"yyyy-MM-dd"]);
         return res;
     }
-    NSArray* tasks = store.tasks;
+    NSArray* tasks = store.getAllTasks;
     EZQuotasResult* qres = [self scheduleQuotasTask:tasks date:date avDay:day];
     NSMutableArray* exclusiveMut = [NSMutableArray arrayWithArray:exclusive];
     [self addExclusive:exclusiveMut tasks:qres.scheduledTasks];
@@ -219,7 +219,7 @@
 {
     EZAvailableTime* avTime = [[EZAvailableTime alloc] init:change.startTime name:change.task.name duration:change.duration environment:change.envTraits];
     EZTaskStore* store = [EZTaskStore getInstance];
-    return [self scheduleTaskByBulk:avTime exclusiveList:exclusive tasks:store.tasks];
+    return [self scheduleTaskByBulk:avTime exclusiveList:exclusive tasks:store.getAllTasks];
 }
 
 // What this function do?

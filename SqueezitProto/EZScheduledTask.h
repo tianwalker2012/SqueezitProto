@@ -8,10 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "Constants.h"
+#import "EZTaskHelper.h"
 
-@class EZTask;
+@class EZTask, MScheduledTask;
 
-@interface EZScheduledTask : NSObject {
+@interface EZScheduledTask : NSObject<EZValueObject> {
     NSDate* startTime;
     int duration;
     EZTask* task;
@@ -28,5 +29,13 @@
 @property(assign, nonatomic) EZEnvironmentTraits envTraits;
 //@property(strong, nonatomic) NSString* description;
 @property(strong, nonatomic) UILocalNotification* alarmNotification;
+@property(strong, nonatomic) MScheduledTask* PO;
+
+
+- (id) initWithPO:(MScheduledTask*)mtk;
+
+- (MScheduledTask*) createPO;
+
+- (MScheduledTask*) populatePO:(MScheduledTask*)po;
 
 @end

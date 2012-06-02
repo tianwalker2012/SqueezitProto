@@ -14,5 +14,6 @@
 
 @dynamic name;
 @dynamic tasks;
+@dynamic createdTime;
 
 @end

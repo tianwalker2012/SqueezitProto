@@ -8,10 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "Constants.h"
+#import "EZTaskHelper.h"
 
-@class EZQuotas;
+@class EZQuotas, MTask;
 
-@interface EZTask : NSObject {
+@interface EZTask : NSObject<EZValueObject> {
     NSString* name;
 
     //In minutes, which mean minimum duration.
@@ -49,10 +50,17 @@
 @property (assign, nonatomic) EZEnvironmentTraits envTraits;
 @property (strong, nonatomic) EZQuotas* quotas;
 @property (strong, nonatomic) NSString* soundName;
+@property (strong, nonatomic) MTask* PO;
 
 
 - (id) initWithName:(NSString*) nm duration:(int)dur maxDur:(int)mdur envTraits:(EZEnvironmentTraits)traits;
 
 - (BOOL) isEqual:(EZTask*)task;
+
+- (id) initWithPO:(MTask*)mtk;
+
+- (MTask*) createPO;
+
+- (MTask*) populatePO:(MTask*)po;
 
 @end

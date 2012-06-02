@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class MQuotas;
+@class MQuotas, EZTask;
 
 @interface MTask : NSManagedObject
 
@@ -18,5 +18,6 @@
 @property (nonatomic, retain) NSNumber * duration;
 @property (nonatomic, retain) NSNumber * maxDuration;
 @property (nonatomic, retain) MQuotas*quotas;
+
 
 @end

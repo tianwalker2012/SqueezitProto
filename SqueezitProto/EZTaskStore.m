@@ -14,6 +14,14 @@
 #import "EZScheduledDay.h"
 #import "EZTaskHelper.h"
 #import "EZQuotas.h"
+#import "EZCoreAccessor.h"
+#import "MTask.h"
+#import "MScheduledTask.h"
+#import "MQuotas.h"
+#import "MTaskGroup.h"
+#import "MAvailableDay.h"
+#import "MAvailableTime.h"
+
 
 @interface EZTaskStore(private)
 
@@ -21,8 +29,6 @@
 
 
 @implementation EZTaskStore
-@synthesize scheduleDays, tasks, achievedTasks, availableDays;
-
 // The purpose of this functinality 
 // is to fill the store with the test data, so that we could go ahead and do the test accordingly.
 // I love it.
@@ -75,7 +81,8 @@
                      [[EZTask alloc] initWithName:@"Play game" duration:15 maxDur:45 envTraits:EZ_ENV_SOCIALING]
                      , nil];
     
-    [self.tasks addObjectsFromArray:tks];
+    //[self.tasks addObjectsFromArray:tks];
+    [self storeObjects:tks];
     EZAvailableDay* avDays = [[EZAvailableDay alloc] initWithName:@"Default setting" weeks:ALLDAYS];
     NSArray* avTimes = [NSArray arrayWithObjects:
                         [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm:ss" dateString:@"05:30:00"] name:@"大便时段" duration:30 environment:EZ_ENV_READING],
@@ -89,48 +96,98 @@
                          [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm:ss" dateString:@"20:30:00"] name:@"Night hours" duration:105 environment:EZ_ENV_FLOWING|EZ_ENV_LISTENING|EZ_ENV_READING]
                         , nil];
     [avDays.availableTimes addObjectsFromArray:avTimes];
-    [self.availableDays addObject:avDays];
+    //[self.availableDays addObject:avDays];
+    [self storeObject:avDays];
     
 }
 
 - (void) clean
 {
-    [scheduledDays removeAllObjects];
-    [tasks removeAllObjects];
-    [achievedTasks removeAllObjects];
-    [availableDays removeAllObjects];
 }
 
 - (id) init
 {
     self = [super init];
-    //Will load all the data from the persistence storage.
-    scheduleDays = [[NSMutableArray alloc] init];
-    tasks = [[NSMutableArray alloc] init];
-    achievedTasks = [[NSMutableArray alloc] init];
-    availableDays = [[NSMutableArray alloc] init];
-    storedScheduledTasks = [[NSMutableDictionary alloc] init];
     
     //[self fillTestData];
     return self;
 }
 
+- (void) storeObjects:(NSArray*) objects
+{
+    for(NSObject<EZValueObject>* obj in objects){
+        [self storeObject:obj];
+    }
+}
+
+- (void) storeObject:(NSObject<EZValueObject>*)obj
+{
+    [[EZCoreAccessor getInstance] store:obj.createPO];
+}
+
+- (void) removeObject:(NSObject<EZValueObject>*)obj
+{
+    if(obj.PO){
+        [[EZCoreAccessor getInstance] remove:obj.PO];
+    }
+}
+
+- (void) removeObjects:(NSArray*) objects
+{
+    for(NSObject<EZValueObject>* obj in objects){
+        [self removeObject:obj];
+    }
+}
+
+- (NSArray*) getAllTasks
+{
+    return [self fetchAllWithVO:[EZTask class] po:[MTask class]];
+}
+
+// So far it is clean, have a name for every PO seems a simpler solution
+// You just set it as option, what harm it can cause us?
+// Keep it as simple as possible.
+- (NSArray*) fetchAllWithVO:(Class)voType po:(Class)poType
+{
+    NSArray* allPos = [[EZCoreAccessor getInstance] fetchAll:poType sortField:nil];
+    NSMutableArray* res = [[NSMutableArray alloc] initWithCapacity:[allPos count]];
+    for(NSManagedObject* po in allPos){
+        NSObject<EZValueObject>* vo = [[voType alloc] initWithPO:po];
+        [res addObject:vo];
+    }
+    return res;
+}
+
+
+//Need refractor later.
+//As the history data keep increasing. 
+//Learn how to do conditional query to get only record I interested out. 
 - (NSArray*) getScheduledTaskByDate:(NSDate*)date
 {
     NSString* keyStr = [date stringWithFormat:@"yyyyMMdd"];
-    return [storedScheduledTasks objectForKey:keyStr];
+    NSArray* schTasks = [[EZCoreAccessor getInstance] fetchAll:[MScheduledTask class] sortField:@"startTime"];
+    //I am wondering how the sort could work? anyway let's try it
+    NSMutableArray* res = [[NSMutableArray alloc] init];
+    
+    for(MScheduledTask* mschTask in schTasks){
+        if([keyStr compare:[mschTask.startTime stringWithFormat:@"yyyyMMdd"]] == NSOrderedSame){
+            [res addObject:[[EZScheduledTask alloc] initWithPO:mschTask]];
+        }
+    }
+    return res;
 }
 
 //Including the date of start and end.
+//
 - (int) getTaskTime:(EZTask*)task start:(NSDate*)start end:(NSDate*)end
 {
     int res = 0;
-    for(NSArray* schArrs in [storedScheduledTasks allValues]){
-        for(EZScheduledTask* schTask in schArrs){
-            if([schTask.task isEqual:task] && [schTask.startTime InBetweenDays:start end:end]){
-                res += schTask.duration;
+    MTask* mt = task.PO;
+    NSArray* mschTasks = [[EZCoreAccessor getInstance] fetchAll:[MScheduledTask class] sortField:@"startTime"];
+    for(MScheduledTask* schTask in mschTasks){
+            if([schTask.task isEqual:mt] && [schTask.startTime InBetweenDays:start end:end]){
+                res += schTask.duration.intValue;
             }
-        }
     }
     return res;
 }
@@ -144,13 +201,8 @@
 //If already exist will be Append. Cool. 
 - (void) storeScheduledTask:(NSArray*)stasks date:(NSDate*)date
 {
-    NSString* keyStr = [date stringWithFormat:@"yyyyMMdd"];
-    NSMutableArray* storeTasks = [storedScheduledTasks objectForKey:keyStr];
-    if(storeTasks){
-        [storeTasks addObjectsFromArray:stasks];
-    }else{
-        storeTasks = [NSMutableArray arrayWithArray:stasks];
-        [storedScheduledTasks setObject:storeTasks forKey:keyStr];
+    for(EZScheduledTask* schTask in stasks){
+        [[EZCoreAccessor getInstance] store:schTask.createPO];
     }
 }
 
@@ -166,58 +218,30 @@
 
 - (NSArray*) getTasks:(int)env
 {
-    NSMutableArray* res = [[NSMutableArray alloc] initWithCapacity:[tasks count]];
-    for(int i = 0; i < [tasks count]; i++){
-        EZTask* task = [tasks objectAtIndex:i];
+    NSArray* mtasks = [[EZCoreAccessor getInstance] fetchAll:[MTask class] sortField:nil];
+    NSLog(@"Fetch all returned: %i",[mtasks count]);
+    NSMutableArray* res = [[NSMutableArray alloc] initWithCapacity:[mtasks count]];
+    for(MTask* mt in mtasks){
         //Mean the environment meet the task requirements
-        if((task.envTraits & env) == task.envTraits){
-            [res addObject:task];
+        if((mt.envTraits.intValue & env) == mt.envTraits.intValue){
+            [res addObject:[[EZTask alloc] initWithPO:mt]];
         }
     }
     return res;
 }
 
-NSInteger comparator(id obj1, id obj2, void* ctx)
-{
-    EZScheduledDay* day1 = (EZScheduledDay*)obj1;
-    EZScheduledDay* day2 = (EZScheduledDay*)obj2;
-    return [day1.scheduledDay compare:day2.scheduledDay];
-}
-
-// The result are sorted by date, mean the latest are at the beginning
-- (NSArray*) getSortedScheduledDays
-{
-    NSArray* res = nil;
-    res = [scheduleDays sortedArrayUsingFunction:comparator context:nil];
-    return res;
-}
-
-
-// Find the scheduledDay for a particular date.
-- (EZScheduledDay*) getScheduledDayByDate:(NSDate*)date
-{
-    for(int i = 0; i < [scheduleDays count]; i++ ){
-        EZScheduledDay* sday = [scheduleDays objectAtIndex:i];
-        if([sday.scheduledDay convertDays] == [date convertDays]){
-            return sday;
-        }
-    }
-    return nil;
-}
-
-
-// Pick a allocated pattern for that day 
+// Pick a allocated pattern for that day
 - (EZAvailableDay*) getAvailableDay:(NSDate*)date
 {
     EZAvailableDay* matchedWeek = nil;
     EZWeekDayValue week = [date weekDay];
-    for(int i = 0; i < [availableDays count]; i++ ){
-        EZAvailableDay* sday = [availableDays objectAtIndex:i];
-        if([sday.date convertDays] == [date convertDays]){
-            matchedWeek = sday;
+    NSArray* mDays = [[EZCoreAccessor getInstance] fetchAll:[MAvailableDay class] sortField:nil];
+    for(MAvailableDay* day in mDays){
+        if([day.date convertDays] == [date convertDays]){
+            matchedWeek = [[EZAvailableDay alloc] initWithPO:day];
             break;
-        }else if((sday.assignedWeeks&week) == week){
-            matchedWeek = sday;
+        }else if((day.assignedWeeks.intValue&week) == week){
+            matchedWeek = [[EZAvailableDay alloc] initWithPO:day];
         }
     }
     EZDEBUG(@"Not match exact day, matched week %@",matchedWeek);

@@ -34,7 +34,7 @@
 		184C29ED1573651F00852B35 /* EZScheduledTaskDetailCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C29EC1573651E00852B35 /* EZScheduledTaskDetailCtrl.m */; };
 		184C29EF1573697800852B35 /* EZScheduledTaskDetailCtrl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 184C29EE1573697700852B35 /* EZScheduledTaskDetailCtrl.xib */; };
 		184C29F61574769400852B35 /* EZReleaseDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C29F51574769300852B35 /* EZReleaseDetector.m */; };
-		184C29F91575C7C400852B35 /* EZTaskList.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C29F81575C7C000852B35 /* EZTaskList.m */; };
+		184C29F91575C7C400852B35 /* EZTaskGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C29F81575C7C000852B35 /* EZTaskGroup.m */; };
 		184C2A7A15770F7F00852B35 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 184C2A7915770F7E00852B35 /* CoreData.framework */; };
 		184C2A811577101100852B35 /* Tasks.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 184C2A7F1577101100852B35 /* Tasks.xcdatamodeld */; };
 		184C2AA31577209500852B35 /* EZCoreAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2AA21577209500852B35 /* EZCoreAccessor.m */; };
@@ -45,6 +45,7 @@
 		184C2AC5157759CF00852B35 /* MTaskGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2AC4157759CF00852B35 /* MTaskGroup.m */; };
 		184C2AC8157759D000852B35 /* MTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2AC7157759CF00852B35 /* MTask.m */; };
 		184C2ACB157768DB00852B35 /* MImageOwner.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2ACA157768DA00852B35 /* MImageOwner.m */; };
+		184C2ACE1579BBA600852B35 /* EZCoreHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2ACD1579BBA600852B35 /* EZCoreHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -98,8 +99,8 @@
 		184C29EE1573697700852B35 /* EZScheduledTaskDetailCtrl.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZScheduledTaskDetailCtrl.xib; sourceTree = "<group>"; };
 		184C29F41574769300852B35 /* EZReleaseDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZReleaseDetector.h; sourceTree = "<group>"; };
 		184C29F51574769300852B35 /* EZReleaseDetector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZReleaseDetector.m; sourceTree = "<group>"; };
-		184C29F71575C7BB00852B35 /* EZTaskList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTaskList.h; sourceTree = "<group>"; };
-		184C29F81575C7C000852B35 /* EZTaskList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTaskList.m; sourceTree = "<group>"; };
+		184C29F71575C7BB00852B35 /* EZTaskGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTaskGroup.h; sourceTree = "<group>"; };
+		184C29F81575C7C000852B35 /* EZTaskGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTaskGroup.m; sourceTree = "<group>"; };
 		184C2A7915770F7E00852B35 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		184C2A801577101100852B35 /* Tasks.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Tasks.xcdatamodel; sourceTree = "<group>"; };
 		184C2AA11577209500852B35 /* EZCoreAccessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZCoreAccessor.h; sourceTree = "<group>"; };
@@ -118,6 +119,8 @@
 		184C2AC7157759CF00852B35 /* MTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTask.m; sourceTree = "<group>"; };
 		184C2AC9157768DA00852B35 /* MImageOwner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MImageOwner.h; sourceTree = "<group>"; };
 		184C2ACA157768DA00852B35 /* MImageOwner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MImageOwner.m; sourceTree = "<group>"; };
+		184C2ACC1579BBA600852B35 /* EZCoreHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZCoreHelper.h; sourceTree = "<group>"; };
+		184C2ACD1579BBA600852B35 /* EZCoreHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZCoreHelper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -221,8 +224,8 @@
 				184C29E61570925B00852B35 /* EZQuotas.m */,
 				184C29E81570C1F800852B35 /* EZTaskHelper.h */,
 				184C29E91570C1F900852B35 /* EZTaskHelper.m */,
-				184C29F71575C7BB00852B35 /* EZTaskList.h */,
-				184C29F81575C7C000852B35 /* EZTaskList.m */,
+				184C29F71575C7BB00852B35 /* EZTaskGroup.h */,
+				184C29F81575C7C000852B35 /* EZTaskGroup.m */,
 			);
 			name = "Task objects";
 			sourceTree = "<group>";
@@ -286,6 +289,8 @@
 			children = (
 				184C2AA11577209500852B35 /* EZCoreAccessor.h */,
 				184C2AA21577209500852B35 /* EZCoreAccessor.m */,
+				184C2ACC1579BBA600852B35 /* EZCoreHelper.h */,
+				184C2ACD1579BBA600852B35 /* EZCoreHelper.m */,
 			);
 			name = CoreDataUtility;
 			sourceTree = "<group>";
@@ -384,7 +389,7 @@
 				184C29EA1570C1F900852B35 /* EZTaskHelper.m in Sources */,
 				184C29ED1573651F00852B35 /* EZScheduledTaskDetailCtrl.m in Sources */,
 				184C29F61574769400852B35 /* EZReleaseDetector.m in Sources */,
-				184C29F91575C7C400852B35 /* EZTaskList.m in Sources */,
+				184C29F91575C7C400852B35 /* EZTaskGroup.m in Sources */,
 				184C2A811577101100852B35 /* Tasks.xcdatamodeld in Sources */,
 				184C2AA31577209500852B35 /* EZCoreAccessor.m in Sources */,
 				184C2AB9157759C700852B35 /* MQuotas.m in Sources */,
@@ -394,6 +399,7 @@
 				184C2AC5157759CF00852B35 /* MTaskGroup.m in Sources */,
 				184C2AC8157759D000852B35 /* MTask.m in Sources */,
 				184C2ACB157768DB00852B35 /* MImageOwner.m in Sources */,
+				184C2ACE1579BBA600852B35 /* EZCoreHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

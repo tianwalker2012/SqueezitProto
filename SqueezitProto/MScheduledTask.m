@@ -17,6 +17,7 @@
 @dynamic envTraits;
 @dynamic task;
 @dynamic alarmNotification;
+@dynamic name;
 
 @end
 

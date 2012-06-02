@@ -19,18 +19,26 @@
 
 @end
 
+static EZCoreAccessor* accessor = nil;
 
 @implementation EZCoreAccessor
 @synthesize model, context, coordinator;
 
 + (EZCoreAccessor*) getInstance
 {
-    static EZCoreAccessor* accessor = nil;
-    //EZAppDelegate* delegate = [UIApplication sharedApplication].delegate;
     if(accessor == nil){
         accessor = [[EZCoreAccessor alloc] initWithDBName:CoreDBName modelName:CoreModelName];
     }
     return accessor; 
+}
+
+//The purpose of this method, is to provide way to use other instance.
+//For example, the test database and the production database are different one.
+//I can instantiate a different database for it. 
+//Easy and straightforward
++ (void) setInstance:(EZCoreAccessor*)inst
+{
+    accessor = inst;
 }
 
 + (NSURL *)applicationDocumentsDirectory

@@ -7,9 +7,11 @@
 //
 
 #import "EZAvailableTime.h"
+#import "MAvailableTime.h"
+#import "EZCoreAccessor.h"
 
 @implementation EZAvailableTime
-@synthesize start, duration, envTraits, name;
+@synthesize start, duration, envTraits, name, PO;
 
 - (id) init:(NSDate*)st name:(NSString*)nm duration:(int)dur environment:(int)env
 {
@@ -30,6 +32,7 @@
     //self.description = at.description;
     self.duration = at.duration;
     self.envTraits = at.envTraits;
+    self.PO = at.PO;
     return self;
 }
 
@@ -42,6 +45,35 @@
 {
     self.start = [[NSDate alloc] initWithTimeInterval:increasedMinutes*60 sinceDate:self.start];
     
+}
+
+- (id) initWithPO:(MAvailableTime*)mtk
+{
+    self = [super init];
+    self.start = mtk.startTime;
+    self.name = mtk.name;
+    self.envTraits = mtk.envTraits.intValue;
+    self.duration = mtk.duration.intValue;
+    self.PO = mtk;
+    return self;
+}
+
+- (MAvailableTime*) createPO
+{
+    if(!self.PO){
+        self.PO = (MAvailableTime*)[[EZCoreAccessor getInstance] create:[MAvailableTime class]];
+    }    
+    return [self populatePO:self.PO];
+    
+}
+
+- (MAvailableTime*) populatePO:(MAvailableTime*)po
+{
+    po.startTime = self.start;
+    po.name = self.name;
+    po.envTraits = [[NSNumber alloc] initWithInt:self.envTraits];
+    po.duration = [[NSNumber alloc] initWithInt:self.duration];
+    return po;
 }
 
 @end

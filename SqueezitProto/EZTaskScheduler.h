@@ -7,10 +7,11 @@
 ///Users/apple/work_foot/ios/SqueezitProto/SqueezitProto/EZTask.h
 
 #import <Foundation/Foundation.h>
+#import "EZTaskHelper.h"
 
 @class EZScheduledTask, EZAvailableTime, EZQuotasResult, EZQuotas, EZAvailableDay, EZTask;
 
-@interface EZTaskScheduler : NSObject
+@interface EZTaskScheduler : NSObject<EZValueObject>
 
 
 + (EZTaskScheduler*) getInstance;

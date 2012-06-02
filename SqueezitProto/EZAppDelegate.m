@@ -8,6 +8,10 @@
 
 #import "EZAppDelegate.h"
 #import "EZTestSuite.h"
+#import "EZCoreAccessor.h"
+#import "EZTaskStore.h"
+#import "EZAvailableDay.h"
+#import "MAvailableDay.h"
 
 @implementation EZAppDelegate
 
@@ -16,8 +20,13 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [EZTestSuite testSchedule];
-    
-    
+    //[EZCoreAccessor cleanDefaultDB];
+    //Make sure the persistence layer initialization completeds
+    [EZCoreAccessor getInstance];
+    if([[[EZTaskStore getInstance] fetchAllWithVO:[EZAvailableDay class] po:[MAvailableDay class]] count] == 0){
+        EZDEBUG(@"Fill Test data");
+        [[EZTaskStore getInstance] fillTestData];
+    }
     // Override point for customization after application launch.
     return YES;
 }
@@ -47,6 +56,7 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    [[EZCoreAccessor getInstance] saveContext];
 }
 
 @end

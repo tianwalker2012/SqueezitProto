@@ -16,6 +16,7 @@
 
 @interface MScheduledTask : NSManagedObject
 
+@property (nonatomic, retain) NSString* name;
 @property (nonatomic, retain) NSDate * startTime;
 @property (nonatomic, retain) NSNumber * duration;
 @property (nonatomic, retain) NSNumber * envTraits;

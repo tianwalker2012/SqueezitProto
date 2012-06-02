@@ -7,8 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "EZTaskHelper.h"
 
-@interface EZAvailableDay : NSObject {
+@class MAvailableDay;
+
+@interface EZAvailableDay : NSObject<EZValueObject> {
     NSDate* date;
     int assignedWeeks; //1 mean monday, 2 mean tuesday, 4 mean wensday etc...
     NSMutableArray* availableTimes; 
@@ -28,5 +31,12 @@
 @property (assign, nonatomic) int assignedWeeks;
 @property (strong, nonatomic) NSMutableArray* availableTimes;
 @property (strong, nonatomic) NSString* name;
+@property (strong, nonatomic) MAvailableDay* PO;
+
+- (id) initWithPO:(MAvailableDay*)mtk;
+
+- (MAvailableDay*) createPO;
+
+- (MAvailableDay*) populatePO:(MAvailableDay*)po;
 
 @end

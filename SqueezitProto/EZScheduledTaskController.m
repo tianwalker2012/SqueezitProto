@@ -62,9 +62,14 @@
 
 - (void) rescheduleTasks
 {
+    if([scheduledTasks count] > 0){
+        EZDEBUG(@"Remove the scheduled Tasks");
+        [[EZTaskStore getInstance] removeObjects:scheduledTasks];
+    }
     EZTaskScheduler* scheduler = [EZTaskScheduler getInstance];
     scheduledTasks = [scheduler scheduleTaskByDate:currentDate exclusiveList:nil];
     [EZAlarmUtility setupAlarmBulk:scheduledTasks];
+    [[EZTaskStore getInstance] storeObjects:scheduledTasks];
     [self.tableView reloadData];
     [self cancelShakeMessage];
     
@@ -142,11 +147,11 @@
     //[UIApplication sharedApplication]
     
     EZTaskStore* store = [EZTaskStore getInstance];
-    [store fillTestData];
+    //[store fillTestData];
     //EZTaskScheduler* scheduler = [[EZTaskScheduler alloc] init];
     //scheduledTasks = [scheduler scheduleTaskByDate:currentDate exclusiveList:nil];
     scheduledTasks = [store getScheduledTaskByDate:currentDate];
-    if(!scheduledTasks){
+    if([scheduledTasks count] == 0){
         [self presentShakeMessage:@"Shake shake"];
     }
     
@@ -259,6 +264,7 @@
         NSMutableArray* mutArr = [NSMutableArray arrayWithArray:self.scheduledTasks];
         [mutArr removeObjectAtIndex:path.row];
         self.scheduledTasks = mutArr;
+        [[EZTaskStore getInstance] removeObject:delTask];
         //How to animate more precisely.
         //[self.tableView reloadData];
         [self dismissModalViewControllerAnimated:YES];
@@ -275,6 +281,8 @@
         if([schTasks count] > 0){
             [EZAlarmUtility cancelAlarm:[mutArr objectAtIndex:path.row]];
             [EZAlarmUtility setupAlarmBulk:schTasks];
+            [[EZTaskStore getInstance] removeObject:schTask];
+            [[EZTaskStore getInstance] storeObjects:schTasks];
             [mutArr removeObjectAtIndex:path.row];
             [mutArr addObjectsFromArray:schTasks];
             [mutArr sortUsingComparator:^(id obj1, id obj2) {

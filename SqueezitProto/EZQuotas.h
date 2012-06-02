@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "EZTaskHelper.h"
 
 //The one week, two week, could safely represented by customized cyle.
 typedef enum CycleType {
@@ -19,7 +20,9 @@ typedef enum CycleType {
     CustomizedCycle = 7
 } CycleType;
 
-@interface EZQuotas : NSObject {
+@class MQuotas;
+
+@interface EZQuotas : NSObject<EZValueObject>{
     //How much have to complete by one cycle 
     int quotasPerCycle;
     
@@ -49,7 +52,14 @@ typedef enum CycleType {
 @property (strong, nonatomic) NSDate* startDay;
 @property (strong, nonatomic) NSDate* cycleStartDay;
 @property (assign, nonatomic) int cycleLength;
+@property (strong, nonatomic) MQuotas* PO;
 
 - (id) init:(NSDate*)sd quotas:(int)quotas type:(CycleType)type cycleStartDate:(NSDate*)cycleDate cycleLength:(int)length;
+
+- (id) initWithPO:(MQuotas*)mtk;
+
+- (MQuotas*) createPO;
+
+- (MQuotas*) populatePO:(MQuotas*)po;
 
 @end

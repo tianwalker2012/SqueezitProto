@@ -8,11 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import "Constants.h"
+#import "EZTaskHelper.h"
 
 //The purpose of this class, it to define the allocatable time period 
 //So that the system could allocate proper task according to the time setting.
+@class MAvailableTime;
 
-@interface EZAvailableTime : NSObject {
+@interface EZAvailableTime : NSObject<EZValueObject>{
     NSString* name;
     NSDate* start;
     
@@ -41,4 +43,13 @@
 @property (assign, nonatomic) int envTraits;
 //@property (strong, nonatomic) NSString* description;
 @property (strong, nonatomic) NSString* name;
+@property (strong, nonatomic) MAvailableTime* PO;
+
+- (id) initWithPO:(MAvailableTime*)mtk;
+
+- (MAvailableTime*) createPO;
+
+- (MAvailableTime*) populatePO:(MAvailableTime*)po;
+
+
 @end

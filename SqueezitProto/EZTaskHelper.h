@@ -9,6 +9,23 @@
 #import <UIKit/UIKit.h>
 #import "Constants.h"
 
+@class NSManagedObject;
+
+@protocol EZValueObject <NSObject>
+
+@required
+- (id) initWithPO:(NSManagedObject*)mtk;
+
+- (NSManagedObject*) createPO;
+
+- (NSManagedObject*) populatePO:(NSManagedObject*)po;
+
+- (NSManagedObject*) PO;
+
+- (void) setPO:(NSManagedObject*)po;
+
+@end
+
 @interface NSDate(EZPrivate) 
 
 - (NSInteger) convertDays;

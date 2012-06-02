@@ -16,6 +16,8 @@
 
 + (EZCoreAccessor*) getInstance;
 
++ (void) setInstance:(EZCoreAccessor*)inst;
+
 + (NSURL *)applicationDocumentsDirectory;
 
 //Clean the database, if you change the model, the model and exist data base will have a mismatch,
@@ -40,6 +42,7 @@
 
 - (id) initWithDBName:(NSString*)dbName modelName:(NSString*)modelName;
 
+- (void)saveContext;
 @property (strong, nonatomic) NSManagedObjectContext* context;
 @property (strong, nonatomic) NSManagedObjectModel* model;
 @property (strong, nonatomic) NSPersistentStoreCoordinator* coordinator;

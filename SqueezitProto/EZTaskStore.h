@@ -8,26 +8,28 @@
 
 #import <Foundation/Foundation.h>
 #import "Constants.h"
+#import "EZTaskHelper.h"
 
-@class EZScheduledDay,EZAvailableDay, EZTask;
+@class EZScheduledDay,EZAvailableDay, EZTask, EZCoreAccessor;
 
 @interface EZTaskStore : NSObject {
-    NSMutableArray* scheduledDays;
-    NSMutableArray* tasks;
-    NSMutableArray* archivedTasks;
-    NSMutableArray* availableDays;
-    NSMutableDictionary* storedScheduledTasks;
+    //EZCoreAccessor* accessor;
 }
 
+//@property (strong, nonatomic) EZCoreAccessor* accessor;
 
-@property (strong, nonatomic) NSMutableArray* scheduleDays;
-@property (strong, nonatomic) NSMutableArray* tasks;
-@property (strong, nonatomic) NSMutableArray* achievedTasks;
-@property (strong, nonatomic) NSMutableArray* availableDays;
 
 - (id) init;
 
 + (EZTaskStore*) getInstance;
+
+- (void) storeObject:(NSObject<EZValueObject>*)obj;
+
+- (void) storeObjects:(NSArray*) objects;
+
+- (void) removeObject:(NSObject<EZValueObject>*)obj;
+
+- (void) removeObjects:(NSArray*) objects;
 
 - (int) getTaskTime:(EZTask*)task start:(NSDate*)tart end:(NSDate*)end;
 
@@ -37,11 +39,9 @@
 
 - (NSArray*) getTasks:(int)env; 
 
-// The result are sorted by date, mean the latest are at the beginning
-- (NSArray*) getSortedScheduledDays;
+- (NSArray*) getAllTasks;
 
-// Find the scheduledDay for a particular date.
-- (EZScheduledDay*) getScheduledDayByDate:(NSDate*)date;
+- (NSArray*) fetchAllWithVO:(Class)voType po:(Class)poType;
 
 // Pick a allocated pattern for that day 
 - (EZAvailableDay*) getAvailableDay:(NSDate*)date;
