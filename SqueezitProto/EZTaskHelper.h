@@ -26,6 +26,12 @@
 
 @end
 
+@interface NSString(EZPrivate)
+
+- (NSString*) trim;
+
+@end
+
 @interface NSDate(EZPrivate) 
 
 - (NSInteger) convertDays;
@@ -50,6 +56,11 @@
 //Check if the date fall inbetween the specified start and end.
 //It will including the stat and end date.
 - (BOOL) InBetweenDays:(NSDate*)start end:(NSDate*)end;
+
+- (BOOL) InBetween:(NSDate*)start end:(NSDate*)end;
+
+//Wether have passed the passin time or not
+- (BOOL) isPassed:(NSDate*)date;
 
 @end
 

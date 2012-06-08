@@ -65,6 +65,7 @@
     if([scheduledTasks count] > 0){
         EZDEBUG(@"Remove the scheduled Tasks");
         [[EZTaskStore getInstance] removeObjects:scheduledTasks];
+        [EZAlarmUtility cancelAlarmBulk:scheduledTasks];
     }
     EZTaskScheduler* scheduler = [EZTaskScheduler getInstance];
     scheduledTasks = [scheduler scheduleTaskByDate:currentDate exclusiveList:nil];
@@ -81,6 +82,7 @@
     if (self) {
         // Custom initialization
         currentDate = [NSDate date];
+        self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemRecents tag:1];
     }
     return self;
 }
@@ -199,7 +201,17 @@
     EZScheduledTask* task = [scheduledTasks objectAtIndex:indexPath.row];
     
     cell.textLabel.text = [NSString stringWithFormat:@"%@(%@)",task.task.name,(task.alarmNotification?@"setup alarm":@"no alarm")];
+    
     NSDate* endTime = [NSDate dateWithTimeInterval:task.duration*60 sinceDate:task.startTime];
+    NSDate* now = [NSDate date];
+    if([now InBetween:task.startTime end:endTime] ){
+        cell.textLabel.textColor = [UIColor redColor];
+    }else if([task.startTime isPassed:now]) { //Passed task
+        cell.textLabel.textColor = [UIColor lightGrayColor];
+    } else {
+        //cell.textLabel.textColor = FutureTaskColor;
+        cell.textLabel.textColor = [UIColor blackColor];
+    }
     cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ - %@",[task.startTime stringWithFormat:@"HH:mm"],[endTime stringWithFormat:@"HH:mm"]];
     
     // Configure the cell..

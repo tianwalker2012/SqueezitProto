@@ -29,6 +29,8 @@
 #import "MImageOwner.h"
 #import "EZCoreAccessor.h"
 #import "MAvailableTime.h"
+#import "EZGlobalLocalize.h"
+#import "EZTaskGroup.h"
 
 
 #define TestValue 60*20
@@ -116,6 +118,18 @@ typedef void(^TestBlock)(id obj);
 
 + (EZAvailableTime*) findTimeByObjectID:(NSManagedObjectID*)objID list:(NSArray*)list;
 
++ (void) testTimePassed;
+
++ (void) testTimeSort;
+
++ (void) testInBetween;
+
++ (void) testTrim;
+
++ (void) testI18N;
+
++ (void) testCascadeDelete;
+
 @end
 
 @implementation EZTestSuite
@@ -126,7 +140,7 @@ typedef void(^TestBlock)(id obj);
 //So I just comments it out. Will not execute any test cases
 + (void) testSchedule
 {
-    //[EZTestSuite innerTestAll];
+    [EZTestSuite innerTestAll];
     
 }
 
@@ -150,12 +164,149 @@ typedef void(^TestBlock)(id obj);
     [EZTestSuite testMethodAsProperty];
     //[EZTestSuite testBlockMemory];
     [EZTestSuite testSimpleData];
+    [EZTestSuite testTimePassed];
+    [EZTestSuite testTimeSort];
+    [EZTestSuite testInBetween];
+    [EZTestSuite testTrim];
+    [EZTestSuite testI18N];
+    [EZTestSuite testCascadeDelete];
     //Clear all the test data.
     //In the future what should I do with this.
     //Seems in this case, we need the test case ready
     //If it involve the test data cleanup.
     //[[EZTaskStore getInstance] clean];
     
+    //Make sure the application don't use 
+    //Test database.
+    [EZCoreAccessor setInstance:nil];
+    
+}
+
+
+
++ (void) testCascadeDelete
+{
+    [EZTestSuite initializeDB];
+    EZTask* task = [[EZTask alloc] initWithName:@"Tian" duration:20 maxDur:20 envTraits:4];
+    [[EZTaskStore getInstance] storeObject:task];
+    NSArray* array = [[EZTaskStore getInstance] fetchAllWithVO:[EZTask class] po:[MTask class] sortField:nil];
+    assert(array.count == 1);
+    
+    //Verify what's wrong with the Persistent framework.
+    
+    EZTask* taskFresh = [[EZTask alloc] initWithName:@"Hou" duration:40 maxDur:60 envTraits:8];
+    
+    EZTaskGroup* taskGroup = [[EZTaskGroup alloc] init];
+    taskGroup.name = @"Cool group";
+    [taskGroup.tasks addObject:taskFresh];
+    [taskGroup.tasks addObject:task];
+    //Make sure task get inserted into the task of group
+    assert(taskGroup.tasks.count == 2);
+    
+    
+    [[EZTaskStore getInstance] storeObject:taskGroup];
+    array = [[EZTaskStore getInstance] fetchAllWithVO:[EZTaskGroup class] po:[MTaskGroup class] sortField:nil];
+    assert(array.count == 1);
+    
+    
+    
+    
+    EZTaskGroup* res = [array objectAtIndex:0];
+    NSLog(@"Group %@, task count:%i", res.name, res.tasks.count);
+    assert(res.tasks.count == 2);
+    
+    array = [[EZTaskStore getInstance] fetchAllWithVO:[EZTask class] po:[MTask class] sortField:nil];
+    assert(array.count == 2);
+    
+    
+    [[EZTaskStore getInstance] removeObject:res];
+    
+    //Make sure the task get removed when the taskGroup get remove.
+    //we called this cascade remove mechanism. 
+    //Cool.
+    array = [[EZTaskStore getInstance] fetchAllWithVO:[EZTask class] po:[MTask class] sortField:nil];
+    EZDEBUG(@"The final task count:%i",array.count);
+    assert(array.count == 0);
+    //Make sure there is no side effect.
+    
+    taskGroup = [[EZTaskGroup alloc] init];
+    taskGroup.name = @"Cool group";
+    [taskGroup.tasks addObject:[[EZTask alloc] initWithName:@"Tian ge 2" duration:25 maxDur:25 envTraits:25]];
+    [[EZTaskStore getInstance] storeObject:taskGroup];
+    
+    array = [[EZTaskStore getInstance] fetchAllWithVO:[EZTaskGroup class] po:[MTaskGroup class] sortField:nil];
+    assert(array.count == 1);
+    
+    EZTaskGroup* resGroup = [array objectAtIndex:0];
+    resGroup.name = @"Tian ge updated";
+    [[EZTaskStore getInstance] storeObject:resGroup];
+    
+    array = [[EZTaskStore getInstance] fetchAllWithVO:[EZTaskGroup class] po:[MTaskGroup class] sortField:nil];
+    EZTaskGroup* resGroupStored = [array objectAtIndex:0];
+    assert([resGroupStored.name isEqualToString:resGroup.name]);
+    //Make sure no side effect happened
+    assert(resGroupStored.tasks.count == 1);
+    
+    //Make sure no side effect happened
+    array = [[EZTaskStore getInstance] fetchAllWithVO:[EZTask class] po:[MTask class] sortField:nil];
+    assert(array.count == 1);
+    
+    
+}
+
++ (void) testI18N
+{
+    NSString* test = EZLocalizedString(@"Test",@"Test");
+    NSLog(@"Result:%@",test);
+    assert([@"English" isEqualToString:test]);
+}
+
++ (void) testTrim
+{
+    NSString* orgin = @"  haha   \n";
+    NSString* trimmed = orgin.trim;
+    assert([trimmed isEqualToString:@"haha"]);
+}
+
++ (void) testInBetween
+{
+    NSDate* now = [NSDate date];
+    NSDate* b4 = [now adjustMinutes:-1];
+    NSDate* after = [now adjustMinutes:1];
+    NSDate* b44 = [now adjustMinutes:-2];
+    NSDate* afterr = [now adjustMinutes:2];
+    
+    assert([now InBetween:b4 end:after]);
+    assert(![b44 InBetween:b4 end:after]);
+    assert(![afterr InBetween:b4 end:after]);
+    EZDEBUG(@"now:%@, before:%@, after:%@, before4:%@ , afterr:%@",now, b4, after, b44, afterr);
+}
+
+
++ (void) testTimeSort
+{
+    NSDate* now = [NSDate date];
+    NSDate* before = [now adjustMinutes:-20];
+    NSDate* after = [now adjustMinutes:20];
+    NSArray* times = [NSArray arrayWithObjects:now, before, after, nil];
+    NSArray* result = [times sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        NSDate* d1 = obj1;
+        NSDate* d2 = obj2;
+        return [d1 timeIntervalSince1970] - [d2 timeIntervalSince1970];
+    }];
+    NSDate* prev = nil;
+    for(NSDate* dt in result){
+        if(prev){
+            assert([prev timeIntervalSince1970] < [dt timeIntervalSince1970]);
+        }
+        prev = dt;
+    }
+}
+
++ (void) testTimePassed
+{
+    NSDate* time = [NSDate stringToDate:@"yyyyMMdd" dateString:@"20120501"];
+    assert([time isPassed:[NSDate date]]);
 }
 
 + (EZAvailableTime*) findTimeByObjectID:(NSManagedObjectID*)objID list:(NSArray*)list
@@ -408,7 +559,7 @@ typedef void(^TestBlock)(id obj);
     EZAvailableTime* time1 = [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm" dateString:@"06:00"] name:@"Taiji time" duration:120 environment:EZ_ENV_FITTING];
     EZAvailableTime* time2 = [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm" dateString:@"08:00"] name:@"Programming time" duration:90 environment:EZ_ENV_FLOWING];
     EZAvailableTime* time3 = [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm" dateString:@"10:00"] name:@"Reading and Thinking" duration:120 environment:EZ_ENV_FLOWING|EZ_ENV_READING];
-    [avDay.availableTimes addObjectsFromArray:[NSArray arrayWithObjects:time1, time2, time3, nil]];
+    [avDay.availableTimes addObjectsFromArray:[NSArray arrayWithObjects:time3, time2, time1, nil]];
     //[store.availableDays addObject:avDay];
     [store storeObject:avDay];
     EZTask* task1 = [[EZTask alloc] initWithName:@"programming" duration:80 maxDur:80 envTraits:EZ_ENV_FLOWING];

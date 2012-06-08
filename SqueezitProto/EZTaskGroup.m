@@ -14,13 +14,21 @@
 #import "EZCoreHelper.h"
 
 @implementation EZTaskGroup
-@synthesize name, createdTime, tasks, PO;
+@synthesize name, createdTime, tasks, PO, displayOrder;
+
+- (id) init
+{
+    self = [super init];
+    self.tasks = [[NSMutableArray alloc] init];
+    return self;
+}
 
 - (id) initWithPO:(MTaskGroup*)mtk
 {
     self = [super init];
     self.name = mtk.name;
     self.createdTime = mtk.createdTime;
+    self.displayOrder = mtk.displayOrder.intValue;
     self.tasks = [[NSMutableArray alloc] initWithCapacity:[mtk.tasks count]];
     for(MTask* mt in mtk.tasks){
         [self.tasks addObject:[[EZTask alloc] initWithPO:mt]];
@@ -39,8 +47,10 @@
 
 - (MTaskGroup*) populatePO:(MTaskGroup*)po
 {
+    //EZDEBUG(@"I am in TaskGroup populatePO");
     po.name = self.name;
     po.createdTime = self.createdTime;
+    po.displayOrder = [[NSNumber alloc] initWithInt:self.displayOrder];
     NSMutableArray* mutArr = [NSMutableArray arrayWithArray:[po.tasks allObjects]];
     for(EZTask* et in self.tasks){
         if(!et.PO){
@@ -51,10 +61,14 @@
             //But need to remove the objectID
             //Because all the remaining objectID will 
             //Get removed later.
+            [po addTasksObject:et.createPO];
             [EZCoreHelper removeByID:et.createPO.objectID array:mutArr];
         } 
     }
-    [po removeTasks:[NSSet setWithArray:mutArr]];
+    if([mutArr count] > 0){
+        EZDEBUG(@"Removed %i from TaskGroup:%@",[mutArr count],self.name);
+        [po removeTasks:[NSSet setWithArray:mutArr]];
+    }
     return po;
     
 }

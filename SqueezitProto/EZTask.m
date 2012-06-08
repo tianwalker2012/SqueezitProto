@@ -13,7 +13,7 @@
 
 
 @implementation EZTask
-@synthesize name, duration, maxDuration, fixedTime, fixedDate, time, date, envTraits, quotas, soundName, PO;
+@synthesize name, duration, maxDuration, fixedTime, fixedDate, time, date, envTraits, quotas, soundName, PO, createdTime;
 
 - (id) initWithName:(NSString*) nm duration:(int)dur maxDur:(int)mdur envTraits:(EZEnvironmentTraits)traits
 {
@@ -24,6 +24,7 @@
     self.envTraits = traits;
     //Task can choose it's own name, I love it.
     self.soundName = UILocalNotificationDefaultSoundName;
+    self.createdTime = [NSDate date];
     return self;
 
 }
@@ -48,6 +49,7 @@
     if(mtk.quotas){
         self.quotas = [[EZQuotas alloc] initWithPO:mtk.quotas];
     }
+    self.createdTime = mtk.createdTime;
     return self;
 }
 
@@ -55,11 +57,11 @@
 //Of course.
 - (MTask*) createPO
 {
-    EZDEBUG(@"EZTask Create PO get called");
+    //EZDEBUG(@"EZTask Create PO get called");
     if(self.PO == nil){
         EZCoreAccessor* accessor = [EZCoreAccessor getInstance];
         self.PO = (MTask*)[accessor create:[MTask class]];
-        EZDEBUG(@"created by accessor is:%@",self.PO);
+        //EZDEBUG(@"created by accessor is:%@",self.PO);
     }
     return [self populatePO:self.PO];
 }
@@ -79,6 +81,7 @@
     }else{
         po.quotas = nil;
     }
+    po.createdTime = self.createdTime;
     return po;
 }
 

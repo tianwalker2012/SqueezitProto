@@ -15,5 +15,6 @@
 @dynamic name;
 @dynamic tasks;
 @dynamic createdTime;
+@dynamic displayOrder;
 
 @end

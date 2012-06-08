@@ -16,5 +16,6 @@
 @dynamic duration;
 @dynamic maxDuration;
 @dynamic quotas;
+@dynamic createdTime;
 
 @end

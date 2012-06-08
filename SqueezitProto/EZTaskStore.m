@@ -21,6 +21,7 @@
 #import "MTaskGroup.h"
 #import "MAvailableDay.h"
 #import "MAvailableTime.h"
+#import "EZTaskGroup.h"
 
 
 @interface EZTaskStore(private)
@@ -48,6 +49,53 @@
     EZTask* codeReading = [[EZTask alloc] initWithName:@"Code reading" duration:40 maxDur:90 envTraits:EZ_ENV_FLOWING];
     EZQuotas* codeReadingQuotas = [[EZQuotas alloc] init:startDate quotas:420 type:WeekCycle cycleStartDate:nil cycleLength:7];
     codeReading.quotas = codeReadingQuotas;
+    
+    
+    NSDate* now = [NSDate date];
+    
+    EZTaskGroup* fittingGroup = [[EZTaskGroup alloc] init];
+    fittingGroup.name = @"WorkOut";
+    fittingGroup.displayOrder = 1;
+    fittingGroup.createdTime = now;
+    fittingGroup.tasks = [NSArray arrayWithObjects:
+                          //Fitting tasks
+                          [[EZTask alloc] initWithName:@"Tai ji" duration:15 maxDur:90 envTraits:EZ_ENV_FITTING],
+                          [[EZTask alloc] initWithName:@"Jujisu" duration:15 maxDur:90 envTraits:EZ_ENV_FITTING],
+                          [[EZTask alloc] initWithName:@"Swimming" duration:60 maxDur:150 envTraits:EZ_ENV_FITTING],
+                          nil];
+    
+    EZTaskGroup* quotasGroup = [[EZTaskGroup alloc] init];
+    quotasGroup.name = @"Task With Quotas";
+    quotasGroup.createdTime = now;
+    quotasGroup.displayOrder = 0;
+    quotasGroup.tasks = [NSArray arrayWithObjects:iosTask, codeReading, design, nil];
+    
+    EZTaskGroup* snippetGroup = [[EZTaskGroup alloc] init];
+    snippetGroup.name = @"Snippet Tasks";
+    snippetGroup.createdTime = now;
+    snippetGroup.displayOrder = 2;
+    snippetGroup.tasks = [NSArray arrayWithObjects:
+                          [[EZTask alloc] initWithName:@"Hacker News" duration:15 maxDur:30 envTraits:EZ_ENV_READING],
+                          [[EZTask alloc] initWithName:@"How to win friends" duration:15 maxDur:30 envTraits:EZ_ENV_READING],
+                          [[EZTask alloc] initWithName:@"Feynman" duration:30 maxDur:60 envTraits:EZ_ENV_READING],
+                          [[EZTask alloc] initWithName:@"App design books" duration:30 maxDur:60 envTraits:EZ_ENV_READING],
+                          [[EZTask alloc] initWithName:@"Thinking fast and slow" duration:15 maxDur:40 envTraits:EZ_ENV_READING],
+                          [[EZTask alloc] initWithName:@"Founders at work" duration:15 maxDur:30 envTraits:EZ_ENV_READING],
+                          [[EZTask alloc] initWithName:@"Gandhi" duration:15 maxDur:30 envTraits:EZ_ENV_READING],
+                          [[EZTask alloc] initWithName:@"Martin Luther King" duration:15 maxDur:30 envTraits:EZ_ENV_READING],
+                          [[EZTask alloc] initWithName:@"Road to freedom" duration:15 maxDur:30 envTraits:EZ_ENV_READING],
+                          [[EZTask alloc] initWithName:@"Machine learning" duration:40 maxDur:60 envTraits:EZ_ENV_READING],
+                          [[EZTask alloc] initWithName:@"Information theory" duration:40 maxDur:60 envTraits:EZ_ENV_READING],
+                          [[EZTask alloc] initWithName:@"Poem" duration:5 maxDur:20 envTraits:EZ_ENV_READING],
+                          //Video tasks
+                          [[EZTask alloc] initWithName:@"TED" duration:10 maxDur:20 envTraits:EZ_ENV_LISTENING],
+                          [[EZTask alloc] initWithName:@"Leadership" duration:10 maxDur:20 envTraits:EZ_ENV_LISTENING],
+                          //Socialing tasks
+                          [[EZTask alloc] initWithName:@"Tell story" duration:15 maxDur:45 envTraits:EZ_ENV_SOCIALING],
+                          [[EZTask alloc] initWithName:@"Play game" duration:15 maxDur:45 envTraits:EZ_ENV_SOCIALING]
+                          
+                          , nil];
+    NSArray* groups = [NSArray arrayWithObjects:fittingGroup,quotasGroup,snippetGroup, nil];
     
      NSArray* tks = [NSArray arrayWithObjects:
                      //Fitting tasks
@@ -82,7 +130,8 @@
                      , nil];
     
     //[self.tasks addObjectsFromArray:tks];
-    [self storeObjects:tks];
+    //[self storeObjects:tks];
+    [self storeObjects:groups];
     EZAvailableDay* avDays = [[EZAvailableDay alloc] initWithName:@"Default setting" weeks:ALLDAYS];
     NSArray* avTimes = [NSArray arrayWithObjects:
                         [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm:ss" dateString:@"05:30:00"] name:@"大便时段" duration:30 environment:EZ_ENV_READING],
@@ -141,15 +190,15 @@
 
 - (NSArray*) getAllTasks
 {
-    return [self fetchAllWithVO:[EZTask class] po:[MTask class]];
+    return [self fetchAllWithVO:[EZTask class] po:[MTask class] sortField:nil];
 }
 
 // So far it is clean, have a name for every PO seems a simpler solution
 // You just set it as option, what harm it can cause us?
 // Keep it as simple as possible.
-- (NSArray*) fetchAllWithVO:(Class)voType po:(Class)poType
+- (NSArray*) fetchAllWithVO:(Class)voType po:(Class)poType sortField:(NSString *)field
 {
-    NSArray* allPos = [[EZCoreAccessor getInstance] fetchAll:poType sortField:nil];
+    NSArray* allPos = [[EZCoreAccessor getInstance] fetchAll:poType sortField:field];
     NSMutableArray* res = [[NSMutableArray alloc] initWithCapacity:[allPos count]];
     for(NSManagedObject* po in allPos){
         NSObject<EZValueObject>* vo = [[voType alloc] initWithPO:po];

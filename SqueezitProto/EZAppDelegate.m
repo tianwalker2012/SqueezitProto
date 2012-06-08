@@ -12,10 +12,17 @@
 #import "EZTaskStore.h"
 #import "EZAvailableDay.h"
 #import "MAvailableDay.h"
+#import "EZMainCtrl.h"
+#import "EZScheduledTaskController.h"
+#import "EZTaskListCtrl.h"
+
+#import "EZTestTabCtrl.h"
+#import "EZTestViewCtrl.h"
 
 @implementation EZAppDelegate
 
 @synthesize window = _window;
+@synthesize rootCtrl;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -23,10 +30,44 @@
     //[EZCoreAccessor cleanDefaultDB];
     //Make sure the persistence layer initialization completeds
     [EZCoreAccessor getInstance];
-    if([[[EZTaskStore getInstance] fetchAllWithVO:[EZAvailableDay class] po:[MAvailableDay class]] count] == 0){
+    if([[[EZTaskStore getInstance] fetchAllWithVO:[EZAvailableDay class] po:[MAvailableDay class] sortField:nil] count] == 0){
         EZDEBUG(@"Fill Test data");
         [[EZTaskStore getInstance] fillTestData];
     }
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    /**
+    self.rootCtrl = [[UIViewController alloc] init];
+    self.window.rootViewController = rootCtrl;
+    [self.window addSubview:self.rootCtrl.view];
+    
+    
+    EZMainCtrl* mctrl = [[EZMainCtrl alloc] init];
+    // Custom initialization
+    EZScheduledTaskController* stc = [[EZScheduledTaskController alloc] initWithStyle:UITableViewStylePlain];
+    EZTaskListCtrl* tlc = [[EZTaskListCtrl alloc] initWithStyle:UITableViewStylePlain];
+    mctrl.viewControllers = [NSArray arrayWithObjects:stc, tlc, nil];
+    [self.rootCtrl addChildViewController:mctrl];
+    [self.rootCtrl.view addSubview:mctrl.view];
+    **/
+    
+    self.rootCtrl = [[UIViewController alloc] init];
+    self.window.rootViewController = rootCtrl;
+    [self.window addSubview:self.rootCtrl.view];
+    EZTestTabCtrl* tabCtrl = [[EZTestTabCtrl alloc] init];
+    EZTestViewCtrl* viewCtrl1 = [[EZTestViewCtrl alloc] init];
+    EZTestViewCtrl* viewCtrl2 = [[EZTestViewCtrl alloc] init];
+    EZScheduledTaskController* stc = [[EZScheduledTaskController alloc] initWithStyle:UITableViewStylePlain];
+    
+    UINavigationController* nstc = [[UINavigationController alloc] initWithRootViewController:stc];
+    
+    EZTaskListCtrl* tlc = [[EZTaskListCtrl alloc] initWithStyle:UITableViewStylePlain];
+    UINavigationController* tnav = [[UINavigationController alloc] initWithRootViewController:tlc];
+    
+    tabCtrl.viewControllers = [NSArray arrayWithObjects:nstc, tnav, viewCtrl1,viewCtrl2, nil];
+    //self.window.rootViewController = tabCtrl;
+    [self.rootCtrl addChildViewController:tabCtrl];
+    [self.rootCtrl.view addSubview:tabCtrl.view];
     // Override point for customization after application launch.
     return YES;
 }

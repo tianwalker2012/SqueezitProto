@@ -35,6 +35,8 @@
 
 - (EZAvailableTime*) createAvTimeFromScheduledTask:(EZScheduledTask*)schTask;
 
+- (NSArray*) sortAvailableTimes:(NSArray*)avTimes;
+
 @end
 
 @implementation EZTaskScheduler
@@ -125,6 +127,8 @@
 }
 
 
+
+
 //When and where we try to find we just don't have enough time to do so?
 //Can do this at the beginning of the method.
 //First make sure this task have enough data to run. 
@@ -145,13 +149,22 @@
             int remain = tk.quotas.quotasPerCycle - historyTime;
             int avg = remain/[EZTaskHelper cycleRemains:tk.quotas date:date];
             int amount = avg * 1.1;
-            NSArray* scts = [self allocTimeForTasks:tk avTimes:avDay.availableTimes amount:amount date:date];
+            NSArray* scts = [self allocTimeForTasks:tk avTimes:[self sortAvailableTimes:avDay.availableTimes] amount:amount date:date];
             [res.scheduledTasks addObjectsFromArray:scts];
             EZDEBUG(@"%@:remain:%i,avg:%i,currentAmount:%i,createdTask:%i",tk.name,remain,avg,amount,[scts count]);
         }
     }
     res.availableDay = avDay;
     return res;
+}
+
+- (NSArray*) sortAvailableTimes:(NSArray*)avTimes
+{
+    return [avTimes sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        EZAvailableTime* av1 = obj1;
+        EZAvailableTime* av2 = obj2;
+        return [av1.start timeIntervalSince1970] - [av2.start timeIntervalSince1970];
+    }];
 }
 
 - (void) addExclusive:(NSMutableArray*)exclusive tasks:(NSArray*)tasks

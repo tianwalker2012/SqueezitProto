@@ -12,9 +12,11 @@
 
 + (void) removeByID:(NSManagedObjectID*)oid array:(NSMutableArray*)list
 {
-    for(NSManagedObject* obj in list){
+    for(int i = 0; i< [list count] ; i++){
+        NSManagedObject* obj = [list objectAtIndex:i];
         if([obj.objectID isEqual:oid]){
             [list removeObject:obj];
+            break;
         }
     }
 }

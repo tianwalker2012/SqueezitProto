@@ -16,6 +16,8 @@
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSDate* createdTime;
 @property (nonatomic, retain) NSSet *tasks;
+@property (nonatomic, retain) NSNumber* displayOrder;
+
 @end
 
 @interface MTaskGroup (CoreDataGeneratedAccessors)

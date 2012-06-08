@@ -41,7 +41,7 @@
 
 - (NSArray*) getAllTasks;
 
-- (NSArray*) fetchAllWithVO:(Class)voType po:(Class)poType;
+- (NSArray*) fetchAllWithVO:(Class)voType po:(Class)poType sortField:(NSString*)field;
 
 // Pick a allocated pattern for that day 
 - (EZAvailableDay*) getAvailableDay:(NSDate*)date;

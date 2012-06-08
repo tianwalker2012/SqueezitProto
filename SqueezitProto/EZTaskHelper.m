@@ -11,11 +11,33 @@
 #import "EZAvailableDay.h"
 #import "EZQuotas.h"
 
+@implementation NSString(EZPrivate)
+
+//Implement the traditional trim, space new line etc...
+- (NSString*) trim
+{
+    return [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+}
+
+@end
+
+
 @implementation NSDate(EZPrivate)
 
 - (NSInteger) convertDays
 {
     return [self timeIntervalSince1970]/SecondsPerDay;
+}
+
+- (BOOL) isPassed:(NSDate*)date
+{
+    return [self timeIntervalSinceDate:date] <= 0;
+}
+
+- (BOOL) InBetween:(NSDate*)start end:(NSDate*)end
+{
+    NSTimeInterval selfInt = [self timeIntervalSince1970];
+    return selfInt > [start timeIntervalSince1970] && selfInt < [end timeIntervalSince1970];
 }
 
 - (BOOL) InBetweenDays:(NSDate*)start end:(NSDate*)end

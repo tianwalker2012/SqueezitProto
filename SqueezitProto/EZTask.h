@@ -51,6 +51,7 @@
 @property (strong, nonatomic) EZQuotas* quotas;
 @property (strong, nonatomic) NSString* soundName;
 @property (strong, nonatomic) MTask* PO;
+@property (strong, nonatomic) NSDate* createdTime;
 
 
 - (id) initWithName:(NSString*) nm duration:(int)dur maxDur:(int)mdur envTraits:(EZEnvironmentTraits)traits;

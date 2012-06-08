@@ -26,8 +26,11 @@
 @property(strong, nonatomic) NSDate* createdTime;
 @property(strong, nonatomic) NSMutableArray* tasks;
 @property(strong, nonatomic) MTaskGroup* PO;
+@property(assign, nonatomic) NSInteger displayOrder;
 
 - (id) initWithPO:(MTaskGroup*)mtk;
+
+- (id) init;
 
 - (MTaskGroup*) createPO;
 

@@ -17,6 +17,7 @@
 @property (nonatomic, retain) NSNumber * envTraits;
 @property (nonatomic, retain) NSNumber * duration;
 @property (nonatomic, retain) NSNumber * maxDuration;
+@property (nonatomic, retain) NSDate* createdTime;
 @property (nonatomic, retain) MQuotas*quotas;
 
 

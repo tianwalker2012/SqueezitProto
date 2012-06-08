@@ -46,6 +46,27 @@
 		184C2AC8157759D000852B35 /* MTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2AC7157759CF00852B35 /* MTask.m */; };
 		184C2ACB157768DB00852B35 /* MImageOwner.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2ACA157768DA00852B35 /* MImageOwner.m */; };
 		184C2ACE1579BBA600852B35 /* EZCoreHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2ACD1579BBA600852B35 /* EZCoreHelper.m */; };
+		184C2ADC157B136F00852B35 /* EZTaskListCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2ADA157B136800852B35 /* EZTaskListCtrl.m */; };
+		184C2ADD157B136F00852B35 /* EZTaskListCtrl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 184C2ADB157B136C00852B35 /* EZTaskListCtrl.xib */; };
+		184C2AE6157B3B2F00852B35 /* EZTaskGroupDetailCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2AE4157B3B2400852B35 /* EZTaskGroupDetailCtrl.m */; };
+		184C2AE7157B3B2F00852B35 /* EZTaskGroupDetailCtrl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 184C2AE5157B3B2800852B35 /* EZTaskGroupDetailCtrl.xib */; };
+		184C2AF5157CA9A300852B35 /* EZMainCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2AF3157CA9A100852B35 /* EZMainCtrl.m */; };
+		184C2AF6157CA9A300852B35 /* EZMainCtrl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 184C2AF4157CA9A200852B35 /* EZMainCtrl.xib */; };
+		184C2AFB157CBA5A00852B35 /* EZTestTabCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2AFA157CBA5A00852B35 /* EZTestTabCtrl.m */; };
+		184C2AFE157CBA9300852B35 /* EZTestViewCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2AFD157CBA9200852B35 /* EZTestViewCtrl.m */; };
+		184C2B05157DBD8E00852B35 /* EZAddCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 184C2B04157DBD8E00852B35 /* EZAddCell.xib */; };
+		184C2B09157DE0F000852B35 /* EZEditCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2B08157DE0F000852B35 /* EZEditCell.m */; };
+		184C2B0F157E4DA000852B35 /* Squeezit.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 184C2B0E157E4DA000852B35 /* Squeezit.bundle */; };
+		184C2B12157E4E8900852B35 /* EZGlobalLocalize.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2B11157E4E8900852B35 /* EZGlobalLocalize.m */; };
+		184C2B23157F362F00852B35 /* EZEditLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2B22157F362F00852B35 /* EZEditLabelCell.m */; };
+		184C2B26157F36E500852B35 /* EZEditLabelCellHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2B25157F36E300852B35 /* EZEditLabelCellHolder.m */; };
+		184C2B28157F38C000852B35 /* EZEditLabelCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 184C2B27157F38BF00852B35 /* EZEditLabelCell.xib */; };
+		184C2B2B157F3C8B00852B35 /* EZTaskDetailCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2B2A157F3C8800852B35 /* EZTaskDetailCtrl.m */; };
+		18E035D0158089E9003B3D3E /* EZTaskGroupCellHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E035CF158089E9003B3D3E /* EZTaskGroupCellHolder.m */; };
+		18E035D415808A16003B3D3E /* EZTaskGroupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E035D315808A16003B3D3E /* EZTaskGroupCell.m */; };
+		18E035D615808BB4003B3D3E /* EZTaskGroupCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18E035D515808BB4003B3D3E /* EZTaskGroupCell.xib */; };
+		18E035D81581A471003B3D3E /* EZPureEditCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18E035D71581A471003B3D3E /* EZPureEditCell.xib */; };
+		18E035DB1581A506003B3D3E /* EZPureEditCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E035DA1581A506003B3D3E /* EZPureEditCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -121,6 +142,40 @@
 		184C2ACA157768DA00852B35 /* MImageOwner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MImageOwner.m; sourceTree = "<group>"; };
 		184C2ACC1579BBA600852B35 /* EZCoreHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZCoreHelper.h; sourceTree = "<group>"; };
 		184C2ACD1579BBA600852B35 /* EZCoreHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZCoreHelper.m; sourceTree = "<group>"; };
+		184C2AD9157B136700852B35 /* EZTaskListCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTaskListCtrl.h; sourceTree = "<group>"; };
+		184C2ADA157B136800852B35 /* EZTaskListCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTaskListCtrl.m; sourceTree = "<group>"; };
+		184C2ADB157B136C00852B35 /* EZTaskListCtrl.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZTaskListCtrl.xib; sourceTree = "<group>"; };
+		184C2AE3157B3B2200852B35 /* EZTaskGroupDetailCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTaskGroupDetailCtrl.h; sourceTree = "<group>"; };
+		184C2AE4157B3B2400852B35 /* EZTaskGroupDetailCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTaskGroupDetailCtrl.m; sourceTree = "<group>"; };
+		184C2AE5157B3B2800852B35 /* EZTaskGroupDetailCtrl.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZTaskGroupDetailCtrl.xib; sourceTree = "<group>"; };
+		184C2AF2157CA9A100852B35 /* EZMainCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZMainCtrl.h; sourceTree = "<group>"; };
+		184C2AF3157CA9A100852B35 /* EZMainCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZMainCtrl.m; sourceTree = "<group>"; };
+		184C2AF4157CA9A200852B35 /* EZMainCtrl.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZMainCtrl.xib; sourceTree = "<group>"; };
+		184C2AF9157CBA5A00852B35 /* EZTestTabCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTestTabCtrl.h; sourceTree = "<group>"; };
+		184C2AFA157CBA5A00852B35 /* EZTestTabCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTestTabCtrl.m; sourceTree = "<group>"; };
+		184C2AFC157CBA9200852B35 /* EZTestViewCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTestViewCtrl.h; sourceTree = "<group>"; };
+		184C2AFD157CBA9200852B35 /* EZTestViewCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTestViewCtrl.m; sourceTree = "<group>"; };
+		184C2B04157DBD8E00852B35 /* EZAddCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZAddCell.xib; sourceTree = "<group>"; };
+		184C2B07157DE0F000852B35 /* EZEditCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZEditCell.h; sourceTree = "<group>"; };
+		184C2B08157DE0F000852B35 /* EZEditCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZEditCell.m; sourceTree = "<group>"; };
+		184C2B0E157E4DA000852B35 /* Squeezit.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Squeezit.bundle; sourceTree = "<group>"; };
+		184C2B10157E4E8100852B35 /* EZGlobalLocalize.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EZGlobalLocalize.h; sourceTree = "<group>"; };
+		184C2B11157E4E8900852B35 /* EZGlobalLocalize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZGlobalLocalize.m; sourceTree = "<group>"; };
+		184C2B21157F362E00852B35 /* EZEditLabelCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZEditLabelCell.h; sourceTree = "<group>"; };
+		184C2B22157F362F00852B35 /* EZEditLabelCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZEditLabelCell.m; sourceTree = "<group>"; };
+		184C2B24157F36E300852B35 /* EZEditLabelCellHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZEditLabelCellHolder.h; sourceTree = "<group>"; };
+		184C2B25157F36E300852B35 /* EZEditLabelCellHolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZEditLabelCellHolder.m; sourceTree = "<group>"; };
+		184C2B27157F38BF00852B35 /* EZEditLabelCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZEditLabelCell.xib; sourceTree = "<group>"; };
+		184C2B29157F3C8600852B35 /* EZTaskDetailCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTaskDetailCtrl.h; sourceTree = "<group>"; };
+		184C2B2A157F3C8800852B35 /* EZTaskDetailCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTaskDetailCtrl.m; sourceTree = "<group>"; };
+		18E035CE158089E9003B3D3E /* EZTaskGroupCellHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTaskGroupCellHolder.h; sourceTree = "<group>"; };
+		18E035CF158089E9003B3D3E /* EZTaskGroupCellHolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTaskGroupCellHolder.m; sourceTree = "<group>"; };
+		18E035D215808A16003B3D3E /* EZTaskGroupCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTaskGroupCell.h; sourceTree = "<group>"; };
+		18E035D315808A16003B3D3E /* EZTaskGroupCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTaskGroupCell.m; sourceTree = "<group>"; };
+		18E035D515808BB4003B3D3E /* EZTaskGroupCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZTaskGroupCell.xib; sourceTree = "<group>"; };
+		18E035D71581A471003B3D3E /* EZPureEditCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZPureEditCell.xib; sourceTree = "<group>"; };
+		18E035D91581A505003B3D3E /* EZPureEditCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZPureEditCell.h; sourceTree = "<group>"; };
+		18E035DA1581A506003B3D3E /* EZPureEditCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZPureEditCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -169,6 +224,9 @@
 		184C295F1569E19900852B35 /* SqueezitProto */ = {
 			isa = PBXGroup;
 			children = (
+				184C2B0D157E4D6F00852B35 /* Resources */,
+				184C2B06157DE09600852B35 /* Customized Cells */,
+				184C2AF8157CBA1E00852B35 /* TestController */,
 				184C2AA415774C6500852B35 /* TestCases */,
 				184C2AA01577206800852B35 /* CoreDataUtility */,
 				184C2A7B15770F9F00852B35 /* Models */,
@@ -241,6 +299,8 @@
 		184C298E156A296F00852B35 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				184C2B11157E4E8900852B35 /* EZGlobalLocalize.m */,
+				184C2B10157E4E8100852B35 /* EZGlobalLocalize.h */,
 				184C29DF156FB29400852B35 /* EZAlarmUtility.h */,
 				184C29E0156FB29400852B35 /* EZAlarmUtility.m */,
 				184C29F41574769300852B35 /* EZReleaseDetector.h */,
@@ -258,6 +318,17 @@
 				184C29EB1573651E00852B35 /* EZScheduledTaskDetailCtrl.h */,
 				184C29EC1573651E00852B35 /* EZScheduledTaskDetailCtrl.m */,
 				184C29EE1573697700852B35 /* EZScheduledTaskDetailCtrl.xib */,
+				184C2AD9157B136700852B35 /* EZTaskListCtrl.h */,
+				184C2ADA157B136800852B35 /* EZTaskListCtrl.m */,
+				184C2ADB157B136C00852B35 /* EZTaskListCtrl.xib */,
+				184C2AE3157B3B2200852B35 /* EZTaskGroupDetailCtrl.h */,
+				184C2AE4157B3B2400852B35 /* EZTaskGroupDetailCtrl.m */,
+				184C2AE5157B3B2800852B35 /* EZTaskGroupDetailCtrl.xib */,
+				184C2AF2157CA9A100852B35 /* EZMainCtrl.h */,
+				184C2AF3157CA9A100852B35 /* EZMainCtrl.m */,
+				184C2AF4157CA9A200852B35 /* EZMainCtrl.xib */,
+				184C2B29157F3C8600852B35 /* EZTaskDetailCtrl.h */,
+				184C2B2A157F3C8800852B35 /* EZTaskDetailCtrl.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -302,6 +373,48 @@
 				184C298F156B36D100852B35 /* EZTestSuite.h */,
 			);
 			name = TestCases;
+			sourceTree = "<group>";
+		};
+		184C2AF8157CBA1E00852B35 /* TestController */ = {
+			isa = PBXGroup;
+			children = (
+				184C2AF9157CBA5A00852B35 /* EZTestTabCtrl.h */,
+				184C2AFA157CBA5A00852B35 /* EZTestTabCtrl.m */,
+				184C2AFC157CBA9200852B35 /* EZTestViewCtrl.h */,
+				184C2AFD157CBA9200852B35 /* EZTestViewCtrl.m */,
+			);
+			name = TestController;
+			sourceTree = "<group>";
+		};
+		184C2B06157DE09600852B35 /* Customized Cells */ = {
+			isa = PBXGroup;
+			children = (
+				184C2B04157DBD8E00852B35 /* EZAddCell.xib */,
+				184C2B07157DE0F000852B35 /* EZEditCell.h */,
+				184C2B08157DE0F000852B35 /* EZEditCell.m */,
+				184C2B21157F362E00852B35 /* EZEditLabelCell.h */,
+				184C2B22157F362F00852B35 /* EZEditLabelCell.m */,
+				184C2B24157F36E300852B35 /* EZEditLabelCellHolder.h */,
+				184C2B25157F36E300852B35 /* EZEditLabelCellHolder.m */,
+				184C2B27157F38BF00852B35 /* EZEditLabelCell.xib */,
+				18E035CE158089E9003B3D3E /* EZTaskGroupCellHolder.h */,
+				18E035CF158089E9003B3D3E /* EZTaskGroupCellHolder.m */,
+				18E035D215808A16003B3D3E /* EZTaskGroupCell.h */,
+				18E035D315808A16003B3D3E /* EZTaskGroupCell.m */,
+				18E035D515808BB4003B3D3E /* EZTaskGroupCell.xib */,
+				18E035D71581A471003B3D3E /* EZPureEditCell.xib */,
+				18E035D91581A505003B3D3E /* EZPureEditCell.h */,
+				18E035DA1581A506003B3D3E /* EZPureEditCell.m */,
+			);
+			name = "Customized Cells";
+			sourceTree = "<group>";
+		};
+		184C2B0D157E4D6F00852B35 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				184C2B0E157E4DA000852B35 /* Squeezit.bundle */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -359,6 +472,14 @@
 				184C29761569E19900852B35 /* MainStoryboard.storyboard in Resources */,
 				184C29DE156CE21E00852B35 /* EZScheduledTaskController.xib in Resources */,
 				184C29EF1573697800852B35 /* EZScheduledTaskDetailCtrl.xib in Resources */,
+				184C2ADD157B136F00852B35 /* EZTaskListCtrl.xib in Resources */,
+				184C2AE7157B3B2F00852B35 /* EZTaskGroupDetailCtrl.xib in Resources */,
+				184C2AF6157CA9A300852B35 /* EZMainCtrl.xib in Resources */,
+				184C2B05157DBD8E00852B35 /* EZAddCell.xib in Resources */,
+				184C2B0F157E4DA000852B35 /* Squeezit.bundle in Resources */,
+				184C2B28157F38C000852B35 /* EZEditLabelCell.xib in Resources */,
+				18E035D615808BB4003B3D3E /* EZTaskGroupCell.xib in Resources */,
+				18E035D81581A471003B3D3E /* EZPureEditCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,6 +521,19 @@
 				184C2AC8157759D000852B35 /* MTask.m in Sources */,
 				184C2ACB157768DB00852B35 /* MImageOwner.m in Sources */,
 				184C2ACE1579BBA600852B35 /* EZCoreHelper.m in Sources */,
+				184C2ADC157B136F00852B35 /* EZTaskListCtrl.m in Sources */,
+				184C2AE6157B3B2F00852B35 /* EZTaskGroupDetailCtrl.m in Sources */,
+				184C2AF5157CA9A300852B35 /* EZMainCtrl.m in Sources */,
+				184C2AFB157CBA5A00852B35 /* EZTestTabCtrl.m in Sources */,
+				184C2AFE157CBA9300852B35 /* EZTestViewCtrl.m in Sources */,
+				184C2B09157DE0F000852B35 /* EZEditCell.m in Sources */,
+				184C2B12157E4E8900852B35 /* EZGlobalLocalize.m in Sources */,
+				184C2B23157F362F00852B35 /* EZEditLabelCell.m in Sources */,
+				184C2B26157F36E500852B35 /* EZEditLabelCellHolder.m in Sources */,
+				184C2B2B157F3C8B00852B35 /* EZTaskDetailCtrl.m in Sources */,
+				18E035D0158089E9003B3D3E /* EZTaskGroupCellHolder.m in Sources */,
+				18E035D415808A16003B3D3E /* EZTaskGroupCell.m in Sources */,
+				18E035DB1581A506003B3D3E /* EZPureEditCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -511,6 +645,7 @@
 				184C297B1569E19900852B35 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

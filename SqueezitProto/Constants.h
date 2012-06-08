@@ -27,6 +27,10 @@ EZDEBUG(xx, ##__VA_ARGS__); \
 
 #define SecondsPerDay 86400
 
+
+//#define CurrentTaskColor [UIColor redColor]
+//#define PassedTaskColor [UIColor lightGrayColor]
+
 #define CoreDBName @"Tasks.sqlite"
 #define CoreModelName @"Tasks"
 
