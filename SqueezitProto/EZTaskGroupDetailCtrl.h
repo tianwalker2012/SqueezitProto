@@ -7,14 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "EZTaskHelper.h"
 
 @class EZTaskGroup;
 
-@interface EZTaskGroupDetailCtrl : UITableViewController 
+@interface EZTaskGroupDetailCtrl : UITableViewController<UITextFieldDelegate> 
 
 @property (strong, nonatomic) EZTaskGroup* taskGroup;
+@property (strong, nonatomic) UITextField* editField;
 @property (assign, nonatomic) NSInteger barType;
-
-- (void) changeLeftBarButton;
+@property (strong, nonatomic) EZOperationBlock superUpdateBlock;
 
 @end

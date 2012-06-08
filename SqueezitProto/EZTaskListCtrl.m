@@ -384,7 +384,11 @@
     if(indexPath.row < [taskGroups count]){
         return indexPath;
     }
+    EZTaskGroupCell* groupCell = (EZTaskGroupCell*)[tableView cellForRowAtIndexPath:indexPath];
+    //My one cents to UX
+    [groupCell.titleField becomeFirstResponder];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
     return nil;
 }
 
@@ -393,6 +397,12 @@
     EZTaskGroup* tgrp = [taskGroups objectAtIndex:indexPath.row];
     EZTaskGroupDetailCtrl* tgc = [[EZTaskGroupDetailCtrl alloc] initWithStyle:UITableViewStylePlain];
     tgc.taskGroup = tgrp;
+    tgc.superUpdateBlock = ^(){
+        EZDEBUG(@"SuperUpdateBlock get called, before refresh count:%i",tgrp.tasks.count);
+        [tgrp refresh];
+        EZDEBUG(@"after refresh count:%i",tgrp.tasks.count);
+        [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:NO];
+    };
     [self.navigationController pushViewController:tgc animated:YES];
 }
 

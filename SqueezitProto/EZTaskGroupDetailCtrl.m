@@ -10,13 +10,24 @@
 #import "EZTaskGroup.h"
 #import "EZTask.h"
 #import "EZTaskDetailCtrl.h"
+#import "EZGlobalLocalize.h"
+#import "EZPureEditCell.h"
+#import "EZEditLabelCellHolder.h"
+#import "EZTaskStore.h"
+#import "EZTaskHelper.h"
 
 @interface EZTaskGroupDetailCtrl ()
+
+- (UITableViewCell*) generateEditCell:(NSIndexPath*)indexPath;
+
+- (void) addClicked;
+
+- (void) backClicked;
 
 @end
 
 @implementation EZTaskGroupDetailCtrl
-@synthesize taskGroup, barType;
+@synthesize editField, taskGroup, barType, superUpdateBlock;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -30,9 +41,24 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addClicked)];
+    
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"List" style:UIBarButtonItemStyleBordered target:self action:@selector(backClicked)];
     //self.navigationItem.leftBarButtonItem
     //self.barType = UIBarButtonSystemItemDone;
     //[self performSelector:@selector(changeLeftBarButton) withObject:nil afterDelay:1];
+}
+
+- (void) backClicked
+{
+    EZDEBUG(@"Back get clicked");
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void) addClicked 
+{
+    EZDEBUG(@"Add clicked");
+    [self.editField becomeFirstResponder]; 
 }
 
 - (void)viewDidUnload
@@ -56,40 +82,77 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [taskGroup.tasks count];
+    return [taskGroup.tasks count]+1;
 }
 
-- (void) dummyHandler:(id)sender
+
+- (UITableViewCell*) generateEditCell:(NSIndexPath*)indexPath
 {
-    
+    static NSString *CellIdentifier = @"EditCell";
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if(cell == nil){
+        EZPureEditCell* pureCell = [EZEditLabelCellHolder createPureEditCellWithDelegate:self];
+        pureCell.editField.placeholder = EZLocalizedString(@"Task name ...", nil);
+        self.editField = pureCell.editField;
+        cell = pureCell;
+    }
+    self.editField.text = @"";
+    return cell;
 }
 
-- (void) changeLeftBarButton
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
-    //self.navigationItem.b
-    EZDEBUG(@"Begin to execute the ChangeLeftBarButton: type:%i",self.barType);
-    if(self.barType > UIBarButtonSystemItemPageCurl){
-        EZDEBUG(@"Quit for reach the maximum");
+    EZDEBUG(@"textFieldShouldBeginEditing, backBarItem:%@, navController backBarItem:%@",self.navigationItem.backBarButtonItem, self.navigationController.navigationItem.backBarButtonItem);
+    self.navigationItem.leftBarButtonItem.enabled = false;
+    return true;
+}
+//Baically what should be done in this method
+//1.If the input only space, then remove the space and hold the focus
+//2.If it is a valid name, I will create a task and insert the task into 
+//The task group and store the taskGroup.
+//3. Call the tableView to insert a cell.
+//Done. Simple and stupid and happy. 
+//4. Then let's the cell get the focus back of course. 
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    self.navigationItem.leftBarButtonItem.enabled = true;
+    NSString* trimmed = textField.text.trim;
+    EZDEBUG(@"didEndEditing, trimmed:%@", trimmed);
+    if([trimmed isEqualToString:@""]){
+        textField.text = @"";
+        //[textField becomeFirstResponder];
         return;
     }
+    EZDEBUG(@"Not empty, go ahead store it");
+    EZTask* newTask = [[EZTask alloc] initWithName:trimmed];
+    [taskGroup.tasks addObject:newTask];
+    [[EZTaskStore getInstance] storeObject:taskGroup];
+    [self.tableView beginUpdates];
+    [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject: [NSIndexPath indexPathForRow:taskGroup.tasks.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationMiddle];
     
-    @try {
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:self.barType target:nil action:@selector(dummyHandler:)];
-        
-    }
-    @catch (NSException *exception) {
-        EZDEBUG(@"Encounter exception for type:%i",self.barType);
-    }
-    @finally {
-        self.barType = 1+self.barType;
-        [self performSelector:@selector(changeLeftBarButton) withObject:nil afterDelay:1];
-    }
+    [self.tableView endUpdates];
     
+    //Inform the up layer that we added new object
+    self.superUpdateBlock();
+    textField.text = @"";
+    [textField becomeFirstResponder];
     
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    EZDEBUG(@"textFieldShouldReturn get called");
+    [textField resignFirstResponder];
+    return TRUE;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
+    if(indexPath.row >= taskGroup.tasks.count){
+        return [self generateEditCell:indexPath];
+    }
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if(cell == nil){
@@ -98,8 +161,15 @@
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     EZTask* task = [taskGroup.tasks objectAtIndex:indexPath.row];
     cell.textLabel.text = task.name;
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"Mini:%i minutes, Max:%i minutes, Type:%i",task.duration, task.maxDuration, task.envTraits];
+    
+    if(task.duration == task.maxDuration){
+        cell.detailTextLabel.text = [NSString stringWithFormat:EZLocalizedString(@"Consume %i minutes each time", nil),task.duration];
+    }else{
+        cell.detailTextLabel.text = [NSString stringWithFormat:EZLocalizedString(@"Consume %i to %i minutes each time", nil),task.duration, task.maxDuration];
+        
+    }
     return cell;
+    
 }
 
 /*
@@ -143,11 +213,34 @@
 
 #pragma mark - Table view delegate
 
+//I assume by return nil, it will not get selected.
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    EZDEBUG(@"willSelectRowAtIndexPath get called");
+    if(indexPath.row < self.taskGroup.tasks.count){
+        return indexPath;
+    }
+    return nil;
+}
+
+- (void) removeCellAtIndex:(NSIndexPath*)path
+{
+    [self.tableView beginUpdates];
+    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:path] withRowAnimation:YES];
+    [self.tableView endUpdates];
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     EZTask* task = [self.taskGroup.tasks objectAtIndex:indexPath.row];
-    EZTaskDetailCtrl* td = [[EZTaskDetailCtrl alloc] initWithStyle:UITableViewStylePlain];
+    EZTaskDetailCtrl* td = [[EZTaskDetailCtrl alloc] initWithStyle:UITableViewStyleGrouped];
     td.task = task;
+    td.superDeletBlock = ^(){
+        [self.taskGroup.tasks removeObjectAtIndex:indexPath.row];
+        [[EZTaskStore getInstance] storeObject:self.taskGroup];
+        [self performSelector:@selector(removeCellAtIndex:) withObject:indexPath afterDelay:0.3];
+        self.superUpdateBlock();
+    };
     [self.navigationController pushViewController:td animated:YES];
     
 }

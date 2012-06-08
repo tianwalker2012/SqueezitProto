@@ -62,7 +62,6 @@
 		184C2B26157F36E500852B35 /* EZEditLabelCellHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2B25157F36E300852B35 /* EZEditLabelCellHolder.m */; };
 		184C2B28157F38C000852B35 /* EZEditLabelCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 184C2B27157F38BF00852B35 /* EZEditLabelCell.xib */; };
 		184C2B2B157F3C8B00852B35 /* EZTaskDetailCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2B2A157F3C8800852B35 /* EZTaskDetailCtrl.m */; };
-		18E035D0158089E9003B3D3E /* EZTaskGroupCellHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E035CF158089E9003B3D3E /* EZTaskGroupCellHolder.m */; };
 		18E035D415808A16003B3D3E /* EZTaskGroupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E035D315808A16003B3D3E /* EZTaskGroupCell.m */; };
 		18E035D615808BB4003B3D3E /* EZTaskGroupCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18E035D515808BB4003B3D3E /* EZTaskGroupCell.xib */; };
 		18E035D81581A471003B3D3E /* EZPureEditCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18E035D71581A471003B3D3E /* EZPureEditCell.xib */; };
@@ -168,8 +167,6 @@
 		184C2B27157F38BF00852B35 /* EZEditLabelCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZEditLabelCell.xib; sourceTree = "<group>"; };
 		184C2B29157F3C8600852B35 /* EZTaskDetailCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTaskDetailCtrl.h; sourceTree = "<group>"; };
 		184C2B2A157F3C8800852B35 /* EZTaskDetailCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTaskDetailCtrl.m; sourceTree = "<group>"; };
-		18E035CE158089E9003B3D3E /* EZTaskGroupCellHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTaskGroupCellHolder.h; sourceTree = "<group>"; };
-		18E035CF158089E9003B3D3E /* EZTaskGroupCellHolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTaskGroupCellHolder.m; sourceTree = "<group>"; };
 		18E035D215808A16003B3D3E /* EZTaskGroupCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTaskGroupCell.h; sourceTree = "<group>"; };
 		18E035D315808A16003B3D3E /* EZTaskGroupCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTaskGroupCell.m; sourceTree = "<group>"; };
 		18E035D515808BB4003B3D3E /* EZTaskGroupCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZTaskGroupCell.xib; sourceTree = "<group>"; };
@@ -397,8 +394,6 @@
 				184C2B24157F36E300852B35 /* EZEditLabelCellHolder.h */,
 				184C2B25157F36E300852B35 /* EZEditLabelCellHolder.m */,
 				184C2B27157F38BF00852B35 /* EZEditLabelCell.xib */,
-				18E035CE158089E9003B3D3E /* EZTaskGroupCellHolder.h */,
-				18E035CF158089E9003B3D3E /* EZTaskGroupCellHolder.m */,
 				18E035D215808A16003B3D3E /* EZTaskGroupCell.h */,
 				18E035D315808A16003B3D3E /* EZTaskGroupCell.m */,
 				18E035D515808BB4003B3D3E /* EZTaskGroupCell.xib */,
@@ -531,7 +526,6 @@
 				184C2B23157F362F00852B35 /* EZEditLabelCell.m in Sources */,
 				184C2B26157F36E500852B35 /* EZEditLabelCellHolder.m in Sources */,
 				184C2B2B157F3C8B00852B35 /* EZTaskDetailCtrl.m in Sources */,
-				18E035D0158089E9003B3D3E /* EZTaskGroupCellHolder.m in Sources */,
 				18E035D415808A16003B3D3E /* EZTaskGroupCell.m in Sources */,
 				18E035DB1581A506003B3D3E /* EZPureEditCell.m in Sources */,
 			);

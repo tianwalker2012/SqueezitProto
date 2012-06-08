@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "Constants.h"
 
+typedef void (^ EZOperationBlock)();
+
 @class NSManagedObject;
 
 @protocol EZValueObject <NSObject>
@@ -23,6 +25,9 @@
 - (NSManagedObject*) PO;
 
 - (void) setPO:(NSManagedObject*)po;
+
+//Will fetch the value from the database again.
+- (void) refresh;
 
 @end
 
@@ -81,5 +86,7 @@
 + (int) cycleRemains:(EZQuotas*)quotas date:(NSDate*)date;
 
 + (int) getMonthLength:(NSDate*)date;
+
++ (NSString*) envTraitsToString:(NSInteger)envTraits;
 
 @end

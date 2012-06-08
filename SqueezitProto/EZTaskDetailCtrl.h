@@ -7,11 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "EZTaskHelper.h"
 
 @class EZTask;
 
-@interface EZTaskDetailCtrl : UITableViewController<UITextFieldDelegate>
+typedef void(^DeleteBlock) (BOOL deleted);
+
+@interface EZTaskDetailCtrl : UITableViewController<UITextFieldDelegate, UIActionSheetDelegate>
 
 @property (strong, nonatomic) EZTask* task;
+@property (strong, nonatomic) DeleteBlock deleteBlock;
+@property (strong, nonatomic) EZOperationBlock superDeletBlock;
 
 @end

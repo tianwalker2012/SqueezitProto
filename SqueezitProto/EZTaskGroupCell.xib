@@ -32,21 +32,21 @@
 				<string key="IBProxiedObjectIdentifier">IBFirstResponder</string>
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 			</object>
-			<object class="IBUITableViewCell" id="681523334">
+			<object class="IBUITableViewCell" id="94174601">
 				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">292</int>
 				<array class="NSMutableArray" key="NSSubviews">
-					<object class="IBUIView" id="236887587">
-						<reference key="NSNextResponder" ref="681523334"/>
+					<object class="IBUIView" id="882033438">
+						<reference key="NSNextResponder" ref="94174601"/>
 						<int key="NSvFlags">256</int>
 						<array class="NSMutableArray" key="NSSubviews">
-							<object class="IBUITextField" id="780576307">
-								<reference key="NSNextResponder" ref="236887587"/>
+							<object class="IBUITextField" id="751263201">
+								<reference key="NSNextResponder" ref="882033438"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{16, 0}, {258, 28}}</string>
-								<reference key="NSSuperview" ref="236887587"/>
+								<string key="NSFrame">{{12, 0}, {258, 28}}</string>
+								<reference key="NSSuperview" ref="882033438"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="501298195"/>
+								<reference key="NSNextKeyView" ref="99356803"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -76,11 +76,11 @@
 									<int key="NSfFlags">16</int>
 								</object>
 							</object>
-							<object class="IBUILabel" id="501298195">
-								<reference key="NSNextResponder" ref="236887587"/>
+							<object class="IBUILabel" id="99356803">
+								<reference key="NSNextResponder" ref="882033438"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{16, 26}, {262, 12}}</string>
-								<reference key="NSSuperview" ref="236887587"/>
+								<string key="NSFrame">{{12, 26}, {262, 12}}</string>
+								<reference key="NSSuperview" ref="882033438"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
@@ -113,9 +113,9 @@
 							</object>
 						</array>
 						<string key="NSFrameSize">{300, 43}</string>
-						<reference key="NSSuperview" ref="681523334"/>
+						<reference key="NSSuperview" ref="94174601"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="780576307"/>
+						<reference key="NSNextKeyView" ref="751263201"/>
 						<string key="NSReuseIdentifierKey">_NS:11</string>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">3</int>
@@ -131,15 +131,15 @@
 				<string key="NSFrameSize">{320, 44}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
-				<reference key="NSNextKeyView" ref="236887587"/>
+				<reference key="NSNextKeyView" ref="882033438"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 				<int key="IBUISelectionStyle">2</int>
 				<int key="IBUIAccessoryType">1</int>
-				<reference key="IBUIContentView" ref="236887587"/>
+				<reference key="IBUIContentView" ref="882033438"/>
 				<string key="IBUIReuseIdentifier">groupCell</string>
 			</object>
-			<object class="IBUILabel" id="583901405">
+			<object class="IBUILabel" id="877736150">
 				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">292</int>
 				<string key="NSFrameSize">{126, 8}</string>
@@ -175,23 +175,23 @@
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">groupCell</string>
 						<reference key="source" ref="841351856"/>
-						<reference key="destination" ref="681523334"/>
+						<reference key="destination" ref="94174601"/>
 					</object>
 					<int key="connectionID">6</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">titleField</string>
-						<reference key="source" ref="681523334"/>
-						<reference key="destination" ref="780576307"/>
+						<reference key="source" ref="94174601"/>
+						<reference key="destination" ref="751263201"/>
 					</object>
 					<int key="connectionID">7</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">groupInfo</string>
-						<reference key="source" ref="681523334"/>
-						<reference key="destination" ref="501298195"/>
+						<reference key="source" ref="94174601"/>
+						<reference key="destination" ref="99356803"/>
 					</object>
 					<int key="connectionID">8</int>
 				</object>
@@ -217,27 +217,27 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">2</int>
-						<reference key="object" ref="681523334"/>
+						<reference key="object" ref="94174601"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="780576307"/>
-							<reference ref="501298195"/>
+							<reference ref="751263201"/>
+							<reference ref="99356803"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">3</int>
-						<reference key="object" ref="780576307"/>
-						<reference key="parent" ref="681523334"/>
+						<reference key="object" ref="751263201"/>
+						<reference key="parent" ref="94174601"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">4</int>
-						<reference key="object" ref="583901405"/>
+						<reference key="object" ref="877736150"/>
 						<reference key="parent" ref="0"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">5</int>
-						<reference key="object" ref="501298195"/>
-						<reference key="parent" ref="681523334"/>
+						<reference key="object" ref="99356803"/>
+						<reference key="parent" ref="94174601"/>
 					</object>
 				</array>
 			</object>
@@ -288,6 +288,7 @@
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="editCell">EZEditLabelCell</string>
 						<string key="groupCell">EZTaskGroupCell</string>
+						<string key="pureEditCell">EZPureEditCell</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
 						<object class="IBToOneOutletInfo" key="editCell">
@@ -298,10 +299,33 @@
 							<string key="name">groupCell</string>
 							<string key="candidateClassName">EZTaskGroupCell</string>
 						</object>
+						<object class="IBToOneOutletInfo" key="pureEditCell">
+							<string key="name">pureEditCell</string>
+							<string key="candidateClassName">EZPureEditCell</string>
+						</object>
 					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/EZEditLabelCellHolder.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">EZPureEditCell</string>
+					<string key="superclassName">UITableViewCell</string>
+					<object class="NSMutableDictionary" key="outlets">
+						<string key="NS.key.0">editField</string>
+						<string key="NS.object.0">UITextField</string>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<string key="NS.key.0">editField</string>
+						<object class="IBToOneOutletInfo" key="NS.object.0">
+							<string key="name">editField</string>
+							<string key="candidateClassName">UITextField</string>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/EZPureEditCell.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

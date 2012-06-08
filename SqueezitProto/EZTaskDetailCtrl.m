@@ -12,13 +12,15 @@
 #import "EZEditLabelCellHolder.h"
 #import "EZEditLabelCell.h"
 #import "EZGlobalLocalize.h"
+#import "EZPureEditCell.h"
+#import "EZQuotas.h"
 
 @interface EZTaskDetailCtrl ()
 
 @end
 
 @implementation EZTaskDetailCtrl
-@synthesize task;
+@synthesize task, deleteBlock, superDeletBlock;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -87,12 +89,12 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return 5;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 4;
+    return 1;
 }
 
 
@@ -101,37 +103,107 @@
     return [NSString stringWithFormat:@"%i", envTraits];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if(section == 0){
+        return 10;
+    }
+    return 5;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 5;
+}
+
+    
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"EditLabelCell";
-    EZEditLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if(cell == nil){
-        cell = [EZEditLabelCellHolder createCellWithDelegate:self];
-    }
-    switch (indexPath.row) {
-        case 0:
-            cell.textField.text = task.name;
-            cell.label.text = EZLocalizedString(@"Name:",nil);
+    
+    NSInteger section = indexPath.section;
+    EZDEBUG(@"Get cell for section:%i", section);
+    switch (section) {
+        case 0:{
+            NSString* cellIdentifier = @"EditCell";
+            EZPureEditCell* pureCell = (EZPureEditCell*)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            if(pureCell == nil){
+                pureCell = [EZEditLabelCellHolder createPureEditCellWithDelegate:self];
+            }
+            pureCell.editField.placeholder = @"Task Name ...";
+            pureCell.editField.text = task.name;
+            pureCell.editField.textAlignment = UITextAlignmentCenter;
+            return pureCell;
             break;
+        }
         case 1:
-            cell.textField.text = [NSString stringWithFormat:EZLocalizedString(@"%i minutes", nil), task.duration];
-            cell.label.text = EZLocalizedString(@"Shortest Time:", nil);
-            break;
         case 2:
-            cell.textField.text = [NSString stringWithFormat:EZLocalizedString(@"%i minutes", nil), task.maxDuration];
-            cell.label.text = EZLocalizedString(@"Longest Time:",nil); 
-            break;
         case 3:
-            cell.textField.text = [self envTraitsToString:task.envTraits];
-            cell.label.text = EZLocalizedString(@"Environment Traits", nil);
+        {
+            NSString* cellIdentifier = @"EditLabelCell";
+            EZEditLabelCell* eLabelCell = (EZEditLabelCell*)[tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            if(eLabelCell == nil){
+                eLabelCell = [EZEditLabelCellHolder createCellWithDelegate:self];
+            }
+            
+            if(section == 1){
+                eLabelCell.label.text = EZLocalizedString(@"Time", nil);
+                NSString* timeStr = nil;
+                if(task.duration == task.maxDuration){
+                    timeStr = [NSString stringWithFormat:EZLocalizedString(@"%i minutes",nil), task.duration];
+                }else{
+                    timeStr = [NSString stringWithFormat:EZLocalizedString(@"%i to %i minutes", nil),task.duration, task.maxDuration];
+                }
+                //Make it read only, click into another screen to modify it
+                
+                eLabelCell.textField.text = timeStr;
+            }else if(section == 2){
+                eLabelCell.label.text = EZLocalizedString(@"Environment", nil);
+                eLabelCell.textField.text = [EZTaskHelper envTraitsToString:task.envTraits];
+            } else { // == 3
+                if(task.quotas == nil){
+                    eLabelCell.label.text = EZLocalizedString(@"Weekly Minimum", nil);
+                    eLabelCell.textField.text = EZLocalizedString(@"None", nil);
+                }
+                else if(task.quotas.cycleType == WeekCycle){
+                    eLabelCell.label.text = EZLocalizedString(@"Each Week's quotas",nil);
+                    eLabelCell.textField.text = [NSString stringWithFormat:EZLocalizedString(@"%i hours %i minutes",nil),task.quotas.quotasPerCycle/60, task.quotas.quotasPerCycle%60];
+                }else if(task.quotas.cycleType == MonthCycle){
+                    eLabelCell.label.text = EZLocalizedString(@"Each Month's quotas",nil);
+                    eLabelCell.textField.text = [NSString stringWithFormat:EZLocalizedString(@"%i hours %i minutes",nil),task.quotas.quotasPerCycle/60, task.quotas.quotasPerCycle%60];
+                    
+                }else if(task.quotas.cycleType == CustomizedCycle){
+                    eLabelCell.label.text = EZLocalizedString(@"Each Cycle's quotas",nil);
+                    eLabelCell.textField.text = [NSString stringWithFormat:EZLocalizedString(@"%i hours %i minutes per %i days",nil),task.quotas.quotasPerCycle/60, task.quotas.quotasPerCycle%60, task.quotas.cycleLength];
+                }
+            }
+            eLabelCell.textField.userInteractionEnabled = false;
+            eLabelCell.textField.textAlignment = UITextAlignmentRight;
+            eLabelCell.label.textAlignment = UITextAlignmentLeft;
+            eLabelCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            return eLabelCell;
+        }
+            
+        case 4:{
+            NSString* cellIdentifier = @"DeleteCell";
+            UITableViewCell* deleteCell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            if(deleteCell == nil){
+                deleteCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+            }
+            deleteCell.textLabel.textAlignment = UITextAlignmentCenter;
+            deleteCell.backgroundColor = [UIColor colorWithRed:0.8 green:0.6 blue:0.6 alpha:1 ];
+            deleteCell.textLabel.text = EZLocalizedString(@"Delete", nil);
+            deleteCell.selectionStyle = UITableViewCellSelectionStyleNone;
+            return deleteCell;
+        }
             break;
         default:
             break;
     }
     
-    return cell;
+    
+    EZDEBUG(@"Why come here, section:%i",section);
+    return nil;
 }
-
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
@@ -173,15 +245,54 @@
 
 #pragma mark - Table view delegate
 
+- (NSIndexPath*)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(indexPath.section == 0){
+        return nil;
+    }
+    return indexPath;
+}
+
+
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath 
+{
+    if(indexPath.section == 4){
+        UITableViewCell* deleteCell = [self.tableView cellForRowAtIndexPath:indexPath];
+        deleteCell.backgroundColor = [UIColor colorWithRed:0.8 green:0.6 blue:0.6 alpha:1];
+    }
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    EZDEBUG(@"Button clicked:%i",buttonIndex);
+    BOOL deleted = false;
+    if(buttonIndex == 0){
+        deleted = true;
+    }
+    EZDEBUG(@"Delete %@", deleted?@"YES":@"NO");
+    self.deleteBlock(deleted);
+    self.deleteBlock = nil;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
+    if(indexPath.section == 4){
+        UITableViewCell* deleteCell = [self.tableView cellForRowAtIndexPath:indexPath];
+        deleteCell.backgroundColor = [UIColor colorWithRed:1 green:0.5 blue:0.5 alpha:1];
+        UIActionSheet* action = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Delete" otherButtonTitles:nil];
+        self.deleteBlock = ^(BOOL deleted){
+            if(deleted){
+                //[[EZTaskStore getInstance] removeObject:self.task];
+                self.superDeletBlock();
+                [self.navigationController popViewControllerAnimated:YES];
+            }else{
+                //Turn the color into not selected;
+                UITableViewCell* deleteCell = [self.tableView cellForRowAtIndexPath:indexPath];
+                deleteCell.backgroundColor = [UIColor colorWithRed:0.8 green:0.6 blue:0.6 alpha:1];
+            }
+        };
+        [action showInView:self.view.window];
+    }
 }
 
 @end

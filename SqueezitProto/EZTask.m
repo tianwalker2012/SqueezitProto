@@ -15,6 +15,12 @@
 @implementation EZTask
 @synthesize name, duration, maxDuration, fixedTime, fixedDate, time, date, envTraits, quotas, soundName, PO, createdTime;
 
+//Cool implementation. Keep the redundency code to minimum. 
+- (id) initWithName:(NSString*) nm
+{
+    return [self initWithName:nm duration:20 maxDur:20 envTraits:0];
+}
+
 - (id) initWithName:(NSString*) nm duration:(int)dur maxDur:(int)mdur envTraits:(EZEnvironmentTraits)traits
 {
     self = [super init];

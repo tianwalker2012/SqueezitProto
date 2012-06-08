@@ -45,6 +45,20 @@
     return [self populatePO:self.PO];
 }
 
+- (void) refresh
+{
+    if(self.PO){
+        [self.PO.managedObjectContext refreshObject:self.PO mergeChanges:NO];
+        self.name = self.PO.name;
+        self.createdTime = self.PO.createdTime;
+        self.displayOrder = self.PO.displayOrder.intValue;
+        self.tasks = [[NSMutableArray alloc] initWithCapacity:[self.PO.tasks count]];
+        for(MTask* mt in self.PO.tasks){
+            [self.tasks addObject:[[EZTask alloc] initWithPO:mt]];
+        }
+    }
+}
+
 - (MTaskGroup*) populatePO:(MTaskGroup*)po
 {
     //EZDEBUG(@"I am in TaskGroup populatePO");

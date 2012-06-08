@@ -10,6 +10,7 @@
 #import "EZAvailableTime.h"
 #import "EZAvailableDay.h"
 #import "EZQuotas.h"
+#import "EZGlobalLocalize.h"
 
 @implementation NSString(EZPrivate)
 
@@ -205,6 +206,43 @@
     
     return res;
 
+}
+
++ (NSString*) envTraitsToString:(NSInteger)envTraits
+{
+    if(envTraits == EZ_ENV_NONE){
+        return EZLocalizedString(@"None", nil);
+    }
+    NSMutableString* res = [[NSMutableString alloc] init];
+    
+    //EZ_ENV_NONE = 0,
+    //EZ_ENV_FITTING = 1,
+    //EZ_ENV_READING = 2,
+    //EZ_ENV_LISTENING = 4,
+    //EZ_ENV_SOCIALING = 8, 
+    //EZ_ENV_FLOWING = 16,
+    
+    if((EZ_ENV_FITTING & envTraits) == EZ_ENV_FITTING){
+        [res appendString:EZLocalizedString(@" FITTING", nil)];
+    }
+    
+    if((EZ_ENV_READING & envTraits) == EZ_ENV_READING){
+        [res appendString:EZLocalizedString(@" READING", nil)];
+    }
+
+    if((EZ_ENV_LISTENING & envTraits) == EZ_ENV_LISTENING){
+        [res appendString:EZLocalizedString(@" LISTENING", nil)];
+    }
+
+    if((EZ_ENV_FLOWING & envTraits) == EZ_ENV_FLOWING){
+        [res appendString:EZLocalizedString(@" FLOWING", nil)];
+    }
+
+    if((EZ_ENV_SOCIALING & envTraits) == EZ_ENV_SOCIALING){
+        [res appendString:EZLocalizedString(@" SOCIALING", nil)];
+    }
+
+    return res;
 }
 
 @end

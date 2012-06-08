@@ -56,6 +56,8 @@
 
 - (id) initWithName:(NSString*) nm duration:(int)dur maxDur:(int)mdur envTraits:(EZEnvironmentTraits)traits;
 
+- (id) initWithName:(NSString*) nm;
+
 - (BOOL) isEqual:(EZTask*)task;
 
 - (id) initWithPO:(MTask*)mtk;
