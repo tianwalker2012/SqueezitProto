@@ -11,11 +11,17 @@
 
 typedef void (^ EZOperationBlock)();
 
-@class NSManagedObject;
+typedef BOOL (^ FilterOperation)(id obj);
+
+@class NSManagedObject, EZArray;
 
 @protocol EZValueObject <NSObject>
 
 @required
+- (id) initWithVO:(id<EZValueObject>) valueObj;
+
+- (id) cloneVO;
+
 - (id) initWithPO:(NSManagedObject*)mtk;
 
 - (NSManagedObject*) createPO;
@@ -36,6 +42,13 @@ typedef void (^ EZOperationBlock)();
 - (NSString*) trim;
 
 @end
+
+@interface NSArray(EZPrivate)
+
+- (NSArray*) filter:(FilterOperation)opts;
+
+@end
+
 
 @interface NSDate(EZPrivate) 
 
@@ -71,6 +84,16 @@ typedef void (^ EZOperationBlock)();
 
 @class EZAvailableDay, EZQuotas;
 
+BOOL isContained(NSUInteger flag, NSUInteger envFlags);
+
+//Find in the fractors array if any number could be divided from the target
+NSUInteger findFractor(NSUInteger target, EZArray* flags);
+
+NSUInteger combineFlags(NSUInteger flag, NSUInteger envFlags);
+
+//The flags mean all the existed prime number, make sure the all the prime number are found on sequence
+NSUInteger findNextFlag(EZArray* flags);
+
 @interface EZTaskHelper : NSObject
 
 //envTraits will be EZEnvironmentTraits combiation
@@ -87,6 +110,6 @@ typedef void (^ EZOperationBlock)();
 
 + (int) getMonthLength:(NSDate*)date;
 
-+ (NSString*) envTraitsToString:(NSInteger)envTraits;
+//+ (NSString*) envTraitsToString:(NSInteger)envTraits;
 
 @end

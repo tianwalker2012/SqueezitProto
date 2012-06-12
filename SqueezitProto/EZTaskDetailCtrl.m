@@ -14,32 +14,59 @@
 #import "EZGlobalLocalize.h"
 #import "EZPureEditCell.h"
 #import "EZQuotas.h"
+#import "EZTaskTimeSetter.h"
+#import "EZEnvFlagPicker.h"
+
 
 @interface EZTaskDetailCtrl ()
+
+@property (assign, nonatomic) BOOL cancelled;
+
+- (void) cancelClicked;
+
+- (void) doneClicked;
 
 @end
 
 @implementation EZTaskDetailCtrl
-@synthesize task, deleteBlock, superDeletBlock;
+@synthesize task, deleteBlock, superUpdateBlock, cancelled, superDeleteBlock;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
+        self.cancelled = false;
     }
     return self;
+}
+
+- (void) cancelClicked
+{
+    EZDEBUG(@"Cancel get clicked");
+    self.cancelled = true;
+    [self.navigationController popViewControllerAnimated:YES];
+    
+}
+
+//I have one assumption.
+//State it clearly, All the change will already be update to the object.
+//Only when done get clicked, the changes happened so far will be persisted
+- (void) doneClicked
+{
+    EZDEBUG(@"Done get clicked, name:%@", task.name);
+    [[EZTaskStore getInstance] storeObject:task];
+    self.superUpdateBlock();
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelClicked)];
+    //self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonItemStyleDone target:self action:@selector(doneClicked)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:EZLocalizedString(@"Done", nil) style:UIBarButtonItemStyleDone target:self action:@selector(doneClicked)];
 
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)viewDidUnload
@@ -65,14 +92,15 @@
 //- (void)textFieldDidBeginEditing:(UITextField *)textField
 
 
-//Really necessary to override this?
-- (BOOL)textFieldShouldEndEditing:(UITextField *)textField
+- (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    EZDEBUG(@"textFieldShouldEndEditing");
-    return true;
+    NSString* trimmed = textField.text.trim;
+    if([trimmed isEqualToString:@""]){
+        textField.text = task.name;
+        return;
+    }
+    task.name = trimmed;
 }
-
-//- (void)textFieldDidEndEditing:(UITextField *)textField;     
 //- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string;   
 
 //- (BOOL)textFieldShouldClear:(UITextField *)textField;  
@@ -103,6 +131,8 @@
     return [NSString stringWithFormat:@"%i", envTraits];
 }
 
+
+
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     if(section == 0){
@@ -121,7 +151,7 @@
 {
     
     NSInteger section = indexPath.section;
-    EZDEBUG(@"Get cell for section:%i", section);
+    //EZDEBUG(@"Get cell for section:%i", section);
     switch (section) {
         case 0:{
             NSString* cellIdentifier = @"EditCell";
@@ -158,7 +188,7 @@
                 eLabelCell.textField.text = timeStr;
             }else if(section == 2){
                 eLabelCell.label.text = EZLocalizedString(@"Environment", nil);
-                eLabelCell.textField.text = [EZTaskHelper envTraitsToString:task.envTraits];
+                eLabelCell.textField.text = [[EZTaskStore getInstance] StringForFlags:task.envTraits];
             } else { // == 3
                 if(task.quotas == nil){
                     eLabelCell.label.text = EZLocalizedString(@"Weekly Minimum", nil);
@@ -283,7 +313,7 @@
         self.deleteBlock = ^(BOOL deleted){
             if(deleted){
                 //[[EZTaskStore getInstance] removeObject:self.task];
-                self.superDeletBlock();
+                self.superDeleteBlock();
                 [self.navigationController popViewControllerAnimated:YES];
             }else{
                 //Turn the color into not selected;
@@ -292,6 +322,29 @@
             }
         };
         [action showInView:self.view.window];
+    }else if(indexPath.section == 1){
+        EZTaskTimeSetter* timeSetter = [[EZTaskTimeSetter alloc] initWithStyle:UITableViewStyleGrouped];
+        timeSetter.task = task.cloneVO;
+        timeSetter.superDone = ^(){
+            //If max smaller than min, then set it equal with minimum
+            if(timeSetter.task.duration > timeSetter.task.maxDuration){
+                timeSetter.task.maxDuration = timeSetter.task.duration;
+            }
+            self.task = timeSetter.task;
+            [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
+        };
+        [self.navigationController pushViewController:timeSetter animated:YES];
+    }else if(indexPath.section == 2){
+        EZEnvFlagPicker* picker = [[EZEnvFlagPicker alloc] initWithStyle:UITableViewStyleGrouped];
+        picker.settedFlags = task.envTraits;
+        picker.doneBlock = ^(){
+            EZDEBUG(@"Done: final value:%i", picker.settedFlags);
+            task.envTraits = picker.settedFlags;
+            [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
+        };
+        //EZDEBUG(@"Before PushViewController");
+        [self.navigationController pushViewController:picker animated:YES];
+        //EZDEBUG(@"After PushViewController");
     }
 }
 

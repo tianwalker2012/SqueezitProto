@@ -13,7 +13,7 @@
 @implementation EZAvailableTime
 @synthesize start, duration, envTraits, name, PO;
 
-- (id) init:(NSDate*)st name:(NSString*)nm duration:(int)dur environment:(int)env
+- (id) init:(NSDate*)st name:(NSString*)nm duration:(int)dur environment:(NSUInteger)env
 {
     self = [super init];
     self.start = st;
@@ -52,7 +52,7 @@
     self = [super init];
     self.start = mtk.startTime;
     self.name = mtk.name;
-    self.envTraits = mtk.envTraits.intValue;
+    self.envTraits = mtk.envTraits.unsignedIntegerValue;
     self.duration = mtk.duration.intValue;
     self.PO = mtk;
     return self;
@@ -71,7 +71,7 @@
 {
     po.startTime = self.start;
     po.name = self.name;
-    po.envTraits = [[NSNumber alloc] initWithInt:self.envTraits];
+    po.envTraits = [[NSNumber alloc] initWithUnsignedInteger:self.envTraits];
     po.duration = [[NSNumber alloc] initWithInt:self.duration];
     return po;
 }

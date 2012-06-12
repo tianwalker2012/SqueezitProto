@@ -7,7 +7,7 @@
 //
 
 #import "MAvailableTime.h"
-
+#import "MAvailableDay.h"
 
 @implementation MAvailableTime
 
@@ -15,5 +15,6 @@
 @dynamic startTime;
 @dynamic envTraits;
 @dynamic duration;
+@dynamic avDay;
 
 @end

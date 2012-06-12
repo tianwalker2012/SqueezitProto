@@ -27,7 +27,7 @@
 @end
 
 @implementation EZTaskGroupDetailCtrl
-@synthesize editField, taskGroup, barType, superUpdateBlock;
+@synthesize editField, taskGroup, barType, superUpdateBlock, tasks;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -126,8 +126,10 @@
     }
     EZDEBUG(@"Not empty, go ahead store it");
     EZTask* newTask = [[EZTask alloc] initWithName:trimmed];
-    [taskGroup.tasks addObject:newTask];
+    [self.tasks addObject:newTask];
+    self.taskGroup.tasks = [NSMutableArray arrayWithArray:self.tasks];
     [[EZTaskStore getInstance] storeObject:taskGroup];
+    
     [self.tableView beginUpdates];
     [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject: [NSIndexPath indexPathForRow:taskGroup.tasks.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationMiddle];
     
@@ -140,6 +142,14 @@
     
 }
 
+//I assume a member variable get created too.
+//ARC should have done this automatically.
+- (void) setTaskGroup:(EZTaskGroup *)tg
+{
+    taskGroup = tg;
+    self.tasks = [NSMutableArray arrayWithArray:taskGroup.tasks];
+}
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     EZDEBUG(@"textFieldShouldReturn get called");
@@ -150,7 +160,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    if(indexPath.row >= taskGroup.tasks.count){
+    if(indexPath.row >= tasks.count){
         return [self generateEditCell:indexPath];
     }
     static NSString *CellIdentifier = @"Cell";
@@ -159,7 +169,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    EZTask* task = [taskGroup.tasks objectAtIndex:indexPath.row];
+    EZTask* task = [self.tasks objectAtIndex:indexPath.row];
     cell.textLabel.text = task.name;
     
     if(task.duration == task.maxDuration){
@@ -220,6 +230,7 @@
     if(indexPath.row < self.taskGroup.tasks.count){
         return indexPath;
     }
+    
     return nil;
 }
 
@@ -232,14 +243,23 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    EZTask* task = [self.taskGroup.tasks objectAtIndex:indexPath.row];
+    EZTask* task = [self.tasks objectAtIndex:indexPath.row];
+    
+    EZDEBUG(@"Task Name:%@, row:%i", task.name, indexPath.row);
     EZTaskDetailCtrl* td = [[EZTaskDetailCtrl alloc] initWithStyle:UITableViewStyleGrouped];
     td.task = task;
-    td.superDeletBlock = ^(){
-        [self.taskGroup.tasks removeObjectAtIndex:indexPath.row];
+    td.superDeleteBlock = ^(){
+        [self.tasks removeObjectAtIndex:indexPath.row];
+        self.taskGroup.tasks = [NSMutableArray arrayWithArray:self.tasks];
+        //The reason I do this because the store have side effect
         [[EZTaskStore getInstance] storeObject:self.taskGroup];
         [self performSelector:@selector(removeCellAtIndex:) withObject:indexPath afterDelay:0.3];
         self.superUpdateBlock();
+    };
+    
+    td.superUpdateBlock = ^(){
+        [task refresh];
+        [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:NO];
     };
     [self.navigationController pushViewController:td animated:YES];
     

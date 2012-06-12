@@ -26,7 +26,7 @@
     self.startTime = mtk.startTime;
     self.duration = mtk.duration.intValue;
     self.task = [[EZTask alloc] initWithPO:mtk.task];
-    self.envTraits = mtk.envTraits.intValue;
+    self.envTraits = mtk.envTraits.unsignedIntegerValue;
     self.alarmNotification = mtk.alarmNotification;
     self.PO = mtk;
     return self;
@@ -45,7 +45,7 @@
 {
     po.startTime = self.startTime;
     po.duration = [[NSNumber alloc] initWithInt:self.duration];
-    po.envTraits = [[NSNumber alloc] initWithInt:self.envTraits];
+    po.envTraits = [[NSNumber alloc] initWithUnsignedInteger:self.envTraits];
     po.alarmNotification = self.alarmNotification;
     //Assume every ScheduledTask have Task.
     if(po.task){

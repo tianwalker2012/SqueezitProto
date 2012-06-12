@@ -10,7 +10,7 @@
 #import "Constants.h"
 #import "EZTaskHelper.h"
 
-@class EZScheduledDay,EZAvailableDay, EZTask, EZCoreAccessor;
+@class EZScheduledDay,EZAvailableDay, EZTask, EZCoreAccessor, EZArray;
 
 @interface EZTaskStore : NSObject {
     //EZCoreAccessor* accessor;
@@ -18,10 +18,19 @@
 
 //@property (strong, nonatomic) EZCoreAccessor* accessor;
 
+@property (strong, nonatomic) NSMutableDictionary* flagToEnvFlag;
+@property (strong, nonatomic) NSMutableArray* envFlags;
 
 - (id) init;
 
 + (EZTaskStore*) getInstance;
+
+- (void) fillEnvFlag;
+
+//Read flags into a NSDictionary
+- (void) populateEnvFlags;
+
+- (EZArray*) flagsToArray;
 
 - (void) storeObject:(NSObject<EZValueObject>*)obj;
 
@@ -37,7 +46,7 @@
 
 - (void) storeScheduledTask:(NSArray*)tasks date:(NSDate*)date;
 
-- (NSArray*) getTasks:(int)env; 
+- (NSArray*) getTasks:(NSUInteger)env; 
 
 - (NSArray*) getAllTasks;
 
@@ -52,6 +61,10 @@
 // Get cycle history data
 // It is return the history for a particular cycle based on the date and cycle type
 - (NSArray*) getCycleData:(int)cycleType date:(NSDate*)date;
+
+- (NSString*) StringForFlags:(NSUInteger)flags;
+
+- (NSArray*) StringArrayForFlags:(NSUInteger)flags;
 
 // Currently only for test purpose. Clean the influence among different test cases
 - (void) clean;

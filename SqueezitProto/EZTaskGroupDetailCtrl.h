@@ -14,6 +14,7 @@
 @interface EZTaskGroupDetailCtrl : UITableViewController<UITextFieldDelegate> 
 
 @property (strong, nonatomic) EZTaskGroup* taskGroup;
+@property (strong, nonatomic) NSMutableArray* tasks;
 @property (strong, nonatomic) UITextField* editField;
 @property (assign, nonatomic) NSInteger barType;
 @property (strong, nonatomic) EZOperationBlock superUpdateBlock;

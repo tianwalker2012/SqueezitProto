@@ -24,6 +24,22 @@
     return self;
 }
 
+- (id) cloneVO{
+    return [[EZQuotas alloc] initWithVO:self];
+}
+
+- (id) initWithVO:(EZQuotas*) qu
+{
+    self = [super init];
+    self.quotasPerCycle = qu.quotasPerCycle;
+    self.startDay = qu.startDay;
+    self.cycleType = qu.cycleType;
+    self.cycleStartDay = qu.cycleStartDay;
+    self.cycleLength = qu.cycleLength;
+    self.PO = qu.PO;
+    return self;
+}
+
 - (id) initWithPO:(MQuotas*)mtk
 {
     self = [super init];

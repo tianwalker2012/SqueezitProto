@@ -25,7 +25,7 @@
 
 - (EZScheduledTask*) getTaskFromList:(NSArray*)tasks timeSlot:(EZAvailableTime*)timeSlot;
 
-- (NSMutableArray*) tasksRemovedExclusive:(NSArray*)tasks exclusiveList:(NSArray*)exclusive envTraits:(EZEnvironmentTraits)envTraits;
+- (NSMutableArray*) tasksRemovedExclusive:(NSArray*)tasks exclusiveList:(NSArray*)exclusive envTraits:(NSUInteger)envTraits;
 
 - (BOOL) contain:(NSArray*)list object:(id)obj;
 
@@ -98,7 +98,7 @@
         if(totalAmount <= 0){ //Allocated enough time.
             break;
         }
-        if((time.envTraits & task.envTraits) != task.envTraits){
+        if(!isContained(task.envTraits, time.envTraits)){
             //Not meet the requirements
             continue;
         }
@@ -273,12 +273,12 @@
 
 //Remove the exclusive tasks from the tasks list 
 //So that all the tasks with the list are good to go
-- (NSMutableArray*) tasksRemovedExclusive:(NSArray*)tasks exclusiveList:(NSArray*)exclusive envTraits:(EZEnvironmentTraits)envTraits
+- (NSMutableArray*) tasksRemovedExclusive:(NSArray*)tasks exclusiveList:(NSArray*)exclusive envTraits:(NSUInteger)envTraits
 {
     NSMutableArray* res = [[NSMutableArray alloc] initWithCapacity:[tasks count]];
     for(int i = 0; i < [tasks count]; i++){
         EZTask* tk = (EZTask*)[tasks objectAtIndex:i];
-        if(![exclusive containsObject:tk] && (tk.envTraits & envTraits) == tk.envTraits){
+        if(![exclusive containsObject:tk] && isContained(tk.envTraits, envTraits)){
             [res addObject:tk];
         }
     }

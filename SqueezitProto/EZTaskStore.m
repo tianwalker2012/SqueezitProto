@@ -22,6 +22,10 @@
 #import "MAvailableDay.h"
 #import "MAvailableTime.h"
 #import "EZTaskGroup.h"
+#import "EZEnvFlag.h"
+#import "EZGlobalLocalize.h"
+#import "MEnvFlag.h"
+#import "EZArray.h"
 
 
 @interface EZTaskStore(private)
@@ -30,11 +34,31 @@
 
 
 @implementation EZTaskStore
+@synthesize flagToEnvFlag, envFlags;
+
+//The purpose of this functionality is to fill the data which is necessary for the environment flag. 
+//Previously, I am using the enum, but not extensible. 
+//It is smelly, I pick this method. 
+- (void) fillEnvFlag
+{
+    NSArray* flags = [NSArray arrayWithObjects:
+                      [[EZEnvFlag alloc] initWithName:@"OutDoor" flag:2],
+                      [[EZEnvFlag alloc] initWithName:@"Stable" flag:3],
+                      [[EZEnvFlag alloc] initWithName:@"Quiet" flag:5],
+                      [[EZEnvFlag alloc] initWithName:@"Socialize" flag:7],
+                      [[EZEnvFlag alloc] initWithName:@"Private" flag:11]
+                      , nil];
+    [[EZTaskStore getInstance] storeObjects:flags];
+}
+
+
 // The purpose of this functinality 
 // is to fill the store with the test data, so that we could go ahead and do the test accordingly.
 // I love it.
 - (void) fillTestData 
 {
+    
+    [self fillEnvFlag];
     
     EZTask* design = [[EZTask alloc] initWithName:@"App design" duration:40 maxDur:90 envTraits:EZ_ENV_FLOWING];
     NSDate* startDate = [NSDate stringToDate:@"yyyyMMdd" dateString:@"20120528"];
@@ -97,37 +121,6 @@
                           , nil];
     NSArray* groups = [NSArray arrayWithObjects:fittingGroup,quotasGroup,snippetGroup, nil];
     
-     NSArray* tks = [NSArray arrayWithObjects:
-                     //Fitting tasks
-                     [[EZTask alloc] initWithName:@"Tai ji" duration:15 maxDur:90 envTraits:EZ_ENV_FITTING],
-                     [[EZTask alloc] initWithName:@"Jujisu" duration:15 maxDur:90 envTraits:EZ_ENV_FITTING],
-                     [[EZTask alloc] initWithName:@"Swimming" duration:60 maxDur:150 envTraits:EZ_ENV_FITTING],
-                     
-                     //Flowing tasks
-                     iosTask,
-                     codeReading,
-                     design,
-                     
-                     //Reading tasks
-                     [[EZTask alloc] initWithName:@"Hacker News" duration:15 maxDur:30 envTraits:EZ_ENV_READING],
-                     [[EZTask alloc] initWithName:@"How to win friends" duration:15 maxDur:30 envTraits:EZ_ENV_READING],
-                     [[EZTask alloc] initWithName:@"Feynman" duration:30 maxDur:60 envTraits:EZ_ENV_READING],
-                     [[EZTask alloc] initWithName:@"App design books" duration:30 maxDur:60 envTraits:EZ_ENV_READING],
-                     [[EZTask alloc] initWithName:@"Thinking fast and slow" duration:15 maxDur:40 envTraits:EZ_ENV_READING],
-                     [[EZTask alloc] initWithName:@"Founders at work" duration:15 maxDur:30 envTraits:EZ_ENV_READING],
-                     [[EZTask alloc] initWithName:@"Gandhi" duration:15 maxDur:30 envTraits:EZ_ENV_READING],
-                     [[EZTask alloc] initWithName:@"Martin Luther King" duration:15 maxDur:30 envTraits:EZ_ENV_READING],
-                     [[EZTask alloc] initWithName:@"Road to freedom" duration:15 maxDur:30 envTraits:EZ_ENV_READING],
-                     [[EZTask alloc] initWithName:@"Machine learning" duration:40 maxDur:60 envTraits:EZ_ENV_READING],
-                     [[EZTask alloc] initWithName:@"Information theory" duration:40 maxDur:60 envTraits:EZ_ENV_READING],
-                     [[EZTask alloc] initWithName:@"Poem" duration:5 maxDur:20 envTraits:EZ_ENV_READING],
-                     //Video tasks
-                     [[EZTask alloc] initWithName:@"TED" duration:10 maxDur:20 envTraits:EZ_ENV_LISTENING],
-                     [[EZTask alloc] initWithName:@"Leadership" duration:10 maxDur:20 envTraits:EZ_ENV_LISTENING],
-                     //Socialing tasks
-                     [[EZTask alloc] initWithName:@"Tell story" duration:15 maxDur:45 envTraits:EZ_ENV_SOCIALING],
-                     [[EZTask alloc] initWithName:@"Play game" duration:15 maxDur:45 envTraits:EZ_ENV_SOCIALING]
-                     , nil];
     
     //[self.tasks addObjectsFromArray:tks];
     //[self storeObjects:tks];
@@ -148,6 +141,30 @@
     //[self.availableDays addObject:avDays];
     [self storeObject:avDays];
     
+}
+
+
+//Read flags into a NSDictionary
+- (void) populateEnvFlags
+{
+    NSArray* flags = [self fetchAllWithVO:[EZEnvFlag class] po:[MEnvFlag class] sortField:@"flag"];
+    self.envFlags = [NSMutableArray arrayWithArray:flags];
+    self.flagToEnvFlag = [[NSMutableDictionary alloc] init];
+    for(EZEnvFlag* flag in flags){
+        [self.flagToEnvFlag setObject:flag forKey:[[NSNumber alloc] initWithUnsignedInteger:flag.flag]];
+    }
+    
+}
+
+//Save the headache for memory management.
+- (EZArray*) flagsToArray
+{
+    EZArray* res = [[EZArray alloc] initWithCapacity:envFlags.count];
+    int i = 0;
+    for(EZEnvFlag* flag in self.envFlags){
+        res.uarray[i] = flag.flag;
+    }
+    return res;
 }
 
 - (void) clean
@@ -265,14 +282,14 @@
     return res;
 }
 
-- (NSArray*) getTasks:(int)env
+- (NSArray*) getTasks:(NSUInteger)env
 {
     NSArray* mtasks = [[EZCoreAccessor getInstance] fetchAll:[MTask class] sortField:nil];
     NSLog(@"Fetch all returned: %i",[mtasks count]);
     NSMutableArray* res = [[NSMutableArray alloc] initWithCapacity:[mtasks count]];
     for(MTask* mt in mtasks){
         //Mean the environment meet the task requirements
-        if((mt.envTraits.intValue & env) == mt.envTraits.intValue){
+        if(isContained(mt.envTraits.unsignedIntegerValue, env)){
             [res addObject:[[EZTask alloc] initWithPO:mt]];
         }
     }
@@ -297,6 +314,35 @@
     return [matchedWeek duplicate];
 }
 
+//What's kind of Env involved in this flags
+- (NSArray*) EnvStringForFlags:(NSUInteger)flags
+{
+    NSMutableArray* res = [[NSMutableArray alloc] init];
+    for(EZEnvFlag* flag in self.envFlags){
+        if(isContained(flag.flag, flags)){
+            [res addObject:EZLocalizedString(flag.name, nil)];
+        }
+    }
+    return res;
+}
 
+- (NSString*) StringForFlags:(NSUInteger)flags
+{
+    return [[self StringArrayForFlags:flags] componentsJoinedByString:@" "];
+}
+
+- (NSArray*) StringArrayForFlags:(NSUInteger)flags
+{
+    NSMutableArray* res = [[NSMutableArray alloc] init];
+    for(EZEnvFlag* flag in self.envFlags){
+        if(isContained(flag.flag, flags)){
+            [res addObject:EZLocalizedString(flag.name, nil)];
+        }
+    }
+    if(res.count == 0){
+        [res addObject:EZLocalizedString(@"Env None", nil)];
+    }
+    return res;    
+}
 
 @end

@@ -11,6 +11,7 @@
 #import "EZAvailableDay.h"
 #import "EZQuotas.h"
 #import "EZGlobalLocalize.h"
+#import "EZArray.h"
 
 @implementation NSString(EZPrivate)
 
@@ -22,6 +23,21 @@
 
 @end
 
+
+@implementation NSArray(EZPrivate)
+
+- (NSArray*) filter:(FilterOperation)opts
+{
+    NSMutableArray* res = [[NSMutableArray alloc] initWithCapacity:self.count];
+    for(id obj in self){
+        if(opts(obj)){
+            [res addObject:obj];
+        }
+    }
+    return res;
+}
+
+@end
 
 @implementation NSDate(EZPrivate)
 
@@ -207,6 +223,45 @@
     return res;
 
 }
+
+//If flag can be divide cleanly from envFlags
+BOOL isContained(NSUInteger flag, NSUInteger envFlags)
+{
+    if((envFlags/flag)*flag == envFlags){
+        return true;
+    }
+    return false;
+}
+
+NSUInteger combineFlags(NSUInteger flag, NSUInteger envFlags)
+{
+    return envFlags*flag;
+}
+        
+NSUInteger findFractor(NSUInteger target, EZArray* fractors)
+{
+    for(int pos = 0; pos < fractors.length; ++pos){
+        if(isContained(fractors.uarray[pos], target)){
+            return fractors.uarray[pos];
+        }
+    }
+    return 0;
+}
+
+
+//Assume it also sorted.
+NSUInteger findNextFlag(EZArray* flags)
+{
+    NSUInteger begin = flags.uarray[flags.length-1] + 2;
+    for(NSUInteger i = begin; i < NSUIntegerMax ; i += 2){
+        if(findFractor(i, flags) == 0){
+            return i;
+        }
+    }
+    //Reach the maximum
+    return 0;
+}
+
 
 + (NSString*) envTraitsToString:(NSInteger)envTraits
 {

@@ -17,6 +17,7 @@ typedef void(^DeleteBlock) (BOOL deleted);
 
 @property (strong, nonatomic) EZTask* task;
 @property (strong, nonatomic) DeleteBlock deleteBlock;
-@property (strong, nonatomic) EZOperationBlock superDeletBlock;
+@property (strong, nonatomic) EZOperationBlock superUpdateBlock;
+@property (strong, nonatomic) EZOperationBlock superDeleteBlock;
 
 @end

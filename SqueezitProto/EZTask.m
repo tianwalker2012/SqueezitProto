@@ -21,7 +21,27 @@
     return [self initWithName:nm duration:20 maxDur:20 envTraits:0];
 }
 
-- (id) initWithName:(NSString*) nm duration:(int)dur maxDur:(int)mdur envTraits:(EZEnvironmentTraits)traits
+- (id) cloneVO
+{
+    EZTask* res = [[EZTask alloc] initWithVO:self];
+    return res;
+}
+
+- (id) initWithVO:(EZTask*)valueObj
+{
+    self = [super init];
+    self.name = valueObj.name;
+    self.duration = valueObj.duration;
+    self.maxDuration = valueObj.maxDuration;
+    self.envTraits = valueObj.envTraits;
+    self.soundName = valueObj.soundName;
+    self.createdTime = valueObj.createdTime;
+    self.quotas = valueObj.quotas.cloneVO;
+    self.PO = valueObj.PO;
+    return self;
+}
+
+- (id) initWithName:(NSString*) nm duration:(int)dur maxDur:(int)mdur envTraits:(NSUInteger)traits
 {
     self = [super init];
     self.name = nm;
@@ -44,6 +64,22 @@
 }
 
 
+- (void) refresh
+{
+    //EZDEBUG(@"Task refresh get called");
+    if(self.PO){
+        [self.PO.managedObjectContext refreshObject:self.PO mergeChanges:NO];
+        self.name = self.PO.name;
+        self.createdTime = self.PO.createdTime;
+        self.duration = self.PO.duration.intValue;
+        self.maxDuration = self.PO.maxDuration.intValue;
+        self.envTraits = self.PO.envTraits.unsignedIntegerValue;
+        if(PO.quotas){
+            self.quotas = [[EZQuotas alloc] initWithPO:PO.quotas];
+        }
+    }
+}
+
 - (id) initWithPO:(MTask*)mtk
 {
     self = [super init];
@@ -51,7 +87,7 @@
     self.name = mtk.name;
     self.duration = mtk.duration.intValue;
     self.maxDuration = mtk.maxDuration.intValue;
-    self.envTraits = mtk.envTraits.intValue;
+    self.envTraits = mtk.envTraits.unsignedIntegerValue;
     if(mtk.quotas){
         self.quotas = [[EZQuotas alloc] initWithPO:mtk.quotas];
     }
@@ -77,7 +113,7 @@
     po.name = self.name;
     po.duration = [[NSNumber alloc] initWithInt:self.duration];
     po.maxDuration = [[NSNumber alloc] initWithInt:self.maxDuration];
-    po.envTraits = [[NSNumber alloc] initWithInt:self.envTraits];
+    po.envTraits = [[NSNumber alloc] initWithUnsignedInteger:self.envTraits];
     if(self.quotas){
         if(!po.quotas){
             po.quotas = self.quotas.createPO; //CreatePO invoke populate.

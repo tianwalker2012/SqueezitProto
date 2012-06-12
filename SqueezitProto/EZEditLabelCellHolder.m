@@ -10,10 +10,38 @@
 #import "EZEditLabelCell.h"
 #import "EZTaskGroupCell.h"
 #import "EZPureEditCell.h"
+#import "EZAvailableTimeCell.h"
 
 @implementation EZEditLabelCellHolder
-@synthesize editCell, groupCell, pureEditCell;
+@synthesize editCell, groupCell, pureEditCell, settingCell, flagCell, timeCell;
 
+
++ (EZAvailableTimeCell*) createTimeCell
+{
+    EZEditLabelCellHolder* cellHolder = [[EZEditLabelCellHolder alloc] init];
+    
+    [[NSBundle mainBundle] loadNibNamed:@"EZAvailableTimeCell" owner:cellHolder options:nil];
+    
+    return cellHolder.timeCell;
+}
+
++ (EZEnvFlagPickerCell*) createFlagCell
+{
+    EZEditLabelCellHolder* cellHolder = [[EZEditLabelCellHolder alloc] init];
+    
+    [[NSBundle mainBundle] loadNibNamed:@"EZFlagPickerCell" owner:cellHolder options:nil];
+    
+    return cellHolder.flagCell;
+}
+
++ (EZSettingCell*) createSettingCell
+{
+    EZEditLabelCellHolder* cellHolder = [[EZEditLabelCellHolder alloc] init];
+    
+    [[NSBundle mainBundle] loadNibNamed:@"EZSettingCell" owner:cellHolder options:nil];
+    
+    return cellHolder.settingCell;
+}
 
 //Hope this can simplify the later cell loading code
 + (EZEditLabelCell*) createCellWithDelegate:(id<UITextFieldDelegate>)deleg

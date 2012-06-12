@@ -62,10 +62,25 @@
 		184C2B26157F36E500852B35 /* EZEditLabelCellHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2B25157F36E300852B35 /* EZEditLabelCellHolder.m */; };
 		184C2B28157F38C000852B35 /* EZEditLabelCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 184C2B27157F38BF00852B35 /* EZEditLabelCell.xib */; };
 		184C2B2B157F3C8B00852B35 /* EZTaskDetailCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2B2A157F3C8800852B35 /* EZTaskDetailCtrl.m */; };
+		188D55161584883000142394 /* EZEnvFlag.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D55151584883000142394 /* EZEnvFlag.m */; };
+		188D551A15848B3A00142394 /* MEnvFlag.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D551915848B3A00142394 /* MEnvFlag.m */; };
+		188D551D1584ACB000142394 /* EZArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D551C1584ACB000142394 /* EZArray.m */; };
+		188D55201585C70800142394 /* EZEnvFlagPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D551F1585C70700142394 /* EZEnvFlagPicker.m */; };
+		188D55221585C73600142394 /* EZFlagPickerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 188D55211585C73600142394 /* EZFlagPickerCell.xib */; };
+		188D55251585C85D00142394 /* EZEnvFlagPickerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D55241585C85D00142394 /* EZEnvFlagPickerCell.m */; };
+		188D55271585F08500142394 /* EZAvailableTimeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 188D55261585F08500142394 /* EZAvailableTimeCell.xib */; };
+		188D552A1585F26300142394 /* EZAvailableTimeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D55291585F26200142394 /* EZAvailableTimeCell.m */; };
+		188D552D1585F46E00142394 /* EZAvTimeForEnvTrait.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D552C1585F46E00142394 /* EZAvTimeForEnvTrait.m */; };
 		18E035D415808A16003B3D3E /* EZTaskGroupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E035D315808A16003B3D3E /* EZTaskGroupCell.m */; };
 		18E035D615808BB4003B3D3E /* EZTaskGroupCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18E035D515808BB4003B3D3E /* EZTaskGroupCell.xib */; };
 		18E035D81581A471003B3D3E /* EZPureEditCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18E035D71581A471003B3D3E /* EZPureEditCell.xib */; };
 		18E035DB1581A506003B3D3E /* EZPureEditCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E035DA1581A506003B3D3E /* EZPureEditCell.m */; };
+		18E035DE158346FC003B3D3E /* EZTaskTimeSetter.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E035DD158346FB003B3D3E /* EZTaskTimeSetter.m */; };
+		18E035E115834870003B3D3E /* EZSettingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E035E015834870003B3D3E /* EZSettingCell.m */; };
+		18E035E315834938003B3D3E /* EZSettingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18E035E215834937003B3D3E /* EZSettingCell.xib */; };
+		18E035E615835139003B3D3E /* PickerKeyboardTime.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18E035E515835139003B3D3E /* PickerKeyboardTime.xib */; };
+		18E035E9158351E5003B3D3E /* EZPickerKeyboardTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E035E8158351E5003B3D3E /* EZPickerKeyboardTime.m */; };
+		18E035EC15836161003B3D3E /* EZKeyBoardHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E035EB15836161003B3D3E /* EZKeyBoardHolder.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -167,12 +182,38 @@
 		184C2B27157F38BF00852B35 /* EZEditLabelCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZEditLabelCell.xib; sourceTree = "<group>"; };
 		184C2B29157F3C8600852B35 /* EZTaskDetailCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTaskDetailCtrl.h; sourceTree = "<group>"; };
 		184C2B2A157F3C8800852B35 /* EZTaskDetailCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTaskDetailCtrl.m; sourceTree = "<group>"; };
+		188D55141584883000142394 /* EZEnvFlag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZEnvFlag.h; sourceTree = "<group>"; };
+		188D55151584883000142394 /* EZEnvFlag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZEnvFlag.m; sourceTree = "<group>"; };
+		188D551815848B3A00142394 /* MEnvFlag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEnvFlag.h; sourceTree = "<group>"; };
+		188D551915848B3A00142394 /* MEnvFlag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEnvFlag.m; sourceTree = "<group>"; };
+		188D551B1584ACB000142394 /* EZArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZArray.h; sourceTree = "<group>"; };
+		188D551C1584ACB000142394 /* EZArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZArray.m; sourceTree = "<group>"; };
+		188D551E1585C70600142394 /* EZEnvFlagPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZEnvFlagPicker.h; sourceTree = "<group>"; };
+		188D551F1585C70700142394 /* EZEnvFlagPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZEnvFlagPicker.m; sourceTree = "<group>"; };
+		188D55211585C73600142394 /* EZFlagPickerCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZFlagPickerCell.xib; sourceTree = "<group>"; };
+		188D55231585C85D00142394 /* EZEnvFlagPickerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZEnvFlagPickerCell.h; sourceTree = "<group>"; };
+		188D55241585C85D00142394 /* EZEnvFlagPickerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZEnvFlagPickerCell.m; sourceTree = "<group>"; };
+		188D55261585F08500142394 /* EZAvailableTimeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZAvailableTimeCell.xib; sourceTree = "<group>"; };
+		188D55281585F26200142394 /* EZAvailableTimeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAvailableTimeCell.h; sourceTree = "<group>"; };
+		188D55291585F26200142394 /* EZAvailableTimeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAvailableTimeCell.m; sourceTree = "<group>"; };
+		188D552B1585F46E00142394 /* EZAvTimeForEnvTrait.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAvTimeForEnvTrait.h; sourceTree = "<group>"; };
+		188D552C1585F46E00142394 /* EZAvTimeForEnvTrait.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAvTimeForEnvTrait.m; sourceTree = "<group>"; };
 		18E035D215808A16003B3D3E /* EZTaskGroupCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTaskGroupCell.h; sourceTree = "<group>"; };
 		18E035D315808A16003B3D3E /* EZTaskGroupCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTaskGroupCell.m; sourceTree = "<group>"; };
 		18E035D515808BB4003B3D3E /* EZTaskGroupCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZTaskGroupCell.xib; sourceTree = "<group>"; };
 		18E035D71581A471003B3D3E /* EZPureEditCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZPureEditCell.xib; sourceTree = "<group>"; };
 		18E035D91581A505003B3D3E /* EZPureEditCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZPureEditCell.h; sourceTree = "<group>"; };
 		18E035DA1581A506003B3D3E /* EZPureEditCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZPureEditCell.m; sourceTree = "<group>"; };
+		18E035DC158346F9003B3D3E /* EZTaskTimeSetter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTaskTimeSetter.h; sourceTree = "<group>"; };
+		18E035DD158346FB003B3D3E /* EZTaskTimeSetter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTaskTimeSetter.m; sourceTree = "<group>"; };
+		18E035DF15834870003B3D3E /* EZSettingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZSettingCell.h; sourceTree = "<group>"; };
+		18E035E015834870003B3D3E /* EZSettingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZSettingCell.m; sourceTree = "<group>"; };
+		18E035E215834937003B3D3E /* EZSettingCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZSettingCell.xib; sourceTree = "<group>"; };
+		18E035E515835139003B3D3E /* PickerKeyboardTime.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PickerKeyboardTime.xib; sourceTree = "<group>"; };
+		18E035E7158351E5003B3D3E /* EZPickerKeyboardTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZPickerKeyboardTime.h; sourceTree = "<group>"; };
+		18E035E8158351E5003B3D3E /* EZPickerKeyboardTime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZPickerKeyboardTime.m; sourceTree = "<group>"; };
+		18E035EA15836161003B3D3E /* EZKeyBoardHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZKeyBoardHolder.h; sourceTree = "<group>"; };
+		18E035EB15836161003B3D3E /* EZKeyBoardHolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZKeyBoardHolder.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -221,6 +262,7 @@
 		184C295F1569E19900852B35 /* SqueezitProto */ = {
 			isa = PBXGroup;
 			children = (
+				18E035E4158350F4003B3D3E /* Customize popup */,
 				184C2B0D157E4D6F00852B35 /* Resources */,
 				184C2B06157DE09600852B35 /* Customized Cells */,
 				184C2AF8157CBA1E00852B35 /* TestController */,
@@ -281,6 +323,8 @@
 				184C29E91570C1F900852B35 /* EZTaskHelper.m */,
 				184C29F71575C7BB00852B35 /* EZTaskGroup.h */,
 				184C29F81575C7C000852B35 /* EZTaskGroup.m */,
+				188D55141584883000142394 /* EZEnvFlag.h */,
+				188D55151584883000142394 /* EZEnvFlag.m */,
 			);
 			name = "Task objects";
 			sourceTree = "<group>";
@@ -302,6 +346,8 @@
 				184C29E0156FB29400852B35 /* EZAlarmUtility.m */,
 				184C29F41574769300852B35 /* EZReleaseDetector.h */,
 				184C29F51574769300852B35 /* EZReleaseDetector.m */,
+				188D551B1584ACB000142394 /* EZArray.h */,
+				188D551C1584ACB000142394 /* EZArray.m */,
 			);
 			name = Utility;
 			sourceTree = "<group>";
@@ -326,6 +372,12 @@
 				184C2AF4157CA9A200852B35 /* EZMainCtrl.xib */,
 				184C2B29157F3C8600852B35 /* EZTaskDetailCtrl.h */,
 				184C2B2A157F3C8800852B35 /* EZTaskDetailCtrl.m */,
+				18E035DC158346F9003B3D3E /* EZTaskTimeSetter.h */,
+				18E035DD158346FB003B3D3E /* EZTaskTimeSetter.m */,
+				188D551E1585C70600142394 /* EZEnvFlagPicker.h */,
+				188D551F1585C70700142394 /* EZEnvFlagPicker.m */,
+				188D552B1585F46E00142394 /* EZAvTimeForEnvTrait.h */,
+				188D552C1585F46E00142394 /* EZAvTimeForEnvTrait.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -348,6 +400,8 @@
 				184C2AC7157759CF00852B35 /* MTask.m */,
 				184C2AC9157768DA00852B35 /* MImageOwner.h */,
 				184C2ACA157768DA00852B35 /* MImageOwner.m */,
+				188D551815848B3A00142394 /* MEnvFlag.h */,
+				188D551915848B3A00142394 /* MEnvFlag.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -400,6 +454,15 @@
 				18E035D71581A471003B3D3E /* EZPureEditCell.xib */,
 				18E035D91581A505003B3D3E /* EZPureEditCell.h */,
 				18E035DA1581A506003B3D3E /* EZPureEditCell.m */,
+				18E035DF15834870003B3D3E /* EZSettingCell.h */,
+				18E035E015834870003B3D3E /* EZSettingCell.m */,
+				18E035E215834937003B3D3E /* EZSettingCell.xib */,
+				188D55211585C73600142394 /* EZFlagPickerCell.xib */,
+				188D55231585C85D00142394 /* EZEnvFlagPickerCell.h */,
+				188D55241585C85D00142394 /* EZEnvFlagPickerCell.m */,
+				188D55261585F08500142394 /* EZAvailableTimeCell.xib */,
+				188D55281585F26200142394 /* EZAvailableTimeCell.h */,
+				188D55291585F26200142394 /* EZAvailableTimeCell.m */,
 			);
 			name = "Customized Cells";
 			sourceTree = "<group>";
@@ -410,6 +473,18 @@
 				184C2B0E157E4DA000852B35 /* Squeezit.bundle */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		18E035E4158350F4003B3D3E /* Customize popup */ = {
+			isa = PBXGroup;
+			children = (
+				18E035E515835139003B3D3E /* PickerKeyboardTime.xib */,
+				18E035E7158351E5003B3D3E /* EZPickerKeyboardTime.h */,
+				18E035E8158351E5003B3D3E /* EZPickerKeyboardTime.m */,
+				18E035EA15836161003B3D3E /* EZKeyBoardHolder.h */,
+				18E035EB15836161003B3D3E /* EZKeyBoardHolder.m */,
+			);
+			name = "Customize popup";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -475,6 +550,10 @@
 				184C2B28157F38C000852B35 /* EZEditLabelCell.xib in Resources */,
 				18E035D615808BB4003B3D3E /* EZTaskGroupCell.xib in Resources */,
 				18E035D81581A471003B3D3E /* EZPureEditCell.xib in Resources */,
+				18E035E315834938003B3D3E /* EZSettingCell.xib in Resources */,
+				18E035E615835139003B3D3E /* PickerKeyboardTime.xib in Resources */,
+				188D55221585C73600142394 /* EZFlagPickerCell.xib in Resources */,
+				188D55271585F08500142394 /* EZAvailableTimeCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -528,6 +607,17 @@
 				184C2B2B157F3C8B00852B35 /* EZTaskDetailCtrl.m in Sources */,
 				18E035D415808A16003B3D3E /* EZTaskGroupCell.m in Sources */,
 				18E035DB1581A506003B3D3E /* EZPureEditCell.m in Sources */,
+				18E035DE158346FC003B3D3E /* EZTaskTimeSetter.m in Sources */,
+				18E035E115834870003B3D3E /* EZSettingCell.m in Sources */,
+				18E035E9158351E5003B3D3E /* EZPickerKeyboardTime.m in Sources */,
+				18E035EC15836161003B3D3E /* EZKeyBoardHolder.m in Sources */,
+				188D55161584883000142394 /* EZEnvFlag.m in Sources */,
+				188D551A15848B3A00142394 /* MEnvFlag.m in Sources */,
+				188D551D1584ACB000142394 /* EZArray.m in Sources */,
+				188D55201585C70800142394 /* EZEnvFlagPicker.m in Sources */,
+				188D55251585C85D00142394 /* EZEnvFlagPickerCell.m in Sources */,
+				188D552A1585F26300142394 /* EZAvailableTimeCell.m in Sources */,
+				188D552D1585F46E00142394 /* EZAvTimeForEnvTrait.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

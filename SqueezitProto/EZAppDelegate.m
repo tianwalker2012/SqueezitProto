@@ -27,13 +27,14 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [EZTestSuite testSchedule];
-    //[EZCoreAccessor cleanDefaultDB];
+    [EZCoreAccessor cleanDefaultDB];
     //Make sure the persistence layer initialization completeds
     [EZCoreAccessor getInstance];
     if([[[EZTaskStore getInstance] fetchAllWithVO:[EZAvailableDay class] po:[MAvailableDay class] sortField:nil] count] == 0){
         EZDEBUG(@"Fill Test data");
         [[EZTaskStore getInstance] fillTestData];
     }
+    [[EZTaskStore getInstance] populateEnvFlags];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     /**

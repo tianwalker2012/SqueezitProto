@@ -26,11 +26,11 @@
     int duration;
     
     //Is it noisy? is it private? is it stable?(On bus, unstable and noisy and no privacy either)
-    int envTraits;
+    NSUInteger envTraits;
     
 }
 
-- (id) init:(NSDate*)start name:(NSString*)nm duration:(int)dur environment:(int)env;
+- (id) init:(NSDate*)start name:(NSString*)nm duration:(int)dur environment:(NSUInteger)env;
 
 - (id) init:(EZAvailableTime*)at;
 
@@ -40,7 +40,7 @@
 
 @property (strong, nonatomic) NSDate* start;
 @property (assign, nonatomic) int duration;
-@property (assign, nonatomic) int envTraits;
+@property (assign, nonatomic) NSUInteger envTraits;
 //@property (strong, nonatomic) NSString* description;
 @property (strong, nonatomic) NSString* name;
 @property (strong, nonatomic) MAvailableTime* PO;

@@ -36,16 +36,17 @@ EZDEBUG(xx, ##__VA_ARGS__); \
 
 #define CoreFetchResultCache @"Root"
 
+
 typedef enum EZEnvironmentTraits {
-    EZ_ENV_NONE = 0,
-    EZ_ENV_FITTING = 1,
-    EZ_ENV_READING = 2,
-    EZ_ENV_LISTENING = 4,
-    EZ_ENV_SOCIALING = 8, 
-    EZ_ENV_FLOWING = 16,//Quite, private, 
+    EZ_ENV_NONE = 1,
+    EZ_ENV_FITTING = 2,
+    EZ_ENV_READING = 3,
+    EZ_ENV_LISTENING = 5,
+    EZ_ENV_SOCIALING = 7, 
+    EZ_ENV_FLOWING = 11,//Quite, private, 
     //For practice need this 
 } EZEnvironmentTraits;
-
+ 
 typedef enum EZWeekDayValue {
     SUNDAY = 1,
     MONDAY = 2,

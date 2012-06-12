@@ -17,7 +17,7 @@
     int duration;
     EZTask* task;
     //When I change the tasks I need this traits
-    EZEnvironmentTraits envTraits;
+    NSUInteger envTraits;
 //    NSString* description;
 }
 
@@ -26,7 +26,7 @@
 @property(strong, nonatomic) NSDate* startTime;
 @property(strong, nonatomic) EZTask* task;
 @property(assign, nonatomic) int duration;
-@property(assign, nonatomic) EZEnvironmentTraits envTraits;
+@property(assign, nonatomic) NSUInteger envTraits;
 //@property(strong, nonatomic) NSString* description;
 @property(strong, nonatomic) UILocalNotification* alarmNotification;
 @property(strong, nonatomic) MScheduledTask* PO;

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+@class MAvailableDay;
 
 @interface MAvailableTime : NSManagedObject
 
@@ -16,5 +17,6 @@
 @property (nonatomic, retain) NSDate * startTime;
 @property (nonatomic, retain) NSNumber * envTraits;
 @property (nonatomic, retain) NSNumber * duration;
+@property (nonatomic, retain) MAvailableDay* avDay;
 
 @end

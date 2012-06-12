@@ -31,7 +31,7 @@
 #import "MAvailableTime.h"
 #import "EZGlobalLocalize.h"
 #import "EZTaskGroup.h"
-
+#import "EZArray.h"
 
 #define TestValue 60*20
 
@@ -130,6 +130,18 @@ typedef void(^TestBlock)(id obj);
 
 + (void) testCascadeDelete;
 
++ (void) testStoreSideEffect;
+
++ (void) testPrimeSeries;
+
++ (void) testMemorySet;
+
++ (void) testMemoryCopy;
+
++ (void) testArrayFilter;
+
++ (void) testAvTimeRelationship;
+
 @end
 
 @implementation EZTestSuite
@@ -170,6 +182,12 @@ typedef void(^TestBlock)(id obj);
     [EZTestSuite testTrim];
     [EZTestSuite testI18N];
     [EZTestSuite testCascadeDelete];
+    [EZTestSuite testStoreSideEffect];
+    [EZTestSuite testPrimeSeries];
+    [EZTestSuite testMemorySet];
+    [EZTestSuite testMemoryCopy];
+    [EZTestSuite testArrayFilter];
+    [EZTestSuite testAvTimeRelationship];
     //Clear all the test data.
     //In the future what should I do with this.
     //Seems in this case, we need the test case ready
@@ -182,7 +200,181 @@ typedef void(^TestBlock)(id obj);
     
 }
 
++ (void) testAvTimeRelationship
+{
+    [EZTestSuite initializeDB];
+    EZAvailableDay* day = [[EZAvailableDay alloc] initWithName:@"Test Day" weeks:1];
+    EZAvailableTime* avTime = [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HHmm" dateString:@"0630"] name:@"Meditation Period" duration:50 environment:2];
+    [day.availableTimes addObject:avTime];
+    [[EZTaskStore getInstance] storeObject:day];
+    
+    MAvailableDay* storedDay = [[[EZCoreAccessor getInstance] fetchAll:[MAvailableDay class] sortField:nil] objectAtIndex:0];
+    assert(storedDay.availableTimes.count == 1);
+    
+    MAvailableTime* storedTime = [storedDay.availableTimes anyObject];
+    assert([storedTime.avDay.name isEqualToString:day.name]);
+    
+    MAvailableTime* mTime = [[[EZCoreAccessor getInstance] fetchAll:[MAvailableTime class] sortField:nil] objectAtIndex:0];
+    assert([mTime.avDay.name isEqualToString:day.name]);
+}
 
++ (void) testArrayFilter
+{
+    NSArray* strArr = [NSArray arrayWithObjects:@"me",@"tian",@"me", nil];
+    NSArray* filterResult = [strArr filter:^BOOL(id obj) {
+        return [@"me" isEqualToString:obj];
+    }];
+    assert(filterResult.count == 2);
+}
+
++ (void) testMemoryCopy
+{
+    NSUInteger* source = malloc(10*sizeof(NSUInteger));
+    NSUInteger* target = malloc(10*sizeof(NSUInteger));
+    
+    for(int i = 1 ; i < 11;  ++i){
+        target[i-1] = i;
+        source[i-1] = 10+i;
+    }
+    
+    memcpy(target, source, 10*sizeof(NSUInteger));
+    
+    //assert(target[9] == source[9]);
+    
+    for(int i = 0; i < 10; ++i){
+        EZDEBUG(@"compare %i, target:%i, source:%i",i, source[i], target[i]);
+        assert(target[i] == source[i]);
+    }
+    
+    
+    source = malloc(10*sizeof(NSUInteger));
+    target = malloc(10*sizeof(NSUInteger));
+    for(int i = 1 ; i < 11;  ++i){
+        target[i-1] = i;
+        source[i-1] = 10+i;
+    }
+    
+    memcpy((void*)target,(void*)source, 10*4);
+    
+    for(int i = 0; i < 10; ++i){
+        EZDEBUG(@"Second compare %i, target:%i, source:%i",i, source[i], target[i]);
+        assert(target[i] == source[i]);
+    }    
+    
+}
+
++ (void) testMemorySet
+{
+    EZDEBUG(@"Size of void* %i , size of UInteger:%i , size of long:%i , size of int:%i",sizeof(void*),sizeof(NSUInteger),sizeof(long),sizeof(int));
+    
+    NSUInteger* uarray = malloc(10*sizeof(NSUInteger));
+    uarray[8] = 19;
+    uarray[9] = 20;
+    memset(uarray, 0, 9*4);
+    
+    EZDEBUG(@"The position 9 is %i, size of whole array:%i",uarray[9], sizeof(uarray));
+    assert(uarray[9] == 20);
+    assert(uarray[8] == 0);
+    assert(sizeof(uarray) == 4);
+    free(uarray);
+    @try {
+        //[NSString stringWithFormat:@"Value:%i",uarray[9]];
+        EZDEBUG(@"Value after freed:%i", uarray[9]);
+        EZDEBUG(@"Second time,Value after freed:%i", uarray[9]);
+        //assert(uarray[9] == 20);
+        
+        //Suppose to encounter exception
+        //assert(false);
+    }
+    @catch (NSException *exception) {
+        EZDEBUG(@"Exception detail %@",exception);
+    }
+    @finally {
+        
+    }
+    
+    //assert(false);
+}
+
+
++ (void) testPrimeSeries
+{
+    NSUInteger fractors[] = {2,3,5,7};
+    assert(findNextFlag([[EZArray alloc] initWithArray:fractors length:4]) == 11);
+    
+    NSUInteger fractors1[] = {2,3,5,7,11};
+    //assert(findNextFlag(fractors1, 5) == 13);
+    assert(findNextFlag([[EZArray alloc] initWithArray:fractors1 length:5]) == 13);
+    
+    NSUInteger fractors2[] = {2,3,5,7,11,13};
+    //assert(findNextFlag(fractors2, 6) == 17);
+    assert(findNextFlag([[EZArray alloc] initWithArray:fractors2 length:6]) == 17);
+    
+    NSUInteger fractors3[] = {2,3,5,7,11,13,17};
+    //assert(findNextFlag(fractors3, 7) == 19);
+    assert(findNextFlag([[EZArray alloc] initWithArray:fractors3 length:7]) == 19);
+    
+    NSUInteger fractors4[] = {2,3,5,7,11,13,17,19};
+    //assert(findNextFlag(fractors4, 8) == 23);
+    assert(findNextFlag([[EZArray alloc] initWithArray:fractors4 length:8]) == 23);
+    
+    NSUInteger fractors5[] = {2,3,5,7,11,13,17,19,23};
+    //assert(findNextFlag(fractors5, 9) == 29);
+    assert(findNextFlag([[EZArray alloc] initWithArray:fractors5 length:9]) == 29);
+    
+    
+}
+
+//The store will get the list fetched again.
++ (void) testStoreSideEffect
+{
+    [EZTestSuite initializeDB];
+    EZTaskGroup* tg = [[EZTaskGroup alloc] init];
+    tg.name = @"Test Side Effect";
+    EZTask* task1 = [[EZTask alloc] initWithName:@"Orange"];
+    EZTask* task2 = [[EZTask alloc] initWithName:@"Apple"];
+    [tg.tasks addObjectsFromArray:[NSArray arrayWithObjects:task1,task2, nil]];
+    [[EZTaskStore getInstance] storeObject:tg];
+    EZTask* res1 = [tg.tasks objectAtIndex:0];
+    EZTask* res2 = [tg.tasks objectAtIndex:1];
+    //The first time is the exception?
+    
+    //Default sort is name and alpha bata
+    assert([task1.name isEqualToString:res1.name]);
+    assert([task2.name isEqualToString:res2.name]);
+    EZTask* task3 = [[EZTask alloc] initWithName:@"Babicue"];
+    [tg.tasks addObject:task3];
+    
+    [[EZTaskStore getInstance] storeObject:tg];
+    res1 = [tg.tasks objectAtIndex:0];
+    res2 = [tg.tasks objectAtIndex:1];
+    EZTask* res3 = [tg.tasks objectAtIndex:2];
+    
+    EZDEBUG(@"res1:%@, res2:%@, res3:%@",res1.name, res2.name, res3.name
+            );
+    
+    assert([task1.name isEqualToString:res1.name]);
+    assert([task2.name isEqualToString:res2.name]);
+    assert([task3.name isEqualToString:res3.name]);
+    //Confirmed that storage have no side effect. 
+    //The side effect caused by the refresh.
+    tg.name = @"Real Side effect";
+    
+    [tg refresh];
+    
+    res1 = [tg.tasks objectAtIndex:0];
+    res2 = [tg.tasks objectAtIndex:1];
+    res3 = [tg.tasks objectAtIndex:2];
+    
+    EZDEBUG(@"after refresh: res1:%@, res2:%@, res3:%@",res1.name, res2.name, res3.name
+            );
+
+    //assert([task1.name isEqualToString:res3.name]);
+    //assert([task2.name isEqualToString:res1.name]);
+    //assert([task3.name isEqualToString:res2.name]);
+    
+     
+}
 
 + (void) testCascadeDelete
 {
@@ -526,7 +718,7 @@ typedef void(^TestBlock)(id obj);
     EZTaskScheduler* scheduler = [[EZTaskScheduler alloc] init];
     EZTaskStore* store = [EZTaskStore getInstance];
     [store clean];
-    EZTask* task = [[EZTask alloc] initWithName:@"iOS programming" duration:60 maxDur:120 envTraits:EZ_ENV_FLOWING];
+    EZTask* task = [[EZTask alloc] initWithName:@"iOS programming" duration:60 maxDur:120 envTraits:EZ_ENV_FITTING];
     
     NSDate* actualStart = [NSDate stringToDate:@"yyyyMMdd" dateString:@"20120523"];
     task.quotas = [[EZQuotas alloc] init:actualStart quotas:21 type:WeekCycle cycleStartDate:nil cycleLength:7];
@@ -765,13 +957,13 @@ typedef void(^TestBlock)(id obj);
 {
     EZTaskStore* store = [EZTaskStore getInstance];
     EZTask* task1 = [[EZTask alloc] initWithName:@"Read" duration:10 maxDur:10 envTraits:EZ_ENV_NONE];
-    task1.envTraits = 1|4;
+    task1.envTraits = 2*3;
     
     EZTask* task2 = [[EZTask alloc] initWithName:@"Write" duration:10 maxDur:10 envTraits:EZ_ENV_NONE];
     task2.envTraits = 2;
     
     EZTask* task3 = [[EZTask alloc] initWithName:@"Think" duration:10 maxDur:10 envTraits:EZ_ENV_NONE];
-    task3.envTraits = 8;
+    task3.envTraits = 5;
     [store storeObjects:[NSArray arrayWithObjects:task1, task2, task3, nil]];
     
     NSArray* res = [store getTasks:2];
@@ -783,10 +975,10 @@ typedef void(^TestBlock)(id obj);
     assert([res count] == 1);
     assert([task2 isEqual:[res objectAtIndex:0]]);
     
-    res = [store getTasks:16];
+    res = [store getTasks:11];
     assert([res count] == 0);
     
-    res = [store getTasks:(1|2|4|8)];
+    res = [store getTasks:2*3*5];
     assert([res count] == 3);
     assert([res containsObject:task1]);
     assert([res containsObject:task2]);

@@ -30,7 +30,7 @@
     BOOL fixedDate;
     
     //The requirement for the environment
-    EZEnvironmentTraits envTraits;
+    NSUInteger envTraits;
     
     NSDate* time;
     NSDate* date;
@@ -47,14 +47,14 @@
 @property (assign, nonatomic) BOOL fixedDate;
 @property (strong, nonatomic) NSDate* time;
 @property (strong, nonatomic) NSDate* date;
-@property (assign, nonatomic) EZEnvironmentTraits envTraits;
+@property (assign, nonatomic) NSUInteger envTraits;
 @property (strong, nonatomic) EZQuotas* quotas;
 @property (strong, nonatomic) NSString* soundName;
 @property (strong, nonatomic) MTask* PO;
 @property (strong, nonatomic) NSDate* createdTime;
 
 
-- (id) initWithName:(NSString*) nm duration:(int)dur maxDur:(int)mdur envTraits:(EZEnvironmentTraits)traits;
+- (id) initWithName:(NSString*) nm duration:(int)dur maxDur:(int)mdur envTraits:(NSUInteger)traits;
 
 - (id) initWithName:(NSString*) nm;
 
