@@ -22,8 +22,6 @@
 
 - (id) initWithName:(NSString*)nm weeks:(int)aw;
 
-//Return a deep copy of itself
-- (id) duplicate;
 
 - (NSString*) description;
 
@@ -32,6 +30,7 @@
 @property (strong, nonatomic) NSMutableArray* availableTimes;
 @property (strong, nonatomic) NSString* name;
 @property (strong, nonatomic) MAvailableDay* PO;
+@property (assign, nonatomic) NSInteger displayOrder;
 
 - (id) initWithPO:(MAvailableDay*)mtk;
 

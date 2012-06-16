@@ -47,6 +47,12 @@ typedef enum EZEnvironmentTraits {
     //For practice need this 
 } EZEnvironmentTraits;
  
+typedef enum EZAlarmType {
+    EZ_SOUND,
+    EZ_SHAKE,
+    EZ_MUTE
+} EZAlarmType;
+
 typedef enum EZWeekDayValue {
     SUNDAY = 1,
     MONDAY = 2,

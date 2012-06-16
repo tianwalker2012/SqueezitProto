@@ -18,7 +18,7 @@
 @dynamic task;
 @dynamic alarmNotification;
 @dynamic name;
-
+@dynamic alarmType;
 @end
 
 //The purpose of this class is to make the LocalNotification persistentable.

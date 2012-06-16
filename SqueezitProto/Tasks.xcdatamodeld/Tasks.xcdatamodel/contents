@@ -3,6 +3,7 @@
     <entity name="MAvailableDay" representedClassName="MAvailableDay" syncable="YES">
         <attribute name="assignedWeeks" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="displayOrder" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="availableTimes" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="MAvailableTime" inverseName="avDay" inverseEntity="MAvailableTime" syncable="YES"/>
     </entity>
@@ -32,6 +33,7 @@
     </entity>
     <entity name="MScheduledTask" representedClassName="MZScheduledTask" syncable="YES">
         <attribute name="alarmNotification" optional="YES" attributeType="Transformable" valueTransformerName="NotificationConverter" syncable="YES"/>
+        <attribute name="alarmType" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="duration" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="envTraits" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
@@ -53,13 +55,13 @@
         <relationship name="tasks" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="MTask" syncable="YES"/>
     </entity>
     <elements>
-        <element name="MAvailableDay" positionX="160" positionY="192" width="128" height="105"/>
-        <element name="MAvailableTime" positionX="160" positionY="192" width="128" height="120"/>
+        <element name="MAvailableDay" positionX="160" positionY="192" width="128" height="120"/>
+        <element name="MAvailableTime" positionX="160" positionY="192" width="128" height="105"/>
+        <element name="MEnvFlag" positionX="160" positionY="192" width="128" height="75"/>
         <element name="MImageOwner" positionX="160" positionY="192" width="128" height="75"/>
         <element name="MQuotas" positionX="160" positionY="192" width="128" height="150"/>
-        <element name="MScheduledTask" positionX="160" positionY="192" width="128" height="120"/>
+        <element name="MScheduledTask" positionX="160" positionY="192" width="128" height="150"/>
         <element name="MTask" positionX="160" positionY="192" width="128" height="135"/>
         <element name="MTaskGroup" positionX="160" positionY="192" width="128" height="105"/>
-        <element name="MEnvFlag" positionX="160" positionY="192" width="128" height="75"/>
     </elements>
 </model>

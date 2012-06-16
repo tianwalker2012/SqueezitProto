@@ -1,0 +1,178 @@
+//
+//  EZScheduledDetail.m
+//  SqueezitProto
+//
+//  Created by Apple on 12-6-14.
+//  Copyright (c) 2012年 __MyCompanyName__. All rights reserved.
+//
+
+#import "EZScheduledDetail.h"
+#import "EZTaskHelper.h"
+#import "EZGlobalLocalize.h"
+#import "EZScheduledTask.h"
+#import "EZTask.h"
+#import "EZTaskStore.h"
+
+@interface EZScheduledDetail ()
+
+@end
+
+@implementation EZScheduledDetail
+@synthesize deleteBlock, rescheduleBlock, schTask;
+
+- (id)initWithStyle:(UITableViewStyle)style
+{
+    self = [super initWithStyle:style];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.navigationItem.title = Local(@"Scheduled Task");
+}
+
+- (void)viewDidUnload
+{
+    [super viewDidUnload];
+    // Release any retained subviews of the main view.
+    // e.g. self.myOutlet = nil;
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+#pragma mark - Table view data source
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 6;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 1;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell* cell = nil;
+    
+    switch (indexPath.section) {
+        case 0:{
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Title"];
+            cell.textLabel.text = schTask.task.name;
+            cell.textLabel.textAlignment = UITextAlignmentCenter;
+            }
+            break;
+        case 1:{
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"Time"];
+            cell.textLabel.text = Local(@"Start Time");
+            cell.detailTextLabel.text = [schTask.startTime stringWithFormat:@"HH:mm"];
+        }
+            break;
+        case 2:{
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"Time"];
+            cell.textLabel.text = Local(@"End Time");
+            cell.detailTextLabel.text = [[schTask.startTime adjustMinutes:schTask.duration] stringWithFormat:@"HH:mm"];
+        }
+            break;
+        case 3:{
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"Env"];
+            cell.textLabel.text = Local(@"Environment");
+            cell.detailTextLabel.text = envTraitsToString(schTask.task.envTraits);
+        }
+            break;
+        case 4:{
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Dele"];
+            cell.textLabel.text = Local(@"Delete");
+            cell.textLabel.textAlignment = UITextAlignmentCenter;
+        }
+            break;
+        case 5:{
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Reschedule"];
+            cell.textLabel.text = Local(@"Reschedule");
+            cell.textLabel.textAlignment = UITextAlignmentCenter;
+        }
+            break;
+        default:
+            break;
+    }
+    return cell;
+}
+
+/*
+// Override to support conditional editing of the table view.
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // Return NO if you do not want the specified item to be editable.
+    return YES;
+}
+*/
+
+/*
+// Override to support editing the table view.
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        // Delete the row from the data source
+        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    }   
+    else if (editingStyle == UITableViewCellEditingStyleInsert) {
+        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+    }   
+}
+*/
+
+/*
+// Override to support rearranging the table view.
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
+{
+}
+*/
+
+/*
+// Override to support conditional rearranging of the table view.
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // Return NO if you do not want the item to be re-orderable.
+    return YES;
+}
+*/
+
+#pragma mark - Table view delegate
+
+//Only have the last 2 rows could be selected. 
+- (NSIndexPath*) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(indexPath.section < 4){
+        return nil;
+    }
+    return indexPath;
+}
+
+//What I am suppose to do here?
+//Only delete and reschedule will be selected here. 
+//pop the view then call the delete or the reschedule operations.
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    EZDEBUG(@"Selected %@", indexPath);
+    if(indexPath.section == 4){
+        [self.navigationController popViewControllerAnimated:YES];
+        if(deleteBlock){
+            deleteBlock();
+        }
+    }else if(indexPath.section == 5){
+        [self.navigationController popViewControllerAnimated:YES];
+        if(rescheduleBlock){
+            rescheduleBlock();
+        }
+    }
+}
+
+@end

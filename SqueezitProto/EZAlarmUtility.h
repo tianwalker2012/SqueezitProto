@@ -21,4 +21,6 @@
 //Cancel the alarm for task
 + (void) cancelAlarm:(EZScheduledTask*)task;
 
++ (void) changeAlarmMode:(EZScheduledTask*)task;
+
 @end

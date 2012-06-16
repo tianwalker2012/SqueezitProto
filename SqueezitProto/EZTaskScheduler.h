@@ -11,6 +11,14 @@
 
 @class EZScheduledTask, EZAvailableTime, EZQuotasResult, EZQuotas, EZAvailableDay, EZTask;
 
+@interface ScheduledFilterResult : NSObject
+
+@property (strong, nonatomic) NSMutableArray* remainingTasks;
+@property (strong, nonatomic) NSMutableArray* removedTasks;
+@property (strong, nonatomic) NSDate* adjustedDate;
+
+@end
+
 @interface EZTaskScheduler : NSObject<EZValueObject>
 
 
@@ -30,6 +38,33 @@
 //It will modify the available time based on the statistic collected. 
 //Then use the time to allocate the tasks.
 - (EZQuotasResult*) scheduleQuotasTask:(NSArray*)tasks date:(NSDate*)date avDay:(EZAvailableDay*)avDay;
+
+
+//What's the purpose of this function?
+//Only the availableTime behind current date will left.
+- (EZAvailableDay*) filterAvailebleDay:(EZAvailableDay*)avDay  byTime:(NSDate*)currentDate;
+
+
+//This will be called when the refresh button get clicked
+//What the effect will be achieved?
+//Travel through the task that startTime already passed, will not be touched. 
+//One minor edge case jump into my mind. what if the current task longer than the current date?
+//My solution is that modify the date make it just at the time. 
+//Who responsible to do the deletion?
+//Let's this method do it.
+//It will remove the task not timeout from the database.
+//Then get the availble time out and filter it with current date.
+//Then add the remaining task into the exclusion task list. 
+//Go through task as the schduledTaskByDate
+- (NSArray*) rescheduleAll:(NSArray*)scheduledTask date:(NSDate*)date;
+
+
+//Will be invoked by rescheduleAll
+//task startTime before the date will be kept in the remainTasks
+//task startTime after the date will be will be added into removed task
+//The date will be adjusted, to the the end of the latest task if that task's end time is later than current date.
+//Cool, simple and clear
+- (ScheduledFilterResult*) filterTask:(NSArray*)scheduledTask date:(NSDate*)date;
 
 //Sort scheduled task by time
 - (NSArray*) sort:(NSArray*)schTasks;

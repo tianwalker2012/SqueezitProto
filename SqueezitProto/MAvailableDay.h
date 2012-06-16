@@ -17,6 +17,7 @@
 @property (nonatomic, retain) NSDate * date;
 @property (nonatomic, retain) NSNumber * assignedWeeks;
 @property (nonatomic, retain) NSSet *availableTimes;
+@property (nonatomic, retain) NSNumber * displayOrder;
 @end
 
 @interface MAvailableDay (CoreDataGeneratedAccessors)

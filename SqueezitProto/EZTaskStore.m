@@ -145,6 +145,7 @@
 
 
 //Read flags into a NSDictionary
+//Every tiem somebody added a flag, this method will get called
 - (void) populateEnvFlags
 {
     NSArray* flags = [self fetchAllWithVO:[EZEnvFlag class] po:[MEnvFlag class] sortField:@"flag"];
@@ -311,7 +312,7 @@
         }
     }
     EZDEBUG(@"Not match exact day, matched week %@",matchedWeek);
-    return [matchedWeek duplicate];
+    return [matchedWeek cloneVO];
 }
 
 //What's kind of Env involved in this flags
@@ -346,3 +347,25 @@
 }
 
 @end
+
+NSString* envTraitsToString(NSUInteger envTraits)
+{
+    if(envTraits == EZ_ENV_NONE){
+        return Local(@"None");
+    }
+    //NSMutableString* res = [[NSMutableString alloc] init];
+    NSMutableArray* arr = [[NSMutableArray alloc] init];
+    NSArray* flags = [EZTaskStore getInstance].envFlags;
+    NSUInteger flagCount = envTraits;
+    for(EZEnvFlag* flag in flags){
+        if(flagCount== 1){
+            break;
+        }
+        if(isContained(flag.flag, flagCount)){
+            [arr addObject:Local(flag.name)];
+            flagCount = flagCount/flag.flag;
+        }
+    }
+    return [arr componentsJoinedByString:@" "];
+}
+

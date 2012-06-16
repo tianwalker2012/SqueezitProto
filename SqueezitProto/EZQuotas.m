@@ -24,6 +24,16 @@
     return self;
 }
 
+- (NSInteger) cycleLength
+{
+    if(cycleType == WeekCycle){
+        return 7;
+    }else if(cycleType == MonthCycle){
+        return 30;
+    }
+    return cycleLength;
+}
+
 - (id) cloneVO{
     return [[EZQuotas alloc] initWithVO:self];
 }

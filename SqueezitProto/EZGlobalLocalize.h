@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#define Local(x) EZLocalizedString(x,x)
+
 /**
  * Gets the current system locale chosen by the user.
  *
@@ -19,3 +21,4 @@ NSLocale* EZCurrentLocale();
  * @return A localized string from the Squeezit.bundle.
  */
 NSString* EZLocalizedString(NSString* key, NSString* comment);
+

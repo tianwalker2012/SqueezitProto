@@ -18,6 +18,7 @@
 
 #import "EZTestTabCtrl.h"
 #import "EZTestViewCtrl.h"
+#import "EZAvailableDayList.h"
 
 @implementation EZAppDelegate
 
@@ -60,12 +61,16 @@
     EZTestViewCtrl* viewCtrl2 = [[EZTestViewCtrl alloc] init];
     EZScheduledTaskController* stc = [[EZScheduledTaskController alloc] initWithStyle:UITableViewStylePlain];
     
+    stc.currentDate = [NSDate stringToDate:@"yyyyMMdd" dateString:@"20120615"];
     UINavigationController* nstc = [[UINavigationController alloc] initWithRootViewController:stc];
     
     EZTaskListCtrl* tlc = [[EZTaskListCtrl alloc] initWithStyle:UITableViewStylePlain];
     UINavigationController* tnav = [[UINavigationController alloc] initWithRootViewController:tlc];
     
-    tabCtrl.viewControllers = [NSArray arrayWithObjects:nstc, tnav, viewCtrl1,viewCtrl2, nil];
+    EZAvailableDayList* tsl = [[EZAvailableDayList alloc] initWithStyle:UITableViewStylePlain];
+    UINavigationController* tslNav = [[UINavigationController alloc] initWithRootViewController:tsl];
+    
+    tabCtrl.viewControllers = [NSArray arrayWithObjects:nstc, tnav, tslNav,viewCtrl2, nil];
     //self.window.rootViewController = tabCtrl;
     [self.rootCtrl addChildViewController:tabCtrl];
     [self.rootCtrl.view addSubview:tabCtrl.view];

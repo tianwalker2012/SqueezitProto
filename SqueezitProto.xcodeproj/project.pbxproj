@@ -62,6 +62,12 @@
 		184C2B26157F36E500852B35 /* EZEditLabelCellHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2B25157F36E300852B35 /* EZEditLabelCellHolder.m */; };
 		184C2B28157F38C000852B35 /* EZEditLabelCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 184C2B27157F38BF00852B35 /* EZEditLabelCell.xib */; };
 		184C2B2B157F3C8B00852B35 /* EZTaskDetailCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2B2A157F3C8800852B35 /* EZTaskDetailCtrl.m */; };
+		187ED026158B138900B499D3 /* EZAvailableDayList.m in Sources */ = {isa = PBXBuildFile; fileRef = 187ED025158B138900B499D3 /* EZAvailableDayList.m */; };
+		187ED02A158C68FF00B499D3 /* EZAvailableDayDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = 187ED029158C68FF00B499D3 /* EZAvailableDayDetail.m */; };
+		187ED02C158C743C00B499D3 /* EZAvTimeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 187ED02B158C743C00B499D3 /* EZAvTimeCell.xib */; };
+		187ED02F158C75F900B499D3 /* EZAvTimeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 187ED02E158C75F900B499D3 /* EZAvTimeCell.m */; };
+		187ED031158C78C500B499D3 /* EZAvTimeHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 187ED030158C78C500B499D3 /* EZAvTimeHeader.xib */; };
+		187ED034158C7A0F00B499D3 /* EZAvTimeHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 187ED033158C7A0F00B499D3 /* EZAvTimeHeader.m */; };
 		188D55161584883000142394 /* EZEnvFlag.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D55151584883000142394 /* EZEnvFlag.m */; };
 		188D551A15848B3A00142394 /* MEnvFlag.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D551915848B3A00142394 /* MEnvFlag.m */; };
 		188D551D1584ACB000142394 /* EZArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D551C1584ACB000142394 /* EZArray.m */; };
@@ -71,6 +77,13 @@
 		188D55271585F08500142394 /* EZAvailableTimeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 188D55261585F08500142394 /* EZAvailableTimeCell.xib */; };
 		188D552A1585F26300142394 /* EZAvailableTimeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D55291585F26200142394 /* EZAvailableTimeCell.m */; };
 		188D552D1585F46E00142394 /* EZAvTimeForEnvTrait.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D552C1585F46E00142394 /* EZAvTimeForEnvTrait.m */; };
+		188D553015871DA700142394 /* EZGoalSetter.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D552F15871DA700142394 /* EZGoalSetter.m */; };
+		188D55331587392C00142394 /* EZGoalTimeSetter.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D55321587392B00142394 /* EZGoalTimeSetter.m */; };
+		188D55391588702C00142394 /* PickerKeyboardDate.xib in Resources */ = {isa = PBXBuildFile; fileRef = 188D55381588702C00142394 /* PickerKeyboardDate.xib */; };
+		188D553C158870F300142394 /* EZPickerKeyboardDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D553B158870F300142394 /* EZPickerKeyboardDate.m */; };
+		188D553E1588908100142394 /* EZScheduledCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 188D553D1588908000142394 /* EZScheduledCell.xib */; };
+		188D55411588920900142394 /* EZScheduledCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D55401588920800142394 /* EZScheduledCell.m */; };
+		18D47CB41589EBA6009B0012 /* EZScheduledDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D47CB31589EBA6009B0012 /* EZScheduledDetail.m */; };
 		18E035D415808A16003B3D3E /* EZTaskGroupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E035D315808A16003B3D3E /* EZTaskGroupCell.m */; };
 		18E035D615808BB4003B3D3E /* EZTaskGroupCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18E035D515808BB4003B3D3E /* EZTaskGroupCell.xib */; };
 		18E035D81581A471003B3D3E /* EZPureEditCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18E035D71581A471003B3D3E /* EZPureEditCell.xib */; };
@@ -182,6 +195,16 @@
 		184C2B27157F38BF00852B35 /* EZEditLabelCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZEditLabelCell.xib; sourceTree = "<group>"; };
 		184C2B29157F3C8600852B35 /* EZTaskDetailCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTaskDetailCtrl.h; sourceTree = "<group>"; };
 		184C2B2A157F3C8800852B35 /* EZTaskDetailCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTaskDetailCtrl.m; sourceTree = "<group>"; };
+		187ED024158B138900B499D3 /* EZAvailableDayList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAvailableDayList.h; sourceTree = "<group>"; };
+		187ED025158B138900B499D3 /* EZAvailableDayList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAvailableDayList.m; sourceTree = "<group>"; };
+		187ED028158C68FF00B499D3 /* EZAvailableDayDetail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAvailableDayDetail.h; sourceTree = "<group>"; };
+		187ED029158C68FF00B499D3 /* EZAvailableDayDetail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAvailableDayDetail.m; sourceTree = "<group>"; };
+		187ED02B158C743C00B499D3 /* EZAvTimeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZAvTimeCell.xib; sourceTree = "<group>"; };
+		187ED02D158C75F800B499D3 /* EZAvTimeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAvTimeCell.h; sourceTree = "<group>"; };
+		187ED02E158C75F900B499D3 /* EZAvTimeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAvTimeCell.m; sourceTree = "<group>"; };
+		187ED030158C78C500B499D3 /* EZAvTimeHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZAvTimeHeader.xib; sourceTree = "<group>"; };
+		187ED032158C7A0E00B499D3 /* EZAvTimeHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAvTimeHeader.h; sourceTree = "<group>"; };
+		187ED033158C7A0F00B499D3 /* EZAvTimeHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAvTimeHeader.m; sourceTree = "<group>"; };
 		188D55141584883000142394 /* EZEnvFlag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZEnvFlag.h; sourceTree = "<group>"; };
 		188D55151584883000142394 /* EZEnvFlag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZEnvFlag.m; sourceTree = "<group>"; };
 		188D551815848B3A00142394 /* MEnvFlag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEnvFlag.h; sourceTree = "<group>"; };
@@ -198,6 +221,18 @@
 		188D55291585F26200142394 /* EZAvailableTimeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAvailableTimeCell.m; sourceTree = "<group>"; };
 		188D552B1585F46E00142394 /* EZAvTimeForEnvTrait.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAvTimeForEnvTrait.h; sourceTree = "<group>"; };
 		188D552C1585F46E00142394 /* EZAvTimeForEnvTrait.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAvTimeForEnvTrait.m; sourceTree = "<group>"; };
+		188D552E15871DA700142394 /* EZGoalSetter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZGoalSetter.h; sourceTree = "<group>"; };
+		188D552F15871DA700142394 /* EZGoalSetter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZGoalSetter.m; sourceTree = "<group>"; };
+		188D55311587392B00142394 /* EZGoalTimeSetter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZGoalTimeSetter.h; sourceTree = "<group>"; };
+		188D55321587392B00142394 /* EZGoalTimeSetter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZGoalTimeSetter.m; sourceTree = "<group>"; };
+		188D55381588702C00142394 /* PickerKeyboardDate.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PickerKeyboardDate.xib; sourceTree = "<group>"; };
+		188D553A158870F300142394 /* EZPickerKeyboardDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZPickerKeyboardDate.h; sourceTree = "<group>"; };
+		188D553B158870F300142394 /* EZPickerKeyboardDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZPickerKeyboardDate.m; sourceTree = "<group>"; };
+		188D553D1588908000142394 /* EZScheduledCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZScheduledCell.xib; sourceTree = "<group>"; };
+		188D553F1588920700142394 /* EZScheduledCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZScheduledCell.h; sourceTree = "<group>"; };
+		188D55401588920800142394 /* EZScheduledCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZScheduledCell.m; sourceTree = "<group>"; };
+		18D47CB21589EBA6009B0012 /* EZScheduledDetail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZScheduledDetail.h; sourceTree = "<group>"; };
+		18D47CB31589EBA6009B0012 /* EZScheduledDetail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZScheduledDetail.m; sourceTree = "<group>"; };
 		18E035D215808A16003B3D3E /* EZTaskGroupCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTaskGroupCell.h; sourceTree = "<group>"; };
 		18E035D315808A16003B3D3E /* EZTaskGroupCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTaskGroupCell.m; sourceTree = "<group>"; };
 		18E035D515808BB4003B3D3E /* EZTaskGroupCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZTaskGroupCell.xib; sourceTree = "<group>"; };
@@ -378,6 +413,16 @@
 				188D551F1585C70700142394 /* EZEnvFlagPicker.m */,
 				188D552B1585F46E00142394 /* EZAvTimeForEnvTrait.h */,
 				188D552C1585F46E00142394 /* EZAvTimeForEnvTrait.m */,
+				188D552E15871DA700142394 /* EZGoalSetter.h */,
+				188D552F15871DA700142394 /* EZGoalSetter.m */,
+				188D55311587392B00142394 /* EZGoalTimeSetter.h */,
+				188D55321587392B00142394 /* EZGoalTimeSetter.m */,
+				18D47CB21589EBA6009B0012 /* EZScheduledDetail.h */,
+				18D47CB31589EBA6009B0012 /* EZScheduledDetail.m */,
+				187ED024158B138900B499D3 /* EZAvailableDayList.h */,
+				187ED025158B138900B499D3 /* EZAvailableDayList.m */,
+				187ED028158C68FF00B499D3 /* EZAvailableDayDetail.h */,
+				187ED029158C68FF00B499D3 /* EZAvailableDayDetail.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -463,6 +508,15 @@
 				188D55261585F08500142394 /* EZAvailableTimeCell.xib */,
 				188D55281585F26200142394 /* EZAvailableTimeCell.h */,
 				188D55291585F26200142394 /* EZAvailableTimeCell.m */,
+				188D553D1588908000142394 /* EZScheduledCell.xib */,
+				188D553F1588920700142394 /* EZScheduledCell.h */,
+				188D55401588920800142394 /* EZScheduledCell.m */,
+				187ED02B158C743C00B499D3 /* EZAvTimeCell.xib */,
+				187ED02D158C75F800B499D3 /* EZAvTimeCell.h */,
+				187ED02E158C75F900B499D3 /* EZAvTimeCell.m */,
+				187ED030158C78C500B499D3 /* EZAvTimeHeader.xib */,
+				187ED032158C7A0E00B499D3 /* EZAvTimeHeader.h */,
+				187ED033158C7A0F00B499D3 /* EZAvTimeHeader.m */,
 			);
 			name = "Customized Cells";
 			sourceTree = "<group>";
@@ -483,6 +537,9 @@
 				18E035E8158351E5003B3D3E /* EZPickerKeyboardTime.m */,
 				18E035EA15836161003B3D3E /* EZKeyBoardHolder.h */,
 				18E035EB15836161003B3D3E /* EZKeyBoardHolder.m */,
+				188D55381588702C00142394 /* PickerKeyboardDate.xib */,
+				188D553A158870F300142394 /* EZPickerKeyboardDate.h */,
+				188D553B158870F300142394 /* EZPickerKeyboardDate.m */,
 			);
 			name = "Customize popup";
 			sourceTree = "<group>";
@@ -554,6 +611,10 @@
 				18E035E615835139003B3D3E /* PickerKeyboardTime.xib in Resources */,
 				188D55221585C73600142394 /* EZFlagPickerCell.xib in Resources */,
 				188D55271585F08500142394 /* EZAvailableTimeCell.xib in Resources */,
+				188D55391588702C00142394 /* PickerKeyboardDate.xib in Resources */,
+				188D553E1588908100142394 /* EZScheduledCell.xib in Resources */,
+				187ED02C158C743C00B499D3 /* EZAvTimeCell.xib in Resources */,
+				187ED031158C78C500B499D3 /* EZAvTimeHeader.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -618,6 +679,15 @@
 				188D55251585C85D00142394 /* EZEnvFlagPickerCell.m in Sources */,
 				188D552A1585F26300142394 /* EZAvailableTimeCell.m in Sources */,
 				188D552D1585F46E00142394 /* EZAvTimeForEnvTrait.m in Sources */,
+				188D553015871DA700142394 /* EZGoalSetter.m in Sources */,
+				188D55331587392C00142394 /* EZGoalTimeSetter.m in Sources */,
+				188D553C158870F300142394 /* EZPickerKeyboardDate.m in Sources */,
+				188D55411588920900142394 /* EZScheduledCell.m in Sources */,
+				18D47CB41589EBA6009B0012 /* EZScheduledDetail.m in Sources */,
+				187ED026158B138900B499D3 /* EZAvailableDayList.m in Sources */,
+				187ED02A158C68FF00B499D3 /* EZAvailableDayDetail.m in Sources */,
+				187ED02F158C75F900B499D3 /* EZAvTimeCell.m in Sources */,
+				187ED034158C7A0F00B499D3 /* EZAvTimeHeader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

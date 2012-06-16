@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class EZEditLabelCell, EZTaskGroupCell, EZPureEditCell, EZSettingCell, EZEnvFlagPickerCell, EZAvailableTimeCell;
+@class EZEditLabelCell, EZTaskGroupCell, EZPureEditCell, EZSettingCell, EZEnvFlagPickerCell, EZAvailableTimeCell, EZScheduledCell, EZAvTimeCell, EZAvTimeHeader;
 //The purpose of this holder is serve as the file owner, 
 //So that this cell could be used by many controllers.
 @interface EZEditLabelCellHolder : NSObject
@@ -25,7 +25,15 @@
 
 @property (strong, nonatomic) IBOutlet EZAvailableTimeCell* timeCell;
 
+@property (strong, nonatomic) IBOutlet EZScheduledCell* scheduledCell;
+
+@property (strong, nonatomic) IBOutlet EZAvTimeCell* avTimeCell;
+
+@property (strong, nonatomic) IBOutlet EZAvTimeHeader* avTimeHeader;
+
 //@property (strong, nonatomic) id<UITextFieldDelegate> delegate;
+
++ (EZEditLabelCellHolder*) getInstance;
 
 + (EZEditLabelCell*) createCellWithDelegate:(id<UITextFieldDelegate>)deleg;
 + (EZTaskGroupCell*) createTaskGroupCellWithDelegate:(id<UITextFieldDelegate>)deleg;
@@ -38,7 +46,12 @@
 
 + (EZAvailableTimeCell*) createTimeCell;
 
++ (EZScheduledCell*) createScheduledCell;
+
++ (EZAvTimeCell*) createAvTimeCell;
 //Need to think about it later. 
 //+ (UITableViewCell*) createCell:(NSString*)xibFile;
+
++ (EZAvTimeHeader*) createAvTimeHeader;
 
 @end

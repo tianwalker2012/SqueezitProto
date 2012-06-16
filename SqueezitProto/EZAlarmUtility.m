@@ -28,6 +28,13 @@
     }
 }
 
+//Although I don't know what to do in this method but just let us 
+//Make all the processes weaved
++ (void) changeAlarmMode:(EZScheduledTask*)task
+{
+    EZDEBUG(@"Change Alarm Mode:%@, alarmType:%i",task.task.name,task.alarmType);
+}
+
 //Setup the alarm for task
 + (void) setupAlarm:(EZScheduledTask*)task
 {

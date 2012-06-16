@@ -13,6 +13,7 @@
 #import "EZGlobalLocalize.h"
 #import "EZArray.h"
 
+
 @implementation NSString(EZPrivate)
 
 //Implement the traditional trim, space new line etc...
@@ -32,6 +33,25 @@
     for(id obj in self){
         if(opts(obj)){
             [res addObject:obj];
+        }
+    }
+    return res;
+}
+
+- (void) iterate:(IterateOperation) opts
+{
+    for(id obj in self){
+        opts(obj);
+    }
+}
+
+- (NSArray*) recreate:(RecreateOperation)opts
+{
+    NSMutableArray* res = [[NSMutableArray alloc] initWithCapacity:self.count];
+    for(id obj in self){
+        id resObj = opts(obj);
+        if(resObj){
+            [res addObject:resObj];
         }
     }
     return res;
@@ -72,6 +92,16 @@
     int curDays = [self convertDays];
     curDays = curDays + days;
     return [[NSDate alloc] initWithTimeIntervalSince1970:curDays*SecondsPerDay];
+}
+
+//Combine the date with the time. 
+//I love this, relentlessly refractor.
+- (NSDate*) combineTime:(NSDate*)time
+{
+    NSString* dateStr = [self stringWithFormat:@"yyyy-MM-dd"];
+    NSString* timeStr = [time stringWithFormat:@"HH:mm:ss"];
+    NSString* combineStr = [NSString stringWithFormat:@"%@ %@",dateStr,timeStr];
+    return [NSDate stringToDate:@"yyyy-MM-dd HH:mm:ss" dateString:combineStr];
 }
 
 - (NSDate*) adjustMinutes:(int)minutes
@@ -262,42 +292,31 @@ NSUInteger findNextFlag(EZArray* flags)
     return 0;
 }
 
-
-+ (NSString*) envTraitsToString:(NSInteger)envTraits
++ (NSString*) weekFlagToWeekString:(NSInteger)weekFlags
 {
-    if(envTraits == EZ_ENV_NONE){
-        return EZLocalizedString(@"None", nil);
+    NSMutableArray* res = [[NSMutableArray alloc] initWithCapacity:7];
+    if((weekFlags & SUNDAY) == SUNDAY){
+        [res addObject:Local(@"Sunday")];
     }
-    NSMutableString* res = [[NSMutableString alloc] init];
-    
-    //EZ_ENV_NONE = 0,
-    //EZ_ENV_FITTING = 1,
-    //EZ_ENV_READING = 2,
-    //EZ_ENV_LISTENING = 4,
-    //EZ_ENV_SOCIALING = 8, 
-    //EZ_ENV_FLOWING = 16,
-    
-    if((EZ_ENV_FITTING & envTraits) == EZ_ENV_FITTING){
-        [res appendString:EZLocalizedString(@" FITTING", nil)];
+    if((weekFlags & MONDAY) == MONDAY){
+        [res addObject:Local(@"Monday")];
     }
-    
-    if((EZ_ENV_READING & envTraits) == EZ_ENV_READING){
-        [res appendString:EZLocalizedString(@" READING", nil)];
+    if((weekFlags & TUESDAY) == TUESDAY){
+        [res addObject:Local(@"Tuesday")];
     }
-
-    if((EZ_ENV_LISTENING & envTraits) == EZ_ENV_LISTENING){
-        [res appendString:EZLocalizedString(@" LISTENING", nil)];
+    if((weekFlags & WEDNESDAY) == WEDNESDAY){
+        [res addObject:Local(@"Wednesday")];
     }
-
-    if((EZ_ENV_FLOWING & envTraits) == EZ_ENV_FLOWING){
-        [res appendString:EZLocalizedString(@" FLOWING", nil)];
+    if((weekFlags & THURSDAY) == THURSDAY){
+        [res addObject:Local(@"Thursday")];
     }
-
-    if((EZ_ENV_SOCIALING & envTraits) == EZ_ENV_SOCIALING){
-        [res appendString:EZLocalizedString(@" SOCIALING", nil)];
+    if((weekFlags & FRIDAY) == FRIDAY){
+        [res addObject:Local(@"Friday")];
     }
-
-    return res;
+    if((weekFlags & SATURDAY) == SATURDAY){
+        [res addObject:Local(@"Saturday")];
+    }
+    return [res componentsJoinedByString:@" "];
 }
 
 @end

@@ -24,7 +24,7 @@
     return self;
 }
 
-- (id) init:(EZAvailableTime*)at
+- (id) initWithVO:(EZAvailableTime*)at
 {
     self = [super init];
     self.start = at.start;
@@ -36,9 +36,9 @@
     return self;
 }
 
-- (id) duplicate
+- (id) cloneVO
 {
-    return [[EZAvailableTime alloc] init:self];
+    return [[EZAvailableTime alloc] initWithVO:self];
 }
 
 - (void) adjustStartTime:(int)increasedMinutes

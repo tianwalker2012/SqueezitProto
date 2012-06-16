@@ -53,9 +53,6 @@
     self.endTime.text = [[schTask.startTime adjustMinutes:schTask.duration] stringWithFormat:@"HH:mm"];
     self.duration.text = [NSString stringWithFormat:@"%i minutes",schTask.duration];
     
-    //self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(backTapped)];
-    //self.navigationItem.hidesBackButton = false;
-    //self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(backTapped)];
     self.navigationController.navigationItem.hidesBackButton = YES;
     self.navigationController.navigationItem.backBarButtonItem.title = @"List";
     self.navigationController.navigationItem.backBarButtonItem.target = self;

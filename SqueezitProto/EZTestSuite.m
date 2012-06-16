@@ -32,12 +32,29 @@
 #import "EZGlobalLocalize.h"
 #import "EZTaskGroup.h"
 #import "EZArray.h"
+#import "EZEditLabelCellHolder.h"
+#import "EZScheduledCell.h"
+
 
 #define TestValue 60*20
 
 //Block definition
 //No copy and paste, typing every code by your hand. Learn with your whole body.
 typedef void(^TestBlock)(id obj);
+
+
+typedef int(^ClosureTest)();
+
+
+@interface IntCarrier : NSObject
+
+@property (assign, nonatomic) int value;
+
+@end
+
+@implementation IntCarrier
+@synthesize  value;
+@end
 
 
 @interface WeakReferObject : NSObject
@@ -142,6 +159,18 @@ typedef void(^TestBlock)(id obj);
 
 + (void) testAvTimeRelationship;
 
++ (void) testEZQuotasProperty;
+
++ (void) testCellCreatorSingleton;
+
++ (void) testClosure;
+
++ (void) testAvailableTimeFilter;
+
++ (void) testRescheduleFilter;
+
++ (void) testRescheduleAll;
+
 @end
 
 @implementation EZTestSuite
@@ -188,6 +217,13 @@ typedef void(^TestBlock)(id obj);
     [EZTestSuite testMemoryCopy];
     [EZTestSuite testArrayFilter];
     [EZTestSuite testAvTimeRelationship];
+    [EZTestSuite testEZQuotasProperty];
+    [EZTestSuite testCellCreatorSingleton];
+    [EZTestSuite testClosure];
+    [EZTestSuite testAvailableTimeFilter];
+    [EZTestSuite testRescheduleFilter];
+    [EZTestSuite testRescheduleAll];
+
     //Clear all the test data.
     //In the future what should I do with this.
     //Seems in this case, we need the test case ready
@@ -197,6 +233,157 @@ typedef void(^TestBlock)(id obj);
     //Make sure the application don't use 
     //Test database.
     [EZCoreAccessor setInstance:nil];
+    
+}
+
++ (void) testRescheduleAll
+{
+    [EZTestSuite initializeDB];
+    EZTask* task1 = [[EZTask alloc] initWithName:@"Taiji" duration:30 maxDur:30 envTraits:2];
+    EZTask* task2 = [[EZTask alloc] initWithName:@"iOS" duration:40 maxDur:40 envTraits:2];
+    EZTask* task3 = [[EZTask alloc] initWithName:@"Martial arts" duration:50 maxDur:50 envTraits:2];
+    [[EZTaskStore getInstance] storeObjects:[NSArray arrayWithObjects:task1, task2, task3, nil]];
+    EZAvailableTime* avTime1 = [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm" dateString:@"07:00"] name:@"morning" duration:50 environment:2];
+    
+    EZAvailableTime* avTime2 = [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm" dateString:@"14:00"] name:@"afternoon" duration:50 environment:2];
+    
+    EZAvailableDay* avDay = [[EZAvailableDay alloc] initWithName:@"All day" weeks:ALLDAYS];
+    [avDay.availableTimes addObjectsFromArray:[NSArray arrayWithObjects:avTime1, avTime2, nil]];
+    [[EZTaskStore getInstance] storeObject:avDay];
+    
+    EZTaskScheduler* scheduler = [[EZTaskScheduler alloc] init];
+    NSArray* schTasks = [scheduler scheduleTaskByDate:[NSDate stringToDate:@"yyyyMMdd-HH:mm" dateString:@"20120614-06:00"] exclusiveList:nil];
+    
+    [schTasks iterate:^(EZScheduledTask* task){
+        EZDEBUG(@"first round:%@",task.detail);
+    }];
+    
+    EZScheduledTask* firstSchTask1 = [schTasks objectAtIndex:0];
+    EZScheduledTask* firstSchTask2 = [schTasks objectAtIndex:1];
+    
+    
+    assert(schTasks.count == 2);
+    
+    EZTask* scTask1 = ((EZScheduledTask*)[schTasks objectAtIndex:1]).task;
+    [[EZTaskStore getInstance] removeObject:scTask1];
+    
+    NSArray* schTasks2 = [scheduler rescheduleAll:schTasks date:[NSDate stringToDate:@"yyyyMMdd-HH:mm" dateString:@"20120614-10:00"]];
+    assert(schTasks2.count == 2);
+    [schTasks2 iterate:^(EZScheduledTask* task){
+        EZDEBUG(@"second round:%@",task.detail);
+    }];
+    
+    EZScheduledTask* secondSchTask1 = [schTasks2 objectAtIndex:0];
+    EZScheduledTask* secondSchTask2 = [schTasks2 objectAtIndex:1];
+
+    assert(firstSchTask1.task.duration == secondSchTask1.task.duration);
+    assert(firstSchTask2.task.duration != secondSchTask2.task.duration);
+
+}
+
++ (void) testRescheduleFilter
+{
+    EZScheduledTask* task1 = [[EZScheduledTask alloc] init];
+    task1.duration = 20;
+    task1.startTime = [NSDate stringToDate:@"yyyyMMdd-HH:mm" dateString:@"20120614-12:10"];
+    
+    EZScheduledTask* task2 = [[EZScheduledTask alloc] init];
+    task2.duration = 80;
+    task2.startTime = [NSDate stringToDate:@"yyyyMMdd-HH:mm" dateString:@"20120614-13:10"];
+    
+    EZScheduledTask* task3 = [[EZScheduledTask alloc] init];
+    task3.duration = 100;
+    task3.startTime = [NSDate stringToDate:@"yyyyMMdd-HH:mm" dateString:@"20120614-15:10"];
+    
+    NSArray* schTasks = [NSArray arrayWithObjects:task1, task2, task3, nil];
+    
+    EZTaskScheduler* scheduler = [[EZTaskScheduler alloc] init];
+    NSDate* currentDate = [NSDate stringToDate:@"yyyyMMdd-HH:mm" dateString:@"20120614-13:30"];
+    
+    
+    ScheduledFilterResult* sfr = [scheduler filterTask:schTasks date:currentDate];
+    assert(sfr.remainingTasks.count == 2);
+    assert(sfr.removedTasks.count == 1);
+    assert([@"20120614-14:30" isEqualToString:[sfr.adjustedDate stringWithFormat:@"yyyyMMdd-HH:mm"]]);
+    EZScheduledTask* removed = [sfr.removedTasks objectAtIndex:0];
+    assert(removed.duration == 100);
+    
+}
+
++ (void) testAvailableTimeFilter
+{
+    EZAvailableDay* avDay = [[EZAvailableDay alloc] initWithName:@"Coolest Day" weeks:1];
+    EZAvailableTime* time1 = [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm" dateString:@"11:40"] name:@"Morning" duration:20 environment:3];
+    EZAvailableTime* time2 = [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm" dateString:@"12:40"] name:@"Noon" duration:80 environment:5];
+    EZAvailableTime* time3 = [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm" dateString:@"15:40"] name:@"Afternoon" duration:120 environment:7];
+    
+    [avDay.availableTimes addObjectsFromArray:[NSArray arrayWithObjects:time1,time2,time3, nil]];
+    
+    EZTaskScheduler* scheduler = [[EZTaskScheduler alloc] init];
+    EZAvailableDay* convertDay = [scheduler filterAvailebleDay:avDay byTime:[NSDate stringToDate:@"yyyyMMdd-HH:mm" dateString:@"19770611-12:50"]];
+    
+    assert(convertDay.availableTimes.count == 2);
+    
+    EZAvailableTime* resTime1 = [convertDay.availableTimes objectAtIndex:0];
+    EZAvailableTime* resTime2 = [convertDay.availableTimes objectAtIndex:1];
+    assert(resTime1.duration == 70);
+    assert([@"12:50" isEqualToString:[resTime1.start stringWithFormat:@"HH:mm"]]);
+    
+    assert(resTime2.duration == 120);
+    
+    
+}
+
+//The purpose of this test is to make sure once the closure objet have been created the change of the scene will not affect the closure object. 
+
++ (void) testClosure
+{
+    IntCarrier* car1 = [[IntCarrier alloc] init];
+    car1.value = 1;
+    
+    IntCarrier* car2 = [[IntCarrier alloc] init];
+    car2.value = 2;
+    
+    ClosureTest block = ^(){
+        return car1.value;
+    };
+    car1 = car2;
+    assert(block() == 1);
+}
+
++ (void) testCellCreatorSingleton
+{
+    EZEditLabelCellHolder* holder = [EZEditLabelCellHolder getInstance];
+    EZEditLabelCellHolder* newHolder = [[EZEditLabelCellHolder alloc] init];
+    
+    assert(holder != newHolder);
+    
+    EZEditLabelCellHolder* olderHolder = [EZEditLabelCellHolder getInstance];
+    assert(holder == olderHolder);
+    
+    EZScheduledCell* schCell = [EZEditLabelCellHolder createScheduledCell];
+    assert(schCell != nil);
+    
+    EZScheduledCell* newCell = [EZEditLabelCellHolder createScheduledCell];
+    assert(newCell != nil);
+    
+    assert(schCell != newCell);
+    
+}
+
++ (void) testEZQuotasProperty
+{
+    
+    EZDEBUG(@"Local string:%@",Local(@"Happy"));
+    EZQuotas* eq = [[EZQuotas alloc] init:[NSDate date] quotas:100 type:WeekCycle cycleStartDate:[NSDate date] cycleLength:14];
+    
+    assert(eq.cycleLength == 7);
+    
+    eq.cycleType = MonthCycle;
+    assert(eq.cycleLength == 30);
+    
+    eq.cycleType = CustomizedCycle;
+    assert(eq.cycleLength == 14);
     
 }
 
@@ -865,7 +1052,7 @@ typedef void(^TestBlock)(id obj);
     
     EZTaskScheduler* scheduler = [[EZTaskScheduler alloc] init];
     
-    NSArray* scheduledTasks = [scheduler scheduleTaskByDate:[NSDate date] exclusiveList:nil];
+    NSArray* scheduledTasks = [scheduler scheduleTaskByDate:[NSDate stringToDate:@"yyyyMMdd-HH:mm" dateString:@"20120525-04:30"] exclusiveList:nil];
     
     NSLog(@"ScheduledTasks %@",scheduledTasks);
     

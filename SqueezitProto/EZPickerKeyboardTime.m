@@ -7,6 +7,7 @@
 //
 
 #import "EZPickerKeyboardTime.h"
+#import "Constants.h"
 
 @implementation EZPickerKeyboardTime
 @synthesize picker, selector, title1, title2;
@@ -23,6 +24,7 @@
 
 - (void) pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
+    EZDEBUG(@"Selected:%i, %i, selector:%@", row, component, selector);
     [selector selectedRow:row component:component];
 }
 

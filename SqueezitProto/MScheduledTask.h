@@ -22,6 +22,7 @@
 @property (nonatomic, retain) NSNumber * envTraits;
 @property (nonatomic, retain) MTask *task;
 @property (nonatomic, retain) UILocalNotification* alarmNotification;
+@property (nonatomic, retain) NSNumber * alarmType; 
 
 
 

@@ -18,6 +18,7 @@
     EZTask* task;
     //When I change the tasks I need this traits
     NSUInteger envTraits;
+    EZAlarmType alarmType;
 //    NSString* description;
 }
 
@@ -30,6 +31,7 @@
 //@property(strong, nonatomic) NSString* description;
 @property(strong, nonatomic) UILocalNotification* alarmNotification;
 @property(strong, nonatomic) MScheduledTask* PO;
+@property(assign, nonatomic) EZAlarmType alarmType;
 
 
 - (id) initWithPO:(MScheduledTask*)mtk;
@@ -37,5 +39,7 @@
 - (MScheduledTask*) createPO;
 
 - (MScheduledTask*) populatePO:(MScheduledTask*)po;
+
+- (id) init;
 
 @end

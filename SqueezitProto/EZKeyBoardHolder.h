@@ -8,12 +8,17 @@
 
 #import <Foundation/Foundation.h>
 
-@class EZPickerKeyboardTime;
+@class EZPickerKeyboardTime, EZPickerKeyboardDate;
 
 @interface EZKeyBoardHolder : NSObject
 
 @property (strong, nonatomic) IBOutlet EZPickerKeyboardTime* pickerKeyBoard;
 
-+ (EZPickerKeyboardTime*) createPickerKeyBoard;
+@property (strong, nonatomic) IBOutlet EZPickerKeyboardDate* dateKeyBoard;
+
++ (EZPickerKeyboardTime*) createPickerKeyboard;
+
+
++ (EZPickerKeyboardDate*) createDateKeyboard;
 
 @end

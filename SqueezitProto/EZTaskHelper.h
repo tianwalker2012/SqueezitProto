@@ -13,6 +13,10 @@ typedef void (^ EZOperationBlock)();
 
 typedef BOOL (^ FilterOperation)(id obj);
 
+typedef id (^ RecreateOperation)(id obj);
+
+typedef void  (^ IterateOperation)(id obj);
+
 @class NSManagedObject, EZArray;
 
 @protocol EZValueObject <NSObject>
@@ -47,6 +51,10 @@ typedef BOOL (^ FilterOperation)(id obj);
 
 - (NSArray*) filter:(FilterOperation)opts;
 
+- (NSArray*) recreate:(RecreateOperation)opts;
+
+- (void) iterate:(IterateOperation) opts;
+
 @end
 
 
@@ -67,6 +75,8 @@ typedef BOOL (^ FilterOperation)(id obj);
 - (NSDate*) adjustDays:(int)days;
 
 - (NSDate*) adjustMinutes:(int)minutes;
+
+- (NSDate*) combineTime:(NSDate*)time;
 
 //True mean they are equal with the format, False mean not equal. 
 - (BOOL) equalWith:(NSDate*)date format:(NSString*)format;
@@ -109,6 +119,8 @@ NSUInteger findNextFlag(EZArray* flags);
 + (int) cycleRemains:(EZQuotas*)quotas date:(NSDate*)date;
 
 + (int) getMonthLength:(NSDate*)date;
+
++ (NSString*) weekFlagToWeekString:(NSInteger)weekFlags;
 
 //+ (NSString*) envTraitsToString:(NSInteger)envTraits;
 

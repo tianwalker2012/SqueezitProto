@@ -11,10 +11,31 @@
 #import "EZTaskGroupCell.h"
 #import "EZPureEditCell.h"
 #import "EZAvailableTimeCell.h"
+#import "EZScheduledCell.h"
+#import "EZAvTimeCell.h"
+#import "EZAvTimeHeader.h"
 
 @implementation EZEditLabelCellHolder
-@synthesize editCell, groupCell, pureEditCell, settingCell, flagCell, timeCell;
+@synthesize editCell, groupCell, pureEditCell, settingCell, flagCell, timeCell, scheduledCell, avTimeCell, avTimeHeader;
 
+
+//Singleton, save memory?
++ (EZEditLabelCellHolder*) getInstance
+{
+    static EZEditLabelCellHolder* holder = nil;
+    if(holder == nil){
+        holder = [[EZEditLabelCellHolder alloc] init];
+    }
+    return holder;
+}
+
+//Write a test to make sure this refactor will not cause problem.
++ (EZScheduledCell*) createScheduledCell
+{
+    EZEditLabelCellHolder* holder = [EZEditLabelCellHolder getInstance];
+    [[NSBundle mainBundle] loadNibNamed:@"EZScheduledCell" owner:holder options:nil];
+    return holder.scheduledCell;
+}
 
 + (EZAvailableTimeCell*) createTimeCell
 {
@@ -71,6 +92,29 @@
     [[NSBundle mainBundle] loadNibNamed:@"EZPureEditCell" owner:cellHolder options:nil];
     cellHolder.pureEditCell.editField.delegate = deleg;
     return cellHolder.pureEditCell;
+}
+
+//Why I set the space to empty here?
+//Because I need the original text in the Xib file to demostrate the effect.
++ (EZAvTimeCell*) createAvTimeCell
+{
+    EZEditLabelCellHolder* cellHolder = [EZEditLabelCellHolder getInstance];
+    [[NSBundle mainBundle] loadNibNamed:@"EZAvTimeCell" owner:cellHolder options:nil];
+    cellHolder.avTimeCell.name.text = @"";
+    cellHolder.avTimeCell.endTime.text = @"";
+    cellHolder.avTimeCell.startTime.text = @"";
+    cellHolder.avTimeCell.envLabel.text = @"";
+    return cellHolder.avTimeCell;
+}
+
++ (EZAvTimeHeader*) createAvTimeHeader
+{
+    EZEditLabelCellHolder* cellHolder = [EZEditLabelCellHolder getInstance];
+    [[NSBundle mainBundle] loadNibNamed:@"EZAvTimeHeader" owner:cellHolder options:nil];
+    cellHolder.avTimeHeader.title.text = @"";
+    //Hide the button
+    cellHolder.avTimeHeader.addButton.alpha = 0;
+    return cellHolder.avTimeHeader;
 }
 
 @end

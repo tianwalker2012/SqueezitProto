@@ -12,6 +12,8 @@
 
 @class EZScheduledDay,EZAvailableDay, EZTask, EZCoreAccessor, EZArray;
 
+NSString* envTraitsToString(NSUInteger envTraits);
+
 @interface EZTaskStore : NSObject {
     //EZCoreAccessor* accessor;
 }

@@ -16,6 +16,7 @@
 #import "EZQuotas.h"
 #import "EZTaskTimeSetter.h"
 #import "EZEnvFlagPicker.h"
+#import "EZGoalSetter.h"
 
 
 @interface EZTaskDetailCtrl ()
@@ -345,6 +346,16 @@
         //EZDEBUG(@"Before PushViewController");
         [self.navigationController pushViewController:picker animated:YES];
         //EZDEBUG(@"After PushViewController");
+    }else if(indexPath.section == 3){
+        EZGoalSetter* goalSetter = [[EZGoalSetter alloc] initWithStyle:UITableViewStyleGrouped];
+        //Add the clone later
+        goalSetter.quotas = task.quotas.cloneVO;
+        goalSetter.doneBlock = ^(){
+            EZDEBUG(@"Done block get called"); 
+            task.quotas = goalSetter.quotas;
+            [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
+        };
+        [self.navigationController pushViewController:goalSetter animated:YES];
     }
 }
 

@@ -14,7 +14,7 @@
 #import "MAvailableTime.h"
 
 @implementation EZAvailableDay
-@synthesize date, assignedWeeks, availableTimes, name, PO;
+@synthesize date, assignedWeeks, availableTimes, name, PO, displayOrder;
 
 - (id) init
 {
@@ -23,30 +23,38 @@
     return self;
 }
 
+- (id) initWithVO:(EZAvailableDay*)day
+{
+    self = [super init];
+    self.availableTimes = [[NSMutableArray alloc] initWithCapacity:day.availableTimes.count];
+    self.name = day.name;
+    self.assignedWeeks = day.assignedWeeks;
+    self.displayOrder = day.displayOrder;
+    for(EZAvailableTime* time in day.availableTimes){
+        [self.availableTimes addObject:time.cloneVO];
+    }
+    self.PO = day.PO;
+    return self;
+}
+
+- (id) cloneVO
+{
+    return [[EZAvailableDay alloc] initWithVO:self];
+}
+
 - (id) initWithName:(NSString*)nm weeks:(int)aw
 {
     self = [super init];
     self.availableTimes = [[NSMutableArray alloc] init];
     self.name = nm;
     self.assignedWeeks = aw;
+    self.displayOrder = 0;
     return self;
 }
 
 - (NSString*) description
 {
     return [NSString stringWithFormat:@"EZAvailableDay,name:%@,weekAssignd:%i,Date:%@",name,assignedWeeks,(date != nil?[date stringWithFormat:@"yyyy-MM-dd"]:@"null")];
-}
-
-- (id) duplicate
-{
-    EZAvailableDay* res = [[EZAvailableDay alloc] init];
-    res.name = self.name;
-    res.date = self.date;
-    res.assignedWeeks = self.assignedWeeks;
-    for(EZAvailableTime* time in self.availableTimes){
-        [res.availableTimes addObject:[time duplicate]];
-    }
-    return res;
 }
 
 - (id) initWithPO:(MAvailableDay*)mtk
@@ -56,6 +64,7 @@
     self.date = mtk.date;
     self.assignedWeeks = mtk.assignedWeeks.intValue;
     self.PO = mtk;
+    self.displayOrder = mtk.displayOrder.integerValue;
     self.availableTimes = [[NSMutableArray alloc] initWithCapacity:[mtk.availableTimes count]];
     for(MAvailableTime* mat in mtk.availableTimes){
         [self.availableTimes addObject:[[EZAvailableTime alloc] initWithPO:mat]];
@@ -73,9 +82,10 @@
 
 - (void) removeByID:(NSManagedObjectID*)oid array:(NSMutableArray*)list
 {
-    for(NSManagedObject* obj in list){
+    for(int i = 0; i < list.count; i++){
+        NSManagedObject* obj = [list objectAtIndex:i];
         if([obj.objectID isEqual:oid]){
-            [list removeObject:obj];
+            [list removeObjectAtIndex:i];
         }
     }
 }
@@ -85,6 +95,7 @@
     po.name = self.name;
     po.date = self.date;
     po.assignedWeeks = [[NSNumber alloc] initWithInt:self.assignedWeeks];
+    po.displayOrder = [[NSNumber alloc] initWithInt:self.displayOrder];
     NSMutableArray* mutTimes = [NSMutableArray arrayWithArray:po.availableTimes.allObjects];
     for(EZAvailableTime* avt in self.availableTimes){
         if(!avt.PO){
@@ -98,7 +109,9 @@
             [self removeByID:avt.createPO.objectID array:mutTimes];
         }
     }
-    [po removeAvailableTimes:[NSSet setWithArray:mutTimes]];
+    if(mutTimes.count > 0){
+        [po removeAvailableTimes:[NSSet setWithArray:mutTimes]];
+    }
     return po;
 }
 

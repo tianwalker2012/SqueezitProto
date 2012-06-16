@@ -32,11 +32,7 @@
 
 - (id) init:(NSDate*)start name:(NSString*)nm duration:(int)dur environment:(NSUInteger)env;
 
-- (id) init:(EZAvailableTime*)at;
-
 - (void) adjustStartTime:(int)increasedMinutes;
-
-- (id) duplicate;
 
 @property (strong, nonatomic) NSDate* start;
 @property (assign, nonatomic) int duration;

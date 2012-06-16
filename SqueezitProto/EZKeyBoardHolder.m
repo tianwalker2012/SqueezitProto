@@ -10,15 +10,22 @@
 #import "EZPickerKeyboardTime.h"
 
 @implementation EZKeyBoardHolder
-@synthesize pickerKeyBoard;
+@synthesize pickerKeyBoard, dateKeyBoard;
 
-+ (EZPickerKeyboardTime*) createPickerKeyBoard
++ (EZPickerKeyboardTime*) createPickerKeyboard
 {
     EZKeyBoardHolder* holder = [[EZKeyBoardHolder alloc] init];
     [[NSBundle mainBundle] loadNibNamed:@"PickerKeyboardTime" owner:holder options:nil];
     holder.pickerKeyBoard.picker.delegate = holder.pickerKeyBoard;
     holder.pickerKeyBoard.picker.dataSource = holder.pickerKeyBoard;
     return holder.pickerKeyBoard;
+}
+
++ (EZPickerKeyboardDate*) createDateKeyboard
+{
+    EZKeyBoardHolder* holder = [[EZKeyBoardHolder alloc] init];
+    [[NSBundle mainBundle] loadNibNamed:@"PickerKeyboardDate" owner:holder options:nil];
+    return holder.dateKeyBoard;
 }
 
 @end

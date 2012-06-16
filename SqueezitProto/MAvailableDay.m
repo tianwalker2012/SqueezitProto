@@ -16,5 +16,6 @@
 @dynamic date;
 @dynamic assignedWeeks;
 @dynamic availableTimes;
+@dynamic displayOrder;
 
 @end

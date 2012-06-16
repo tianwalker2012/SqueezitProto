@@ -16,10 +16,28 @@
 #import "EZQuotasResult.h"
 #import "EZQuotas.h"
 #import "EZTaskHelper.h"
+#import "EZAlarmUtility.h"
 
 //Block definition, maybe useful very soon.
 //typedef NSComparisonResult (^NSComparator)(id obj1, id obj2);
 
+@implementation ScheduledFilterResult
+
+@synthesize remainingTasks, removedTasks, adjustedDate;
+
+//Why I assume the link will 
+//Link the method to my implementation.
+//This should be the links logic, right?
+//If local offer the implmentation, link to the local.
+- (id) init
+{
+    self = [super init];
+    self.removedTasks = [[NSMutableArray alloc] init];
+    self.remainingTasks = [[NSMutableArray alloc] init];
+    return self;
+}
+
+@end
 
 @interface EZTaskScheduler(private)
 
@@ -28,8 +46,6 @@
 - (NSMutableArray*) tasksRemovedExclusive:(NSArray*)tasks exclusiveList:(NSArray*)exclusive envTraits:(NSUInteger)envTraits;
 
 - (BOOL) contain:(NSArray*)list object:(id)obj;
-
-- (NSDate*) combineDate:(NSDate*)date time:(NSDate*)time;
 
 - (void) addExclusive:(NSMutableArray*)exclusive tasks:(NSArray*)tasks;
 
@@ -57,7 +73,10 @@
     return res;
 }
 
-
+//What's the current logic
+//This is a reschedule for the existed task.
+//Should our schedule be like this. only with 
+//The current time filter before anything actually done?
 - (NSArray*) rescheduleTask:(EZScheduledTask*)schTask existTasks:(NSArray*)schTasks
 {
     EZAvailableTime* avTime = [self createAvTimeFromScheduledTask:schTask];
@@ -103,7 +122,7 @@
             continue;
         }
         
-        time.start = [self combineDate:date time:time.start];
+        time.start = [date combineTime:time.start];
         int maxDur = MAX(task.duration, totalAmount);
         int miniDur = task.duration;
         if(time.duration >= miniDur){
@@ -126,7 +145,28 @@
     return res;
 }
 
-
+//Abosolutely need some test to make sure this is correctly implmented
+- (EZAvailableDay*) filterAvailebleDay:(EZAvailableDay*)avDay  byTime:(NSDate*)currentDate
+{
+    EZAvailableDay* res = avDay.cloneVO;
+    [res.availableTimes removeAllObjects];
+    for(int i = 0; i < avDay.availableTimes.count; i++){
+        EZAvailableTime* time = [avDay.availableTimes objectAtIndex:i];
+        NSDate* startTime = [currentDate combineTime:time.start];
+        NSDate* endTime = [startTime adjustMinutes:time.duration];
+        if([startTime compare:currentDate] == NSOrderedDescending){
+            [res.availableTimes addObject:time.cloneVO];
+        }else if([endTime compare:currentDate] == NSOrderedDescending){
+            //Mean fall within.
+            time = time.cloneVO;
+            time.start = currentDate;
+            time.duration =  [endTime timeIntervalSinceDate:currentDate]/60;
+            [res.availableTimes addObject:time];
+        }
+        
+    }
+    return res;
+}
 
 
 //When and where we try to find we just don't have enough time to do so?
@@ -174,14 +214,6 @@
     }
 }
 
-- (NSDate*) combineDate:(NSDate*)date time:(NSDate*)time
-{
-    NSString* dateStr = [date stringWithFormat:@"yyyy-MM-dd"];
-    NSString* timeStr = [time stringWithFormat:@"HH:mm:ss"];
-    NSString* combineStr = [NSString stringWithFormat:@"%@ %@",dateStr,timeStr];
-    return [NSDate stringToDate:@"yyyy-MM-dd HH:mm:ss" dateString:combineStr];
-}
-
 
 //This method only take care of the random arranged tasks
 - (NSArray*) scheduleRandomTask:(NSDate*)date avDay:(EZAvailableDay*)avDay exclusiveList:(NSArray*)exclusive
@@ -191,7 +223,7 @@
     NSMutableArray* exclusiveTasks = [NSMutableArray arrayWithArray:exclusive]; 
     //EZDEBUG(@"Available Time count:%i",[avDay.availableTimes count]);
     for(EZAvailableTime* avTime in avDay.availableTimes){
-        avTime.start = [self combineDate:date time:avTime.start];
+        avTime.start = [date combineTime:avTime.start];
         NSArray* scheduledTasks = [self scheduleTaskByBulk:avTime exclusiveList:exclusiveTasks tasks:[store getAllTasks]];
         [self addExclusive:exclusiveTasks tasks:scheduledTasks];
         //EZDEBUG(@"add %i tasks to %@(%@)",[scheduledTasks count],avTime.description,[avTime.start stringWithFormat:@"yyyy-MM-dd HH:mm:ss"]);
@@ -202,12 +234,14 @@
 }
 
 
+
 // Now this function meet my requirements.
-// Let's test on the really equipment, see how's going. 
+// Let's test on the real equipment, see how's going. 
 - (NSArray*) scheduleTaskByDate:(NSDate*)date exclusiveList:(NSArray*)exclusive 
 {
     EZTaskStore* store = [EZTaskStore getInstance];
     EZAvailableDay* day = [store getAvailableDay:date];
+    day = [self filterAvailebleDay:day byTime:date];
     NSMutableArray* res = [[NSMutableArray alloc] init];
     if(!day){
         EZDEBUG(@"Didn't find schedule for %@",[date stringWithFormat:@"yyyy-MM-dd"]);
@@ -250,7 +284,7 @@
 {
     NSMutableArray* res = [[NSMutableArray alloc] init];
     //NSMutableArray* exclusiveMut = [[NSMutableArray alloc] initWithArray:exclusive];
-    EZAvailableTime* timeSlotMut = [[EZAvailableTime alloc] init:timeSlot];
+    EZAvailableTime* timeSlotMut = timeSlot.cloneVO;
     //Tasks should be available for this time slot.
     //NSLog(@"Tasks count:%i, exclusive task count:%i",[tasks count],[exclusive count]);
     NSMutableArray* tasksMut = [self tasksRemovedExclusive:tasks exclusiveList:exclusive envTraits:timeSlot.envTraits];
@@ -347,6 +381,54 @@
         }
     }
     return false;
+}
+
+
+//This will be called when the refresh button get clicked
+//What the effect will be achieved?
+//Travel through the task that startTime already passed, will not be touched. 
+//One minor edge case jump into my mind. what if the current task longer than the current date?
+//My solution is that modify the date make it just at the time. 
+//Who responsible to do the deletion?
+//Let's this method do it.
+//It will remove the task not timeout from the database.
+//Then get the availble time out and filter it with current date.
+//Then add the remaining task into the exclusion task list. 
+//Go through task as the schduledTaskByDate
+- (NSArray*) rescheduleAll:(NSArray*)scheduledTask date:(NSDate*)date
+{
+    ScheduledFilterResult* sfr = [self filterTask:scheduledTask date:date];
+    EZDEBUG(@"Removed tasks count:%i, remaining task count:%i, adjustedDate:%@", sfr.removedTasks.count, sfr.remainingTasks.count, [sfr.adjustedDate stringWithFormat:@"yyyyMMdd-HH:mm"]);
+    [[EZTaskStore getInstance] removeObjects:sfr.removedTasks];
+    [EZAlarmUtility cancelAlarmBulk:sfr.removedTasks];
+    [sfr.remainingTasks addObjectsFromArray:[self scheduleTaskByDate:sfr.adjustedDate exclusiveList:[sfr.remainingTasks recreate:^(EZScheduledTask* st){
+        return st.task;
+    }]]];
+    return sfr.remainingTasks;
+}
+
+
+//Will be invoked by rescheduleAll
+//task startTime before the date will be kept in the remainTasks
+//task startTime after the date will be will be added into removed task
+//The date will be adjusted, to the the end of the latest task if that task's end time is later than current date.
+//Cool, simple and clear
+- (ScheduledFilterResult*) filterTask:(NSArray*)scheduledTask date:(NSDate*)date
+{
+    ScheduledFilterResult* res = [[ScheduledFilterResult alloc] init];
+    res.adjustedDate = date;
+    for(EZScheduledTask* schTask in scheduledTask){
+        if([schTask.startTime compare:date] == NSOrderedDescending){
+            [res.removedTasks addObject:schTask];
+        }else{
+            [res.remainingTasks addObject:schTask];
+            NSDate* endTime = [schTask.startTime adjustMinutes:schTask.duration];
+            if([endTime compare:date] == NSOrderedDescending){
+                res.adjustedDate = endTime;
+            }
+        }
+    }
+    return res;
 }
 
 @end

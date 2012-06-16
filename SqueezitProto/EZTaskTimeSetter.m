@@ -59,7 +59,7 @@
 - (void) initKeyboard:(EZOperationBlock)completeBlock
 {
     if(!pickerKeyboard){
-        pickerKeyboard = [EZKeyBoardHolder createPickerKeyBoard];
+        pickerKeyboard = [EZKeyBoardHolder createPickerKeyboard];
         pickerKeyboard.selector = self;
         [pickerKeyboard setFrame:CGRectMake(0, 480, pickerKeyboard.frame.size.width, pickerKeyboard.frame.size.height)];
         [self.view.window addSubview:pickerKeyboard];
