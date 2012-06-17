@@ -10,6 +10,10 @@
 
 @interface EZAvTimeHeader : UIView
 
+- (void) showButton:(BOOL)show;
+
+- (void) setupCellWithButton:(BOOL)yes;
+
 @property (strong, nonatomic) IBOutlet UILabel* title;
 @property (strong, nonatomic) IBOutlet UIButton* addButton;
 

@@ -68,6 +68,7 @@
 		187ED02F158C75F900B499D3 /* EZAvTimeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 187ED02E158C75F900B499D3 /* EZAvTimeCell.m */; };
 		187ED031158C78C500B499D3 /* EZAvTimeHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 187ED030158C78C500B499D3 /* EZAvTimeHeader.xib */; };
 		187ED034158C7A0F00B499D3 /* EZAvTimeHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 187ED033158C7A0F00B499D3 /* EZAvTimeHeader.m */; };
+		188CFDC4158D88F8008ACCB8 /* EZPickerWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDC3158D88F8008ACCB8 /* EZPickerWrapper.m */; };
 		188D55161584883000142394 /* EZEnvFlag.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D55151584883000142394 /* EZEnvFlag.m */; };
 		188D551A15848B3A00142394 /* MEnvFlag.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D551915848B3A00142394 /* MEnvFlag.m */; };
 		188D551D1584ACB000142394 /* EZArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D551C1584ACB000142394 /* EZArray.m */; };
@@ -205,6 +206,8 @@
 		187ED030158C78C500B499D3 /* EZAvTimeHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZAvTimeHeader.xib; sourceTree = "<group>"; };
 		187ED032158C7A0E00B499D3 /* EZAvTimeHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAvTimeHeader.h; sourceTree = "<group>"; };
 		187ED033158C7A0F00B499D3 /* EZAvTimeHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAvTimeHeader.m; sourceTree = "<group>"; };
+		188CFDC2158D88F8008ACCB8 /* EZPickerWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZPickerWrapper.h; sourceTree = "<group>"; };
+		188CFDC3158D88F8008ACCB8 /* EZPickerWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZPickerWrapper.m; sourceTree = "<group>"; };
 		188D55141584883000142394 /* EZEnvFlag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZEnvFlag.h; sourceTree = "<group>"; };
 		188D55151584883000142394 /* EZEnvFlag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZEnvFlag.m; sourceTree = "<group>"; };
 		188D551815848B3A00142394 /* MEnvFlag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEnvFlag.h; sourceTree = "<group>"; };
@@ -423,6 +426,8 @@
 				187ED025158B138900B499D3 /* EZAvailableDayList.m */,
 				187ED028158C68FF00B499D3 /* EZAvailableDayDetail.h */,
 				187ED029158C68FF00B499D3 /* EZAvailableDayDetail.m */,
+				188CFDC2158D88F8008ACCB8 /* EZPickerWrapper.h */,
+				188CFDC3158D88F8008ACCB8 /* EZPickerWrapper.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -688,6 +693,7 @@
 				187ED02A158C68FF00B499D3 /* EZAvailableDayDetail.m in Sources */,
 				187ED02F158C75F900B499D3 /* EZAvTimeCell.m in Sources */,
 				187ED034158C7A0F00B499D3 /* EZAvTimeHeader.m in Sources */,
+				188CFDC4158D88F8008ACCB8 /* EZPickerWrapper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -84,6 +84,7 @@
 								<string key="NSFrame">{{12, 26}, {262, 12}}</string>
 								<reference key="NSSuperview" ref="882033438"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -138,7 +139,7 @@
 				<int key="IBUISelectionStyle">2</int>
 				<int key="IBUIAccessoryType">1</int>
 				<reference key="IBUIContentView" ref="882033438"/>
-				<string key="IBUIReuseIdentifier">groupCell</string>
+				<string key="IBUIReuseIdentifier">TaskGroupCell</string>
 			</object>
 			<object class="IBUILabel" id="877736150">
 				<nil key="NSNextResponder"/>
@@ -261,6 +262,60 @@
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
 				<object class="IBPartialClassDescription">
+					<string key="className">EZAvTimeCell</string>
+					<string key="superclassName">UITableViewCell</string>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="endTime">UILabel</string>
+						<string key="envLabel">UILabel</string>
+						<string key="name">UILabel</string>
+						<string key="startTime">UILabel</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="endTime">
+							<string key="name">endTime</string>
+							<string key="candidateClassName">UILabel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="envLabel">
+							<string key="name">envLabel</string>
+							<string key="candidateClassName">UILabel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="name">
+							<string key="name">name</string>
+							<string key="candidateClassName">UILabel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="startTime">
+							<string key="name">startTime</string>
+							<string key="candidateClassName">UILabel</string>
+						</object>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/EZAvTimeCell.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">EZAvTimeHeader</string>
+					<string key="superclassName">UIView</string>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="addButton">UIButton</string>
+						<string key="title">UILabel</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="addButton">
+							<string key="name">addButton</string>
+							<string key="candidateClassName">UIButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="title">
+							<string key="name">title</string>
+							<string key="candidateClassName">UILabel</string>
+						</object>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/EZAvTimeHeader.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
 					<string key="className">EZAvailableTimeCell</string>
 					<string key="superclassName">UITableViewCell</string>
 					<dictionary class="NSMutableDictionary" key="outlets">
@@ -313,6 +368,8 @@
 					<string key="className">EZEditLabelCellHolder</string>
 					<string key="superclassName">NSObject</string>
 					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="avTimeCell">EZAvTimeCell</string>
+						<string key="avTimeHeader">EZAvTimeHeader</string>
 						<string key="editCell">EZEditLabelCell</string>
 						<string key="flagCell">EZEnvFlagPickerCell</string>
 						<string key="groupCell">EZTaskGroupCell</string>
@@ -322,6 +379,14 @@
 						<string key="timeCell">EZAvailableTimeCell</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="avTimeCell">
+							<string key="name">avTimeCell</string>
+							<string key="candidateClassName">EZAvTimeCell</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="avTimeHeader">
+							<string key="name">avTimeHeader</string>
+							<string key="candidateClassName">EZAvTimeHeader</string>
+						</object>
 						<object class="IBToOneOutletInfo" key="editCell">
 							<string key="name">editCell</string>
 							<string key="candidateClassName">EZEditLabelCell</string>

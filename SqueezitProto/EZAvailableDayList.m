@@ -281,7 +281,7 @@
     EZAvailableDayDetail* detailPage = [[EZAvailableDayDetail alloc] initWithStyle:UITableViewStyleGrouped];
     detailPage.avDay = avDay;
     detailPage.updateBlock = ^(){
-        [self.tableView reloadRowsAtIndexPaths:indexPath withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     };
    [self.navigationController pushViewController:detailPage animated:YES];
 }
