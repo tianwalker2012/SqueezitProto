@@ -31,8 +31,6 @@
 		184C29E415708E6F00852B35 /* EZQuotasResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C29E315708E6D00852B35 /* EZQuotasResult.m */; };
 		184C29E71570925C00852B35 /* EZQuotas.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C29E61570925B00852B35 /* EZQuotas.m */; };
 		184C29EA1570C1F900852B35 /* EZTaskHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C29E91570C1F900852B35 /* EZTaskHelper.m */; };
-		184C29ED1573651F00852B35 /* EZScheduledTaskDetailCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C29EC1573651E00852B35 /* EZScheduledTaskDetailCtrl.m */; };
-		184C29EF1573697800852B35 /* EZScheduledTaskDetailCtrl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 184C29EE1573697700852B35 /* EZScheduledTaskDetailCtrl.xib */; };
 		184C29F61574769400852B35 /* EZReleaseDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C29F51574769300852B35 /* EZReleaseDetector.m */; };
 		184C29F91575C7C400852B35 /* EZTaskGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C29F81575C7C000852B35 /* EZTaskGroup.m */; };
 		184C2A7A15770F7F00852B35 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 184C2A7915770F7E00852B35 /* CoreData.framework */; };
@@ -52,8 +50,7 @@
 		184C2AE7157B3B2F00852B35 /* EZTaskGroupDetailCtrl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 184C2AE5157B3B2800852B35 /* EZTaskGroupDetailCtrl.xib */; };
 		184C2AF5157CA9A300852B35 /* EZMainCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2AF3157CA9A100852B35 /* EZMainCtrl.m */; };
 		184C2AF6157CA9A300852B35 /* EZMainCtrl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 184C2AF4157CA9A200852B35 /* EZMainCtrl.xib */; };
-		184C2AFB157CBA5A00852B35 /* EZTestTabCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2AFA157CBA5A00852B35 /* EZTestTabCtrl.m */; };
-		184C2AFE157CBA9300852B35 /* EZTestViewCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2AFD157CBA9200852B35 /* EZTestViewCtrl.m */; };
+		184C2AFB157CBA5A00852B35 /* EZRootTabCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2AFA157CBA5A00852B35 /* EZRootTabCtrl.m */; };
 		184C2B05157DBD8E00852B35 /* EZAddCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 184C2B04157DBD8E00852B35 /* EZAddCell.xib */; };
 		184C2B09157DE0F000852B35 /* EZEditCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2B08157DE0F000852B35 /* EZEditCell.m */; };
 		184C2B0F157E4DA000852B35 /* Squeezit.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 184C2B0E157E4DA000852B35 /* Squeezit.bundle */; };
@@ -69,6 +66,18 @@
 		187ED031158C78C500B499D3 /* EZAvTimeHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 187ED030158C78C500B499D3 /* EZAvTimeHeader.xib */; };
 		187ED034158C7A0F00B499D3 /* EZAvTimeHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 187ED033158C7A0F00B499D3 /* EZAvTimeHeader.m */; };
 		188CFDC4158D88F8008ACCB8 /* EZPickerWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDC3158D88F8008ACCB8 /* EZPickerWrapper.m */; };
+		188CFDC8158DE888008ACCB8 /* EZTableSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDC7158DE887008ACCB8 /* EZTableSelector.m */; };
+		188CFDCB158ED73F008ACCB8 /* EZAvTimeDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDCA158ED73E008ACCB8 /* EZAvTimeDetail.m */; };
+		188CFDCD158EDCFD008ACCB8 /* EZBeginEndTimeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 188CFDCC158EDCFD008ACCB8 /* EZBeginEndTimeCell.xib */; };
+		188CFDD0158EDE70008ACCB8 /* EZBeginEndTimeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDCF158EDE70008ACCB8 /* EZBeginEndTimeCell.m */; };
+		188CFDD315905381008ACCB8 /* EZCycleResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDD215905381008ACCB8 /* EZCycleResult.m */; };
+		188CFDD51591AE06008ACCB8 /* EZScheduledTaskCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 188CFDD41591AE04008ACCB8 /* EZScheduledTaskCell.xib */; };
+		188CFDD81591AF92008ACCB8 /* EZScheduledTaskCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDD71591AF91008ACCB8 /* EZScheduledTaskCell.m */; };
+		188CFDDA1591BD6C008ACCB8 /* EZTimeCounterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 188CFDD91591BD6C008ACCB8 /* EZTimeCounterView.xib */; };
+		188CFDDD1591BED0008ACCB8 /* EZTimeCounter.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDDC1591BECF008ACCB8 /* EZTimeCounter.m */; };
+		188CFDE01591C9A2008ACCB8 /* EZTimeCounterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDDF1591C9A1008ACCB8 /* EZTimeCounterView.m */; };
+		188CFDE21592D9BF008ACCB8 /* EZButtonCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 188CFDE11592D9BC008ACCB8 /* EZButtonCell.xib */; };
+		188CFDE515930364008ACCB8 /* EZButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDE41593035F008ACCB8 /* EZButtonCell.m */; };
 		188D55161584883000142394 /* EZEnvFlag.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D55151584883000142394 /* EZEnvFlag.m */; };
 		188D551A15848B3A00142394 /* MEnvFlag.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D551915848B3A00142394 /* MEnvFlag.m */; };
 		188D551D1584ACB000142394 /* EZArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D551C1584ACB000142394 /* EZArray.m */; };
@@ -143,9 +152,6 @@
 		184C29E61570925B00852B35 /* EZQuotas.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZQuotas.m; sourceTree = "<group>"; };
 		184C29E81570C1F800852B35 /* EZTaskHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTaskHelper.h; sourceTree = "<group>"; };
 		184C29E91570C1F900852B35 /* EZTaskHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTaskHelper.m; sourceTree = "<group>"; };
-		184C29EB1573651E00852B35 /* EZScheduledTaskDetailCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZScheduledTaskDetailCtrl.h; sourceTree = "<group>"; };
-		184C29EC1573651E00852B35 /* EZScheduledTaskDetailCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZScheduledTaskDetailCtrl.m; sourceTree = "<group>"; };
-		184C29EE1573697700852B35 /* EZScheduledTaskDetailCtrl.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZScheduledTaskDetailCtrl.xib; sourceTree = "<group>"; };
 		184C29F41574769300852B35 /* EZReleaseDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZReleaseDetector.h; sourceTree = "<group>"; };
 		184C29F51574769300852B35 /* EZReleaseDetector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZReleaseDetector.m; sourceTree = "<group>"; };
 		184C29F71575C7BB00852B35 /* EZTaskGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTaskGroup.h; sourceTree = "<group>"; };
@@ -179,10 +185,8 @@
 		184C2AF2157CA9A100852B35 /* EZMainCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZMainCtrl.h; sourceTree = "<group>"; };
 		184C2AF3157CA9A100852B35 /* EZMainCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZMainCtrl.m; sourceTree = "<group>"; };
 		184C2AF4157CA9A200852B35 /* EZMainCtrl.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZMainCtrl.xib; sourceTree = "<group>"; };
-		184C2AF9157CBA5A00852B35 /* EZTestTabCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTestTabCtrl.h; sourceTree = "<group>"; };
-		184C2AFA157CBA5A00852B35 /* EZTestTabCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTestTabCtrl.m; sourceTree = "<group>"; };
-		184C2AFC157CBA9200852B35 /* EZTestViewCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTestViewCtrl.h; sourceTree = "<group>"; };
-		184C2AFD157CBA9200852B35 /* EZTestViewCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTestViewCtrl.m; sourceTree = "<group>"; };
+		184C2AF9157CBA5A00852B35 /* EZRootTabCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZRootTabCtrl.h; sourceTree = "<group>"; };
+		184C2AFA157CBA5A00852B35 /* EZRootTabCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZRootTabCtrl.m; sourceTree = "<group>"; };
 		184C2B04157DBD8E00852B35 /* EZAddCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZAddCell.xib; sourceTree = "<group>"; };
 		184C2B07157DE0F000852B35 /* EZEditCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZEditCell.h; sourceTree = "<group>"; };
 		184C2B08157DE0F000852B35 /* EZEditCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZEditCell.m; sourceTree = "<group>"; };
@@ -208,6 +212,26 @@
 		187ED033158C7A0F00B499D3 /* EZAvTimeHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAvTimeHeader.m; sourceTree = "<group>"; };
 		188CFDC2158D88F8008ACCB8 /* EZPickerWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZPickerWrapper.h; sourceTree = "<group>"; };
 		188CFDC3158D88F8008ACCB8 /* EZPickerWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZPickerWrapper.m; sourceTree = "<group>"; };
+		188CFDC6158DE887008ACCB8 /* EZTableSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTableSelector.h; sourceTree = "<group>"; };
+		188CFDC7158DE887008ACCB8 /* EZTableSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTableSelector.m; sourceTree = "<group>"; };
+		188CFDC9158ED73E008ACCB8 /* EZAvTimeDetail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAvTimeDetail.h; sourceTree = "<group>"; };
+		188CFDCA158ED73E008ACCB8 /* EZAvTimeDetail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAvTimeDetail.m; sourceTree = "<group>"; };
+		188CFDCC158EDCFD008ACCB8 /* EZBeginEndTimeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZBeginEndTimeCell.xib; sourceTree = "<group>"; };
+		188CFDCE158EDE70008ACCB8 /* EZBeginEndTimeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZBeginEndTimeCell.h; sourceTree = "<group>"; };
+		188CFDCF158EDE70008ACCB8 /* EZBeginEndTimeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZBeginEndTimeCell.m; sourceTree = "<group>"; };
+		188CFDD115905380008ACCB8 /* EZCycleResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZCycleResult.h; sourceTree = "<group>"; };
+		188CFDD215905381008ACCB8 /* EZCycleResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZCycleResult.m; sourceTree = "<group>"; };
+		188CFDD41591AE04008ACCB8 /* EZScheduledTaskCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZScheduledTaskCell.xib; sourceTree = "<group>"; };
+		188CFDD61591AF90008ACCB8 /* EZScheduledTaskCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZScheduledTaskCell.h; sourceTree = "<group>"; };
+		188CFDD71591AF91008ACCB8 /* EZScheduledTaskCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZScheduledTaskCell.m; sourceTree = "<group>"; };
+		188CFDD91591BD6C008ACCB8 /* EZTimeCounterView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZTimeCounterView.xib; sourceTree = "<group>"; };
+		188CFDDB1591BECE008ACCB8 /* EZTimeCounter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTimeCounter.h; sourceTree = "<group>"; };
+		188CFDDC1591BECF008ACCB8 /* EZTimeCounter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTimeCounter.m; sourceTree = "<group>"; };
+		188CFDDE1591C9A0008ACCB8 /* EZTimeCounterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTimeCounterView.h; sourceTree = "<group>"; };
+		188CFDDF1591C9A1008ACCB8 /* EZTimeCounterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTimeCounterView.m; sourceTree = "<group>"; };
+		188CFDE11592D9BC008ACCB8 /* EZButtonCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZButtonCell.xib; sourceTree = "<group>"; };
+		188CFDE31593035D008ACCB8 /* EZButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZButtonCell.h; sourceTree = "<group>"; };
+		188CFDE41593035F008ACCB8 /* EZButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZButtonCell.m; sourceTree = "<group>"; };
 		188D55141584883000142394 /* EZEnvFlag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZEnvFlag.h; sourceTree = "<group>"; };
 		188D55151584883000142394 /* EZEnvFlag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZEnvFlag.m; sourceTree = "<group>"; };
 		188D551815848B3A00142394 /* MEnvFlag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEnvFlag.h; sourceTree = "<group>"; };
@@ -303,7 +327,6 @@
 				18E035E4158350F4003B3D3E /* Customize popup */,
 				184C2B0D157E4D6F00852B35 /* Resources */,
 				184C2B06157DE09600852B35 /* Customized Cells */,
-				184C2AF8157CBA1E00852B35 /* TestController */,
 				184C2AA415774C6500852B35 /* TestCases */,
 				184C2AA01577206800852B35 /* CoreDataUtility */,
 				184C2A7B15770F9F00852B35 /* Models */,
@@ -363,6 +386,8 @@
 				184C29F81575C7C000852B35 /* EZTaskGroup.m */,
 				188D55141584883000142394 /* EZEnvFlag.h */,
 				188D55151584883000142394 /* EZEnvFlag.m */,
+				188CFDD115905380008ACCB8 /* EZCycleResult.h */,
+				188CFDD215905381008ACCB8 /* EZCycleResult.m */,
 			);
 			name = "Task objects";
 			sourceTree = "<group>";
@@ -378,6 +403,8 @@
 		184C298E156A296F00852B35 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				188CFDDC1591BECF008ACCB8 /* EZTimeCounter.m */,
+				188CFDDB1591BECE008ACCB8 /* EZTimeCounter.h */,
 				184C2B11157E4E8900852B35 /* EZGlobalLocalize.m */,
 				184C2B10157E4E8100852B35 /* EZGlobalLocalize.h */,
 				184C29DF156FB29400852B35 /* EZAlarmUtility.h */,
@@ -393,12 +420,11 @@
 		184C29D9156CE1C800852B35 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				184C2AF9157CBA5A00852B35 /* EZRootTabCtrl.h */,
+				184C2AFA157CBA5A00852B35 /* EZRootTabCtrl.m */,
 				184C29DA156CE21E00852B35 /* EZScheduledTaskController.h */,
 				184C29DB156CE21E00852B35 /* EZScheduledTaskController.m */,
 				184C29DC156CE21E00852B35 /* EZScheduledTaskController.xib */,
-				184C29EB1573651E00852B35 /* EZScheduledTaskDetailCtrl.h */,
-				184C29EC1573651E00852B35 /* EZScheduledTaskDetailCtrl.m */,
-				184C29EE1573697700852B35 /* EZScheduledTaskDetailCtrl.xib */,
 				184C2AD9157B136700852B35 /* EZTaskListCtrl.h */,
 				184C2ADA157B136800852B35 /* EZTaskListCtrl.m */,
 				184C2ADB157B136C00852B35 /* EZTaskListCtrl.xib */,
@@ -428,6 +454,10 @@
 				187ED029158C68FF00B499D3 /* EZAvailableDayDetail.m */,
 				188CFDC2158D88F8008ACCB8 /* EZPickerWrapper.h */,
 				188CFDC3158D88F8008ACCB8 /* EZPickerWrapper.m */,
+				188CFDC6158DE887008ACCB8 /* EZTableSelector.h */,
+				188CFDC7158DE887008ACCB8 /* EZTableSelector.m */,
+				188CFDC9158ED73E008ACCB8 /* EZAvTimeDetail.h */,
+				188CFDCA158ED73E008ACCB8 /* EZAvTimeDetail.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -476,17 +506,6 @@
 			name = TestCases;
 			sourceTree = "<group>";
 		};
-		184C2AF8157CBA1E00852B35 /* TestController */ = {
-			isa = PBXGroup;
-			children = (
-				184C2AF9157CBA5A00852B35 /* EZTestTabCtrl.h */,
-				184C2AFA157CBA5A00852B35 /* EZTestTabCtrl.m */,
-				184C2AFC157CBA9200852B35 /* EZTestViewCtrl.h */,
-				184C2AFD157CBA9200852B35 /* EZTestViewCtrl.m */,
-			);
-			name = TestController;
-			sourceTree = "<group>";
-		};
 		184C2B06157DE09600852B35 /* Customized Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -522,6 +541,18 @@
 				187ED030158C78C500B499D3 /* EZAvTimeHeader.xib */,
 				187ED032158C7A0E00B499D3 /* EZAvTimeHeader.h */,
 				187ED033158C7A0F00B499D3 /* EZAvTimeHeader.m */,
+				188CFDCC158EDCFD008ACCB8 /* EZBeginEndTimeCell.xib */,
+				188CFDCE158EDE70008ACCB8 /* EZBeginEndTimeCell.h */,
+				188CFDCF158EDE70008ACCB8 /* EZBeginEndTimeCell.m */,
+				188CFDD41591AE04008ACCB8 /* EZScheduledTaskCell.xib */,
+				188CFDD61591AF90008ACCB8 /* EZScheduledTaskCell.h */,
+				188CFDD71591AF91008ACCB8 /* EZScheduledTaskCell.m */,
+				188CFDD91591BD6C008ACCB8 /* EZTimeCounterView.xib */,
+				188CFDDE1591C9A0008ACCB8 /* EZTimeCounterView.h */,
+				188CFDDF1591C9A1008ACCB8 /* EZTimeCounterView.m */,
+				188CFDE11592D9BC008ACCB8 /* EZButtonCell.xib */,
+				188CFDE31593035D008ACCB8 /* EZButtonCell.h */,
+				188CFDE41593035F008ACCB8 /* EZButtonCell.m */,
 			);
 			name = "Customized Cells";
 			sourceTree = "<group>";
@@ -603,7 +634,6 @@
 				184C29641569E19900852B35 /* InfoPlist.strings in Resources */,
 				184C29761569E19900852B35 /* MainStoryboard.storyboard in Resources */,
 				184C29DE156CE21E00852B35 /* EZScheduledTaskController.xib in Resources */,
-				184C29EF1573697800852B35 /* EZScheduledTaskDetailCtrl.xib in Resources */,
 				184C2ADD157B136F00852B35 /* EZTaskListCtrl.xib in Resources */,
 				184C2AE7157B3B2F00852B35 /* EZTaskGroupDetailCtrl.xib in Resources */,
 				184C2AF6157CA9A300852B35 /* EZMainCtrl.xib in Resources */,
@@ -620,6 +650,10 @@
 				188D553E1588908100142394 /* EZScheduledCell.xib in Resources */,
 				187ED02C158C743C00B499D3 /* EZAvTimeCell.xib in Resources */,
 				187ED031158C78C500B499D3 /* EZAvTimeHeader.xib in Resources */,
+				188CFDCD158EDCFD008ACCB8 /* EZBeginEndTimeCell.xib in Resources */,
+				188CFDD51591AE06008ACCB8 /* EZScheduledTaskCell.xib in Resources */,
+				188CFDDA1591BD6C008ACCB8 /* EZTimeCounterView.xib in Resources */,
+				188CFDE21592D9BF008ACCB8 /* EZButtonCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -648,7 +682,6 @@
 				184C29E415708E6F00852B35 /* EZQuotasResult.m in Sources */,
 				184C29E71570925C00852B35 /* EZQuotas.m in Sources */,
 				184C29EA1570C1F900852B35 /* EZTaskHelper.m in Sources */,
-				184C29ED1573651F00852B35 /* EZScheduledTaskDetailCtrl.m in Sources */,
 				184C29F61574769400852B35 /* EZReleaseDetector.m in Sources */,
 				184C29F91575C7C400852B35 /* EZTaskGroup.m in Sources */,
 				184C2A811577101100852B35 /* Tasks.xcdatamodeld in Sources */,
@@ -664,8 +697,7 @@
 				184C2ADC157B136F00852B35 /* EZTaskListCtrl.m in Sources */,
 				184C2AE6157B3B2F00852B35 /* EZTaskGroupDetailCtrl.m in Sources */,
 				184C2AF5157CA9A300852B35 /* EZMainCtrl.m in Sources */,
-				184C2AFB157CBA5A00852B35 /* EZTestTabCtrl.m in Sources */,
-				184C2AFE157CBA9300852B35 /* EZTestViewCtrl.m in Sources */,
+				184C2AFB157CBA5A00852B35 /* EZRootTabCtrl.m in Sources */,
 				184C2B09157DE0F000852B35 /* EZEditCell.m in Sources */,
 				184C2B12157E4E8900852B35 /* EZGlobalLocalize.m in Sources */,
 				184C2B23157F362F00852B35 /* EZEditLabelCell.m in Sources */,
@@ -694,6 +726,14 @@
 				187ED02F158C75F900B499D3 /* EZAvTimeCell.m in Sources */,
 				187ED034158C7A0F00B499D3 /* EZAvTimeHeader.m in Sources */,
 				188CFDC4158D88F8008ACCB8 /* EZPickerWrapper.m in Sources */,
+				188CFDC8158DE888008ACCB8 /* EZTableSelector.m in Sources */,
+				188CFDCB158ED73F008ACCB8 /* EZAvTimeDetail.m in Sources */,
+				188CFDD0158EDE70008ACCB8 /* EZBeginEndTimeCell.m in Sources */,
+				188CFDD315905381008ACCB8 /* EZCycleResult.m in Sources */,
+				188CFDD81591AF92008ACCB8 /* EZScheduledTaskCell.m in Sources */,
+				188CFDDD1591BED0008ACCB8 /* EZTimeCounter.m in Sources */,
+				188CFDE01591C9A2008ACCB8 /* EZTimeCounterView.m in Sources */,
+				188CFDE515930364008ACCB8 /* EZButtonCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

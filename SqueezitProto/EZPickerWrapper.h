@@ -47,6 +47,12 @@
 //Will be used later when when have differnt keyboard for different indexPath
 - (UIView*) pickerWrapper:(EZPickerWrapper*)pickerWrapper getKeyBoard:(NSIndexPath*)path;
 
+
+//When the user changed the value in the picker, this delegate method will
+//Get called
+//The reason I comment it out is because it will hurt the generality.
+//- (void) pickerValueChanged:(EZPickerWrapper *)pickerWrapper; 
+
 - (void) doneClicked:(EZPickerWrapper*)pickerWrapper;
 
 - (void) cancelClicked:(EZPickerWrapper*)pickerWrapper;
@@ -58,6 +64,19 @@
 
 //@property (strong, nonatomic) UIView* keyboard;
 @property (strong, nonatomic) id<EZPickerWrapperDelegate> wrapperDelegate;
+
+//Return the index of the current selected cell
+- (NSIndexPath*) getSelectedRow;
+
+- (UITableViewCell*) getCellByIndexPath:(NSIndexPath*)indexPath;
+
+//It is for sync up the status.
+//Use to address following scenerio.
+//When this Wrapper used again, it cell will not reloaded, 
+//It just keep the old status.
+//For example, the first time I get this view displayed, 
+//How about make it called internally during willDisplay period?
+//- (void) reloadData;
 
 @end
 

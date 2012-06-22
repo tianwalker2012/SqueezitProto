@@ -17,6 +17,7 @@
 #import "EZQuotas.h"
 #import "EZTaskHelper.h"
 #import "EZAlarmUtility.h"
+#import "MScheduledTask.h"
 
 //Block definition, maybe useful very soon.
 //typedef NSComparisonResult (^NSComparator)(id obj1, id obj2);
@@ -84,21 +85,52 @@
     [self addExclusive:exclusive tasks:schTasks];
     return [self scheduleTaskByBulk:avTime exclusiveList:exclusive tasks:[[EZTaskStore getInstance] getAllTasks]];
 }
+
+//Do the same thing as the existed one, the only difference is that
+//It will query all things from the database.
+//Assumption in this code, the other kind of legal check have done by the caller.
+- (NSArray*) rescheduleStoredTask:(EZScheduledTask *)schTask
+{
+    EZAvailableTime* avTime = [self createAvTimeFromScheduledTask:schTask];
+    NSArray* tasks = [[EZTaskStore getInstance] getScheduledTaskByDate:schTask.startTime];
+    NSMutableArray* exclusive = [[NSMutableArray alloc] initWithCapacity:tasks.count];
+    [self addExclusive:exclusive tasks:[tasks filter:^BOOL(EZScheduledTask* obj) {
+        if([obj.PO.objectID isEqual:schTask.PO.objectID]){
+            return false;
+        }
+        return true;
+    }]];
+    return [self scheduleTaskByBulk:avTime exclusiveList:exclusive tasks:[[EZTaskStore getInstance] getAllTasks]];
+}
+
 //Why do we need this?
 //We need to collect the history date to help us calculate how many time we should 
 //Assign today. 
+//So logic is missing. 
+//Following is the expection I have for this method.
+//As we know in each quotas there is a date mean when this quotas was added
+//So it is safe to assume that no history data exist before this date right?
+//Seems the padDay mechanism are for this purpose. 
+//The responsility of this function
+//1. Calculate the cycle start date.
+//2. Calcualte the padding day.
+//3. search database for all the available scheduled task.
+//4. Design a test determined above specified task was successfully completed. 
+
 - (int) calcHistoryTime:(EZTask*)task date:(NSDate*)date
 {
-
-    NSDictionary* histResult = [EZTaskHelper calcHistoryBegin:task.quotas date:date];
-    NSDate* historyStart = [histResult objectForKey:@"beginDate"];
-    int padDay = [(NSNumber*)[histResult objectForKey:@"padDays"] intValue];
-    if([historyStart equalWith:date format:@"yyyyMMdd"]){
-        //Mean there is 
-        return 0;
+    EZCycleResult* histResult= [EZTaskHelper calcHistoryBegin:task.quotas date:date];
+    
+    //What's the meaning of history start?
+    //Is it mean from where to calculate the history date?
+    NSDate* historyStart = histResult.beginDate;
+    int padDay = histResult.paddingDays;
+    int taskTime = 0;
+    if(![historyStart equalWith:date format:@"yyyyMMdd"]){
+        EZTaskStore* store = [EZTaskStore getInstance];
+        taskTime = [store getTaskTime:task start:historyStart end:[date adjustDays:-1]];
+        EZDEBUG(@"taskTime between:%@ and %@ is:%i",[historyStart stringWithFormat:@"yyyyMMdd"], [[date adjustDays:-1] stringWithFormat:@"yyyyMMdd"], taskTime);
     }
-    EZTaskStore* store = [EZTaskStore getInstance];
-    int taskTime = [store getTaskTime:task start:historyStart end:[date adjustDays:-1]];
     //This is only for the cases of the first iteration of the quotas.
     //But we need to handle this cases since this case happen a lot. 
     if(padDay > 0){
@@ -137,7 +169,7 @@
             time.start = [time.start adjustMinutes:actualAmount];
             totalAmount -= actualAmount;
         }else{
-            EZDEBUG(@"Not meet the minimum duration requirements:%@,Mini:%i,available Amount:%i",time.description,miniDur,time.duration);
+            //EZDEBUG(@"Not meet the minimum duration requirements:%@,Mini:%i,available Amount:%i",time.description,miniDur,time.duration);
         }
         
     }
@@ -191,7 +223,7 @@
             int amount = avg * 1.1;
             NSArray* scts = [self allocTimeForTasks:tk avTimes:[self sortAvailableTimes:avDay.availableTimes] amount:amount date:date];
             [res.scheduledTasks addObjectsFromArray:scts];
-            EZDEBUG(@"%@:remain:%i,avg:%i,currentAmount:%i,createdTask:%i",tk.name,remain,avg,amount,[scts count]);
+            EZDEBUG(@"[%@]historyTime:%i, %@:remain:%i,avg:%i,currentAmount:%i,createdTask:%i",[date stringWithFormat:@"yyyyMMdd"],historyTime, tk.name,remain,avg,amount,[scts count]);
         }
     }
     res.availableDay = avDay;
@@ -301,7 +333,7 @@
             break;
         }
     }
-    EZDEBUG(@"Allocate %i tasks for duration:%i",[res count], timeSlot.duration);
+    //EZDEBUG(@"Allocate %i tasks for duration:%i",[res count], timeSlot.duration);
     return res;
 }
 
@@ -340,7 +372,7 @@
         }
     }
     if([filteredTasks count] == 0){
-        EZDEBUG(@"Find no task for timeSlot:%@,Duration:%i",timeSlot,timeSlot.duration);
+        //EZDEBUG(@"Find no task for timeSlot:%@,Duration:%i",timeSlot,timeSlot.duration);
         return res;
     }
     int selected = arc4random()%[filteredTasks count];
@@ -357,7 +389,7 @@
     //res.description = timeSlot.description;
     timeSlot.duration = timeSlot.duration - actualDur;
     [timeSlot adjustStartTime:actualDur];
-    EZDEBUG(@"Find task:%@, duration:%i, remain time:%i", tk.name, res.duration, timeSlot.duration);
+    //EZDEBUG(@"Find task:%@, duration:%i, remain time:%i", tk.name, res.duration, timeSlot.duration);
     return res;
 }
 

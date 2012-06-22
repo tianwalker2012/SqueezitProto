@@ -144,6 +144,20 @@
 }
 
 
+
+//Since the ObjectID can be transfer to URL string, string is serailizeable
+//So I am doing this now. 
+- (EZScheduledTask*) fetchScheduledTaskByURL:(NSString*)urlStr
+{
+    NSArray* schTasks = [self fetchAllWithVO:[EZScheduledTask class] po:[MScheduledTask class] sortField:@"startTime"];
+    for(EZScheduledTask* schTask in schTasks){
+        if([urlStr isEqualToString:schTask.PO.objectID.URIRepresentation.absoluteString]){
+            return schTask;
+        }
+    }
+    return nil;
+}
+
 //Read flags into a NSDictionary
 //Every tiem somebody added a flag, this method will get called
 - (void) populateEnvFlags
@@ -249,11 +263,11 @@
 - (int) getTaskTime:(EZTask*)task start:(NSDate*)start end:(NSDate*)end
 {
     int res = 0;
-    MTask* mt = task.PO;
-    NSArray* mschTasks = [[EZCoreAccessor getInstance] fetchAll:[MScheduledTask class] sortField:@"startTime"];
-    for(MScheduledTask* schTask in mschTasks){
-            if([schTask.task isEqual:mt] && [schTask.startTime InBetweenDays:start end:end]){
-                res += schTask.duration.intValue;
+    //MTask* mt = task.PO;
+    NSArray* mschTasks = [self fetchAllWithVO:[EZScheduledTask class] po:[MScheduledTask class] sortField:@"startTime"];
+    for(EZScheduledTask* schTask in mschTasks){
+            if([schTask.task isEqual:task] && [schTask.startTime InBetweenDays:start end:end]){
+                res += schTask.duration;
             }
     }
     return res;

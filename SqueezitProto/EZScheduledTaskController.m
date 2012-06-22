@@ -7,7 +7,6 @@
 //
 
 #import "EZScheduledTaskController.h"
-#import "EZScheduledTaskDetailCtrl.h"
 #import "EZScheduledTask.h"
 #import "EZTaskScheduler.h"
 #import "EZTask.h"
@@ -18,13 +17,52 @@
 #import "EZEditLabelCellHolder.h"
 #import "EZGlobalLocalize.h"
 #import "EZScheduledDetail.h"
+#import "EZScheduledTaskCell.h"
+#import "EZTimeCounterView.h"
+#import "EZTimeCounter.h"
+#import "MScheduledTask.h"
 
-@interface EZScheduledTaskController ()
+@interface EZNumberWrapper : NSObject 
+
+@property (assign, nonatomic) NSInteger number;
+
+@end
+
+@implementation EZNumberWrapper
+@synthesize number;
+@end
+
+
+@interface EZScheduledTaskController () {
+    EZTimeCounterView* counterView;
+    EZTimeCounter* counter;
+}
+
+- (EZTimeCounter*) createTimeCounter; 
+
+//To find out any task will start to run now
+//If found out return the index of the task
+//The reason to add parameter is to make it more testable
+//The influence from Lisp
+- (NSInteger) findOngoingTask:(NSArray*)tks;
 
 @end
 
 @implementation EZScheduledTaskController
-@synthesize currentDate, scheduledTasks;
+@synthesize currentDate, scheduledTasks, viewAppearBlock;
+
+
+//Just create the counter and the counter view.
+//Set the proper frame for the counterView.
+//The caller will take responsibility to restart it.
+- (EZTimeCounter*) createTimeCounter
+{
+    EZTimeCounter* tc = [[EZTimeCounter alloc] init];
+    EZTimeCounterView* cView = [EZEditLabelCellHolder createTimeCounterView];
+    cView.frame = CGRectMake(200, 2, cView.frame.size.width, counterView.frame.size.height);
+    tc.counterView = cView;
+    return tc;
+}
 
 - (BOOL)canBecomeFirstResponder
 {
@@ -35,6 +73,11 @@
 - (void)viewDidAppear:(BOOL)animated {
     //EZDEBUG(@"viewDidAppear get called");
     [self becomeFirstResponder];
+    currentDate = [NSDate date];
+    if(viewAppearBlock){
+        viewAppearBlock();
+        self.viewAppearBlock = nil;
+    }
 }
 
 
@@ -54,7 +97,7 @@
     if(motion == UIEventSubtypeMotionShake){
         EZDEBUG(@"I encounter shake event");
         if(scheduledTasks.count > 0){
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Reschedule?" message:@"Are you sure you want reschedule? current schedule will be deleted" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Yes", nil];
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:Local(@"Reschedule?") message:Local(@"Are you sure you want reschedule? current schedule will be deleted") delegate:self cancelButtonTitle:Local(@"Cancel") otherButtonTitles:Local(@"Yes"), nil];
             [alert show];
         }else{
         //message.text = @"Shaked";
@@ -115,17 +158,24 @@
     [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationLeft];
     NSMutableArray* insertedPaths = [[NSMutableArray alloc] init];
     for(int i = 0; i < [repalceTasks count]; i++){
-        NSUInteger iarr[2];
-        iarr[0] = indexPath.section;
-        iarr[1] = indexPath.row + i;
-        NSIndexPath* path = [[NSIndexPath alloc] initWithIndexes:iarr length:2];
-        [insertedPaths addObject:path];
+        [insertedPaths addObject:[NSIndexPath indexPathForRow:indexPath.row+i inSection:indexPath.section]];
     }
-    //[insertedPaths addObject:indexPath];
     [self.tableView insertRowsAtIndexPaths:insertedPaths withRowAnimation:UITableViewRowAnimationRight];
     [self.tableView endUpdates];
 }
 
+//Return -1 mean not found, is this a norm, I can make it a norm
+- (NSInteger) findOngoingTask:(NSArray*)tks
+{
+    for(int i = 0; i < tks.count; i++){
+        EZScheduledTask* st = [tks objectAtIndex:i];
+        NSDate* endDate = [st.startTime adjustMinutes:st.duration];
+        if([[NSDate date] InBetween:st.startTime end:endDate]){
+            return i;
+        }
+    }
+    return -1;
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -134,14 +184,37 @@
     //if([scheduledTasks count] == 0){
     //    [self presentShakeMessage:@"Shake shake"];
     //}
-    self.navigationItem.title = Local(@"Scheduled Task");
+    self.navigationItem.title = Local(@"Scheduled");
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(rescheduleTasks)];
-    
+    counter = [self createTimeCounter];
+    counter.isCounting = false;
+    counter.tickBlock = ^(EZTimeCounter* ct){
+        if(!ct.isCounting){
+            NSInteger nowPos = [self findOngoingTask:scheduledTasks];
+            EZDEBUG(@"Any task going on:%i",nowPos);
+            if(nowPos < 0){//Quit if no task is showing
+                return;
+            }
+            
+            EZScheduledTask* st = [scheduledTasks objectAtIndex:nowPos];
+            NSDate* endTime = [st.startTime adjustMinutes:st.duration];
+            ct.remainTime = endTime.timeIntervalSinceNow;
+            ct.isCounting = true;
+            [ct update];
+            [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:nowPos inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+        }    
+    };
+    counter.timeupOps = ^(EZTimeCounter* ct){
+        ct.isCounting = false;
+        [ct.counterView removeFromSuperview];
+    };
+    //[counter start:1];
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
+    [counter stop];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
@@ -166,37 +239,119 @@
     return [scheduledTasks count];
 }
 
+//Return minus if the task not exist.
+- (NSInteger) findTask:(EZScheduledTask*)task inArray:(NSArray*)tasks
+{
+    EZNumberWrapper* res = [EZNumberWrapper new];
+    res.number = -1;
+    [tasks enumerateObjectsUsingBlock:^(EZScheduledTask* obj, NSUInteger idx, BOOL *stop) {
+        if([obj.PO.objectID isEqual:task.PO.objectID]){
+            res.number = idx;
+            *stop = true;
+        }
+    }];
+    return res.number;
+}
+
+
+//The scheduledTask may or may not in current schduledTask list. 
+//It will cause different behavior.
+- (void) presentScheduledTask:(EZScheduledTask*)task
+{
+    EZScheduledDetail* scheduleDetail = [[EZScheduledDetail alloc] initWithStyle:UITableViewStyleGrouped];
+    //EZScheduledTask* task = [scheduledTasks objectAtIndex:indexPath.row];
+    scheduleDetail.schTask = task; 
+    NSInteger pos = [self findTask:task inArray:scheduledTasks];
+    
+    scheduleDetail.deleteBlock = ^(){
+        EZDEBUG(@"DeleteOp get called,pos:%i",pos);
+        [EZAlarmUtility cancelAlarm:task];
+        [[EZTaskStore getInstance] removeObject:task];
+        if(pos > -1){
+            NSMutableArray* mutArr = [NSMutableArray arrayWithArray:self.scheduledTasks];
+            [mutArr removeObjectAtIndex:pos];
+            self.scheduledTasks = mutArr;
+            NSIndexPath* indexPath = [NSIndexPath indexPathForRow:pos inSection:0];
+            [self performSelector:@selector(deleteRow:) withObject:indexPath afterDelay:0.3];
+        }
+    };
+    
+    scheduleDetail.rescheduleBlock = ^(){
+        EZDEBUG(@"RescheduleOp get called");
+        NSArray* schTasks = [[EZTaskScheduler getInstance] rescheduleStoredTask:task];
+        if([schTasks count] > 0){
+            [EZAlarmUtility cancelAlarm:task];
+            [EZAlarmUtility setupAlarmBulk:schTasks];
+            [[EZTaskStore getInstance] removeObject:task];
+            [[EZTaskStore getInstance] storeObjects:schTasks];
+            if(pos > -1){
+                NSMutableArray* mutArr = [NSMutableArray arrayWithArray:self.scheduledTasks];
+                [mutArr removeObjectAtIndex:pos];
+                [mutArr addObjectsFromArray:schTasks];
+                [mutArr sortUsingComparator:^(id obj1, id obj2) {
+                    EZScheduledTask* task1 = obj1;
+                    EZScheduledTask* task2 = obj2;
+                    return [task1.startTime compare:task2.startTime];
+                    
+                }];
+                self.scheduledTasks = mutArr;
+                repalceTasks = schTasks;
+                [self performSelector:@selector(replaceRow:) withObject:[NSIndexPath indexPathForRow:pos inSection:0] afterDelay:0.3];
+            }
+        }else{
+            EZDEBUG(@"Could not find replacement for:%@",[task detail]);
+        }
+        
+    };
+    EZDEBUG(@"Before push detail");
+    [self.navigationController pushViewController:scheduleDetail animated:NO];
+    EZDEBUG(@"After push detail");
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"ScheduleCell";
-    EZScheduledCell *cell = (EZScheduledCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    static NSString *CellIdentifier = @"ScheduledTaskCell";
+    EZScheduledTaskCell *cell = (EZScheduledTaskCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if(!cell){
-        cell = [EZEditLabelCellHolder createScheduledCell];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell = [EZEditLabelCellHolder createScheduledTaskCell];
+        //cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     EZScheduledTask* task = [scheduledTasks objectAtIndex:indexPath.row];
     
-    cell.title.text = [NSString stringWithFormat:@"%@(%@)",task.task.name,(task.alarmNotification?@"setup alarm":@"no alarm")];
+    cell.taskName.text = task.task.name;
     
     NSDate* endTime = [NSDate dateWithTimeInterval:task.duration*60 sinceDate:task.startTime];
     NSDate* now = [NSDate date];
     if([now InBetween:task.startTime end:endTime] ){
-        cell.title.textColor = [UIColor redColor];
+        cell.taskName.textColor = [UIColor redColor];
+        if(cell.nowSign == nil){
+            cell.nowSign = counter.counterView;
+            [cell addSubview:counter.counterView];
+        }
+        cell.switchButton.enabled = false;
     }else if([task.startTime isPassed:now]) { //Passed task
-        cell.title.textColor = [UIColor lightGrayColor];
+        cell.taskName.textColor = [UIColor grayColor];
+        if(cell.nowSign){
+            [cell.nowSign removeFromSuperview];
+            cell.nowSign = nil;
+        }
+        cell.switchButton.enabled = false;
     } else {
         //cell.textLabel.textColor = FutureTaskColor;
-        cell.title.textColor = [UIColor blackColor];
-    }
-    cell.timeSpanTitle.text = [NSString stringWithFormat:@"%@ - %@",[task.startTime stringWithFormat:@"HH:mm"],[endTime stringWithFormat:@"HH:mm"]];
-    cell.clickBlock = ^(){
-        ++task.alarmType;
-        if(task.alarmType > EZ_MUTE){
-            task.alarmType = EZ_SOUND;
+        cell.taskName.textColor = [UIColor blackColor];
+        if(cell.nowSign){
+            [cell.nowSign removeFromSuperview];
+            cell.nowSign = nil;
         }
+    }
+    cell.timeSpan.text = [NSString stringWithFormat:@"%@ - %@",[task.startTime stringWithFormat:@"HH:mm"],[endTime stringWithFormat:@"HH:mm"]];
+    cell.switchChange = ^(UISwitch* sw){
         //Found way later. weave thing together ASAP
-        
-        [cell performSelector:@selector(setButtonStatus:) withObject:[[NSNumber alloc] initWithInteger:task.alarmType] afterDelay:0.3];
+        if(sw.on){
+            task.alarmType = EZ_SOUND;
+        }else{
+            task.alarmType = EZ_MUTE;
+        }
         [EZAlarmUtility changeAlarmMode:task];
         
     };
@@ -209,12 +364,14 @@
 
 
 #pragma mark - Table view delegate
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 66;
+}
+
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-        
-    //EZScheduledTaskDetailCtrl* detailViewController = [[EZScheduledTaskDetailCtrl alloc] initWithNibName:@"EZScheduledTaskDetailCtrl" bundle:nil];
     
     EZScheduledDetail* scheduleDetail = [[EZScheduledDetail alloc] initWithStyle:UITableViewStyleGrouped];
     EZScheduledTask* task = [scheduledTasks objectAtIndex:indexPath.row];
@@ -228,7 +385,6 @@
         self.scheduledTasks = mutArr;
         [[EZTaskStore getInstance] removeObject:task];
         [self performSelector:@selector(deleteRow:) withObject:indexPath afterDelay:0.3];
-        //[self deleteRow:path];
     };
     
     scheduleDetail.rescheduleBlock = ^(){
@@ -249,7 +405,6 @@
                 
             }];
             self.scheduledTasks = mutArr;
-            //[self.tableView reloadData];
             repalceTasks = schTasks;
             [self performSelector:@selector(replaceRow:) withObject:indexPath afterDelay:0.3];
         }else{

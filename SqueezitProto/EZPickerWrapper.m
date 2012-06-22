@@ -57,16 +57,26 @@
 
 - (void)viewDidLoad
 {
+    EZDEBUG(@"viewDidLoad begin");
     [super viewDidLoad];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelClicked)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneClicked)];
     //Animation to select the first row, call the cell selected after the animation is completed. 
+    EZDEBUG(@"viewDidLoad end");
+}
+
+- (void) viewDidAppear:(BOOL)animated
+{
+    EZDEBUG(@"in viewDidApprear");
+    [self.tableView reloadData];
+    EZDEBUG(@"after reloadData");
     NSIndexPath* selectedPath = [wrapperDelegate getDefaultSelected:self];
     if(selectedPath == nil){
         selectedPath = [NSIndexPath indexPathForRow:0 inSection:0];
     }
-    [self performSelector:@selector(animateSelect:) withObject:selectedPath afterDelay:0.3];
-    
+    //[self performSelector:@selector(animateSelect:) withObject:selectedPath afterDelay:0.3];
+    //I guess the Window are ready at this time
+    [self animateSelect:selectedPath];
 }
 
 
@@ -81,6 +91,7 @@
         if(complete){
             complete();
         }
+        return;
     }
     
     [UIView beginAnimations:@"Raise Keyboard" context:nil];
@@ -100,12 +111,13 @@
 {
     EZDEBUG(@"Drop keyboard get called");
     UIWindow* win = self.view.window;
-    
+    currentKeyBoard = nil;
     if(!animated){
         [keyboard removeFromSuperview];
         if(complete){
             complete();
         }
+        return;
     }
     
     [UIView beginAnimations:@"Drop Keyboard" context:nil];
@@ -125,7 +137,9 @@
 //I guess i could. 
 - (void) animateSelect:(NSIndexPath*)path
 {
+    EZDEBUG(@"animated select row begin");
     [self.tableView selectRowAtIndexPath:path animated:YES scrollPosition:UITableViewScrollPositionTop];
+    EZDEBUG(@"animated select row end");
     
     //The purpose of calling this is to raise the keyboard if necessary
     //Setup the correct value for the keyboard
@@ -209,6 +223,7 @@
 //It is his responsibility of the set the picker to the right value
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    EZDEBUG(@"didSelectRowAtIndexPath get called");
     UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
     //[wrapperDelegate cellSelected:cell indexPath:indexPath];
     UIView* keyboard = [wrapperDelegate pickerWrapper:self getKeyBoard:indexPath];
@@ -227,6 +242,17 @@
         }
     }];
     
+}
+
+//Return the index of the current selected cell
+- (NSIndexPath*) getSelectedRow
+{
+    return [self.tableView indexPathForSelectedRow];
+}
+
+- (UITableViewCell*) getCellByIndexPath:(NSIndexPath*)indexPath
+{
+    return [self.tableView cellForRowAtIndexPath:indexPath];
 }
 
 @end

@@ -171,6 +171,26 @@ typedef int(^ClosureTest)();
 
 + (void) testRescheduleAll;
 
++ (void) testInterToHex;
+
++ (void) testQuotasEffective;
+
++ (void) testGetPaddingDay;
+
++ (void) testCalcHistoryTime;
+
++ (void) testCalcHistoryTimeWithPadding;
+
++ (void) testNumberOutput;
+
++ (void) testObjectIDSerialize;
+
++ (void) testNSMutableArray;
+
++ (void) testPredicate;
+
++ (void) testFetchWithPredicate;
+
 @end
 
 @implementation EZTestSuite
@@ -181,9 +201,11 @@ typedef int(^ClosureTest)();
 //So I just comments it out. Will not execute any test cases
 + (void) testSchedule
 {
-    [EZTestSuite innerTestAll];
+  
+   [EZTestSuite innerTestAll];
     
 }
+
 
 + (void) innerTestAll
 {
@@ -223,7 +245,15 @@ typedef int(^ClosureTest)();
     [EZTestSuite testAvailableTimeFilter];
     [EZTestSuite testRescheduleFilter];
     [EZTestSuite testRescheduleAll];
-
+    [EZTestSuite testInterToHex];
+    //[EZTestSuite testQuotasEffective];
+    [EZTestSuite testGetPaddingDay];
+    [EZTestSuite testCalcHistoryTime];
+    [EZTestSuite testCalcHistoryTimeWithPadding];
+    [EZTestSuite testNumberOutput];
+    [EZTestSuite testNSMutableArray];
+    [EZTestSuite testPredicate];
+    [EZTestSuite testFetchWithPredicate];
     //Clear all the test data.
     //In the future what should I do with this.
     //Seems in this case, we need the test case ready
@@ -233,6 +263,436 @@ typedef int(^ClosureTest)();
     //Make sure the application don't use 
     //Test database.
     [EZCoreAccessor setInstance:nil];
+    
+}
+
++ (void) testFetchWithPredicate
+{
+    [EZTestSuite initializeDB];
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"name like %@",@"Tian"];
+    EZTask* task1 = [[EZTask alloc] initWithName:@"Tian" duration:20 maxDur:40 envTraits:2];
+    EZTask* task2 = [[EZTask alloc] initWithName:@"Tian1" duration:21 maxDur:45 envTraits:3];
+    
+    EZTask* task3 = [[EZTask alloc] initWithName:@"TianFinal" duration:2 maxDur:42 envTraits:3];
+    
+    [[EZTaskStore getInstance] storeObjects:[NSArray arrayWithObjects:task1, task2, task3, nil]];
+    NSArray* arr = [[EZCoreAccessor getInstance] fetchObject:[MTask class] byPredicate:predicate withSortField:nil];
+    assert(arr.count == 1);
+    
+    arr = [[EZCoreAccessor getInstance] fetchObject:[MTask class] byPredicate:nil withSortField:@"duration"];
+    assert(arr.count == 3);
+    MTask* mt = [arr objectAtIndex:0];
+    assert(mt.duration.intValue == 2);
+    
+    arr = [[EZCoreAccessor getInstance] fetchObject:[MTask class] byPredicate:nil withSortField:@"maxDuration"];
+    assert(arr.count == 3);
+    mt = [arr objectAtIndex:0];
+    assert(mt.maxDuration.intValue == 40);
+
+    
+    assert(false);
+     
+    
+}
+
++ (void) testPredicate
+{
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"name like %@",@"Tian"];
+    
+    EZTask* task1 = [[EZTask alloc] initWithName:@"Tian" duration:20 maxDur:40 envTraits:2];
+    EZTask* task2 = [[EZTask alloc] initWithName:@"Tian1" duration:21 maxDur:41 envTraits:3];
+    NSArray* arr = [NSArray arrayWithObjects:task1, task2, nil];
+    NSArray* filterResult = [arr filteredArrayUsingPredicate:predicate];
+    EZDEBUG(@"Result is %i",filterResult.count);
+    assert(filterResult.count == 1);
+    
+    predicate = [NSPredicate predicateWithFormat:@"duration > %i",20];
+    
+    filterResult = [arr filteredArrayUsingPredicate:predicate];
+    EZDEBUG(@"Result is %i",filterResult.count);
+    assert(filterResult.count == 1);
+    EZTask* resTK = [filterResult objectAtIndex:0];
+    assert(resTK.duration == 21);
+    
+    predicate = [NSPredicate predicateWithFormat:@"(duration > %i) AND (envTraits == %i)", 20, 2];
+    
+    filterResult = [arr filteredArrayUsingPredicate:predicate];
+    assert(filterResult.count == 0);
+    
+    predicate = [NSPredicate predicateWithFormat:@"(duration > %i) AND (envTraits == %i)", 20, 3];
+    
+    filterResult = [arr filteredArrayUsingPredicate:predicate];
+    assert(filterResult.count == 1);
+    resTK = [filterResult objectAtIndex:0];
+    assert((resTK.duration == 21) && (resTK.envTraits == 3));
+    
+    EZScheduledTask* schTask1 = [[EZScheduledTask alloc] init];
+    schTask1.startTime = [NSDate stringToDate:@"yyyyMMdd:HH" dateString:@"20120622:15"];
+    schTask1.task = task1;
+    
+    EZScheduledTask* schTask2 = [[EZScheduledTask alloc] init];
+    schTask2.startTime = [NSDate stringToDate:@"yyyyMMdd:HH" dateString:@"20120622:08"];
+    schTask2.task = task2;
+    
+    NSArray* schTasks = [NSArray arrayWithObjects:schTask1,schTask2, nil];
+    predicate = [NSPredicate predicateWithFormat:@"task.name like[c] %@", @"TIAN"];
+    filterResult = [schTasks filteredArrayUsingPredicate:predicate];
+    assert(filterResult.count == 1);
+    EZScheduledTask* scTK = [filterResult objectAtIndex:0];
+    assert(scTK.task == task1);
+    
+    predicate = [NSPredicate predicateWithFormat:@"startTime > %@", [NSDate stringToDate:@"yyyyMMdd:HH" dateString:@"20120622:10"]];
+    filterResult = [schTasks filteredArrayUsingPredicate:predicate];
+    assert(filterResult.count == 1);
+    scTK = [filterResult objectAtIndex:0];
+    assert(scTK == schTask1);
+    
+    
+    //assert(false);
+    
+}   
+
++ (void) testNSMutableArray
+{
+    NSString* str1 = @"1";
+    NSString* str2 = @"2";
+    NSMutableArray* arr = [[NSMutableArray alloc] initWithObjects:str1, str2, nil];
+    
+    assert(arr.count == 2);
+    [arr removeObject:str2];
+    assert(arr.count == 1);
+    NSInteger pos = [arr indexOfObject:str1];
+    assert(pos == 0);
+    pos = [arr indexOfObject:str2];
+    //[arr containsObject:
+    EZDEBUG(@"Position for not exist:%i", pos);
+    
+    assert(pos > [arr count]);
+
+    //assert(false);
+    
+}
+
++ (void) testObjectIDSerialize
+{
+    [EZTestSuite initializeDB];
+    EZTask* task = [[EZTask alloc] initWithName:@"TestID"];
+    [[EZTaskStore getInstance]storeObject:task];
+    
+    
+}
+
+//The purpose of this test is to make sure the number output is correct
++ (void) testNumberOutput
+{
+    NSString* outPut = [NSString stringWithFormat:@"%2d",123456];
+    EZDEBUG(@"Output:%@", outPut);
+    //assert([@"01" isEqualToString:outPut]);
+    
+}
+//Follow the principle. Do NOT even copy myself.
+//Fully grasp my code and my logic
+//What's the purpose my this test.
+//Make sure the calculate the history behave as I expected with the 
+//Quotas have Padding date.
+//Set the cycle start date 2 days behind the cycle nature start date.
+//So the the system will add paddingDay*avg days into the history time. 
+//Let's verify this is the cases
++ (void) testCalcHistoryTimeWithPadding
+{
+    [EZTestSuite initializeDB];
+    EZTask* iOSTask = [[EZTask alloc] initWithName:@"iOS" duration:4 maxDur:10 envTraits:2];
+    EZQuotas* quotas = [[EZQuotas alloc] init:[NSDate stringToDate:@"yyyyMMdd" dateString:@"20120619"] quotas:70 type:WeekCycle cycleStartDate:nil cycleLength:7];
+    iOSTask.quotas = quotas;
+    [[EZTaskStore getInstance] storeObject:iOSTask];
+    EZScheduledTask* task1 = [[EZScheduledTask alloc] init];
+    task1.duration = 13;
+    task1.startTime = [NSDate stringToDate:@"yyyyMMdd" dateString:@"20120619"];
+    task1.task = iOSTask;
+    EZScheduledTask* task2 = [[EZScheduledTask alloc] init];
+    task2.duration = 14;
+    task2.startTime = [NSDate stringToDate:@"yyyyMMdd" dateString:@"20120620"];
+    task2.task = iOSTask;
+    [[EZTaskStore getInstance] storeObjects:[NSArray arrayWithObjects:task1, task2, nil]];
+    
+    EZTaskScheduler* scheduler = [[EZTaskScheduler alloc] init];
+    
+    int histTime = [scheduler calcHistoryTime:iOSTask date:[NSDate stringToDate:@"yyyyMMdd" dateString:@"20120621"]];
+    
+    EZDEBUG(@"expected:47, actual:%i",histTime);
+    assert(histTime == 47);
+    
+    EZAvailableDay* avDay = [[EZAvailableDay alloc] initWithName:@"AvDay" weeks:ALLDAYS];
+    EZAvailableTime* avTime = [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm" dateString:@"10:30"] name:@"work" duration:10 environment:2];
+    [avDay.availableTimes addObject:avTime];
+    [[EZTaskStore getInstance] storeObject:avDay];
+    
+    NSArray* schTasks = [scheduler scheduleTaskByDate:[NSDate stringToDate:@"yyyyMMdd" dateString:@"20120621"] exclusiveList:nil];
+    assert(schTasks.count == 1);
+    EZScheduledTask* st = [schTasks objectAtIndex:0];
+    EZDEBUG(@"duration:%i, assignedTime:%@",st.duration, [st.startTime stringWithFormat:@"yyyyMMdd HH:mm"]);
+    assert(st.duration == 7);
+    
+    //assert(false);
+    
+}
+
+//First Let's try the simplest case.
+//No padding day will be involved.
+//Have all the environment under control including the Time.
++ (void) testCalcHistoryTime
+{
+    [EZTestSuite initializeDB];
+    NSDate* startTime = [NSDate stringToDate:@"yyyyMMdd" dateString:@"20120617"];
+    EZTask* iOSTask = [[EZTask alloc] initWithName:@"IOSTask"];
+        
+    EZQuotas* quotas = [[EZQuotas alloc] init:startTime quotas:100 type:WeekCycle cycleStartDate:startTime cycleLength:7];
+    iOSTask.quotas = quotas;
+    [[EZTaskStore getInstance] storeObject:iOSTask];
+        
+    EZScheduledTask* task1 = [[EZScheduledTask alloc] init];
+    task1.task = iOSTask;
+    task1.startTime = startTime;
+    task1.duration = 10;
+    
+    [[EZTaskStore getInstance] storeObject:task1];
+    
+    EZTaskScheduler* scheduler = [[EZTaskScheduler alloc] init];
+    NSDate* day1 = [startTime adjustDays:1];
+    
+    int historyTime = [scheduler calcHistoryTime:iOSTask date:day1];
+    assert(historyTime == task1.duration);
+    
+    EZScheduledTask* task2 = [[EZScheduledTask alloc] init];
+    task2.task = iOSTask;
+    task2.startTime = day1;
+    task2.duration = 20;
+    
+    [[EZTaskStore getInstance] storeObject:task2];
+    NSDate* day2 = [startTime adjustDays:2];
+    historyTime = [scheduler calcHistoryTime:iOSTask date:day2];
+    assert(historyTime == (task1.duration + task2.duration));
+    
+    
+}
+//It is strange for important functionality as 
+//This, I don't even have test cases to cover it. 
+//This is the right time to get things straight.
+
++ (void) testGetPaddingDay
+{
+    EZQuotas* quotas = [[EZQuotas alloc] init:[NSDate date] quotas:100 type:WeekCycle cycleStartDate:[NSDate date] cycleLength:8];
+    
+    
+    EZCycleResult* result = [EZTaskHelper calcHistoryBegin:quotas date:[NSDate date]];
+    //assert(result.paddingDays == 2);
+    assert([result.beginDate equalWith:[NSDate date] format:@"yyyyMMdd"]);
+    
+    
+    quotas = [[EZQuotas alloc] init:[NSDate stringToDate:@"yyyyMMdd" dateString:@"20120620"] quotas:100 type:CustomizedCycle cycleStartDate:[NSDate stringToDate:@"yyyyMMdd" dateString:@"20120601"] cycleLength:10];
+    result = [EZTaskHelper calcHistoryBegin:quotas date:[NSDate stringToDate:@"yyyyMMdd" dateString:@"20120620"]];
+    assert(result.paddingDays == 9);
+    assert([result.beginDate equalWith:[NSDate stringToDate:@"yyyyMMdd" dateString:@"20120620"] format:@"yyyyMMdd"]);
+    
+    
+    quotas = [[EZQuotas alloc] init:[NSDate stringToDate:@"yyyyMMdd" dateString:@"20120618"] quotas:100 type:CustomizedCycle cycleStartDate:[NSDate stringToDate:@"yyyyMMdd" dateString:@"20120601"] cycleLength:10];
+    
+    result = [EZTaskHelper calcHistoryBegin:quotas date:[NSDate stringToDate:@"yyyyMMdd" dateString:@"20120622"]];
+    assert(result.paddingDays == 0);
+    assert([result.beginDate equalWith:[NSDate stringToDate:@"yyyyMMdd" dateString:@"20120621"] format:@"yyyyMMdd"]);
+    EZDEBUG(@"beginDate:%@",[result.beginDate stringWithFormat:@"yyyyMMdd"]);
+   
+    quotas = [[EZQuotas alloc] init:[NSDate stringToDate:@"yyyyMMdd" dateString:@"20120601"] quotas:100 type:CustomizedCycle cycleStartDate:[NSDate stringToDate:@"yyyyMMdd" dateString:@"20120601"] cycleLength:10];
+    
+    result = [EZTaskHelper calcHistoryBegin:quotas date:[NSDate stringToDate:@"yyyyMMdd" dateString:@"20120601"]];
+    //assert(result.paddingDays == 0);
+    
+    EZDEBUG(@"beginDate:%@",[result.beginDate stringWithFormat:@"yyyyMMdd"]);   
+
+    
+    // assert([result.beginDate equalWith:[NSDate stringToDate:@"yyyyMMdd" dateString:@"20120621"] format:@"yyyyMMdd"]);
+    NSDate* toDay = [NSDate stringToDate:@"yyyyMMdd" dateString:@"20120601"];
+    int gapDays = 0;
+    
+    assert([[toDay adjustDays:-gapDays] equalWith:toDay format:@"yyyyMMdd"]);
+    
+    //assert(false);
+}
+
+// Create a normal test cases
+// What do you mean by normal.
+// I have 3 tasks, 1 time period, it can be used by all 3 tasks,
+// I have 1 task with quotas.
+// Let's allocate the task from the cycle start until the end of the cycle. 
+// Check the what's the amount I allocated on daily basis. 
+// See if it meet my assumption or not.
+
+// Let's remove some history and start in the middle of the cycle,
+// The purpose of this test is that, The Allocated time should increase, as the time is urgent and not enough have completed. 
+// Make use of the daily maximum. 
+// If not set, I will use the 6 hour maximum as default. 
+// This value should go with the EZQuotas.
+
+// Should I show a warning sign to user when we don't have enough time for the quotas? 
+//When to show warning sign?
+//If have no enough avTime to allocate for today's quotas
+//Or today's quotas have reach the daily maximum.
+
+// Is there any reason, we allow user to allocate task for tomorrow or the day after tomorrow?
+// We should, How to we calculate the Quotas?
+// Can we just treat it as today?
+// Should we use today's assignment as history?
+// As long as things not happened, It will not be used as history. 
+// Only based on really history. 
+// This is make sense to me. 
+
+//One thing come into my mind, what if the daily time allocation is not the same.
+//How to calculate the quotas?
+//The same right?
+//I am worry about how I am going to know that there is not enough time left.
+//It is easy. 
+//Following is the process to make sure whether we have enough time left or not.
+//From now to the end of the cyle, get amount of suitable time for this task.
+//Check the remaining amount see if we have enough amount left.
+//What if more tasks competing for this time snippet resource. 
+//What should I do?
+// Or what is the user's expectation?
+// This is linear formula.
+
+//Why not 2 tasks. Let's go ahead make it run
++ (void) testQuotasEffective
+{
+    [EZTestSuite initializeDB];
+    EZTask* taskBook = [[EZTask alloc] initWithName:@"Gandhi" duration:30 maxDur:50 envTraits:2];
+     EZTask* taskBook2 = [[EZTask alloc] initWithName:@"Martine Ruther" duration:30 maxDur:50 envTraits:2];
+    
+    EZTask* taskiOS = [[EZTask alloc] initWithName:@"iOS" duration:60 maxDur:90 envTraits:3];
+    NSDate* startDate = [NSDate date];
+    
+    EZQuotas* quotas = [[EZQuotas alloc] init:startDate quotas:1200 type:WeekCycle cycleStartDate:startDate cycleLength:7];
+    taskiOS.quotas = quotas;
+    [[EZTaskStore getInstance] storeObjects:[NSArray arrayWithObjects:taskBook, taskBook2, taskiOS, nil]];
+    
+    EZAvailableDay* avDay = [[EZAvailableDay alloc] initWithName:@"Default" weeks:ALLDAYS];
+    
+    EZAvailableTime* avTime = [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm" dateString:@"19:30"] name:@"HardWork" duration:240 environment:2*3];
+    [avDay.availableTimes addObject:avTime];
+    [[EZTaskStore getInstance] storeObject:avDay];
+    
+    NSArray* existSchTasks = [[EZTaskStore getInstance] fetchAllWithVO:[EZScheduledTask class] po:[MScheduledTask class] sortField:@"startTime"];
+    assert(existSchTasks.count == 0);
+    
+    EZTaskScheduler* scheduler = [[EZTaskScheduler alloc] init];
+    NSDate* date = [NSDate date];
+    NSMutableArray* allTasks = [[NSMutableArray alloc] init];
+    NSMutableArray* flatedTasks = [[NSMutableArray alloc] init];
+    for(int i = 0; i < 3; ++i){
+        NSDate* schDate = [date adjustDays:i];
+        NSArray* schTasks = [scheduler scheduleTaskByDate:schDate exclusiveList:nil];
+        [[EZTaskStore getInstance] storeObjects:schTasks];
+        [allTasks addObject:schTasks];
+        [flatedTasks addObjectsFromArray:schTasks];
+    }
+    existSchTasks = [[EZTaskStore getInstance] fetchAllWithVO:[EZScheduledTask class] po:[MScheduledTask class] sortField:@"startTime"];
+    assert(existSchTasks.count > 0);
+    
+    
+    NSDate* allocDate = [date adjustDays:3];
+    
+    assert(taskiOS.PO != nil);
+    
+    int history = [scheduler calcHistoryTime:taskiOS date:allocDate];
+    
+    int pureDuration = [[EZTaskStore getInstance] getTaskTime:taskiOS start:[NSDate date] end:allocDate];
+    
+    NSArray* schTasks = [scheduler scheduleTaskByDate:allocDate exclusiveList:nil];
+    EZScheduledTask* iosSchTask = nil;
+    for(EZScheduledTask* scTask in schTasks){
+        if([scTask.task.name isEqualToString:taskiOS.name]){
+            iosSchTask = scTask;
+            break;
+        }
+    }
+    [[EZTaskStore getInstance] storeObjects:schTasks];
+    assert(iosSchTask != nil);
+    assert(iosSchTask.duration > 0);
+    
+    int updatedPureDuration = [[EZTaskStore getInstance] getTaskTime:taskiOS start:[NSDate date] end:[allocDate adjustDays:1]];
+    EZDEBUG(@"duration:%i, updatedDuration:%i", pureDuration, updatedPureDuration);
+    
+    int newHistory = [scheduler calcHistoryTime:taskiOS date:[allocDate adjustDays:2]];
+    EZDEBUG(@"newHistory:%i, history:%i, duration:%i, model duration:%i",newHistory, history, iosSchTask.duration, iosSchTask.PO.duration.integerValue);
+    
+    //Let's shake it a little bit.
+    [[EZTaskStore getInstance] removeObject:iosSchTask];
+    int deleteHistory = [scheduler calcHistoryTime:taskiOS date:[allocDate adjustDays:2]];
+    EZDEBUG(@"After delete the history is:%i",deleteHistory);
+    
+    
+    assert(newHistory == (iosSchTask.duration + history));
+    
+    
+    
+    //The reason I do this because there is a lot of unnecessary logs
+    //Which burried real information, Let's get them quit before lunch
+    for(int i = 0; i < 6; ++i){
+        NSDate* schDate = [date adjustDays:i];
+        EZDEBUG(@"For date:%@", [schDate stringWithFormat:@"yyyyMMdd"]);
+        NSArray* schTks = [allTasks objectAtIndex:i];
+        for(EZScheduledTask* scTask in schTks){
+            EZDEBUG(@"TaskName:%@, duration:%i", scTask.task.name, scTask.duration);
+        }
+        
+    }
+    
+    
+    assert(false);
+    
+}
+
++ (void) testInterToHex
+{
+    NSInteger value = 160;
+    NSString* hexStr = [NSString stringWithFormat:@"%X",value];
+    NSString* hexSmall = [NSString stringWithFormat:@"%x",value];
+    EZDEBUG(@"Converted is:%@, small x is:%@",hexStr, hexSmall);
+    assert([@"A0" isEqualToString:hexStr]);
+    NSInteger backVal = hexStr.intValue;
+    EZDEBUG(@"Back value:%i",backVal);
+    //assert(value == backVal);
+    //NSNumber* num = [[NSNumber alloc] initWithInt:10];
+    NSInteger result =  strtoul([hexStr cStringUsingEncoding:NSASCIIStringEncoding], 0, 16);
+    
+    CGFloat divVal = 1/5.0;
+    assert((divVal > 0.19) && (divVal < 0.21));
+    //assert(divVal == 0.2);
+    assert(result == value);
+    
+    UIColor* color = [UIColor createByHex:@"FFFFFF"];
+    CGFloat red = 0.0;
+    CGFloat green = 0.0;
+    CGFloat blue = 0.0;
+    CGFloat alpha = 0.0;
+    assert([color getRed:&red green:&green blue:&blue alpha:&alpha]);
+    
+    int redInt = 255*red;
+    int greenInt = 255*green;
+    int blueInt = 255*blue;
+    
+    EZDEBUG(@"Red:%f, Green:%f, Blue:%f, alpha:%f: Red:%X,Green:%X,Blue:%X",red, green, blue, alpha, redInt, greenInt, blueInt);
+    
+    NSString* resultStr = color.toHexString;
+    EZDEBUG(@"Result string is %@",resultStr);
+    //assert([@"FFFFFF" isEqualToString:resultStr]);
+    
+    color = [UIColor createByHex:@"CCC"];
+    resultStr = color.toHexString;
+    EZDEBUG(@"Half result is %@",resultStr);
+    assert([@"CCCCCC" isEqualToString:resultStr]);
+    
+    color = [UIColor createByHex:@"ABCDEF"];
+    resultStr = color.toHexString;
+    assert([@"ABCDEF" isEqualToString:resultStr]);
     
 }
 

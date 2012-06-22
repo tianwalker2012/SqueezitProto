@@ -10,7 +10,7 @@
 #import "Constants.h"
 #import "EZTaskHelper.h"
 
-@class EZScheduledDay,EZAvailableDay, EZTask, EZCoreAccessor, EZArray;
+@class EZScheduledDay,EZAvailableDay, EZTask, EZCoreAccessor, EZArray, EZScheduledTask;
 
 NSString* envTraitsToString(NSUInteger envTraits);
 
@@ -67,6 +67,8 @@ NSString* envTraitsToString(NSUInteger envTraits);
 - (NSString*) StringForFlags:(NSUInteger)flags;
 
 - (NSArray*) StringArrayForFlags:(NSUInteger)flags;
+
+- (EZScheduledTask*) fetchScheduledTaskByURL:(NSString*)urlStr;
 
 // Currently only for test purpose. Clean the influence among different test cases
 - (void) clean;

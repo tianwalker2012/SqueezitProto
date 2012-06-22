@@ -134,17 +134,28 @@ static EZCoreAccessor* accessor = nil;
 - (NSArray*) fetchAll:(Class)classType sortField:(NSString*)fieldName
 {
     EZDEBUG(@"Fetch %@, sortField:%@",classType, fieldName);
-    NSString* sortField = fieldName?fieldName:@"name";
-    NSFetchRequest* request = [[NSFetchRequest alloc] initWithEntityName:[classType description]];
-    NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:sortField ascending:YES];
-    NSArray* descriptors = [NSArray arrayWithObject:sortDescriptor];
-    [request setSortDescriptors:descriptors];
-    NSFetchedResultsController* fetcher = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:context sectionNameKeyPath:nil cacheName:CoreFetchResultCache];
-    NSError* error = nil;
-    if(![fetcher performFetch:&error]){
-        EZDEBUG(@"Error fetch %@, sortField:%@, error:%@, userinfo:%@",classType,sortField,error,error.userInfo);
+    return [self fetchObject:classType byPredicate:nil withSortField:fieldName];
+}
+
+//Fetch object by the specified predication
+- (NSArray*) fetchObject:(Class)classType byPredicate:(NSPredicate*)predicate withSortField:(NSString *)sortField
+{
+    NSFetchRequest* request = [[NSFetchRequest alloc] init];
+    NSEntityDescription* entity = [NSEntityDescription entityForName:[classType description] inManagedObjectContext:context];
+    [request setEntity:entity];
+    [request setPredicate:predicate];
+    if(sortField){
+        NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:sortField ascending:YES];
+        NSArray* descriptors = [NSArray arrayWithObject:sortDescriptor];
+        [request setSortDescriptors:descriptors];
+
     }
-    return fetcher.fetchedObjects;
+    NSError* error = nil;
+    NSArray* res = [context executeFetchRequest:request error:&error];
+    if(error){
+        EZDEBUG(@"Error fetch object %@, predicate:%@", classType, predicate);
+    }
+    return res;
 }
 
 @end

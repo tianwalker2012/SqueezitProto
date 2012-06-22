@@ -40,6 +40,9 @@
 //If passing nil, System will use "name" to sort the result.
 - (NSArray*) fetchAll:(Class)classType sortField:(NSString*)fieldName;
 
+//Fetch object by the specified predication
+- (NSArray*) fetchObject:(Class)classType byPredicate:(NSPredicate*)predicate withSortField:(NSString*)sortField;
+
 - (id) initWithDBName:(NSString*)dbName modelName:(NSString*)modelName;
 
 - (void)saveContext;

@@ -7,6 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "EZTaskHelper.h"
+
+@class EZScheduledTask;
 
 @interface EZScheduledTaskController : UITableViewController<UIAlertViewDelegate> {
     NSDate* currentDate;
@@ -28,7 +31,13 @@
 
 - (void) replaceRow:(NSIndexPath*)row;
 
+//Will be called when notification recieved.
+- (void) presentScheduledTask:(EZScheduledTask*)schTask;
+
 @property (strong, nonatomic) NSDate* currentDate;
 @property (strong, nonatomic) NSArray* scheduledTasks;
+
+//This will be executed the in the viewDidAppear. and only executed once.
+@property (strong, nonatomic) EZOperationBlock viewAppearBlock;
 
 @end

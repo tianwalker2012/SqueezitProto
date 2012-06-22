@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "Constants.h"
+#import "EZCycleResult.h"
 
 typedef void (^ EZOperationBlock)();
+
+typedef void (^ EZEventOpsBlock) (id sender);
 
 typedef BOOL (^ FilterOperation)(id obj);
 
@@ -45,6 +48,16 @@ typedef void  (^ IterateOperation)(id obj);
 
 - (NSString*) trim;
 
+- (NSInteger) hexToInt;
+
+@end
+
+@interface UIColor(EZPrivate)
+
++ (UIColor*) createByHex:(NSString*)hexStr;
+
+- (NSString*) toHexString;
+
 @end
 
 @interface NSArray(EZPrivate)
@@ -75,6 +88,8 @@ typedef void  (^ IterateOperation)(id obj);
 - (NSDate*) adjustDays:(int)days;
 
 - (NSDate*) adjustMinutes:(int)minutes;
+
+- (NSDate*) adjust:(NSTimeInterval)delta;
 
 - (NSDate*) combineTime:(NSDate*)time;
 
@@ -113,7 +128,7 @@ NSUInteger findNextFlag(EZArray* flags);
 //Calculate the beginning date for current cycle,
 //So that we have the information that from when we start collect history data
 //We collect history data for the purpose of calculating the remaining time
-+ (NSDictionary*) calcHistoryBegin:(EZQuotas*)quotas date:(NSDate*)date;
++ (EZCycleResult*) calcHistoryBegin:(EZQuotas*)quotas date:(NSDate*)date;
 
 //Calculate how many days still left for in current cycle
 + (int) cycleRemains:(EZQuotas*)quotas date:(NSDate*)date;

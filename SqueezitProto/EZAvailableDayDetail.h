@@ -9,10 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "EZTaskHelper.h"
 #import "EZPickerWrapper.h"
+#import "EZTableSelector.h"
 
 @class EZAvailableDay;
 
-@interface EZAvailableDayDetail : UITableViewController<UITextFieldDelegate, EZPickerWrapperDelegate>
+@interface EZAvailableDayDetail : UITableViewController<UITextFieldDelegate, EZPickerWrapperDelegate, EZTableSelectorDelegate>
 
 @property(strong, nonatomic) EZAvailableDay* avDay;
 

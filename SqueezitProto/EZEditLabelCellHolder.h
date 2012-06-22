@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class EZEditLabelCell, EZTaskGroupCell, EZPureEditCell, EZSettingCell, EZEnvFlagPickerCell, EZAvailableTimeCell, EZScheduledCell, EZAvTimeCell, EZAvTimeHeader;
+@class EZEditLabelCell, EZTaskGroupCell, EZPureEditCell, EZSettingCell, EZEnvFlagPickerCell, EZAvailableTimeCell, EZScheduledCell, EZAvTimeCell, EZAvTimeHeader, EZBeginEndTimeCell, EZScheduledTaskCell, EZTimeCounterView, EZButtonCell;
 //The purpose of this holder is serve as the file owner, 
 //So that this cell could be used by many controllers.
 @interface EZEditLabelCellHolder : NSObject
@@ -30,6 +30,13 @@
 @property (strong, nonatomic) IBOutlet EZAvTimeCell* avTimeCell;
 
 @property (strong, nonatomic) IBOutlet EZAvTimeHeader* avTimeHeader;
+
+@property (strong, nonatomic) IBOutlet EZBeginEndTimeCell* beginEndTimeCell;
+@property (strong, nonatomic) IBOutlet EZScheduledTaskCell* scheduledTaskCell;
+
+@property (strong, nonatomic) IBOutlet EZTimeCounterView* timeCounterView;
+
+@property (strong, nonatomic) IBOutlet EZButtonCell* buttonCell;
 
 //@property (strong, nonatomic) id<UITextFieldDelegate> delegate;
 
@@ -53,5 +60,13 @@
 //+ (UITableViewCell*) createCell:(NSString*)xibFile;
 
 + (EZAvTimeHeader*) createAvTimeHeader;
+
++ (EZBeginEndTimeCell*) createBeginEndTimeCell;
+
++ (EZScheduledTaskCell*) createScheduledTaskCell;
+
++ (EZTimeCounterView*) createTimeCounterView;
+
++ (EZButtonCell*) createButtonCell;
 
 @end

@@ -12,6 +12,8 @@
 #import "EZScheduledTask.h"
 #import "EZTask.h"
 #import "EZTaskStore.h"
+#import "EZEditLabelCellHolder.h"
+#import "EZButtonCell.h"
 
 @interface EZScheduledDetail ()
 
@@ -51,6 +53,9 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    if([schTask.startTime isPassed:[NSDate date]]){
+        return 5;
+    }
     return 6;
 }
 
@@ -88,16 +93,33 @@
             cell.detailTextLabel.text = envTraitsToString(schTask.task.envTraits);
         }
             break;
-        case 4:{
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Dele"];
-            cell.textLabel.text = Local(@"Delete");
-            cell.textLabel.textAlignment = UITextAlignmentCenter;
-        }
-            break;
+        case 4:
         case 5:{
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Reschedule"];
-            cell.textLabel.text = Local(@"Reschedule");
-            cell.textLabel.textAlignment = UITextAlignmentCenter;
+            EZButtonCell* buttonCell = [tableView dequeueReusableCellWithIdentifier:@"Button"];
+            if(buttonCell == nil){
+                buttonCell = [EZEditLabelCellHolder createButtonCell];
+            }
+            
+            if(indexPath.section == 4){
+                [buttonCell.button setTitle:Local(@"Delete") forState:UIControlStateNormal];
+            }else{
+                [buttonCell.button setTitle:Local(@"Re-Schedule") forState:UIControlStateNormal];
+            }
+            
+            
+            buttonCell.clickedOps = ^(id sender){
+                [self.navigationController popViewControllerAnimated:YES];
+                if(indexPath.section==4){
+                    if(deleteBlock){
+                        deleteBlock();
+                    }
+                }else{
+                    if(rescheduleBlock){
+                        rescheduleBlock();
+                    }
+                }
+            };
+            cell = buttonCell;
         }
             break;
         default:

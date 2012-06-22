@@ -18,6 +18,8 @@
 #import "EZTaskStore.h"
 #import "EZKeyBoardHolder.h"
 #import "EZPickerKeyboardDate.h"
+#import "EZTableSelector.h"
+#import "EZAvTimeDetail.h"
 
 
 @interface EZAvailableDayDetail () {
@@ -28,6 +30,8 @@
     EZPickerKeyboardDate* dateKeyboard;
     UITableViewCell* dateCell;
     NSDate* assignDate;
+    NSUInteger currentAssignWeeks;
+    EZTableSelector* weekSelector;
 }
 
 - (void) addAvTime;
@@ -104,6 +108,7 @@
     }else{
         assignDate = [[NSDate date] adjustDays:2];
     }
+    currentAssignWeeks = avDay.assignedWeeks;
 }
 
 
@@ -164,6 +169,14 @@
     return 0;
 }
 
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(indexPath.section == 1){
+        return UITableViewCellEditingStyleDelete;
+    }
+    return UITableViewCellEditingStyleNone;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if(indexPath.section == 0){
@@ -173,8 +186,10 @@
             if(editCell == nil){
                 editCell = [EZEditLabelCellHolder createPureEditCellWithDelegate:self];
             }
+            editCell.isAlwaysEditable = false;
             editCell.editField.text = avDay.name;
-            editCell.editField.userInteractionEnabled = self.tableView.isEditing;
+            editCell.editField.placeholder = Local(@"Name for time config...");
+            
             return editCell;
         }else{
             NSString* cellID = @"propertyCell";
@@ -186,6 +201,7 @@
                 cell.textLabel.text = Local(@"Assigned Week Day");
                 cell.detailTextLabel.text = [EZTaskHelper weekFlagToWeekString:avDay.assignedWeeks];
             }else{
+                EZDEBUG(@"Date cell called:%@",[avDay.date stringWithFormat:@"yyyy-MMM-dd"]);
                 cell.textLabel.text = Local(@"Assigned Date");
                 cell.detailTextLabel.text = [avDay.date stringWithFormat:@"yyyy-MMM-dd"];
             }
@@ -223,6 +239,9 @@
     if(indexPath.section == 1){
         return true;
     }
+    if(indexPath.section == 0 && indexPath.row == 0){
+        return true;
+    }
     return false;
 }
 
@@ -233,7 +252,11 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
+        
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        EZAvailableTime* avTime = [avDay.availableTimes objectAtIndex:indexPath.row];
+        [avDay.availableTimes removeObjectAtIndex:indexPath.row];
+        [[EZTaskStore getInstance] removeObject:avTime];
     }   
     else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
@@ -268,6 +291,30 @@
         }
         assignDatePicker.wrapperDelegate = self;
         [self.navigationController pushViewController:assignDatePicker animated:YES];
+    }else if(indexPath.section == 0 && indexPath.row == 1){
+        if(weekSelector == nil){
+            weekSelector = [[EZTableSelector alloc] initWithStyle:UITableViewStyleGrouped];
+        }
+        weekSelector.selectorDelegate = self;
+        [self.navigationController pushViewController:weekSelector animated:YES];
+    }else if(indexPath.section == 1){
+        EZAvTimeDetail* avTimeDetail = [[EZAvTimeDetail alloc] initWithStyle:UITableViewStyleGrouped];
+        
+        EZAvailableTime* avTime = [avDay.availableTimes objectAtIndex:indexPath.row];
+        avTimeDetail.avTime = avTime.cloneVO;
+        
+        avTimeDetail.doneBlock = ^(){
+            [avDay.availableTimes replaceObjectAtIndex:indexPath.row withObject:avTimeDetail.avTime];
+            [avDay.availableTimes sortUsingComparator:^NSComparisonResult(EZAvailableTime* obj1, EZAvailableTime* obj2) {
+                return [obj1.start compare:obj2.start];
+            }];
+            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+            [[EZTaskStore getInstance] storeObject:avTimeDetail.avTime];
+        };
+        avTimeDetail.cancelBlock = ^(){
+            EZDEBUG(@"Cancel get callled");
+        };
+        [self.navigationController pushViewController:avTimeDetail animated:YES];
     }
     //[self setBackButton];
 }
@@ -282,12 +329,15 @@
 
 #pragma mark - PickerWrapper delegate
 //How many rows in this picker controller;
-- (int) getRow:(EZPickerWrapper*)pickerWrapper
+- (int) getRow:(id)pickerWrapper
 {
-    return 1;
+    if([pickerWrapper isKindOfClass:[EZPickerWrapper class]]){
+        return 1;
+    }
+    return 8;
 }
 
-- (int) getSection:(EZPickerWrapper*)pickerWrapper
+- (int) getSection:(id)pickerWrapper
 {
     return 1;
 }
@@ -334,15 +384,96 @@
 
 
 
-- (void) doneClicked:(EZPickerWrapper*)pickerWrapper
+- (void) doneClicked:(id)pickerWrapper
 {
-    avDay.date = assignDate;
-    [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:YES];
+    if([pickerWrapper isKindOfClass:[EZPickerWrapper class]]){
+        avDay.date = assignDate;
+        [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:YES];
+        [[EZTaskStore getInstance] storeObject:avDay];
+    }else{
+        avDay.assignedWeeks = currentAssignWeeks;
+        [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:YES];
+        [[EZTaskStore getInstance] storeObject:avDay];
+        
+    }
 }
 
-- (void) cancelClicked:(EZPickerWrapper*)pickerWrapper
+- (void) cancelClicked:(id)pickerWrapper
 {
     EZDEBUG(@"Don't know what to do");
 }
+
+#pragma mark - TableSelector delegate
+
+
+- (UITableViewCell*) tableSelector:(EZTableSelector*)selector getCell:(NSIndexPath*)indexPath
+{
+    UITableViewCell* res = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"WeekCell"];
+    //res.textLabel.textAlignment = UITextAlignmentCenter;
+    //EZDEBUG(@"Cell Created for indexPath:%i:%i",indexPath.row, indexPath.section);
+    res.selectionStyle = UITableViewCellSelectionStyleNone;
+    if(indexPath.row == 0){
+        res.textLabel.text = Local(@"None");
+        //res.textLabel.textColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.75 alpha:1];
+        if(currentAssignWeeks == 0){
+            res.accessoryType = UITableViewCellAccessoryCheckmark;
+        }else{
+            res.accessoryType = UITableViewCellAccessoryNone;
+        }
+    }else{
+        NSUInteger flag = 1 << (indexPath.row - 1);
+        res.textLabel.text = [EZTaskHelper weekFlagToWeekString:flag];
+        EZDEBUG(@"Flag is %i, text is:%@", flag, res.textLabel.text);
+        if((currentAssignWeeks & flag) == flag){
+            res.accessoryType = UITableViewCellAccessoryCheckmark;
+        }else{
+            res.accessoryType = UITableViewCellAccessoryNone;
+        }
+    }
+    if(indexPath.row % 2){
+        res.backgroundColor = [UIColor colorWithRed:0.8 green:0.8 blue:0.8 alpha:1];
+    }else{
+        res.backgroundColor = [UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:1];
+    }
+    return res;
+}
+
+- (void) tableSelector:(EZTableSelector*)selector selected:(NSIndexPath*)indexPath
+{
+    if(indexPath.row == 0){
+        currentAssignWeeks = 0;
+        [selector selectOnly:indexPath];
+    }else{
+        NSUInteger flag = 1 << indexPath.row;
+        if((currentAssignWeeks & flag) == flag){
+            currentAssignWeeks = currentAssignWeeks & ~flag;
+            [selector selectNot:indexPath];
+        }else{
+            currentAssignWeeks = currentAssignWeeks | flag;
+            [selector selectAdd:indexPath];
+        }
+        [selector selectNot:[NSIndexPath indexPathForRow:0 inSection:0]];
+    }
+}
+
+//I made an assumption
+//That is only the name of the availabDay are used this delegate.
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    //The default behavior is empty string mean back to old value.
+    //This behavior is good
+    if([textField.text.trim isEqualToString:@""]){
+        textField.text = avDay.name;
+    }else{
+        avDay.name = textField.text;
+    }
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return true;
+}
+
 
 @end

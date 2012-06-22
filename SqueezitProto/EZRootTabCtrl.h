@@ -1,5 +1,5 @@
 //
-//  EZTestViewCtrl.h
+//  EZTestTabCtrl.h
 //  SqueezitProto
 //
 //  Created by Apple on 12-6-4.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface EZTestViewCtrl : UIViewController
+@interface EZRootTabCtrl : UITabBarController<UITabBarControllerDelegate>
 
 @end

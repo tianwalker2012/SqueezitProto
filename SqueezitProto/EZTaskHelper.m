@@ -13,6 +13,10 @@
 #import "EZGlobalLocalize.h"
 #import "EZArray.h"
 
+NSString* doubleString(NSString* str)
+{
+    return [NSString stringWithFormat:@"%@%@", str, str];
+}
 
 @implementation NSString(EZPrivate)
 
@@ -22,8 +26,65 @@
     return [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
 
+- (NSInteger) hexToInt
+{
+    return strtoul([self cStringUsingEncoding:NSASCIIStringEncoding], 0, 16);
+}
+
 @end
 
+
+@implementation UIColor(EZPrivate)
+
+//We support 3Hex like CCC or ccc or 6Hex bcbcbc. etc
++ (UIColor*) createByHex:(NSString*)hexStr
+{
+    CGFloat red = 0;
+    CGFloat green = 0;
+    CGFloat blue = 0;
+    if(hexStr.length == 3){
+        NSString* redStr = [hexStr substringWithRange:NSMakeRange(0,1)];
+        redStr = doubleString(redStr);
+        red = redStr.hexToInt/255.0;
+        
+        NSString* greenStr = [hexStr substringWithRange:NSMakeRange(1,1)];
+        greenStr = doubleString(greenStr);
+        green = greenStr.hexToInt/255.0;
+        
+        NSString* blueStr = [hexStr substringWithRange:NSMakeRange(2,1)];
+        blueStr = doubleString(blueStr);
+        blue = blueStr.hexToInt/255.0;
+        
+    }else if(hexStr.length == 6){
+        NSString* redStr = [hexStr substringWithRange:NSMakeRange(0,2)];
+        red = redStr.hexToInt/255.0;
+        
+        NSString* greenStr = [hexStr substringWithRange:NSMakeRange(2,2)];
+        green = greenStr.hexToInt/255.0;
+        
+        NSString* blueStr = [hexStr substringWithRange:NSMakeRange(4,2)];
+        blue = blueStr.hexToInt/255.0;
+        
+    }else{
+        //Will through exception
+    }
+    return [UIColor colorWithRed:red green:green blue:blue alpha:1.0];
+}
+
+- (NSString*) toHexString
+{
+    CGFloat red;
+    CGFloat green;
+    CGFloat blue;
+    CGFloat alpha;
+    [self getRed:&red green:&green blue:&blue alpha:&alpha];
+    int redInt = red*255;
+    int greenInt = green*255;
+    int blueInt = blue*255;
+    return [NSString stringWithFormat:@"%X%X%X", redInt, greenInt, blueInt]; 
+}
+
+@end
 
 @implementation NSArray(EZPrivate)
 
@@ -79,19 +140,15 @@
 
 - (BOOL) InBetweenDays:(NSDate*)start end:(NSDate*)end
 {
-    BOOL res = false;
-    int curDay = [self convertDays];
-    int startDay = [start convertDays];
-    int endDay = [end convertDays];
-    res = (curDay >= startDay && curDay <= endDay); 
-    return res;
+    NSTimeInterval curDay = self.timeIntervalSince1970/SecondsPerDay;
+    NSTimeInterval startDay = start.timeIntervalSince1970/SecondsPerDay;
+    NSTimeInterval endDay = end.timeIntervalSince1970/SecondsPerDay;
+    return (curDay >= startDay && curDay <= endDay); 
 }
 
 - (NSDate*) adjustDays:(int)days
 {
-    int curDays = [self convertDays];
-    curDays = curDays + days;
-    return [[NSDate alloc] initWithTimeIntervalSince1970:curDays*SecondsPerDay];
+    return [self adjust:days * SecondsPerDay]; 
 }
 
 //Combine the date with the time. 
@@ -106,9 +163,14 @@
 
 - (NSDate*) adjustMinutes:(int)minutes
 {
+    return [self adjust:minutes*60];
+}
+
+
+- (NSDate*) adjust:(NSTimeInterval)delta
+{
     NSTimeInterval seconds = [self timeIntervalSince1970];
-    seconds += minutes*60;
-    return [[NSDate alloc] initWithTimeIntervalSince1970:seconds];
+    return [[NSDate alloc] initWithTimeIntervalSince1970:(seconds+delta)];
 }
 
 - (EZWeekDayValue) weekDay
@@ -186,25 +248,27 @@
 }
 
 //It could have many cases, so I only have a natural week and a customized cases figure out so far
-+ (NSDictionary*) calcHistoryBegin:(EZQuotas*)quotas date:(NSDate*)date
++ (EZCycleResult*) calcHistoryBegin:(EZQuotas*)quotas date:(NSDate*)date
 {
-    NSDate* res;
+    
+    NSDate* beginDate;
     switch (quotas.cycleType) {
         case CustomizedCycle: {
             int beginDay = [quotas.cycleStartDay convertDays];
             int endDay = [date convertDays];
             int gapDays = (endDay - beginDay) % quotas.cycleLength;
-            res = [date adjustDays:-gapDays];
-            break;
+            beginDate = [date adjustDays:-gapDays];
+            EZDEBUG(@"Cycle start days:%i,endDay:%i,gapDays:%i,beginDate:%@, date:%@",beginDay, endDay, gapDays, [beginDate stringWithFormat:@"yyyyMMdd"], [date stringWithFormat:@"yyyyMMdd"]);
+            break;  
         }
         case WeekCycle: {
             int currentWeekDay = [date orgWeekDay] - 1;
-            res = [date adjustDays:-currentWeekDay];
+            beginDate = [date adjustDays:-currentWeekDay];
             break;
         }
         case MonthCycle: {
             int monthDay = [date monthDay] - 1;
-            res = [date adjustDays:-monthDay];
+            beginDate = [date adjustDays:-monthDay];
         }
         default:
             EZDEBUG(@"%i not implemented yet",quotas.cycleType);
@@ -214,13 +278,16 @@
     //If actual start day later than cycle days, then the 
     //History data will collect from the actual start day.
     int paddingDay = 0;
-    if([res convertDays] < [quotas.startDay convertDays]){
-        paddingDay = [quotas.startDay convertDays] - [res convertDays];
-        res = quotas.startDay;
+    if([beginDate convertDays] < [quotas.startDay convertDays]){
+        paddingDay = [quotas.startDay convertDays] - [beginDate convertDays];
+        beginDate = quotas.startDay;
         EZDEBUG(@"Padding day:%i",paddingDay);
     }
 
-    return [NSDictionary dictionaryWithObjectsAndKeys:res, @"beginDate", [NSNumber numberWithInt:paddingDay], @"padDays", nil];
+    EZCycleResult* res = [[EZCycleResult alloc] init];
+    res.beginDate = beginDate;
+    res.paddingDays = paddingDay;
+    return res;
 }
 
 

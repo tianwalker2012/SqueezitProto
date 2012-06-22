@@ -14,9 +14,10 @@
 #import "EZScheduledCell.h"
 #import "EZAvTimeCell.h"
 #import "EZAvTimeHeader.h"
+#import "EZButtonCell.h"
 
 @implementation EZEditLabelCellHolder
-@synthesize editCell, groupCell, pureEditCell, settingCell, flagCell, timeCell, scheduledCell, avTimeCell, avTimeHeader;
+@synthesize editCell, groupCell, pureEditCell, settingCell, flagCell, timeCell, scheduledCell, avTimeCell, avTimeHeader, beginEndTimeCell, scheduledTaskCell, timeCounterView, buttonCell;
 
 
 //Singleton, save memory?
@@ -115,6 +116,34 @@
     //Hide the button
     cellHolder.avTimeHeader.addButton.alpha = 0;
     return cellHolder.avTimeHeader;
+}
+
++ (EZBeginEndTimeCell*) createBeginEndTimeCell
+{
+    EZEditLabelCellHolder* cellHolder = [EZEditLabelCellHolder getInstance];
+    [[NSBundle mainBundle] loadNibNamed:@"EZBeginEndTimeCell" owner:cellHolder options:nil];
+    return cellHolder.beginEndTimeCell;
+}
+
++ (EZScheduledTaskCell*) createScheduledTaskCell
+{
+    EZEditLabelCellHolder* cellHolder = [EZEditLabelCellHolder getInstance];
+    [[NSBundle mainBundle] loadNibNamed:@"EZScheduledTaskCell" owner:cellHolder options:nil];
+    return cellHolder.scheduledTaskCell;
+}
+
++ (EZTimeCounterView*) createTimeCounterView
+{
+    EZEditLabelCellHolder* cellHolder = [EZEditLabelCellHolder getInstance];
+    [[NSBundle mainBundle] loadNibNamed:@"EZTimeCounterView" owner:cellHolder options:nil];
+    return cellHolder.timeCounterView;
+}
+
++ (EZButtonCell*) createButtonCell
+{
+    EZEditLabelCellHolder* cellHolder = [EZEditLabelCellHolder getInstance];
+    [[NSBundle mainBundle] loadNibNamed:@"EZButtonCell" owner:cellHolder options:nil];
+    return cellHolder.buttonCell;   
 }
 
 @end

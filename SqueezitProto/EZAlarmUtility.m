@@ -10,6 +10,7 @@
 #import "Constants.h"
 #import "EZScheduledTask.h"
 #import "EZTask.h"
+#import "MScheduledTask.h"
 
 @implementation EZAlarmUtility
 
@@ -55,7 +56,7 @@
     //Mean I can pick my own customized name?
     nofication.soundName = task.task.soundName;
     nofication.applicationIconBadgeNumber = 1;
-    NSDictionary* infoDict = [NSDictionary dictionaryWithObjectsAndKeys:task.task.name,@"task",nil];
+    NSDictionary* infoDict = [NSDictionary dictionaryWithObjectsAndKeys:task.PO.objectID.URIRepresentation.absoluteString ,EZNotificationKey ,nil];
     nofication.userInfo = infoDict;
     [[UIApplication sharedApplication] scheduleLocalNotification:nofication];
     task.alarmNotification = nofication;

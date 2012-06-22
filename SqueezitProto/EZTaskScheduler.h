@@ -33,6 +33,10 @@
 //I am not satisfied so I need to change the task
 - (NSArray*) rescheduleTask:(EZScheduledTask*)schTask existTasks:(NSArray*)schTasks;
 
+//Do the same thing as the existed one, the only difference is that
+//It will query all things from the database.
+- (NSArray*) rescheduleStoredTask:(EZScheduledTask *)schTask;
+
 //The purpose of this method is to schedule tasks which have quotas. 
 //What's the meaning?
 //It will modify the available time based on the statistic collected. 

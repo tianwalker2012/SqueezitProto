@@ -36,6 +36,10 @@ EZDEBUG(xx, ##__VA_ARGS__); \
 
 #define CoreFetchResultCache @"Root"
 
+#define EZEditColor @"324F85"
+
+#define EZNotificationKey @"taskURL"
+
 
 typedef enum EZEnvironmentTraits {
     EZ_ENV_NONE = 1,

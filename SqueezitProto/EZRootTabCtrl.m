@@ -6,14 +6,14 @@
 //  Copyright (c) 2012年 __MyCompanyName__. All rights reserved.
 //
 
-#import "EZTestTabCtrl.h"
+#import "EZRootTabCtrl.h"
 #import "Constants.h"
 
-@interface EZTestTabCtrl ()
+@interface EZRootTabCtrl ()
 
 @end
 
-@implementation EZTestTabCtrl
+@implementation EZRootTabCtrl
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {

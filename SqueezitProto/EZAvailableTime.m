@@ -24,6 +24,8 @@
     return self;
 }
 
+
+
 - (id) initWithVO:(EZAvailableTime*)at
 {
     self = [super init];
