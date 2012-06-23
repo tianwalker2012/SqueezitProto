@@ -88,16 +88,16 @@
 
 - (UITableViewCell*) generateEditCell:(NSIndexPath*)indexPath
 {
-    static NSString *CellIdentifier = @"EditCell";
-    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if(cell == nil){
-        EZPureEditCell* pureCell = [EZEditLabelCellHolder createPureEditCellWithDelegate:self];
+    static NSString *CellIdentifier = @"PureEdit";
+    EZPureEditCell *pureCell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if(pureCell == nil){
+        pureCell = [EZEditLabelCellHolder createPureEditCellWithDelegate:self];
         pureCell.editField.placeholder = EZLocalizedString(@"Task name ...", nil);
         self.editField = pureCell.editField;
-        cell = pureCell;
     }
+    pureCell.isAlwaysEditable = true;
     self.editField.text = @"";
-    return cell;
+    return pureCell;
 }
 
 

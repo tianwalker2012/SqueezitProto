@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class EZEditLabelCell, EZTaskGroupCell, EZPureEditCell, EZSettingCell, EZEnvFlagPickerCell, EZAvailableTimeCell, EZScheduledCell, EZAvTimeCell, EZAvTimeHeader, EZBeginEndTimeCell, EZScheduledTaskCell, EZTimeCounterView, EZButtonCell;
+@class EZEditLabelCell, EZTaskGroupCell, EZPureEditCell, EZSettingCell, EZEnvFlagPickerCell, EZAvailableTimeCell, EZScheduledCell, EZAvTimeCell, EZAvTimeHeader, EZBeginEndTimeCell, EZScheduledTaskCell, EZTimeCounterView, EZButtonCell, EZScheduledV2Cell;
 //The purpose of this holder is serve as the file owner, 
 //So that this cell could be used by many controllers.
 @interface EZEditLabelCellHolder : NSObject
@@ -37,6 +37,8 @@
 @property (strong, nonatomic) IBOutlet EZTimeCounterView* timeCounterView;
 
 @property (strong, nonatomic) IBOutlet EZButtonCell* buttonCell;
+
+@property (strong, nonatomic) IBOutlet EZScheduledV2Cell* scheduleV2Cell;
 
 //@property (strong, nonatomic) id<UITextFieldDelegate> delegate;
 
@@ -68,5 +70,7 @@
 + (EZTimeCounterView*) createTimeCounterView;
 
 + (EZButtonCell*) createButtonCell;
+
++ (EZScheduledV2Cell*) createScheduledV2Cell;
 
 @end

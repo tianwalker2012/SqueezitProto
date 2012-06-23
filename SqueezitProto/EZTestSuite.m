@@ -290,7 +290,7 @@ typedef int(^ClosureTest)();
     assert(mt.maxDuration.intValue == 40);
 
     
-    assert(false);
+    //assert(false);
      
     
 }

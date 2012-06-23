@@ -78,6 +78,8 @@
 		188CFDE01591C9A2008ACCB8 /* EZTimeCounterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDDF1591C9A1008ACCB8 /* EZTimeCounterView.m */; };
 		188CFDE21592D9BF008ACCB8 /* EZButtonCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 188CFDE11592D9BC008ACCB8 /* EZButtonCell.xib */; };
 		188CFDE515930364008ACCB8 /* EZButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDE41593035F008ACCB8 /* EZButtonCell.m */; };
+		188CFDE71595BD6A008ACCB8 /* EZScheduledV2Cell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 188CFDE61595BD66008ACCB8 /* EZScheduledV2Cell.xib */; };
+		188CFDEA1595C081008ACCB8 /* EZScheduledV2Cell.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDE91595C07E008ACCB8 /* EZScheduledV2Cell.m */; };
 		188D55161584883000142394 /* EZEnvFlag.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D55151584883000142394 /* EZEnvFlag.m */; };
 		188D551A15848B3A00142394 /* MEnvFlag.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D551915848B3A00142394 /* MEnvFlag.m */; };
 		188D551D1584ACB000142394 /* EZArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D551C1584ACB000142394 /* EZArray.m */; };
@@ -232,6 +234,9 @@
 		188CFDE11592D9BC008ACCB8 /* EZButtonCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZButtonCell.xib; sourceTree = "<group>"; };
 		188CFDE31593035D008ACCB8 /* EZButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZButtonCell.h; sourceTree = "<group>"; };
 		188CFDE41593035F008ACCB8 /* EZButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZButtonCell.m; sourceTree = "<group>"; };
+		188CFDE61595BD66008ACCB8 /* EZScheduledV2Cell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZScheduledV2Cell.xib; sourceTree = "<group>"; };
+		188CFDE81595C07D008ACCB8 /* EZScheduledV2Cell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZScheduledV2Cell.h; sourceTree = "<group>"; };
+		188CFDE91595C07E008ACCB8 /* EZScheduledV2Cell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZScheduledV2Cell.m; sourceTree = "<group>"; };
 		188D55141584883000142394 /* EZEnvFlag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZEnvFlag.h; sourceTree = "<group>"; };
 		188D55151584883000142394 /* EZEnvFlag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZEnvFlag.m; sourceTree = "<group>"; };
 		188D551815848B3A00142394 /* MEnvFlag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEnvFlag.h; sourceTree = "<group>"; };
@@ -553,6 +558,9 @@
 				188CFDE11592D9BC008ACCB8 /* EZButtonCell.xib */,
 				188CFDE31593035D008ACCB8 /* EZButtonCell.h */,
 				188CFDE41593035F008ACCB8 /* EZButtonCell.m */,
+				188CFDE61595BD66008ACCB8 /* EZScheduledV2Cell.xib */,
+				188CFDE81595C07D008ACCB8 /* EZScheduledV2Cell.h */,
+				188CFDE91595C07E008ACCB8 /* EZScheduledV2Cell.m */,
 			);
 			name = "Customized Cells";
 			sourceTree = "<group>";
@@ -654,6 +662,7 @@
 				188CFDD51591AE06008ACCB8 /* EZScheduledTaskCell.xib in Resources */,
 				188CFDDA1591BD6C008ACCB8 /* EZTimeCounterView.xib in Resources */,
 				188CFDE21592D9BF008ACCB8 /* EZButtonCell.xib in Resources */,
+				188CFDE71595BD6A008ACCB8 /* EZScheduledV2Cell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -734,6 +743,7 @@
 				188CFDDD1591BED0008ACCB8 /* EZTimeCounter.m in Sources */,
 				188CFDE01591C9A2008ACCB8 /* EZTimeCounterView.m in Sources */,
 				188CFDE515930364008ACCB8 /* EZButtonCell.m in Sources */,
+				188CFDEA1595C081008ACCB8 /* EZScheduledV2Cell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

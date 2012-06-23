@@ -21,6 +21,7 @@
 #import "EZTimeCounterView.h"
 #import "EZTimeCounter.h"
 #import "MScheduledTask.h"
+#import "EZScheduledV2Cell.h"
 
 @interface EZNumberWrapper : NSObject 
 
@@ -73,7 +74,8 @@
 - (void)viewDidAppear:(BOOL)animated {
     //EZDEBUG(@"viewDidAppear get called");
     [self becomeFirstResponder];
-    currentDate = [NSDate date];
+    //currentDate = [NSDate date];
+    currentDate = [NSDate stringToDate:@"yyyyMMdd" dateString:@"20120629"];
     if(viewAppearBlock){
         viewAppearBlock();
         self.viewAppearBlock = nil;
@@ -208,7 +210,7 @@
         ct.isCounting = false;
         [ct.counterView removeFromSuperview];
     };
-    //[counter start:1];
+    [counter start:1];
 }
 
 - (void)viewDidUnload

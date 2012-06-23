@@ -109,9 +109,7 @@
         [[EZTaskStore getInstance] fillTestData];
     }
     [[EZTaskStore getInstance] populateEnvFlags];
-    [self setupNotification];
-    
-    
+    //[self setupNotification];
     //Notification related code
     NSString* optionKey = @"UIApplicationLaunchOptionsLocalNotificationKey";
     UILocalNotification* notification = [launchOptions objectForKey:optionKey];
@@ -119,6 +117,8 @@
         [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     }
     EZScheduledTask* schTask = [[EZTaskStore getInstance] fetchScheduledTaskByURL:[notification.userInfo objectForKey:EZNotificationKey]];
+    //End of get notification
+    
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
