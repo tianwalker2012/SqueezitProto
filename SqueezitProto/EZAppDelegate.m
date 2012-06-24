@@ -21,6 +21,9 @@
 #import "EZScheduledTask.h"
 #import "EZTaskHelper.h"
 #import "MScheduledTask.h"
+#import "EZSlideViewTester.h"
+#import "EZViewLayoutTester.h"
+#import "EZSlideViewWrapper.h"
 
 @interface EZAppDelegate() {
     EZRootTabCtrl* tabCtrl;
@@ -82,7 +85,6 @@
     }
     //I made assumption, this will not change
     if(tabCtrl.selectedViewController != scheduledNav){
-        EZDEBUG(@"Switch to correct navigation");
         tabCtrl.selectedViewController = scheduledNav;
     }
     EZDEBUG(@"Will pop to root");
@@ -143,7 +145,21 @@
     EZAvailableDayList* tsl = [[EZAvailableDayList alloc] initWithStyle:UITableViewStylePlain];
     timeSettingNav = [[UINavigationController alloc] initWithRootViewController:tsl];
     
-    tabCtrl.viewControllers = [NSArray arrayWithObjects:scheduledNav, taskNav, timeSettingNav, nil];
+    EZSlideViewWrapper* slider = [[EZSlideViewWrapper alloc] init];
+    UINavigationController* sliderNav = [[UINavigationController alloc] initWithRootViewController:slider];
+    
+    //Test the layout
+    EZViewLayoutTester* father = [[EZViewLayoutTester alloc] initWithName:@"father"];
+    father.view.backgroundColor = [UIColor grayColor];
+    
+    EZViewLayoutTester* daughter = [[EZViewLayoutTester alloc] initWithName:@"daughter"];
+    daughter.view.backgroundColor = [UIColor yellowColor];
+    
+    //[father addChildViewController:daughter];
+    [father.view addSubview:daughter.view];
+    
+    
+    tabCtrl.viewControllers = [NSArray arrayWithObjects:scheduledNav, taskNav, timeSettingNav, sliderNav, daughter, nil];
     //self.window.rootViewController = tabCtrl;
     [self.rootCtrl addChildViewController:tabCtrl];
     [self.rootCtrl.view addSubview:tabCtrl.view];

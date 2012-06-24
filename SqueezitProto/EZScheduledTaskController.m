@@ -193,7 +193,7 @@
     counter.tickBlock = ^(EZTimeCounter* ct){
         if(!ct.isCounting){
             NSInteger nowPos = [self findOngoingTask:scheduledTasks];
-            EZDEBUG(@"Any task going on:%i",nowPos);
+            //EZDEBUG(@"Any task going on:%i",nowPos);
             if(nowPos < 0){//Quit if no task is showing
                 return;
             }
@@ -312,10 +312,10 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"ScheduledTaskCell";
-    EZScheduledTaskCell *cell = (EZScheduledTaskCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    static NSString *CellIdentifier = @"ScheduledV2";
+    EZScheduledV2Cell *cell = (EZScheduledV2Cell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if(!cell){
-        cell = [EZEditLabelCellHolder createScheduledTaskCell];
+        cell = [EZEditLabelCellHolder createScheduledV2Cell];
         //cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     EZScheduledTask* task = [scheduledTasks objectAtIndex:indexPath.row];
@@ -325,39 +325,37 @@
     NSDate* endTime = [NSDate dateWithTimeInterval:task.duration*60 sinceDate:task.startTime];
     NSDate* now = [NSDate date];
     if([now InBetween:task.startTime end:endTime] ){
-        cell.taskName.textColor = [UIColor redColor];
+        [cell setStatus:EZ_NOW];
         if(cell.nowSign == nil){
             cell.nowSign = counter.counterView;
             [cell addSubview:counter.counterView];
         }
-        cell.switchButton.enabled = false;
+        //cell.switchButton.enabled = false;
     }else if([task.startTime isPassed:now]) { //Passed task
-        cell.taskName.textColor = [UIColor grayColor];
+        [cell setStatus:EZ_PASSED];
         if(cell.nowSign){
             [cell.nowSign removeFromSuperview];
             cell.nowSign = nil;
         }
-        cell.switchButton.enabled = false;
+        //cell.switchButton.enabled = false;
     } else {
         //cell.textLabel.textColor = FutureTaskColor;
-        cell.taskName.textColor = [UIColor blackColor];
+        [cell setStatus:EZ_FUTURE];
         if(cell.nowSign){
             [cell.nowSign removeFromSuperview];
             cell.nowSign = nil;
         }
     }
-    cell.timeSpan.text = [NSString stringWithFormat:@"%@ - %@",[task.startTime stringWithFormat:@"HH:mm"],[endTime stringWithFormat:@"HH:mm"]];
-    cell.switchChange = ^(UISwitch* sw){
-        //Found way later. weave thing together ASAP
-        if(sw.on){
-            task.alarmType = EZ_SOUND;
-        }else{
-            task.alarmType = EZ_MUTE;
-        }
-        [EZAlarmUtility changeAlarmMode:task];
-        
-    };
+    cell.startTime.text = [task.startTime stringWithFormat:@"MMM-dd HH:mm"];
+    cell.endTime.text = [endTime stringWithFormat:@"HH:mm"];
     
+    if(task.alarmType == EZ_MUTE){
+        cell.alarmStatus.text = Local(@"OFF");
+        cell.alarmStatus.textColor = [UIColor grayColor];
+    }else{
+        cell.alarmStatus.text = Local(@"ON");
+        cell.alarmStatus.textColor = [UIColor createByHex:EZEditColor];
+    }
     // Configure the cell..
     
     return cell;

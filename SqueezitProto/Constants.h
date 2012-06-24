@@ -57,6 +57,12 @@ typedef enum EZAlarmType {
     EZ_MUTE
 } EZAlarmType;
 
+typedef enum EZScheduledStatus{
+    EZ_PASSED,
+    EZ_NOW,
+    EZ_FUTURE
+} EZScheduledStatus;
+
 typedef enum EZWeekDayValue {
     SUNDAY = 1,
     MONDAY = 2,

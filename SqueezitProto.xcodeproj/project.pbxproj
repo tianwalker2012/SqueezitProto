@@ -80,6 +80,12 @@
 		188CFDE515930364008ACCB8 /* EZButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDE41593035F008ACCB8 /* EZButtonCell.m */; };
 		188CFDE71595BD6A008ACCB8 /* EZScheduledV2Cell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 188CFDE61595BD66008ACCB8 /* EZScheduledV2Cell.xib */; };
 		188CFDEA1595C081008ACCB8 /* EZScheduledV2Cell.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDE91595C07E008ACCB8 /* EZScheduledV2Cell.m */; };
+		188CFDED1595D93D008ACCB8 /* EZSlideViewContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDEC1595D93D008ACCB8 /* EZSlideViewContainer.m */; };
+		188CFDF01595F438008ACCB8 /* EZSlideViewTester.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDEF1595F438008ACCB8 /* EZSlideViewTester.m */; };
+		188CFDF31596C30C008ACCB8 /* EZViewLayoutTester.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDF21596C30C008ACCB8 /* EZViewLayoutTester.m */; };
+		188CFDF61596FD8F008ACCB8 /* EZSlideViewWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDF51596FD8F008ACCB8 /* EZSlideViewWrapper.m */; };
+		188CFDF915974D42008ACCB8 /* EZQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDF815974D42008ACCB8 /* EZQueue.m */; };
+		188CFDFC15975127008ACCB8 /* EZLimitMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDFB15975126008ACCB8 /* EZLimitMap.m */; };
 		188D55161584883000142394 /* EZEnvFlag.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D55151584883000142394 /* EZEnvFlag.m */; };
 		188D551A15848B3A00142394 /* MEnvFlag.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D551915848B3A00142394 /* MEnvFlag.m */; };
 		188D551D1584ACB000142394 /* EZArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D551C1584ACB000142394 /* EZArray.m */; };
@@ -237,6 +243,18 @@
 		188CFDE61595BD66008ACCB8 /* EZScheduledV2Cell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZScheduledV2Cell.xib; sourceTree = "<group>"; };
 		188CFDE81595C07D008ACCB8 /* EZScheduledV2Cell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZScheduledV2Cell.h; sourceTree = "<group>"; };
 		188CFDE91595C07E008ACCB8 /* EZScheduledV2Cell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZScheduledV2Cell.m; sourceTree = "<group>"; };
+		188CFDEB1595D93D008ACCB8 /* EZSlideViewContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZSlideViewContainer.h; sourceTree = "<group>"; };
+		188CFDEC1595D93D008ACCB8 /* EZSlideViewContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZSlideViewContainer.m; sourceTree = "<group>"; };
+		188CFDEE1595F438008ACCB8 /* EZSlideViewTester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZSlideViewTester.h; sourceTree = "<group>"; };
+		188CFDEF1595F438008ACCB8 /* EZSlideViewTester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZSlideViewTester.m; sourceTree = "<group>"; };
+		188CFDF11596C30B008ACCB8 /* EZViewLayoutTester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZViewLayoutTester.h; sourceTree = "<group>"; };
+		188CFDF21596C30C008ACCB8 /* EZViewLayoutTester.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZViewLayoutTester.m; sourceTree = "<group>"; };
+		188CFDF41596FD8F008ACCB8 /* EZSlideViewWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZSlideViewWrapper.h; sourceTree = "<group>"; };
+		188CFDF51596FD8F008ACCB8 /* EZSlideViewWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZSlideViewWrapper.m; sourceTree = "<group>"; };
+		188CFDF715974D42008ACCB8 /* EZQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZQueue.h; sourceTree = "<group>"; };
+		188CFDF815974D42008ACCB8 /* EZQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZQueue.m; sourceTree = "<group>"; };
+		188CFDFA15975126008ACCB8 /* EZLimitMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZLimitMap.h; sourceTree = "<group>"; };
+		188CFDFB15975126008ACCB8 /* EZLimitMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZLimitMap.m; sourceTree = "<group>"; };
 		188D55141584883000142394 /* EZEnvFlag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZEnvFlag.h; sourceTree = "<group>"; };
 		188D55151584883000142394 /* EZEnvFlag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZEnvFlag.m; sourceTree = "<group>"; };
 		188D551815848B3A00142394 /* MEnvFlag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEnvFlag.h; sourceTree = "<group>"; };
@@ -418,6 +436,10 @@
 				184C29F51574769300852B35 /* EZReleaseDetector.m */,
 				188D551B1584ACB000142394 /* EZArray.h */,
 				188D551C1584ACB000142394 /* EZArray.m */,
+				188CFDF715974D42008ACCB8 /* EZQueue.h */,
+				188CFDF815974D42008ACCB8 /* EZQueue.m */,
+				188CFDFA15975126008ACCB8 /* EZLimitMap.h */,
+				188CFDFB15975126008ACCB8 /* EZLimitMap.m */,
 			);
 			name = Utility;
 			sourceTree = "<group>";
@@ -507,6 +529,14 @@
 			children = (
 				184C2990156B36D200852B35 /* EZTestSuite.m */,
 				184C298F156B36D100852B35 /* EZTestSuite.h */,
+				188CFDEB1595D93D008ACCB8 /* EZSlideViewContainer.h */,
+				188CFDEC1595D93D008ACCB8 /* EZSlideViewContainer.m */,
+				188CFDEE1595F438008ACCB8 /* EZSlideViewTester.h */,
+				188CFDEF1595F438008ACCB8 /* EZSlideViewTester.m */,
+				188CFDF11596C30B008ACCB8 /* EZViewLayoutTester.h */,
+				188CFDF21596C30C008ACCB8 /* EZViewLayoutTester.m */,
+				188CFDF41596FD8F008ACCB8 /* EZSlideViewWrapper.h */,
+				188CFDF51596FD8F008ACCB8 /* EZSlideViewWrapper.m */,
 			);
 			name = TestCases;
 			sourceTree = "<group>";
@@ -744,6 +774,12 @@
 				188CFDE01591C9A2008ACCB8 /* EZTimeCounterView.m in Sources */,
 				188CFDE515930364008ACCB8 /* EZButtonCell.m in Sources */,
 				188CFDEA1595C081008ACCB8 /* EZScheduledV2Cell.m in Sources */,
+				188CFDED1595D93D008ACCB8 /* EZSlideViewContainer.m in Sources */,
+				188CFDF01595F438008ACCB8 /* EZSlideViewTester.m in Sources */,
+				188CFDF31596C30C008ACCB8 /* EZViewLayoutTester.m in Sources */,
+				188CFDF61596FD8F008ACCB8 /* EZSlideViewWrapper.m in Sources */,
+				188CFDF915974D42008ACCB8 /* EZQueue.m in Sources */,
+				188CFDFC15975127008ACCB8 /* EZLimitMap.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

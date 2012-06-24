@@ -9,7 +9,7 @@
 #import "EZScheduledV2Cell.h"
 
 @implementation EZScheduledV2Cell
-@synthesize taskName, startTime, endTime, alarmTitle, alarmStatus;
+@synthesize taskName, startTime, endTime, alarmTitle, alarmStatus, nowSign;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -18,6 +18,23 @@
         // Initialization code
     }
     return self;
+}
+
+- (void) setStatus:(EZScheduledStatus)status
+{
+    if(status == EZ_NOW){
+        taskName.textColor = [UIColor blackColor];
+        startTime.alpha = 0;
+        endTime.alpha = 0;
+    }else if(status == EZ_FUTURE){
+        taskName.textColor = [UIColor blackColor];
+        startTime.alpha = 1;
+        endTime.alpha = 1;
+    }else if(status == EZ_PASSED){
+        taskName.textColor = [UIColor grayColor];
+        startTime.alpha = 1;
+        endTime.alpha = 1;
+    }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

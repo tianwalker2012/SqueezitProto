@@ -202,7 +202,7 @@ typedef int(^ClosureTest)();
 + (void) testSchedule
 {
   
-   [EZTestSuite innerTestAll];
+   //[EZTestSuite innerTestAll];
     
 }
 

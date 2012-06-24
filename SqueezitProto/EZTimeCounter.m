@@ -26,14 +26,14 @@
 // Each fire will get called
 - (void) timeTick
 {
-    EZDEBUG(@"Time tick get called");
+    //EZDEBUG(@"Time tick get called");
     if(tickBlock){
         tickBlock(self);
     }
     if(!isCounting){
         return;
     }
-    EZDEBUG(@"Start update time, remaining:%f",remainTime);
+   // EZDEBUG(@"Start update time, remaining:%f",remainTime);
     NSDate* now = [NSDate date];
     NSTimeInterval gap = now.timeIntervalSince1970 - lastTime.timeIntervalSince1970;
     lastTime = now;
@@ -48,7 +48,7 @@
     if(counterView){
         counterView.counter.text = [self updateTitle];
     }
-    EZDEBUG(@"timeTick completed");
+    //EZDEBUG(@"timeTick completed");
 }
 
 - (void) update
