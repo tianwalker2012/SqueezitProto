@@ -8,9 +8,12 @@
 
 #import "EZSlideViewWrapper.h"
 #import "Constants.h"
+#import "EZViewWrapper.h"
+#import "EZViewLayoutTester.h"
+#import "EZTestTableViewCtrl.h"
 
 @interface EZSlideViewWrapper () {
-    NSMutableDictionary* currentViews;
+    //NSMutableDictionary* currentViews;
     NSInteger curPageCount;
 }
 
@@ -76,22 +79,33 @@
     EZDEBUG(@"Page count get called");
     return curPageCount;
 }
-- (UIView*) container:(EZSlideViewContainer*)container viewForPage:(NSInteger)page;
+- (EZViewWrapper*) container:(EZSlideViewContainer*)container viewForPage:(NSInteger)page;
 {
     EZDEBUG(@"viewForPage get called:%i", page);
     
-    UIView* res = [currentViews objectForKey:[[NSNumber alloc] initWithInt:page]];
+    
+    NSString* testID  = @"Tester";
+    EZViewWrapper* res = [self dequeueWithIdentifier:testID]; 
+    NSInteger labelTag = 10;
     
     if(res == nil){
-        res = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
-        res.backgroundColor = [UIColor colorWithRed:0.1*page green:0.1*page blue:0.1*page alpha:1];
+        EZDEBUG(@"Create view for page:%i",page);
+        EZTestTableViewCtrl* layoutTester = [[EZTestTableViewCtrl alloc] initWithStyle:UITableViewStylePlain];
+        [layoutTester.view setFrame:CGRectMake(0, 0, 320, 367)];
+        UIView* vw = layoutTester.view;
+        vw.backgroundColor = [UIColor colorWithRed:0.1*page green:0.1*page blue:0.1*page alpha:1];
         UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
         label.textAlignment = UITextAlignmentCenter;
-        label.text = [NSString stringWithFormat:@"Page:%i", page];
         label.textColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:1];
-        [res addSubview:label];
-        [currentViews setObject:res forKey:[[NSNumber alloc] initWithInt:page]];
+        label.tag = labelTag;
+        [vw addSubview:label];
+
+        res = [[EZViewWrapper alloc] initWithView:vw identifier:testID];
+        res.controller = layoutTester;
     }
+       
+    UILabel* label = (UILabel*)[res.view viewWithTag:labelTag];
+    label.text = [NSString stringWithFormat:@"Page:%i", page];
     return res;
 }
 //Why not tell view?
@@ -106,6 +120,10 @@
     label.textColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:1];
     [pageView addSubview:label];
     **/
+}
+- (NSInteger) firstDisplayPage:(EZSlideViewContainer*)container
+{
+    return 8;
 }
 
 - (void) viewWillAppear:(BOOL)animated

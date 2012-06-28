@@ -34,10 +34,20 @@
 //Will be called when notification recieved.
 - (void) presentScheduledTask:(EZScheduledTask*)schTask;
 
+//Will called to load the date into the scheduledTasks array.
+//And call the reload on the tableView.
+//The currentDate will be set too.
+- (void) reloadScheduledTask:(NSDate*)date;
+
+//Will be called by Container.
+- (void) loadWithTask:(NSArray*)tasks date:(NSDate*)date;
+
 @property (strong, nonatomic) NSDate* currentDate;
 @property (strong, nonatomic) NSArray* scheduledTasks;
 
 //This will be executed the in the viewDidAppear. and only executed once.
 @property (strong, nonatomic) EZOperationBlock viewAppearBlock;
+@property (strong, nonatomic) UIViewController* superController;
+
 
 @end

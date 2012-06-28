@@ -31,6 +31,23 @@
     EZDEBUG(@"%@'s frame:%@, callstack:%@", name, NSStringFromCGRect(self.view.frame), [NSThread callStackSymbols]);
 }
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    EZDEBUG(@"TouchBegan");
+}
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    //EZDEBUG(@"Touch")
+}
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    EZDEBUG(@"TouchedEnded");
+}
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    EZDEBUG(@"touchesCancelled");
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];

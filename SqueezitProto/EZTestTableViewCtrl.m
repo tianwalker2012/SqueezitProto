@@ -1,28 +1,19 @@
 //
-//  EZAvTimeForEnvTrait.m
+//  EZTestTableViewCtrl.m
 //  SqueezitProto
 //
-//  Created by Apple on 12-6-11.
+//  Created by Apple on 12-6-26.
 //  Copyright (c) 2012年 __MyCompanyName__. All rights reserved.
 //
 
-#import "EZAvTimeForEnvTrait.h"
-#import "EZTaskStore.h"
-#import "EZTaskHelper.h"
-#import "EZAvailableTime.h"
-#import "MAvailableTime.h"
-#import "EZAvailableTimeCell.h"
-#import "EZEditLabelCellHolder.h"
-#import "EZGlobalLocalize.h"
+#import "EZTestTableViewCtrl.h"
+#import "Constants.h"
 
-@interface EZAvTimeForEnvTrait ()
-
-- (void) backClicked;
+@interface EZTestTableViewCtrl ()
 
 @end
 
-@implementation EZAvTimeForEnvTrait
-@synthesize envFlag, avTimes, backBlock;
+@implementation EZTestTableViewCtrl
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -33,22 +24,15 @@
     return self;
 }
 
-- (void) backClicked
-{
-    if(backBlock){
-        backBlock();
-    }
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:EZLocalizedString(@"Back", nil) style:UIBarButtonItemStyleDone target:self action:@selector(backClicked)];
-    NSArray* availableTime = [[EZTaskStore getInstance] fetchAllWithVO:[EZAvailableTime class] PO:[MAvailableTime class] sortField:@"startTime"];
-    self.avTimes = [availableTime filter:^BOOL(id obj) {
-        EZAvailableTime* av = (EZAvailableTime*)obj;
-        return isContained(envFlag, av.envTraits);
-    }];
+
+    // Uncomment the following line to preserve selection between presentations.
+    // self.clearsSelectionOnViewWillAppear = NO;
+ 
+    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)viewDidUnload
@@ -63,28 +47,28 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
+#pragma mark - Table view data source
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return avTimes.count;
+    return 100;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"TimeCell";
-    EZAvailableTimeCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    static NSString *CellIdentifier = @"Cell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    
     if(cell == nil){
-        cell = [EZEditLabelCellHolder createTimeCell];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
-    EZAvailableTime* avtime = [avTimes objectAtIndex:indexPath.row];
-    cell.name.text = avtime.name;
-    cell.time.text = [NSString stringWithFormat:@"%@ to %@",[avtime.start stringWithFormat:@"HH:mm"], [[avtime.start adjustMinutes:avtime.duration]stringWithFormat:@"HH:mm"]];
-    cell.envTraits.text = [[EZTaskStore getInstance] StringForFlags:avtime.envTraits];
+    cell.textLabel.text = [NSString stringWithFormat:@"Row:%i", indexPath.row];
+    
     return cell;
 }
 
@@ -130,14 +114,8 @@
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
+{   
+    EZDEBUG(@"selected:%i",indexPath.row);
 }
 
 @end

@@ -46,13 +46,17 @@ NSString* envTraitsToString(NSUInteger envTraits);
 
 - (NSArray*) getScheduledTaskByDate:(NSDate*)date;
 
+- (void) removeScheduledTaskByDate:(NSDate*)date;
+
 - (void) storeScheduledTask:(NSArray*)tasks date:(NSDate*)date;
 
 - (NSArray*) getTasks:(NSUInteger)env; 
 
 - (NSArray*) getAllTasks;
 
-- (NSArray*) fetchAllWithVO:(Class)voType po:(Class)poType sortField:(NSString*)field;
+- (NSArray*) fetchAllWithVO:(Class)voType PO:(Class)poType sortField:(NSString*)field;
+
+- (NSArray*) fetchWithPredication:(NSPredicate*)predicate VO:(Class)voType PO:(Class)poType sortField:(NSString*)field;
 
 // Pick a allocated pattern for that day 
 - (EZAvailableDay*) getAvailableDay:(NSDate*)date;
@@ -75,5 +79,12 @@ NSString* envTraitsToString(NSUInteger envTraits);
 
 // Currently only for test purpose. It is hard to test your design without proper test data
 - (void) fillTestData;
+
+
+//Get current used daily notification
+- (UILocalNotification*) getDailyNotification;
+
+//Will cancel the old notification and store and setup the new notification
+- (void) setDailyNotification:(UILocalNotification*)notification;
 
 @end

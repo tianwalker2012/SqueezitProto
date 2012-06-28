@@ -17,5 +17,6 @@
 - (id) enqueue:(id)obj;
 - (BOOL) isContain:(id)obj;
 - (void) removeAllObjects;
+- (void) removeObject:(id)obj;
 
 @end

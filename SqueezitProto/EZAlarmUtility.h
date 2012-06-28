@@ -23,4 +23,12 @@
 
 + (void) changeAlarmMode:(EZScheduledTask*)task;
 
+//Who will call this? 
+//Application level will call it. 
+//If will try to fetch from the NSUserDefault
+//+ (UILocalNotification*) createTomorrowNotification;
+
+
+//+ (void) assignTomorrowNofication;
+
 @end

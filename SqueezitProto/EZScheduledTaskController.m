@@ -50,7 +50,8 @@
 @end
 
 @implementation EZScheduledTaskController
-@synthesize currentDate, scheduledTasks, viewAppearBlock;
+@synthesize currentDate, scheduledTasks, viewAppearBlock, superController;
+
 
 
 //Just create the counter and the counter view.
@@ -72,16 +73,29 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    //EZDEBUG(@"viewDidAppear get called");
+    EZDEBUG(@"viewDidAppear get called");
     [self becomeFirstResponder];
     //currentDate = [NSDate date];
-    currentDate = [NSDate stringToDate:@"yyyyMMdd" dateString:@"20120629"];
+    //currentDate = [NSDate stringToDate:@"yyyyMMdd" dateString:@"20120629"];
     if(viewAppearBlock){
         viewAppearBlock();
         self.viewAppearBlock = nil;
     }
 }
 
+- (void) reloadScheduledTask:(NSDate *)date
+{
+    [self loadWithTask:[[EZTaskStore getInstance]getScheduledTaskByDate:date] date:date];
+}
+
+- (void) loadWithTask:(NSArray *)tasks date:(NSDate *)date
+{
+    currentDate = date;
+    scheduledTasks = [NSMutableArray arrayWithArray:tasks];
+    EZDEBUG(@"Before reload");
+    [self.tableView reloadData];
+    EZDEBUG(@"task count:%i for date:%@",scheduledTasks.count,[currentDate stringWithFormat:@"yyyyMMdd"]);
+}
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
@@ -134,8 +148,7 @@
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
-        currentDate = [NSDate date];
-        self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemRecents tag:1];
+       
     }
     return self;
 }
@@ -181,34 +194,47 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    EZTaskStore* store = [EZTaskStore getInstance];
-    scheduledTasks = [store getScheduledTaskByDate:currentDate];
+    //EZTaskStore* store = [EZTaskStore getInstance];
+    //scheduledTasks = [store getScheduledTaskByDate:currentDate];
     //if([scheduledTasks count] == 0){
     //    [self presentShakeMessage:@"Shake shake"];
     //}
-    self.navigationItem.title = Local(@"Scheduled");
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(rescheduleTasks)];
+    //self.navigationItem.title = Local(@"Scheduled");
     counter = [self createTimeCounter];
     counter.isCounting = false;
+    __weak EZScheduledTaskController* weakSelf = self;
     counter.tickBlock = ^(EZTimeCounter* ct){
         if(!ct.isCounting){
-            NSInteger nowPos = [self findOngoingTask:scheduledTasks];
+            counter.ongoingTaskPos = [weakSelf findOngoingTask:weakSelf.scheduledTasks];
             //EZDEBUG(@"Any task going on:%i",nowPos);
-            if(nowPos < 0){//Quit if no task is showing
+            if(counter.ongoingTaskPos < 0){//Quit if no task is showing
                 return;
             }
             
-            EZScheduledTask* st = [scheduledTasks objectAtIndex:nowPos];
+            EZScheduledTask* st = [weakSelf.scheduledTasks objectAtIndex:counter.ongoingTaskPos];
             NSDate* endTime = [st.startTime adjustMinutes:st.duration];
             ct.remainTime = endTime.timeIntervalSinceNow;
             ct.isCounting = true;
             [ct update];
-            [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:nowPos inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-        }    
+            [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:counter.ongoingTaskPos inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+        }else{
+            //Why do I need this. because the controller will
+            //Be shared by different days.
+            //When we switch back and forth some issue will show off
+            if(ct.counterView.superview == nil){
+                if(counter.ongoingTaskPos > -1){
+                    [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:counter.ongoingTaskPos inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+                }
+            }
+        }
     };
     counter.timeupOps = ^(EZTimeCounter* ct){
         ct.isCounting = false;
         [ct.counterView removeFromSuperview];
+        //The the time message again
+        if(counter.ongoingTaskPos > -1){
+            [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:counter.ongoingTaskPos inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+        }
     };
     [counter start:1];
 }

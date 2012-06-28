@@ -28,6 +28,7 @@
 @property (strong, nonatomic) EZEventOpsBlock timeupOps;
 @property (assign, nonatomic) NSTimeInterval remainTime;
 @property (assign, nonatomic) BOOL isCounting;
+@property (assign, nonatomic) NSInteger ongoingTaskPos;
 
 //This will be called each time tick.
 @property (strong, nonatomic) EZEventOpsBlock tickBlock;

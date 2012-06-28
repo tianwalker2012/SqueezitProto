@@ -85,7 +85,12 @@
 		188CFDF31596C30C008ACCB8 /* EZViewLayoutTester.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDF21596C30C008ACCB8 /* EZViewLayoutTester.m */; };
 		188CFDF61596FD8F008ACCB8 /* EZSlideViewWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDF51596FD8F008ACCB8 /* EZSlideViewWrapper.m */; };
 		188CFDF915974D42008ACCB8 /* EZQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDF815974D42008ACCB8 /* EZQueue.m */; };
-		188CFDFC15975127008ACCB8 /* EZLimitMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDFB15975126008ACCB8 /* EZLimitMap.m */; };
+		188CFDFC15975127008ACCB8 /* EZLRUMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDFB15975126008ACCB8 /* EZLRUMap.m */; };
+		188CFDFF15980D3A008ACCB8 /* EZViewWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDFE15980D3A008ACCB8 /* EZViewWrapper.m */; };
+		188CFE02159852EE008ACCB8 /* MScheduledDay.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFE01159852EE008ACCB8 /* MScheduledDay.m */; };
+		188CFE0515985D88008ACCB8 /* EZScheduledTaskSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFE0415985D85008ACCB8 /* EZScheduledTaskSlider.m */; };
+		188CFE0815999BDB008ACCB8 /* EZTestTableViewCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFE0715999BD8008ACCB8 /* EZTestTableViewCtrl.m */; };
+		188CFE0F159C0530008ACCB8 /* EZConfigureCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFE0E159C0529008ACCB8 /* EZConfigureCtrl.m */; };
 		188D55161584883000142394 /* EZEnvFlag.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D55151584883000142394 /* EZEnvFlag.m */; };
 		188D551A15848B3A00142394 /* MEnvFlag.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D551915848B3A00142394 /* MEnvFlag.m */; };
 		188D551D1584ACB000142394 /* EZArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D551C1584ACB000142394 /* EZArray.m */; };
@@ -253,8 +258,18 @@
 		188CFDF51596FD8F008ACCB8 /* EZSlideViewWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZSlideViewWrapper.m; sourceTree = "<group>"; };
 		188CFDF715974D42008ACCB8 /* EZQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZQueue.h; sourceTree = "<group>"; };
 		188CFDF815974D42008ACCB8 /* EZQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZQueue.m; sourceTree = "<group>"; };
-		188CFDFA15975126008ACCB8 /* EZLimitMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZLimitMap.h; sourceTree = "<group>"; };
-		188CFDFB15975126008ACCB8 /* EZLimitMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZLimitMap.m; sourceTree = "<group>"; };
+		188CFDFA15975126008ACCB8 /* EZLRUMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZLRUMap.h; sourceTree = "<group>"; };
+		188CFDFB15975126008ACCB8 /* EZLRUMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZLRUMap.m; sourceTree = "<group>"; };
+		188CFDFD15980D39008ACCB8 /* EZViewWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZViewWrapper.h; sourceTree = "<group>"; };
+		188CFDFE15980D3A008ACCB8 /* EZViewWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZViewWrapper.m; sourceTree = "<group>"; };
+		188CFE00159852EE008ACCB8 /* MScheduledDay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MScheduledDay.h; sourceTree = "<group>"; };
+		188CFE01159852EE008ACCB8 /* MScheduledDay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MScheduledDay.m; sourceTree = "<group>"; };
+		188CFE0315985D83008ACCB8 /* EZScheduledTaskSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZScheduledTaskSlider.h; sourceTree = "<group>"; };
+		188CFE0415985D85008ACCB8 /* EZScheduledTaskSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZScheduledTaskSlider.m; sourceTree = "<group>"; };
+		188CFE0615999BD5008ACCB8 /* EZTestTableViewCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTestTableViewCtrl.h; sourceTree = "<group>"; };
+		188CFE0715999BD8008ACCB8 /* EZTestTableViewCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTestTableViewCtrl.m; sourceTree = "<group>"; };
+		188CFE0D159C051F008ACCB8 /* EZConfigureCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZConfigureCtrl.h; sourceTree = "<group>"; };
+		188CFE0E159C0529008ACCB8 /* EZConfigureCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZConfigureCtrl.m; sourceTree = "<group>"; };
 		188D55141584883000142394 /* EZEnvFlag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZEnvFlag.h; sourceTree = "<group>"; };
 		188D55151584883000142394 /* EZEnvFlag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZEnvFlag.m; sourceTree = "<group>"; };
 		188D551815848B3A00142394 /* MEnvFlag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEnvFlag.h; sourceTree = "<group>"; };
@@ -438,8 +453,8 @@
 				188D551C1584ACB000142394 /* EZArray.m */,
 				188CFDF715974D42008ACCB8 /* EZQueue.h */,
 				188CFDF815974D42008ACCB8 /* EZQueue.m */,
-				188CFDFA15975126008ACCB8 /* EZLimitMap.h */,
-				188CFDFB15975126008ACCB8 /* EZLimitMap.m */,
+				188CFDFA15975126008ACCB8 /* EZLRUMap.h */,
+				188CFDFB15975126008ACCB8 /* EZLRUMap.m */,
 			);
 			name = Utility;
 			sourceTree = "<group>";
@@ -485,6 +500,10 @@
 				188CFDC7158DE887008ACCB8 /* EZTableSelector.m */,
 				188CFDC9158ED73E008ACCB8 /* EZAvTimeDetail.h */,
 				188CFDCA158ED73E008ACCB8 /* EZAvTimeDetail.m */,
+				188CFE0315985D83008ACCB8 /* EZScheduledTaskSlider.h */,
+				188CFE0415985D85008ACCB8 /* EZScheduledTaskSlider.m */,
+				188CFE0D159C051F008ACCB8 /* EZConfigureCtrl.h */,
+				188CFE0E159C0529008ACCB8 /* EZConfigureCtrl.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -509,6 +528,8 @@
 				184C2ACA157768DA00852B35 /* MImageOwner.m */,
 				188D551815848B3A00142394 /* MEnvFlag.h */,
 				188D551915848B3A00142394 /* MEnvFlag.m */,
+				188CFE00159852EE008ACCB8 /* MScheduledDay.h */,
+				188CFE01159852EE008ACCB8 /* MScheduledDay.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -537,6 +558,10 @@
 				188CFDF21596C30C008ACCB8 /* EZViewLayoutTester.m */,
 				188CFDF41596FD8F008ACCB8 /* EZSlideViewWrapper.h */,
 				188CFDF51596FD8F008ACCB8 /* EZSlideViewWrapper.m */,
+				188CFDFD15980D39008ACCB8 /* EZViewWrapper.h */,
+				188CFDFE15980D3A008ACCB8 /* EZViewWrapper.m */,
+				188CFE0615999BD5008ACCB8 /* EZTestTableViewCtrl.h */,
+				188CFE0715999BD8008ACCB8 /* EZTestTableViewCtrl.m */,
 			);
 			name = TestCases;
 			sourceTree = "<group>";
@@ -779,7 +804,12 @@
 				188CFDF31596C30C008ACCB8 /* EZViewLayoutTester.m in Sources */,
 				188CFDF61596FD8F008ACCB8 /* EZSlideViewWrapper.m in Sources */,
 				188CFDF915974D42008ACCB8 /* EZQueue.m in Sources */,
-				188CFDFC15975127008ACCB8 /* EZLimitMap.m in Sources */,
+				188CFDFC15975127008ACCB8 /* EZLRUMap.m in Sources */,
+				188CFDFF15980D3A008ACCB8 /* EZViewWrapper.m in Sources */,
+				188CFE02159852EE008ACCB8 /* MScheduledDay.m in Sources */,
+				188CFE0515985D88008ACCB8 /* EZScheduledTaskSlider.m in Sources */,
+				188CFE0815999BDB008ACCB8 /* EZTestTableViewCtrl.m in Sources */,
+				188CFE0F159C0530008ACCB8 /* EZConfigureCtrl.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -51,7 +51,7 @@
     self.navigationItem.rightBarButtonItem = editButton;
     
     self.navigationItem.title = Local(@"Time Setting");
-    avDays = [NSMutableArray arrayWithArray:[[EZTaskStore getInstance] fetchAllWithVO:[EZAvailableDay class] po:[MAvailableDay class] sortField:@"displayOrder"]];
+    avDays = [NSMutableArray arrayWithArray:[[EZTaskStore getInstance] fetchAllWithVO:[EZAvailableDay class] PO:[MAvailableDay class] sortField:@"displayOrder"]];
     
 }
 

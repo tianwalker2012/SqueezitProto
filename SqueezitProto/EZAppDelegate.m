@@ -24,15 +24,22 @@
 #import "EZSlideViewTester.h"
 #import "EZViewLayoutTester.h"
 #import "EZSlideViewWrapper.h"
+#import "EZScheduledTaskSlider.h"
+#import "EZGlobalLocalize.h"
+#import "EZConfigureCtrl.h"
 
 @interface EZAppDelegate() {
     EZRootTabCtrl* tabCtrl;
     UINavigationController* scheduledNav;
     UINavigationController* taskNav;
     UINavigationController* timeSettingNav;
-    EZScheduledTaskController* scheduledListCtrl;
+    EZScheduledTaskSlider* taskSlider;
+    EZOperationBlock notificationBlock;
+    NSTimer* tomorrowTimer;
     
 }
+
+- (void) scheduleForTomorrow;
 
 @end
 
@@ -47,7 +54,7 @@
 {
     
     EZScheduledTask* schTask = [[EZScheduledTask alloc] init];
-    schTask.startTime = [[NSDate date] adjustDays:1];
+    schTask.startTime = [[NSDate date] adjustDays:-2];
     EZTask* task = [[EZTask alloc] initWithName:@"Tomorrow Test" duration:20 maxDur:20 envTraits:3];
     schTask.task = task;
     schTask.duration = 40;
@@ -67,14 +74,9 @@
     EZDEBUG(@"Complete setup Nofication");
 }
 
-- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification 
+
+- (void) processTaskNotify:(NSString*)taskIDURL
 {
-    EZDEBUG(@"Recieved notification");
-    
-    //Any better place?
-    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-    
-    NSString* taskIDURL = [notification.userInfo objectForKey:EZNotificationKey];
     EZScheduledTask* schTask = [[EZTaskStore getInstance] fetchScheduledTaskByURL:taskIDURL];
     //Should I show a warning page?
     //Add it later. Edge case, let's polish it gradually
@@ -83,30 +85,140 @@
         EZDEBUG(@"Can not find ScheduledTask");
         return;
     }
-    //I made assumption, this will not change
-    if(tabCtrl.selectedViewController != scheduledNav){
-        tabCtrl.selectedViewController = scheduledNav;
+    NSString* startStr = Local(@"now");
+    NSTimeInterval passed = [schTask.startTime timeIntervalSinceNow];
+    passed = -passed;
+    if(passed > 60){
+        int minutes = passed;
+        minutes = minutes/60;
+        startStr = [NSString stringWithFormat:@"%i minutes ago",minutes];
     }
-    EZDEBUG(@"Will pop to root");
-    [scheduledNav popToRootViewControllerAnimated:NO];
-    EZDEBUG(@"Start to present detail view");
-    [scheduledListCtrl presentScheduledTask:schTask];
-    if(scheduledListCtrl.navigationController != scheduledNav){
-        EZDEBUG(@"There are different navigation controller");
+    
+    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:Local(@"Task %@ started %@"),schTask.task.name,startStr]  message:nil delegate:self cancelButtonTitle:Local(@"Cancel") otherButtonTitles:Local(@"Check It"),nil];
+    [alertView show];
+    
+    notificationBlock = ^(){
+        //I made assumption, this will 
+        if(tabCtrl.selectedViewController != scheduledNav){
+            tabCtrl.selectedViewController = scheduledNav;
+        }
+        EZDEBUG(@"Will pop to root");
+        [scheduledNav popToRootViewControllerAnimated:NO];
+        EZDEBUG(@"Start to present detail view");
+        [taskSlider presentScheduledTask:schTask];
+    };
+
+}
+
+- (void) processTomorrowNotify
+{
+    if([[EZTaskStore getInstance]getScheduledTaskByDate:[[NSDate date] adjustDays:1]].count > 0){
+        EZDEBUG(@"Have scheduled for tomorrow, no showing of event");
+    }
+    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:Local(@"Want schedule task for tomorrow?") message:nil delegate:self cancelButtonTitle:Local(@"NO") otherButtonTitles:Local(@"YES"),nil];
+    [alertView show];
+    
+    notificationBlock = ^(){
+        //I made assumption, this will 
+        if(tabCtrl.selectedViewController != scheduledNav){
+            tabCtrl.selectedViewController = scheduledNav;
+        }
+        EZDEBUG(@"Will pop to root");
+        [scheduledNav popToRootViewControllerAnimated:NO];
+        EZDEBUG(@"Start to present detail view");
+        [taskSlider scheduleForTomorrow];
+    };
+
+    
+}
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification 
+{
+    EZDEBUG(@"Recieved notification");
+    
+    //Any better place?
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    
+    NSString* taskIDURL = [notification.userInfo objectForKey:EZNotificationKey];
+    NSString* tomorrowStr = [notification.userInfo objectForKey:EZAssignNotificationKey];    
+
+    if(taskIDURL){
+        [self processTaskNotify:taskIDURL];
     }else{
-        EZDEBUG(@"They navigation controller is the same");
+        //I don't need to care which days notify it is.
+        //I only need to show them tomorrow.
+        [self processTomorrowNotify];
     }
 }
 
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if(buttonIndex == 0){
+        EZDEBUG(@"Cancelled");
+    }else if(notificationBlock){
+        notificationBlock();
+    }
+    notificationBlock = nil;
+}
+
+
+- (void) disableTomorrowNotification
+{
+    NSString* tomorrowNofityKey = @"TomorrowNotificationKey";
+    NSUserDefaults* userSetting = [NSUserDefaults standardUserDefaults];
+    id notifyObj = [userSetting objectForKey:tomorrowNofityKey];
+    [userSetting removeObjectForKey:tomorrowNofityKey];
+    UILocalNotification* storeNotify = [NSKeyedUnarchiver unarchiveObjectWithData:notifyObj];
+    [[UIApplication sharedApplication] cancelLocalNotification:storeNotify];
+    EZDEBUG(@"Canceled notification:%@",storeNotify.alertBody);
+}
+
+- (void) setupTomorrowNotification
+{
+    NSString* tomorrowNofityKey = @"TomorrowNotificationKey";
+    NSString* disableTomorrowKey = @"DisableTomorrow";
+    NSUserDefaults* userSetting = [NSUserDefaults standardUserDefaults];
+    BOOL disabled = [userSetting boolForKey:disableTomorrowKey];
+    if(disabled){
+        EZDEBUG(@"Disabled by user");
+        return;
+    }
+    id notifyObj = [userSetting objectForKey:tomorrowNofityKey];
+    
+    UILocalNotification* storeNotify = [NSKeyedUnarchiver unarchiveObjectWithData:notifyObj];
+    if(notifyObj){
+        EZDEBUG(@"already setup nofication, alertBody:%@",storeNotify.alertBody);
+        return;
+    }
+    UILocalNotification* nofication = [[UILocalNotification alloc] init];
+    NSDate* tomorrow = [[NSDate date] adjustDays:1];
+    nofication.fireDate = [[NSDate date] adjust:20];
+    nofication.alertBody = Local(@"Time to schedule tomorrow's task for you.");
+        //Mean I can pick my own customized name?
+    nofication.soundName = UILocalNotificationDefaultSoundName;
+    nofication.applicationIconBadgeNumber = 1;
+    nofication.repeatCalendar = nil;
+    nofication.repeatInterval = kCFCalendarUnitDay;
+    NSDictionary* infoDict = [NSDictionary dictionaryWithObjectsAndKeys:[tomorrow stringWithFormat:@"yyyyMMdd"], EZAssignNotificationKey ,nil];
+    nofication.userInfo = infoDict;
+    [[UIApplication sharedApplication] scheduleLocalNotification:nofication];
+    [userSetting setValue:[NSKeyedArchiver archivedDataWithRootObject:nofication] forKey:tomorrowNofityKey];
+    
+    
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     EZDEBUG(@"Lanch options:%@", launchOptions);
+    [[EZTaskStore getInstance] removeScheduledTaskByDate:[[NSDate date]adjustDays:1]];
+    [self disableTomorrowNotification];
+    [self setupTomorrowNotification];
     [EZTestSuite testSchedule];
     //[EZCoreAccessor cleanDefaultDB];
     //Make sure the persistence layer initialization completeds
     [EZCoreAccessor getInstance];
-    if([[[EZTaskStore getInstance] fetchAllWithVO:[EZAvailableDay class] po:[MAvailableDay class] sortField:nil] count] == 0){
+    if([[[EZTaskStore getInstance] fetchAllWithVO:[EZAvailableDay class] PO:[MAvailableDay class] sortField:nil] count] == 0){
         EZDEBUG(@"Fill Test data");
         [[EZTaskStore getInstance] fillTestData];
     }
@@ -119,6 +231,8 @@
         [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     }
     EZScheduledTask* schTask = [[EZTaskStore getInstance] fetchScheduledTaskByURL:[notification.userInfo objectForKey:EZNotificationKey]];
+    
+    NSString* tomorrowStr = [notification.userInfo objectForKey:EZAssignNotificationKey];
     //End of get notification
     
     
@@ -128,16 +242,24 @@
     self.window.rootViewController = rootCtrl;
     [self.window addSubview:self.rootCtrl.view];
     tabCtrl = [[EZRootTabCtrl alloc] init];
-    scheduledListCtrl = [[EZScheduledTaskController alloc] initWithStyle:UITableViewStylePlain];
+    
+    taskSlider = [[EZScheduledTaskSlider alloc] init];
+    
     if(schTask){
-        scheduledListCtrl.viewAppearBlock = ^(){
-            [scheduledListCtrl presentScheduledTask:schTask];
+        //__weak EZAppDelegate* weakSelf = self;
+        taskSlider.viewAppearBlock = ^(){
+            [taskSlider presentScheduledTask:schTask];
         };
     }
     
+    if(tomorrowStr){
+        taskSlider.viewAppearBlock = ^(){
+            [taskSlider scheduleForTomorrow];
+        };
+    }
     
     //stc.currentDate = [NSDate date];
-    scheduledNav = [[UINavigationController alloc] initWithRootViewController:scheduledListCtrl];
+    scheduledNav = [[UINavigationController alloc] initWithRootViewController:taskSlider];
     
     EZTaskListCtrl* tlc = [[EZTaskListCtrl alloc] initWithStyle:UITableViewStylePlain];
     taskNav = [[UINavigationController alloc] initWithRootViewController:tlc];
@@ -191,10 +313,51 @@
     EZDEBUG(@"applicationDidBecomeActive get called");
 }
 
+- (void) sendTimeAssignmentNotification:(NSDate*)date assignedDate:(NSDate*)assignedDate;
+{
+    UILocalNotification* nofication = [[UILocalNotification alloc] init];
+    nofication.fireDate = date;
+    nofication.alertBody = Local(@"Squeezit have scheduled tomorrow tasks for you, please check.");
+    //Mean I can pick my own customized name?
+    nofication.soundName = UILocalNotificationDefaultSoundName;
+    nofication.applicationIconBadgeNumber = 1;
+    NSDictionary* infoDict = [NSDictionary dictionaryWithObjectsAndKeys:[assignedDate stringWithFormat:@"yyyyMMdd"] , EZAssignNotificationKey, nil];
+    nofication.userInfo = infoDict;
+    [[UIApplication sharedApplication] scheduleLocalNotification:nofication];
+}
+
+
+- (BOOL) haveScheduled:(NSDate*)date
+{
+    return [[EZTaskStore getInstance] getScheduledTaskByDate:date].count > 0;
+}
+
+- (void) scheduleForTomorrow
+{
+    if([self haveScheduled:[[NSDate date] adjustDays:1]]){
+        EZDEBUG(@"Quit since already scheduled");
+    }
+    
+    
+}
+//I will take case of the case, if date already passed.
+- (void) setTimerForTomorrowSchedule:(NSDate*)date
+{
+    NSTimeInterval gap = [date timeIntervalSinceNow];
+    
+    if(gap <= 0){
+        //Mean if ready due, we will start after 15 seconds
+        gap = 15;
+    }
+    
+    tomorrowTimer = [NSTimer scheduledTimerWithTimeInterval:gap target:self selector:@selector(scheduleForTomorrow) userInfo:nil repeats:NO];
+}
+
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    
     [[EZCoreAccessor getInstance] saveContext];
+   
 }
 
 @end

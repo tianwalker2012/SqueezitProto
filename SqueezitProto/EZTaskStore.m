@@ -141,6 +141,44 @@
     //[self.availableDays addObject:avDays];
     [self storeObject:avDays];
     
+    //Fill test data to test the slider implementation
+    EZScheduledDay* his1 = [[EZScheduledDay alloc] init];
+    his1.scheduledDate = [[NSDate date] adjustDays:-4];
+    
+    EZScheduledDay* his2 = [[EZScheduledDay alloc] init];
+    his2.scheduledDate = [[NSDate date] adjustDays:-3];
+    
+    EZScheduledDay* his3 = [[EZScheduledDay alloc] init];
+    his3.scheduledDate = [[NSDate date] adjustDays:-2];
+    
+    EZScheduledDay* his4 = [[EZScheduledDay alloc] init];
+    his4.scheduledDate = [[NSDate date] adjustDays:-1];
+    
+    [[EZTaskStore getInstance] storeObjects:[NSArray arrayWithObjects:his1, his2, his3, his4, nil]];
+    
+    
+    EZScheduledTask* tk1 = [[EZScheduledTask alloc] init];
+    tk1.startTime = his1.scheduledDate;
+    tk1.duration = 10;
+    tk1.task = iosTask;
+    
+    EZScheduledTask* tk2 = [[EZScheduledTask alloc] init];
+    tk2.startTime = his2.scheduledDate;
+    tk2.duration = 20;
+    tk2.task = design;
+    
+    EZScheduledTask* tk3 = [[EZScheduledTask alloc] init];
+    tk3.startTime = his3.scheduledDate;
+    tk3.duration = 30;
+    tk3.task = codeReading;
+    
+    EZScheduledTask* tk4 = [[EZScheduledTask alloc] init];
+    tk4.startTime = his4.scheduledDate;
+    tk4.duration = 40;
+    tk4.task = iosTask;
+    [[EZTaskStore getInstance] storeObjects:[NSArray arrayWithObjects:tk1, tk2, tk3, tk4, nil]];
+    
+    
 }
 
 
@@ -149,7 +187,7 @@
 //So I am doing this now. 
 - (EZScheduledTask*) fetchScheduledTaskByURL:(NSString*)urlStr
 {
-    NSArray* schTasks = [self fetchAllWithVO:[EZScheduledTask class] po:[MScheduledTask class] sortField:@"startTime"];
+    NSArray* schTasks = [self fetchAllWithVO:[EZScheduledTask class] PO:[MScheduledTask class] sortField:@"startTime"];
     for(EZScheduledTask* schTask in schTasks){
         if([urlStr isEqualToString:schTask.PO.objectID.URIRepresentation.absoluteString]){
             return schTask;
@@ -162,7 +200,7 @@
 //Every tiem somebody added a flag, this method will get called
 - (void) populateEnvFlags
 {
-    NSArray* flags = [self fetchAllWithVO:[EZEnvFlag class] po:[MEnvFlag class] sortField:@"flag"];
+    NSArray* flags = [self fetchAllWithVO:[EZEnvFlag class] PO:[MEnvFlag class] sortField:@"flag"];
     self.envFlags = [NSMutableArray arrayWithArray:flags];
     self.flagToEnvFlag = [[NSMutableDictionary alloc] init];
     for(EZEnvFlag* flag in flags){
@@ -222,15 +260,15 @@
 
 - (NSArray*) getAllTasks
 {
-    return [self fetchAllWithVO:[EZTask class] po:[MTask class] sortField:nil];
+    return [self fetchAllWithVO:[EZTask class] PO:[MTask class] sortField:nil];
 }
 
 // So far it is clean, have a name for every PO seems a simpler solution
 // You just set it as option, what harm it can cause us?
 // Keep it as simple as possible.
-- (NSArray*) fetchAllWithVO:(Class)voType po:(Class)poType sortField:(NSString *)field
+- (NSArray*) fetchAllWithVO:(Class)voType PO:(Class)poType sortField:(NSString *)field
 {
-    NSArray* allPos = [[EZCoreAccessor getInstance] fetchAll:poType sortField:field];
+    NSArray* allPos = [[EZCoreAccessor getInstance] fetchObject:poType byPredicate:nil withSortField:field];
     NSMutableArray* res = [[NSMutableArray alloc] initWithCapacity:[allPos count]];
     for(NSManagedObject* po in allPos){
         NSObject<EZValueObject>* vo = [[voType alloc] initWithPO:po];
@@ -239,23 +277,35 @@
     return res;
 }
 
+//Fetch VO and PO with conditions
+- (NSArray*) fetchWithPredication:(NSPredicate*)predicate VO:(Class)voType PO:(Class)poType sortField:(NSString*)field
+{
+    NSArray* fetched = [[EZCoreAccessor getInstance] fetchObject:poType byPredicate:predicate withSortField:field];
+    NSMutableArray* res = [[NSMutableArray alloc] initWithCapacity:[fetched count]];
+    for(NSManagedObject* po in fetched){
+        NSObject<EZValueObject>* vo = [[voType alloc] initWithPO:po];
+        [res addObject:vo];
+    }
+    return res;
+    
+}
 
 //Need refractor later.
 //As the history data keep increasing. 
 //Learn how to do conditional query to get only record I interested out. 
 - (NSArray*) getScheduledTaskByDate:(NSDate*)date
 {
-    NSString* keyStr = [date stringWithFormat:@"yyyyMMdd"];
-    NSArray* schTasks = [[EZCoreAccessor getInstance] fetchAll:[MScheduledTask class] sortField:@"startTime"];
-    //I am wondering how the sort could work? anyway let's try it
-    NSMutableArray* res = [[NSMutableArray alloc] init];
-    
-    for(MScheduledTask* mschTask in schTasks){
-        if([keyStr compare:[mschTask.startTime stringWithFormat:@"yyyyMMdd"]] == NSOrderedSame){
-            [res addObject:[[EZScheduledTask alloc] initWithPO:mschTask]];
-        }
-    }
-    return res;
+    NSDate* begin  = date.beginning;
+    NSDate* end = [begin adjust:SecondsPerDay-1];
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"startTime > %@ AND startTime < %@",begin, end];
+    return [[EZTaskStore getInstance]fetchWithPredication:predicate VO:[EZScheduledTask class] PO:[MScheduledTask class] sortField:@"startTime"];
+}
+
+//Remove the tasks in one particular day
+- (void) removeScheduledTaskByDate:(NSDate*)date
+{
+    NSArray* schTasks = [self getScheduledTaskByDate:date];
+    [self removeObjects:schTasks];
 }
 
 //Including the date of start and end.
@@ -264,7 +314,7 @@
 {
     int res = 0;
     //MTask* mt = task.PO;
-    NSArray* mschTasks = [self fetchAllWithVO:[EZScheduledTask class] po:[MScheduledTask class] sortField:@"startTime"];
+    NSArray* mschTasks = [self fetchAllWithVO:[EZScheduledTask class] PO:[MScheduledTask class] sortField:@"startTime"];
     for(EZScheduledTask* schTask in mschTasks){
             if([schTask.task isEqual:task] && [schTask.startTime InBetweenDays:start end:end]){
                 res += schTask.duration;
@@ -360,6 +410,55 @@
     return res;    
 }
 
+//Need a test see if the only setup for the time 
+//Will enable this notification to get fired?
+//Easy to test.
+- (UILocalNotification*) createDailyNotificationByDate:(NSDate*)date
+{
+    UILocalNotification* notification = [[UILocalNotification alloc] init];
+    notification.fireDate = date;
+    notification.alertBody = Local(@"Would you like shedule for tomorrow");
+    //Mean I can pick my own customized name?
+    notification.soundName = UILocalNotificationDefaultSoundName;
+    notification.applicationIconBadgeNumber = 1;
+    notification.repeatCalendar = nil;
+    notification.repeatInterval = kCFCalendarUnitDay;
+    NSDictionary* infoDict = [NSDictionary dictionaryWithObjectsAndKeys:[date stringWithFormat:@"MMdd HH:mm"], EZAssignNotificationKey ,nil];
+    notification.userInfo = infoDict;
+    return notification;
+}
+
+//Get current used daily notification
+- (UILocalNotification*) getDailyNotification
+{
+    NSString* tomorrowNofityKey = @"TomorrowNotificationKey";
+    NSUserDefaults* userSetting = [NSUserDefaults standardUserDefaults];
+    id notifyObj = [userSetting objectForKey:tomorrowNofityKey];
+    if(notifyObj){
+        return [NSKeyedUnarchiver unarchiveObjectWithData:notifyObj];
+    }
+    return nil;
+}
+
+
+//Will cancel the old notification and store and setup the new notification
+- (void) setDailyNotification:(UILocalNotification*)notification
+{
+    NSString* tomorrowNofityKey = @"TomorrowNotificationKey";
+    
+    NSUserDefaults* userSetting = [NSUserDefaults standardUserDefaults];
+    id notifyObj = [userSetting objectForKey:tomorrowNofityKey];
+    
+    UILocalNotification* storeNotify = [NSKeyedUnarchiver unarchiveObjectWithData:notifyObj];
+    if(notifyObj){
+        EZDEBUG(@"cancel existing nofication");
+        [[UIApplication sharedApplication] cancelLocalNotification:storeNotify];
+    }
+    [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+    [userSetting setValue:[NSKeyedArchiver archivedDataWithRootObject:notification] forKey:tomorrowNofityKey];
+}
+
+
 @end
 
 NSString* envTraitsToString(NSUInteger envTraits)
@@ -382,4 +481,5 @@ NSString* envTraitsToString(NSUInteger envTraits)
     }
     return [arr componentsJoinedByString:@" "];
 }
+
 

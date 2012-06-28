@@ -8,16 +8,17 @@
 
 #import "EZSlideViewContainer.h"
 #import "Constants.h"
-#import "EZLimitMap.h"
+#import "EZLRUMap.h"
+#import "EZViewWrapper.h"
 
 
 @interface EZSlideViewContainer () {
     BOOL initailized;
-    EZLimitMap* cachedPage;
+    EZLRUMap* cachedPage;
     NSMutableDictionary* identifierMap;
     
     NSInteger pageCount;
-    BOOL scrollAnimated;
+    //BOOL scrollAnimated;
 }
 
 //The meaning of this function is to move the view Port to that page.
@@ -38,7 +39,7 @@
 //currentPage or loadPage.
 - (void) adjustPageCountFrom:(NSInteger)from to:(NSInteger)to;
 
-- (void) putToIdentifierMap:(UIView<EZSlideViewPage>*)pageView;
+- (void) putToIdentifierMap:(EZViewWrapper*)pageView;
 
 //Will load the page count again
 //Here is 2 cases
@@ -64,7 +65,7 @@
     //[self.view setFrame:frame];
     identifierMap = [[NSMutableDictionary alloc] init];
     //Enough to aviod shake
-    cachedPage = [[EZLimitMap alloc] initWithLimit:5];
+    cachedPage = [[EZLRUMap alloc] initWithLimit:5];
     //self.containerDelegate = delegate;
     //self.pageCount = [delegate pageCount:self];
     scrollView = [[UIScrollView alloc] init];
@@ -74,18 +75,30 @@
     scrollView.showsVerticalScrollIndicator = NO;
     scrollView.scrollsToTop = NO;
     scrollView.delegate = self;
+    //scrollView.scrollEnabled = false;
     self.view.backgroundColor = [UIColor redColor];
     //[self.view setFrame:scrollView.frame];
 	[self.view addSubview:scrollView];
     currentPage = 0;
     initailized = false;
-    scrollAnimated = NO;
+    //scrollAnimated = NO;
     return self;
 }
 
-- (void) putToIdentifierMap:(UIView<EZSlideViewPage>*)pageView
+// called on start of dragging (may require some time and or distance to move)
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    NSString* identifier = pageView.getIdentifier;
+    EZDEBUG(@"begin drag");
+}
+// called on finger up if the user dragged. velocity is in points/second. targetContentOffset may be changed to adjust where the scroll view comes to rest. not called when pagingEnabled is YES
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    EZDEBUG(@"scrollViewEndDragging get called");
+}
+
+- (void) putToIdentifierMap:(EZViewWrapper*)pageView
+{
+    NSString* identifier = pageView.identifier;
     NSMutableArray* pageViews = [identifierMap objectForKey:identifier];
     if(pageViews == nil){
         pageViews = [[NSMutableArray alloc] init];
@@ -129,9 +142,10 @@
         }
     }
      **/
-    scrollAnimated = YES;
+    //scrollAnimated = YES;
+    EZDEBUG(@"toPage is:%i",toPage);
     [scrollView setContentOffset:CGPointMake(toPage*scrollView.frame.size.width, 0) animated:animate];
-    scrollAnimated = animate;
+    //scrollAnimated = animate;
 }
 
 //PageCount changed, what will happened?
@@ -150,6 +164,11 @@
 //Fine tune it on production iteration.
 - (void) setCurrentPage:(NSInteger)cp
 {
+    [self scrollToPage:cp animated:NO];
+}
+
+- (void) scrollToPage:(NSInteger)cp animated:(BOOL)animated
+{
     //assert(cp < pageCount);
     if(cp >= pageCount){
         NSInteger newPageCount = [containerDelegate nextPage:cp];
@@ -166,18 +185,15 @@
     if(cp == currentPage){//Do nothing
         return;
     }
-    [self scrollFrom:currentPage to:cp animate:YES];
+    [self scrollFrom:currentPage to:cp animate:animated];
     currentPage = cp;
-    
-}
 
+}
 
 - (void) reloadPage:(NSInteger)page
 {
-    UIView* view = [containerDelegate container:self viewForPage:page];
-    [cachedPage setObject:view forKey:[[NSNumber alloc] initWithInteger:page]];
-
-    [self putView:view atPage:page];
+    [cachedPage removeObjectForKey:[[NSNumber alloc] initWithInt:page]];
+    [self loadPage:page];
 }
 
 
@@ -195,19 +211,20 @@
             pageCount = newPageCount;
         }
     }
-    if(page >= pageCount){
-        EZDEBUG(@"Quit load for page %i exceed %i",page ,pageCount);
+    if(page >= pageCount || page < 0){
+        EZDEBUG(@"Quit load for page %i, currentCount: %i",page ,pageCount);
         return;
     }
-    UIView<EZSlideViewPage>* view = [cachedPage getObjectForKey:[[NSNumber alloc] initWithInt:page]];
-    if(view == nil){
-        view = [containerDelegate container:self viewForPage:page];
-        UIView<EZSlideViewPage>* removeView = [cachedPage setObject:view forKey:[[NSNumber alloc] initWithInteger:page]];
-        [removeView setInContainerCache:NO];
-        [view setInContainerCache:YES];
+    EZViewWrapper* viewWrapper = [cachedPage getObjectForKey:[[NSNumber alloc] initWithInt:page]];
+    if(viewWrapper == nil){
+        viewWrapper = [containerDelegate container:self viewForPage:page];
+        [self putToIdentifierMap:viewWrapper];
+        EZViewWrapper* removeView = [cachedPage setObject:viewWrapper forKey:[[NSNumber alloc] initWithInteger:page]];
+        removeView.isInCache = NO;
+        viewWrapper.isInCache = YES;
         
     }
-    [self putView:view atPage:page];
+    [self putView:viewWrapper.view atPage:page];
 }
 
 - (void) putView:(UIView*)view atPage:(NSInteger)page
@@ -232,10 +249,6 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)sender
 {
-    //if(scrollAnimated){
-    //    return;
-    //}
-    //EZDEBUG(@"didScroll get called");
     CGFloat pageWidth = scrollView.frame.size.width;
     int page = floor((scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
     if(currentPage == page){
@@ -248,7 +261,7 @@
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
     EZDEBUG(@"End scroll animation called");
-    scrollAnimated = NO;
+    //scrollAnimated = NO;
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -269,7 +282,7 @@
     pageCount = [containerDelegate pageCount:self];
     scrollView.contentSize = CGSizeMake(scrollView.frame.size.width * [containerDelegate pageCount:self], scrollView.frame.size.height);
     [cachedPage removeAllObjects];
-    currentPage = 0;
+    currentPage = [containerDelegate firstDisplayPage:self];
     [self scrollFrom:currentPage to:currentPage animate:NO];
 }
 
@@ -286,9 +299,24 @@
     
 }
 
-- (id<EZSlideViewPage>) dequeueWithIdentifier:(NSString*)identifier
+- (EZViewWrapper*) getViewWrapperByPage:(NSInteger)page
 {
-    
+    return [cachedPage getObjectForKey:[[NSNumber alloc] initWithInt:page]];
+}
+
+- (EZViewWrapper*) dequeueWithIdentifier:(NSString*)identifier
+{
+    NSArray* viewsForID = [identifierMap objectForKey:identifier];
+    if(viewsForID){
+        for(EZViewWrapper* wrapper in viewsForID){
+            if(!wrapper.isInCache){
+                EZDEBUG(@"Find view in cache for %@", identifier);
+                return wrapper;
+            }
+        }
+    }
+    EZDEBUG(@"No find view for:%@",identifier);
+    return nil;
 }
 
 

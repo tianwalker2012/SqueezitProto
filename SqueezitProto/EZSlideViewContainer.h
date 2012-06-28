@@ -8,14 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-
-@protocol EZSlideViewPage<NSObject>
-
-- (NSString*) getIdentifier;
-- (BOOL) isInContainerCache;
-- (void) setInContainerCache:(BOOL)indicator;
-
-@end
+@class EZViewWrapper;
 //What's my expectation out of this delegate
 //Let's learn from the UITableView.
 //1. Tell how many page it have
@@ -26,10 +19,12 @@
 @protocol  EZSlideViewDelegate<NSObject>
 
 - (NSInteger) pageCount:(EZSlideViewContainer*)container;
-- (UIView<EZSlideViewPage>*) container:(EZSlideViewContainer*)container viewForPage:(NSInteger)page;
+- (EZViewWrapper*) container:(EZSlideViewContainer*)container viewForPage:(NSInteger)page;
 //Why not tell view?
 - (void) container:(EZSlideViewContainer*)container pageDisplayed:(NSInteger)page;
 
+//During startup what's the first page will be displayed?
+- (NSInteger) firstDisplayPage:(EZSlideViewContainer*)container;
 
 //The purpose of this function call it that
 //If the container reach the end of the page, it will call this method
@@ -59,6 +54,11 @@
 //Mean the view changed, let's get it from the delegate again.
 - (void) reloadPage:(NSInteger)page;
 
+
+//Do the same thing as setCurrentPage, the difference is that
+//You could control the animation
+- (void) scrollToPage:(NSInteger)page animated:(BOOL)animated;
+
 //Mean will reload all the paged.
 //Following assumption will be made.
 //Cache will be cleaned
@@ -80,8 +80,9 @@
 //Have a mutableArray to maintian the current visible pages.
 //How to update them?
 //The cluster call is the right time to update that array
-- (id<EZSlideViewPage>) dequeueWithIdentifier:(NSString*)identifier;
+- (EZViewWrapper*) dequeueWithIdentifier:(NSString*)identifier;
 
-
+//If the page not at display status will return nil;
+- (EZViewWrapper*) getViewWrapperByPage:(NSInteger)page;
 
 @end

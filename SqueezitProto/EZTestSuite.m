@@ -34,6 +34,9 @@
 #import "EZArray.h"
 #import "EZEditLabelCellHolder.h"
 #import "EZScheduledCell.h"
+#import "EZScheduledDay.h"
+#import "MScheduledDay.h"
+#import "EZLRUMap.h"
 
 
 #define TestValue 60*20
@@ -45,15 +48,73 @@ typedef void(^TestBlock)(id obj);
 
 typedef int(^ClosureTest)();
 
+@interface ComparedObject : NSObject
+
+@property (strong, nonatomic) NSString* name;
+@property (assign, nonatomic) NSInteger age;
+
+@end
+
+@implementation ComparedObject
+@synthesize name, age;
+
+@end
+
+@interface ComparedObjectEx : NSObject
+
+@property (strong, nonatomic) NSString* name;
+@property (assign, nonatomic) NSInteger age;
+
+@end
+
+@implementation ComparedObjectEx
+@synthesize name, age;
+
+- (BOOL) isEqual:(ComparedObjectEx*)object
+{
+    if(object == self){
+        return true;
+    }
+    return [self.name isEqual:object.name] && (self.age == object.age);
+}
+
+@end
+
 
 @interface IntCarrier : NSObject
 
 @property (assign, nonatomic) int value;
+@property (assign, nonatomic) BOOL animated;
 
 @end
 
 @implementation IntCarrier
-@synthesize  value;
+@synthesize  value, animated;
+
+- (BOOL) isAnimated
+{
+    EZDEBUG(@"isAnimated get called");
+    return false;
+}
+
+- (BOOL) getAnimated
+{
+    EZDEBUG(@"getAnimated get called");
+    return false;
+};
+
+- (BOOL) animated
+{
+    EZDEBUG(@"Animated get called");
+    return false;
+}
+
+- (void) setAnimated:(BOOL)at
+{
+    EZDEBUG(@"Set animated get called");
+    animated = at;
+}
+
 @end
 
 
@@ -191,6 +252,16 @@ typedef int(^ClosureTest)();
 
 + (void) testFetchWithPredicate;
 
++ (void) testBooleanAccessor;
+
++ (void) testArrayContainAndStringEqual;
+
++ (void) testPredicateForScheduledDay;
+
++ (void) testLRUMap;
+
+
+
 @end
 
 @implementation EZTestSuite
@@ -201,8 +272,10 @@ typedef int(^ClosureTest)();
 //So I just comments it out. Will not execute any test cases
 + (void) testSchedule
 {
-  
+    //
+    //[EZTestSuite testArrayContainAndStringEqual];
    //[EZTestSuite innerTestAll];
+    [EZTestSuite testLRUMap];
     
 }
 
@@ -254,6 +327,8 @@ typedef int(^ClosureTest)();
     [EZTestSuite testNSMutableArray];
     [EZTestSuite testPredicate];
     [EZTestSuite testFetchWithPredicate];
+    [EZTestSuite testBooleanAccessor];
+    [EZTestSuite testPredicateForScheduledDay];
     //Clear all the test data.
     //In the future what should I do with this.
     //Seems in this case, we need the test case ready
@@ -264,6 +339,98 @@ typedef int(^ClosureTest)();
     //Test database.
     [EZCoreAccessor setInstance:nil];
     
+}
+
++ (void) testLRUMap
+{
+    EZLRUMap* lruMap = [[EZLRUMap alloc] initWithLimit:4];
+    [lruMap setObject:@"1" forKey:@"1"];
+    [lruMap setObject:@"2" forKey:@"2"];
+    [lruMap setObject:@"3" forKey:@"3"];
+    [lruMap setObject:@"4" forKey:@"4"];
+    assert([@"1" isEqualToString:[lruMap setObject:@"5" forKey:@"5"]]);
+    
+    [lruMap getObjectForKey:@"2"];
+    assert([@"3" isEqualToString:[lruMap setObject:@"6" forKey:@"6"]]);
+    
+    [lruMap getObjectForKey:@"4"];
+    assert([@"5" isEqualToString:[lruMap setObject:@"7" forKey:@"7"]]);
+    
+    
+    //assert(false);
+}
+
++ (void) testPredicateForScheduledDay
+{
+    [EZTestSuite initializeDB];
+    EZScheduledDay* ed = [[EZScheduledDay alloc] init];
+    ed.scheduledDate = [NSDate stringToDate:@"yyyyMMdd" dateString:@"20120623"];
+    EZScheduledDay* ed1 = [[EZScheduledDay alloc] init];
+    ed1.scheduledDate = [NSDate stringToDate:@"yyyyMMdd" dateString:@"20120624"];
+    EZScheduledDay* ed2 = [[EZScheduledDay alloc] init];
+    ed2.scheduledDate = [NSDate stringToDate:@"yyyyMMdd" dateString:@"20120625"];
+    [[EZTaskStore getInstance] storeObjects:[NSArray arrayWithObjects:ed1, ed, ed2, nil]];
+    
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"scheduledDate < %@",ed2.scheduledDate];
+    NSArray* result = [[EZTaskStore getInstance] fetchWithPredication:predicate VO:[EZScheduledDay class] PO:[MScheduledDay class] sortField:@"scheduledDate"];
+    EZDEBUG(@"Result length:%i", result.count);
+    assert(result.count == 2);
+    
+    EZScheduledDay* res1 = [result objectAtIndex:0];
+    EZScheduledDay* res2 = [result objectAtIndex:1];
+    assert([res1.scheduledDate isEqualToDate:ed.scheduledDate]);
+    assert([res2.scheduledDate isEqualToDate:ed1.scheduledDate]);
+    
+    //assert(false);
+    
+}
+
++ (void) testArrayContainAndStringEqual
+{
+    NSString* str1 = [NSString stringWithFormat:@"str%i",1];
+    NSString* str2 = [NSString stringWithFormat:@"str%i",2];
+    NSArray* arr = [NSArray arrayWithObjects:str1, str2, nil];
+    NSString* found = [NSString stringWithFormat:@"str%i",1];
+    assert([arr containsObject:found]);
+    assert([str1 isEqual:found]);
+    
+    assert(((int)str1) != ((int)found));
+    
+    ComparedObject* obj1 = [[ComparedObject alloc] init];
+    obj1.name = str1;
+    obj1.age = 35;
+    ComparedObject* obj2 = [[ComparedObject alloc] init];
+    obj2.name = found;
+    obj2.age = 35;
+    assert(![obj1 isEqual:obj2]);
+    
+    NSArray* arr2 = [NSArray arrayWithObjects:obj1,nil];
+    assert([arr2 containsObject:obj1]);
+    assert(![arr2 containsObject:obj2]);
+    
+    
+    ComparedObjectEx* obje1 = [[ComparedObjectEx alloc] init];
+    obje1.name = str1;
+    obje1.age = 35;
+    ComparedObjectEx* obje2 = [[ComparedObjectEx alloc] init];
+    obje2.name = found;
+    obje2.age = 35;
+    assert([obje1 isEqual:obje2]);
+    
+    NSArray* arre2 = [NSArray arrayWithObjects:obje1,nil];
+    assert([arre2 containsObject:obje1]);
+    assert([arre2 containsObject:obje2]);
+    
+    assert(false);
+    //assert(false);
+    
+}
+
++ (void) testBooleanAccessor
+{
+    IntCarrier* ic = [[IntCarrier alloc] init];
+    ic.animated = true;
+    assert(!ic.animated);
 }
 
 + (void) testFetchWithPredicate
@@ -579,7 +746,7 @@ typedef int(^ClosureTest)();
     [avDay.availableTimes addObject:avTime];
     [[EZTaskStore getInstance] storeObject:avDay];
     
-    NSArray* existSchTasks = [[EZTaskStore getInstance] fetchAllWithVO:[EZScheduledTask class] po:[MScheduledTask class] sortField:@"startTime"];
+    NSArray* existSchTasks = [[EZTaskStore getInstance] fetchAllWithVO:[EZScheduledTask class] PO:[MScheduledTask class] sortField:@"startTime"];
     assert(existSchTasks.count == 0);
     
     EZTaskScheduler* scheduler = [[EZTaskScheduler alloc] init];
@@ -593,7 +760,7 @@ typedef int(^ClosureTest)();
         [allTasks addObject:schTasks];
         [flatedTasks addObjectsFromArray:schTasks];
     }
-    existSchTasks = [[EZTaskStore getInstance] fetchAllWithVO:[EZScheduledTask class] po:[MScheduledTask class] sortField:@"startTime"];
+    existSchTasks = [[EZTaskStore getInstance] fetchAllWithVO:[EZScheduledTask class] PO:[MScheduledTask class] sortField:@"startTime"];
     assert(existSchTasks.count > 0);
     
     
@@ -1028,7 +1195,7 @@ typedef int(^ClosureTest)();
     [EZTestSuite initializeDB];
     EZTask* task = [[EZTask alloc] initWithName:@"Tian" duration:20 maxDur:20 envTraits:4];
     [[EZTaskStore getInstance] storeObject:task];
-    NSArray* array = [[EZTaskStore getInstance] fetchAllWithVO:[EZTask class] po:[MTask class] sortField:nil];
+    NSArray* array = [[EZTaskStore getInstance] fetchAllWithVO:[EZTask class] PO:[MTask class] sortField:nil];
     assert(array.count == 1);
     
     //Verify what's wrong with the Persistent framework.
@@ -1044,7 +1211,7 @@ typedef int(^ClosureTest)();
     
     
     [[EZTaskStore getInstance] storeObject:taskGroup];
-    array = [[EZTaskStore getInstance] fetchAllWithVO:[EZTaskGroup class] po:[MTaskGroup class] sortField:nil];
+    array = [[EZTaskStore getInstance] fetchAllWithVO:[EZTaskGroup class] PO:[MTaskGroup class] sortField:nil];
     assert(array.count == 1);
     
     
@@ -1054,7 +1221,7 @@ typedef int(^ClosureTest)();
     NSLog(@"Group %@, task count:%i", res.name, res.tasks.count);
     assert(res.tasks.count == 2);
     
-    array = [[EZTaskStore getInstance] fetchAllWithVO:[EZTask class] po:[MTask class] sortField:nil];
+    array = [[EZTaskStore getInstance] fetchAllWithVO:[EZTask class] PO:[MTask class] sortField:nil];
     assert(array.count == 2);
     
     
@@ -1063,7 +1230,7 @@ typedef int(^ClosureTest)();
     //Make sure the task get removed when the taskGroup get remove.
     //we called this cascade remove mechanism. 
     //Cool.
-    array = [[EZTaskStore getInstance] fetchAllWithVO:[EZTask class] po:[MTask class] sortField:nil];
+    array = [[EZTaskStore getInstance] fetchAllWithVO:[EZTask class] PO:[MTask class] sortField:nil];
     EZDEBUG(@"The final task count:%i",array.count);
     assert(array.count == 0);
     //Make sure there is no side effect.
@@ -1073,21 +1240,21 @@ typedef int(^ClosureTest)();
     [taskGroup.tasks addObject:[[EZTask alloc] initWithName:@"Tian ge 2" duration:25 maxDur:25 envTraits:25]];
     [[EZTaskStore getInstance] storeObject:taskGroup];
     
-    array = [[EZTaskStore getInstance] fetchAllWithVO:[EZTaskGroup class] po:[MTaskGroup class] sortField:nil];
+    array = [[EZTaskStore getInstance] fetchAllWithVO:[EZTaskGroup class] PO:[MTaskGroup class] sortField:nil];
     assert(array.count == 1);
     
     EZTaskGroup* resGroup = [array objectAtIndex:0];
     resGroup.name = @"Tian ge updated";
     [[EZTaskStore getInstance] storeObject:resGroup];
     
-    array = [[EZTaskStore getInstance] fetchAllWithVO:[EZTaskGroup class] po:[MTaskGroup class] sortField:nil];
+    array = [[EZTaskStore getInstance] fetchAllWithVO:[EZTaskGroup class] PO:[MTaskGroup class] sortField:nil];
     EZTaskGroup* resGroupStored = [array objectAtIndex:0];
     assert([resGroupStored.name isEqualToString:resGroup.name]);
     //Make sure no side effect happened
     assert(resGroupStored.tasks.count == 1);
     
     //Make sure no side effect happened
-    array = [[EZTaskStore getInstance] fetchAllWithVO:[EZTask class] po:[MTask class] sortField:nil];
+    array = [[EZTaskStore getInstance] fetchAllWithVO:[EZTask class] PO:[MTask class] sortField:nil];
     assert(array.count == 1);
     
     

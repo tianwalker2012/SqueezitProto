@@ -6,12 +6,12 @@
 //  Copyright (c) 2012年 __MyCompanyName__. All rights reserved.
 //
 
-#import "EZLimitMap.h"
+#import "EZLRUMap.h"
 #import "EZQueue.h"
+#import "Constants.h"
 
 
-
-@interface EZLimitMap()
+@interface EZLRUMap()
 {
     EZQueue* keyQueue;
     NSMutableDictionary* maps;
@@ -20,7 +20,7 @@
 
 @end
 
-@implementation EZLimitMap
+@implementation EZLRUMap
 @synthesize limit;
 
 - (id) initWithLimit:(NSInteger)lmt
@@ -31,12 +31,26 @@
     maps = [[NSMutableDictionary alloc] initWithCapacity:limit];
     return self;
 }
+
+- (id) removeObjectForKey:(id)aKey
+{
+    id res = [maps objectForKey:aKey];
+    [maps removeObjectForKey:aKey];
+    return res;
+}
+
+
+//Now I can handle the cases even the key already exist.
 - (id) setObject:(id)obj forKey:(id)aKey
 {
     id res = nil;
+    if([self getObjectForKey:aKey]){
+        [keyQueue removeObject:aKey];
+    }
     [maps setObject:obj forKey:aKey];
     id removedKey = [keyQueue enqueue:aKey];
     if(removedKey){
+        EZDEBUG(@"Find removed key:%@",removedKey);
         res = [maps objectForKey:removedKey];
         [maps removeObjectForKey:removedKey];
     }
@@ -44,6 +58,10 @@
 }
 - (id) getObjectForKey:(id)aKey
 {
+    if([keyQueue isContain:aKey]){
+        [keyQueue removeObject:aKey];
+        [keyQueue enqueue:aKey];
+    }
     return [maps objectForKey:aKey];
 }
 

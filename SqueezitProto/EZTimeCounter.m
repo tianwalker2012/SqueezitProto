@@ -21,7 +21,7 @@
 
 
 @implementation EZTimeCounter
-@synthesize remainTime, timeupOps, counterView, tickBlock, isCounting;
+@synthesize remainTime, timeupOps, counterView, tickBlock, isCounting, ongoingTaskPos;
 
 // Each fire will get called
 - (void) timeTick
@@ -74,15 +74,11 @@
     minutes = (minutes%(60*60))/60;
     NSInteger seconds = remainTime;
     seconds = seconds%60;
-    if(hours > 0){
-        return [NSString stringWithFormat:@"%@:%@:%@",
+    return [NSString stringWithFormat:@"%@:%@:%@",
                 [self intToZeroPaddingString:hours],
                 [self intToZeroPaddingString:minutes],
                 [self intToZeroPaddingString:seconds]];
-    }
-    return [NSString stringWithFormat:@"%@:%@",
-                   [self intToZeroPaddingString:minutes],
-                   [self intToZeroPaddingString:seconds]];
+    
 }
 
 

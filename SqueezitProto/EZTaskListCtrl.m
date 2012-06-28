@@ -73,7 +73,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    taskGroups = [NSMutableArray arrayWithArray:[[EZTaskStore getInstance] fetchAllWithVO:[EZTaskGroup class] po:[MTaskGroup class] sortField:@"displayOrder"]];
+    taskGroups = [NSMutableArray arrayWithArray:[[EZTaskStore getInstance] fetchAllWithVO:[EZTaskGroup class] PO:[MTaskGroup class] sortField:@"displayOrder"]];
 
 }
 

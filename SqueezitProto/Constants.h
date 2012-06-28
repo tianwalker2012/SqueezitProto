@@ -39,6 +39,7 @@ EZDEBUG(xx, ##__VA_ARGS__); \
 #define EZEditColor @"324F85"
 
 #define EZNotificationKey @"taskURL"
+#define EZAssignNotificationKey @"assignedDate"
 
 
 typedef enum EZEnvironmentTraits {

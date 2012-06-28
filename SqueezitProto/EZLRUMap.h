@@ -10,7 +10,7 @@
 
 //What's my expectation for this class?
 //It have Limited size, once the limit reached, will be FIFO.
-@interface EZLimitMap : NSObject
+@interface EZLRUMap : NSObject
 
 @property (assign, nonatomic) NSInteger limit;
 
@@ -19,6 +19,7 @@
 
 //Removed object as return
 - (id) setObject:(id)obj forKey:(id)aKey;
+- (id) removeObjectForKey:(id)aKey;
 - (id) getObjectForKey:(id)aKey;
 - (void) removeAllObjects; 
 

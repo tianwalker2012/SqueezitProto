@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1171" systemVersion="11D50" minimumToolsVersion="Xcode 4.1" macOSVersion="Automatic" iOSVersion="Automatic">
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1171" systemVersion="11E53" minimumToolsVersion="Xcode 4.1" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="MAvailableDay" representedClassName="MAvailableDay" syncable="YES">
         <attribute name="assignedWeeks" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
@@ -30,6 +30,9 @@
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="quotasPerCycle" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="startDate" optional="YES" attributeType="Date" syncable="YES"/>
+    </entity>
+    <entity name="MScheduledDay" syncable="YES">
+        <attribute name="scheduledDate" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
     <entity name="MScheduledTask" representedClassName="MZScheduledTask" syncable="YES">
         <attribute name="alarmNotification" optional="YES" attributeType="Transformable" valueTransformerName="NotificationConverter" syncable="YES"/>
@@ -63,5 +66,6 @@
         <element name="MScheduledTask" positionX="160" positionY="192" width="128" height="150"/>
         <element name="MTask" positionX="160" positionY="192" width="128" height="135"/>
         <element name="MTaskGroup" positionX="160" positionY="192" width="128" height="105"/>
+        <element name="MScheduledDay" positionX="160" positionY="192" width="128" height="60"/>
     </elements>
 </model>

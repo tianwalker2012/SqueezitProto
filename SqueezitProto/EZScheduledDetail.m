@@ -14,6 +14,7 @@
 #import "EZTaskStore.h"
 #import "EZEditLabelCellHolder.h"
 #import "EZButtonCell.h"
+#import "EZBeginEndTimeCell.h"
 
 @interface EZScheduledDetail ()
 
@@ -54,14 +55,22 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     if([schTask.startTime isPassed:[NSDate date]]){
-        return 5;
+        return 4;
     }
-    return 6;
+    return 5;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return 1;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(indexPath.section == 1){
+        return 66;
+    }
+    return 44;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -76,25 +85,26 @@
             }
             break;
         case 1:{
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"Time"];
-            cell.textLabel.text = Local(@"Start Time");
-            cell.detailTextLabel.text = [schTask.startTime stringWithFormat:@"HH:mm"];
+            
+            EZBeginEndTimeCell* timeCell = (EZBeginEndTimeCell*) [self.tableView dequeueReusableCellWithIdentifier:@"BeginEndTime"];
+            if(timeCell == nil){
+                timeCell = [EZEditLabelCellHolder createBeginEndTimeCell];
+            }
+            
+            timeCell.beginTime.text =  [schTask.startTime stringWithFormat:@"HH:mm"];
+            timeCell.endTime.text = [[schTask.startTime adjustMinutes:schTask.duration] stringWithFormat:@"HH:mm"];
+                                    
+            cell = timeCell;
         }
-            break;
+                    break;
         case 2:{
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"Time"];
-            cell.textLabel.text = Local(@"End Time");
-            cell.detailTextLabel.text = [[schTask.startTime adjustMinutes:schTask.duration] stringWithFormat:@"HH:mm"];
-        }
-            break;
-        case 3:{
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"Env"];
             cell.textLabel.text = Local(@"Environment");
             cell.detailTextLabel.text = envTraitsToString(schTask.task.envTraits);
         }
             break;
-        case 4:
-        case 5:{
+        case 3:
+        case 4:{
             EZButtonCell* buttonCell = [tableView dequeueReusableCellWithIdentifier:@"Button"];
             if(buttonCell == nil){
                 buttonCell = [EZEditLabelCellHolder createButtonCell];

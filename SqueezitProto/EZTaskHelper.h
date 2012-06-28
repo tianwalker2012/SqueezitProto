@@ -77,6 +77,8 @@ typedef void  (^ IterateOperation)(id obj);
 
 - (EZWeekDayValue) weekDay;
 
+- (NSDate*) beginning;
+
 - (int) orgWeekDay;
 
 - (int) monthDay;

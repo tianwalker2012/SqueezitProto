@@ -1,28 +1,20 @@
 //
-//  EZAvTimeForEnvTrait.m
+//  EZConfigureCtrl.m
 //  SqueezitProto
 //
-//  Created by Apple on 12-6-11.
+//  Created by Apple on 12-6-28.
 //  Copyright (c) 2012年 __MyCompanyName__. All rights reserved.
 //
 
-#import "EZAvTimeForEnvTrait.h"
-#import "EZTaskStore.h"
-#import "EZTaskHelper.h"
-#import "EZAvailableTime.h"
-#import "MAvailableTime.h"
-#import "EZAvailableTimeCell.h"
-#import "EZEditLabelCellHolder.h"
+#import "EZConfigureCtrl.h"
 #import "EZGlobalLocalize.h"
+#import "EZTaskStore.h"
 
-@interface EZAvTimeForEnvTrait ()
-
-- (void) backClicked;
+@interface EZConfigureCtrl ()
 
 @end
 
-@implementation EZAvTimeForEnvTrait
-@synthesize envFlag, avTimes, backBlock;
+@implementation EZConfigureCtrl
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -33,22 +25,12 @@
     return self;
 }
 
-- (void) backClicked
-{
-    if(backBlock){
-        backBlock();
-    }
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:EZLocalizedString(@"Back", nil) style:UIBarButtonItemStyleDone target:self action:@selector(backClicked)];
-    NSArray* availableTime = [[EZTaskStore getInstance] fetchAllWithVO:[EZAvailableTime class] PO:[MAvailableTime class] sortField:@"startTime"];
-    self.avTimes = [availableTime filter:^BOOL(id obj) {
-        EZAvailableTime* av = (EZAvailableTime*)obj;
-        return isContained(envFlag, av.envTraits);
-    }];
+    self.navigationItem.title = Local(@"Configuration");
+    self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemMore tag:4];
+    self.tabBarItem.title = Local(@"Setting");    
 }
 
 - (void)viewDidUnload
@@ -63,28 +45,41 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
+#pragma mark - Table view data source
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return avTimes.count;
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"TimeCell";
-    EZAvailableTimeCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if(cell == nil){
-        cell = [EZEditLabelCellHolder createTimeCell];
+    UITableViewCell* cell = nil;
+    
+    if(indexPath.section == 0){
+        NSString* cellID = @"Normal";
+        cell = [self.tableView dequeueReusableCellWithIdentifier:cellID];
+        if(cell == nil){
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+        }
+        cell.textLabel.text = Local(@"Environment Tags");
+    } else {
+        NSString* cellID = @"ValueSetting";
+        cell = [self.tableView dequeueReusableCellWithIdentifier:cellID];
+        if(cell == nil){
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellID];
+        }
+        UILocalNotification* notification = [[EZTaskStore getInstance] getDailyNotification];
+        cell.textLabel.text = Local(@"Daily schedule reminder");
+        cell.detailTextLabel.text = [notification.fireDate stringWithFormat:@"HH:mm"];
     }
-    EZAvailableTime* avtime = [avTimes objectAtIndex:indexPath.row];
-    cell.name.text = avtime.name;
-    cell.time.text = [NSString stringWithFormat:@"%@ to %@",[avtime.start stringWithFormat:@"HH:mm"], [[avtime.start adjustMinutes:avtime.duration]stringWithFormat:@"HH:mm"]];
-    cell.envTraits.text = [[EZTaskStore getInstance] StringForFlags:avtime.envTraits];
+    
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return cell;
 }
 

@@ -138,6 +138,12 @@ NSString* doubleString(NSString* str)
     return selfInt > [start timeIntervalSince1970] && selfInt < [end timeIntervalSince1970];
 }
 
+//Get the beginning of this date
+- (NSDate*) beginning
+{
+    return [NSDate stringToDate:@"yyyyMMdd" dateString:[self stringWithFormat:@"yyyyMMdd"]];
+}
+
 - (BOOL) InBetweenDays:(NSDate*)start end:(NSDate*)end
 {
     NSTimeInterval curDay = self.timeIntervalSince1970/SecondsPerDay;

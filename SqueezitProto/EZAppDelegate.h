@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface EZAppDelegate : UIResponder <UIApplicationDelegate>
+@interface EZAppDelegate : UIResponder <UIApplicationDelegate, UIAlertViewDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 

@@ -38,9 +38,26 @@
     }
     return res;
 }
+
+//I assume isEqual will find the NSString is the same, even if they are not 
+//The same object. Because, Key may not already the same object.
+- (void) removeObject:(id)obj
+{
+    for(int i = 0; i< queue.count; i++){
+        if([obj isEqual:[queue objectAtIndex:i]]){
+            [queue removeObjectAtIndex:i];
+        }
+    }
+}
+
 - (BOOL) isContain:(id)obj
 {
-    return [queue containsObject:obj];
+    for(id objIn in queue){
+        if([objIn isEqual:obj]){
+            return TRUE;
+        }
+    }
+    return false;
 }
 
 - (void) removeAllObjects
