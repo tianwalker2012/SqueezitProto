@@ -202,6 +202,7 @@
 {
     NSArray* flags = [self fetchAllWithVO:[EZEnvFlag class] PO:[MEnvFlag class] sortField:@"flag"];
     self.envFlags = [NSMutableArray arrayWithArray:flags];
+    //EZDEBUG(@"The last flag:%i, array Count:%i", ((EZEnvFlag*)[self.envFlags objectAtIndex:envFlags.count-1]).flag, self.envFlags.count);
     self.flagToEnvFlag = [[NSMutableDictionary alloc] init];
     for(EZEnvFlag* flag in flags){
         [self.flagToEnvFlag setObject:flag forKey:[[NSNumber alloc] initWithUnsignedInteger:flag.flag]];
@@ -458,6 +459,21 @@
     [userSetting setValue:[NSKeyedArchiver archivedDataWithRootObject:notification] forKey:tomorrowNofityKey];
 }
 
+
+//What's the purpose of this method?
+//Because the envFlags flag will need to be the next prime number so can not be 
+//Initialize at will. 
+//This Method will generate the next prime number and instantiate EZEnvFlag 
+- (EZEnvFlag*) createNextFlagWithName:(NSString *)name
+{
+    NSUInteger nextFlag = findPrimeAfter(((EZEnvFlag*)envFlags.lastObject).flag);
+    EZDEBUG(@"The nextFlag is:%i", nextFlag);
+    EZEnvFlag* res = [[EZEnvFlag alloc] initWithName:name flag:nextFlag];
+    [self storeObject:res];
+    [self.envFlags addObject:res];
+    return res;
+    
+}
 
 @end
 

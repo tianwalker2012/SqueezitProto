@@ -223,7 +223,11 @@
             //When we switch back and forth some issue will show off
             if(ct.counterView.superview == nil){
                 if(counter.ongoingTaskPos > -1){
-                    [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:counter.ongoingTaskPos inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+                    NSMutableArray* arr = [NSMutableArray arrayWithObject:[NSIndexPath indexPathForRow:counter.ongoingTaskPos inSection:0]];
+                    if((counter.ongoingTaskPos-1) > -1){
+                        [arr addObject:[NSIndexPath indexPathForRow:counter.ongoingTaskPos - 1 inSection:0]];
+                    }
+                    [self.tableView reloadRowsAtIndexPaths:arr withRowAnimation:UITableViewRowAnimationFade];
                 }
             }
         }

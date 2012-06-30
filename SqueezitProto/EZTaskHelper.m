@@ -33,6 +33,65 @@ NSString* doubleString(NSString* str)
 
 @end
 
+@implementation NSObject(EZPrivate)
+
+- (void) performBlock:(EZOperationBlock)block withDelay:(NSTimeInterval)delay
+{
+    [self performSelector:@selector(executeBlock:) withObject:block afterDelay:delay];
+}
+
+- (void) executeBlock:(EZOperationBlock)block
+{
+    if(block){
+        block();
+    }
+}
+
+@end
+
+
+@implementation UIView(EZPrivate)
+
+- (void) left:(CGFloat)distance
+{
+    CGRect changed = self.frame;
+    changed.origin.x = distance;
+    [self setFrame:changed];
+}
+
+- (void) top:(CGFloat)distance
+{
+    CGRect changed = self.frame;
+    changed.origin.y = distance;
+    [self setFrame:changed];
+}
+
+- (void) right:(CGFloat)distance
+{
+    if(self.superview == nil){
+        return;
+    }
+    
+    CGFloat totalWidth = self.superview.bounds.size.width;
+    CGRect changed = self.frame;
+    CGFloat selfWidth = changed.size.width;
+    changed.origin.x = totalWidth - selfWidth - distance;
+    [self setFrame:changed];
+}
+
+- (void) bottom:(CGFloat)distance
+{
+    if(self.superview == nil){
+        return;
+    }
+    CGFloat totalHeight = self.superview.bounds.size.height;
+    CGRect changed = self.frame;
+    CGFloat selfHeight = changed.size.height;
+    changed.origin.y = totalHeight - selfHeight - distance;
+    [self setFrame:changed];
+}
+
+@end
 
 @implementation UIColor(EZPrivate)
 
@@ -330,10 +389,10 @@ NSString* doubleString(NSString* str)
 //If flag can be divide cleanly from envFlags
 BOOL isContained(NSUInteger flag, NSUInteger envFlags)
 {
-    if((envFlags/flag)*flag == envFlags){
-        return true;
+    if(envFlags % flag){
+        return false;
     }
-    return false;
+    return true;
 }
 
 NSUInteger combineFlags(NSUInteger flag, NSUInteger envFlags)
@@ -341,27 +400,50 @@ NSUInteger combineFlags(NSUInteger flag, NSUInteger envFlags)
     return envFlags*flag;
 }
         
-NSUInteger findFractor(NSUInteger target, EZArray* fractors)
+BOOL isPrime(NSUInteger divider)
 {
-    for(int pos = 0; pos < fractors.length; ++pos){
-        if(isContained(fractors.uarray[pos], target)){
-            return fractors.uarray[pos];
+    if(divider == 2){
+        return YES;
+    }
+    NSUInteger half = divider/2;
+    for(int i = 2; i <= half; i++){
+        if(divider % i){
+            continue;
+        }else{
+            return NO;
+        }
+    }
+    return YES;
+}
+
+NSUInteger findPrimeAfter(NSUInteger prime){
+    NSUInteger odd = prime % 2;
+    if(odd){
+        prime += 2;
+    }else{
+        ++prime;
+    }
+    EZDEBUG(@"Will start at:%i", prime);
+    for(NSUInteger i = prime; i < NSUIntegerMax; i += 2){
+        if(isPrime(i)){
+            return i;
         }
     }
     return 0;
 }
 
-
 //Assume it also sorted.
 NSUInteger findNextFlag(EZArray* flags)
 {
-    NSUInteger begin = flags.uarray[flags.length-1] + 2;
-    for(NSUInteger i = begin; i < NSUIntegerMax ; i += 2){
-        if(findFractor(i, flags) == 0){
+    NSUInteger begin = flags.uarray[flags.length-1] + 1;
+    EZDEBUG(@"Start from %i", begin);
+    //NSUInteger half = begin/2;
+    for(NSUInteger i = begin; i < NSUIntegerMax ; i++){
+        if(isPrime(i)){
             return i;
         }
     }
-    //Reach the maximum
+    //assert([@"" isEqualToString:@"How could I not find prime"]);
     return 0;
 }
 

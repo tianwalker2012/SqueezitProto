@@ -12,5 +12,9 @@
 
 @property (strong, nonatomic) IBOutlet UITextField* titleField;
 @property (strong, nonatomic) IBOutlet UILabel* groupInfo;
+@property (strong, nonatomic) UIColor* editableColor;
+@property (strong, nonatomic) UIColor* noneEditableColor;
+
+@property (assign, nonatomic) BOOL titleEditable;
 
 @end

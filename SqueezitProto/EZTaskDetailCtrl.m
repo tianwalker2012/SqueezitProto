@@ -161,10 +161,10 @@
             if(pureCell == nil){
                 pureCell = [EZEditLabelCellHolder createPureEditCellWithDelegate:self];
             }
-            pureCell.editField.placeholder = Local(@"Task Name ...");
+            pureCell.placeHolder = Local(@"Task Name ...");
             pureCell.editField.text = task.name;
             //pureCell.editField.textAlignment = UITextAlignmentCenter;
-            pureCell.isAlwaysEditable = true;
+            pureCell.isFieldEditable = true;
             return pureCell;
             break;
         }

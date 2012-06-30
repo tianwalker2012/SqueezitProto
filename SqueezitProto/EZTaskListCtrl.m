@@ -12,18 +12,33 @@
 #import "EZTaskGroupDetailCtrl.h"
 #import "EZTaskStore.h"
 #import "MTaskGroup.h"
-#import "EZEditCell.h"
 #import "EZTaskGroupCell.h"
 #import "EZEditLabelCellHolder.h"
 #import "EZGlobalLocalize.h"
+#import "EZPureEditCell.h"
+#import "EZTaskHelper.h"
 
 
 @interface EZTaskListCtrl ()
+{
+    //EZOperationBlock smallBlock;
+    NSIndexPath* previousDestine;
+}
+
+
+- (NSIndexPath*) textFieldToIndexPath:(UITextField*)field;
+
+//It is more test oriented function than product oriented function
+//The reason I have the function is that, TableView have issue to reload during 
+//Edit status.
+//One possibility I didn't explore is that if I explicitly setup the cell to editing status, will it change it's behavior?
+//Let's try later.For time being let's get this refresh done.
+- (void) refreshCellForIndex:(NSIndexPath*)path;
 
 @end
 
 @implementation EZTaskListCtrl
-@synthesize editButton, doneButton, addCell, addCellView, inputGroupName, operation;
+@synthesize editButton, doneButton, operation;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -42,33 +57,19 @@
 }
 
 
-
 - (void) editClicked:(id)sender
 {
     
     EZDEBUG(@"Edit get called:%@",sender);
     if(self.tableView.editing){
         self.navigationItem.rightBarButtonItem = editButton;
-        self.addCellView.editField.placeholder = @"";
-        self.addCellView.editField.userInteractionEnabled = false;
         [self.tableView setEditing:FALSE animated:YES];
     }else{
         self.navigationItem.rightBarButtonItem = doneButton;
-        self.addCellView.editField.placeholder = @"Add Task Group...";
-        self.addCellView.editField.userInteractionEnabled = TRUE;
         [self.tableView setEditing:TRUE animated:YES];
     }
 }
 
-- (void) setCellTextField:(UITableViewCell*)cell enabled:(BOOL)enabled
-{
-    //EZDEBUG(@"Cell class:%@", NSStringFromClass([cell class]));
-    if([@"EZTaskGroupCell" isEqualToString:NSStringFromClass([cell class])]){
-        EZTaskGroupCell* tgCell = (EZTaskGroupCell*)cell;
-        //EZDEBUG(@"Before get title field");
-        tgCell.titleField.userInteractionEnabled = enabled;
-    }
-}
 
 - (void)viewDidLoad
 {
@@ -99,42 +100,48 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     EZDEBUG(@"numberOfRowsInSection get called");
-    return [taskGroups count] + 1;
+    return taskGroups.count + 1;
+}
+
+- (void) refreshCellForIndex:(NSIndexPath*)path
+{
+    EZTaskGroupCell* tgCell = (EZTaskGroupCell*)[self.tableView cellForRowAtIndexPath:path];
+    EZTaskGroup* taskGroup = [taskGroups objectAtIndex:path.row];
+    
+    EZDEBUG(@"Cell's orginal text:%@, replace text:%@, orginal groupInfo:%@",tgCell.titleField.text, taskGroup.name, tgCell.groupInfo.text);
+    
+    tgCell.titleField.text = taskGroup.name;
+    tgCell.groupInfo.text = [NSString stringWithFormat:@"Tasks:%i, displayOrder:%i",[taskGroup.tasks count], taskGroup.displayOrder];
+    //tgCell.titleField.placeholder = Local(@"Task Group Name...");
+
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    EZDEBUG(@"cellForRowAtIndexPath:%@",indexPath);
     if(indexPath.row >= [taskGroups count]){
-        static NSString* insertIdentifier = @"EditCell";
-        EZEditCell *cell = [tableView dequeueReusableCellWithIdentifier:insertIdentifier];
+        static NSString* insertIdentifier = @"PureEdit";
+        EZPureEditCell *cell = [tableView dequeueReusableCellWithIdentifier:insertIdentifier];
         if(!cell){
-            
-            [[NSBundle mainBundle] loadNibNamed:@"EZAddCell" owner:self options:nil];
-            cell = self.addCellView;
-            cell.editField.userInteractionEnabled = false;
-            //self.addCellView = ;
+            cell = [EZEditLabelCellHolder createPureEditCellWithDelegate:self];
         }
-        //cell.editField.placeholder = @"Task Group Name";
-        //cell.textLabel.text = @"Add group";
+        cell.placeHolder = Local(@"Task Group Name...");
+        cell.isChangeWithCellEdit = true;
+        cell.identWhileEdit = true;
         return cell;
     }
     
-    static NSString *CellIdentifier = @"groupCell";
+    static NSString *CellIdentifier = @"TaskGroup";
     EZTaskGroupCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if(!cell){
         cell = [EZEditLabelCellHolder createTaskGroupCellWithDelegate:self];
         //cell.editingStyle = UITableViewCellEditingStyleDelete;
     }
-    EZDEBUG(@"Before get title field");
-    cell.titleField.userInteractionEnabled = false;
     EZTaskGroup* taskGroup = [taskGroups objectAtIndex:indexPath.row];
     
     cell.titleField.text = taskGroup.name;
     cell.groupInfo.text = [NSString stringWithFormat:@"Tasks:%i, displayOrder:%i",[taskGroup.tasks count], taskGroup.displayOrder];
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    // Configure the cell..
-    
+    cell.titleField.placeholder = Local(@"Task Group Name...");
     return cell;
 }
 
@@ -151,27 +158,40 @@
 //Move get called
 - (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath
 {
-    EZDEBUG(@"TableView cell move get called, sourceIndex row:%i, destinationRow:%i", sourceIndexPath.row, proposedDestinationIndexPath.row);
+    EZDEBUG(@"TableView cell move get called, sourceIndex row:%i, destinationRow:%i, previousDestine:%i", sourceIndexPath.row, proposedDestinationIndexPath.row, previousDestine.row);
     
-    if(proposedDestinationIndexPath.row < [taskGroups count]){
-        return proposedDestinationIndexPath;
+    if(proposedDestinationIndexPath.row >= taskGroups.count){
+        proposedDestinationIndexPath = [NSIndexPath indexPathForRow:taskGroups.count - 1 inSection:0];
     }
-    return [NSIndexPath indexPathForRow:[taskGroups count]-1 inSection:0];
+    if(previousDestine == nil){
+        previousDestine = sourceIndexPath;
+    }
+    
+    EZTaskGroup* srcGroup = [taskGroups objectAtIndex:previousDestine.row];
+    EZTaskGroup* proposedGroup = [taskGroups objectAtIndex:proposedDestinationIndexPath.row];
+    NSInteger srcOrder = srcGroup.displayOrder;
+    srcGroup.displayOrder = proposedGroup.displayOrder;
+    proposedGroup.displayOrder = srcOrder;
+    [taskGroups exchangeObjectAtIndex:previousDestine.row withObjectAtIndex:proposedDestinationIndexPath.row];
+    previousDestine = proposedDestinationIndexPath;
+    return proposedDestinationIndexPath;
 }
+
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath 
 {
-    EZDEBUG(@"moveRowAtIndexPath, fromIndex row:%i, toIndex row:%i", fromIndexPath.row, toIndexPath.row);
-    EZTaskGroup* fromGroup = [taskGroups objectAtIndex:fromIndexPath.row];
-    EZTaskGroup* toGroup = [taskGroups objectAtIndex:toIndexPath.row]; 
-    fromGroup.displayOrder = toIndexPath.row;
-    toGroup.displayOrder = fromIndexPath.row;
-    
-    [taskGroups exchangeObjectAtIndex:toIndexPath.row withObjectAtIndex:fromIndexPath.row];
-    [[EZTaskStore getInstance] storeObject:fromGroup];
-    [[EZTaskStore getInstance] storeObject:toGroup];
+    EZDEBUG(@"moveRowAtIndexPath, fromIndex row:%i, toIndex row:%i, previousDestine:%i", fromIndexPath.row, toIndexPath.row, previousDestine.row);
+    [self performBlock:^(){
+        [self refreshCellForIndex:fromIndexPath];
+        [self refreshCellForIndex:toIndexPath];
+    } withDelay:0.3];
+    //Better store the whole thing
+    [[EZTaskStore getInstance] storeObjects:taskGroups];
+    //Make the next movement normal.
+    previousDestine = nil;
 }
 
+/**
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -188,7 +208,7 @@
     }
     return NO;
 }
-
+**/
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -232,28 +252,6 @@
 }
 
 
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
-{
-    return TRUE;
-}
-
-// return NO to disallow editing.
-- (void)textFieldDidBeginEditing:(UITextField *)textField
-{
-    //Need to do nothing here, why override it? For fun?
-}
-
-
-//What need to be done in this method?
-//1. If is empty, will resume the original text back.
-//2. If it is collid with existing title will flash a alert, Don't resign the responder.
-- (BOOL)textFieldShouldEndEditing:(UITextField *)textField
-{
-    EZDEBUG(@"ShouldEndEditing Called, text:%@",textField.text);
-    return TRUE;
-}
-
-
 
 //Collision check
 - (BOOL) collisionCheck:(NSString*)groupName
@@ -285,42 +283,6 @@
     alertView = nil;
 }
 
-- (void) addCellCalled:(UITextField*)textField
-{
-    NSString* groupName = textField.text;
-    NSString* trimmedName = groupName.trim;
-    if(trimmedName.length == 0){
-        //[self fireAlarm:@"Space not valid name" delay:1];
-        textField.text = @"";
-        [textField becomeFirstResponder];
-        return;
-    }
-    if([self collisionCheck:trimmedName]){
-        [self fireAlarm:@"Duplicated group name" delay:1];
-        [textField becomeFirstResponder];
-        return;
-    }
-    EZTaskGroup* newGroup = [[EZTaskGroup alloc] init];
-    newGroup.name = trimmedName;
-    newGroup.createdTime = [NSDate date];
-    newGroup.displayOrder = [taskGroups count];
-    textField.text = @"";
-    [[EZTaskStore getInstance] storeObject:newGroup];
-    [taskGroups addObject:newGroup];
-    [self.tableView beginUpdates];
-    [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:[taskGroups count] inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-    [self.tableView endUpdates];
-}
-
-- (NSIndexPath*) getIndexByTextField:(UITextField*) field
-{
-    CGRect frame = [self.tableView convertRect:field.frame fromView:field.superview];
-    NSArray* indexPaths = [self.tableView indexPathsForRowsInRect:frame];
-    NSLog(@"The count is %i",[indexPaths count]);
-    assert([indexPaths count] == 1);
-    return [indexPaths objectAtIndex:0];
-}
-
 //1. Will resign the respond.[False, only resigned textField will call this method]
 //2. Verify if it is a empty space, if it is do nothing.
 //3. Do duplication check.
@@ -330,13 +292,10 @@
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
     EZDEBUG(@"didEndEditing, Text:%@", textField.text);
-    if(textField == addCellView.editField){
-        EZDEBUG(@"AddCell get called");
-        [self addCellCalled:textField];
-    }else{
-        NSIndexPath* path = [self getIndexByTextField:textField];
+    NSIndexPath* path = [self textFieldToIndexPath:textField];
+    NSString* trimmed = textField.text.trim;
+    if(path.row < taskGroups.count){
         EZTaskGroup* tg = [taskGroups objectAtIndex:path.row];
-        NSString* trimmed = textField.text.trim;
         if([trimmed isEqualToString:@""]){
             //If the modified place is only space, then nothing will be changed
             textField.text = tg.name;
@@ -344,27 +303,32 @@
         }
         tg.name = trimmed;
         [[EZTaskStore getInstance] storeObject:tg];
+    }else{
+        if([trimmed isEqualToString:@""]){
+            textField.text = @"";
+            return;
+        }
+        EZTaskGroup* tg = [[EZTaskGroup alloc] init];
+        tg.name = trimmed;
+        tg.displayOrder =  ((EZTaskGroup*)taskGroups.lastObject).displayOrder + 1;
+        [[EZTaskStore getInstance] storeObject:tg];
+        [taskGroups addObject:tg];
+        [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:taskGroups.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+        textField.text = @"";
     }
     //[textField becomeFirstResponder];
 }
 
-
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+- (NSIndexPath*) textFieldToIndexPath:(UITextField*)field
 {
-    //EZDEBUG(@"Changed:%@",string);
-    return TRUE;
+    CGRect rect = [self.tableView convertRect:field.frame fromView:field.superview];
+    return  [[self.tableView indexPathsForRowsInRect:rect] objectAtIndex:0];
 }
 
-
-- (BOOL)textFieldShouldClear:(UITextField *)textField
-{
-    //EZDEBUG(@"ShouldClear");
-    return TRUE;
-}
 // called when clear button pressed. return NO to ignore (no notifications)
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    EZDEBUG(@"ShouldReturn get called:%@",textField.text);
+    //EZDEBUG(@"ShouldReturn get called:%@",textField.text);
     [textField resignFirstResponder];
     return TRUE;
 }
@@ -378,32 +342,19 @@
 }
 
 
-//Do not allow user to select the edit row
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if(indexPath.row < [taskGroups count]){
-        return indexPath;
-    }
-    EZTaskGroupCell* groupCell = (EZTaskGroupCell*)[tableView cellForRowAtIndexPath:indexPath];
-    //My one cents to UX
-    [groupCell.titleField becomeFirstResponder];
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    return nil;
-}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    EZTaskGroup* tgrp = [taskGroups objectAtIndex:indexPath.row];
-    EZTaskGroupDetailCtrl* tgc = [[EZTaskGroupDetailCtrl alloc] initWithStyle:UITableViewStylePlain];
-    tgc.taskGroup = tgrp;
-    tgc.superUpdateBlock = ^(){
-        EZDEBUG(@"SuperUpdateBlock get called, before refresh count:%i",tgrp.tasks.count);
-        [tgrp refresh];
-        EZDEBUG(@"after refresh count:%i",tgrp.tasks.count);
-        [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:NO];
-    };
-    [self.navigationController pushViewController:tgc animated:YES];
+    EZDEBUG(@"didSelect get calld, indexPath.row:%i, taskGroups.count:%i",indexPath.row,taskGroups.count);
+    if(indexPath.row < taskGroups.count){
+        EZTaskGroup* tgrp = [taskGroups objectAtIndex:indexPath.row];
+        EZTaskGroupDetailCtrl* tgc = [[EZTaskGroupDetailCtrl alloc] initWithStyle:UITableViewStylePlain];
+        tgc.taskGroup = tgrp;
+        tgc.superUpdateBlock = ^(){
+            [tgrp refresh];
+            [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:NO];
+        };
+        [self.navigationController pushViewController:tgc animated:YES];
+    }
 }
 
 @end

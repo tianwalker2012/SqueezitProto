@@ -57,6 +57,25 @@
     return [NSString stringWithFormat:@"EZAvailableDay,name:%@,weekAssignd:%i,Date:%@",name,assignedWeeks,(date != nil?[date stringWithFormat:@"yyyy-MM-dd"]:@"null")];
 }
 
+- (void) refresh
+{
+    [PO.managedObjectContext refreshObject:PO mergeChanges:YES];
+    [self populateWithPO:PO];
+}
+
+- (void) populateWithPO:(MAvailableDay*)mtk
+{
+    self.name = mtk.name;
+    self.date = mtk.date;
+    self.assignedWeeks = mtk.assignedWeeks.intValue;
+    self.PO = mtk;
+    self.displayOrder = mtk.displayOrder.integerValue;
+    self.availableTimes = [[NSMutableArray alloc] initWithCapacity:[mtk.availableTimes count]];
+    for(MAvailableTime* mat in mtk.availableTimes){
+        [self.availableTimes addObject:[[EZAvailableTime alloc] initWithPO:mat]];
+    }
+}
+
 - (id) initWithPO:(MAvailableDay*)mtk
 {
     self = [super init];
@@ -89,6 +108,7 @@
         }
     }
 }
+
 
 - (MAvailableDay*) populatePO:(MAvailableDay*)po
 {

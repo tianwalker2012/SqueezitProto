@@ -92,10 +92,11 @@
     EZPureEditCell *pureCell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if(pureCell == nil){
         pureCell = [EZEditLabelCellHolder createPureEditCellWithDelegate:self];
-        pureCell.editField.placeholder = EZLocalizedString(@"Task name ...", nil);
+        pureCell.placeHolder = EZLocalizedString(@"Task name ...", nil);
         self.editField = pureCell.editField;
     }
-    pureCell.isAlwaysEditable = true;
+    //pureCell.isChangeWithCellEdit = true;
+    pureCell.isFieldEditable = true;
     self.editField.text = @"";
     return pureCell;
 }

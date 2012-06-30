@@ -91,6 +91,7 @@
 		188CFE0515985D88008ACCB8 /* EZScheduledTaskSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFE0415985D85008ACCB8 /* EZScheduledTaskSlider.m */; };
 		188CFE0815999BDB008ACCB8 /* EZTestTableViewCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFE0715999BD8008ACCB8 /* EZTestTableViewCtrl.m */; };
 		188CFE0F159C0530008ACCB8 /* EZConfigureCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFE0E159C0529008ACCB8 /* EZConfigureCtrl.m */; };
+		188CFE12159C12B0008ACCB8 /* EZEnvTagCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFE11159C12AB008ACCB8 /* EZEnvTagCtrl.m */; };
 		188D55161584883000142394 /* EZEnvFlag.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D55151584883000142394 /* EZEnvFlag.m */; };
 		188D551A15848B3A00142394 /* MEnvFlag.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D551915848B3A00142394 /* MEnvFlag.m */; };
 		188D551D1584ACB000142394 /* EZArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D551C1584ACB000142394 /* EZArray.m */; };
@@ -270,6 +271,8 @@
 		188CFE0715999BD8008ACCB8 /* EZTestTableViewCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTestTableViewCtrl.m; sourceTree = "<group>"; };
 		188CFE0D159C051F008ACCB8 /* EZConfigureCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZConfigureCtrl.h; sourceTree = "<group>"; };
 		188CFE0E159C0529008ACCB8 /* EZConfigureCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZConfigureCtrl.m; sourceTree = "<group>"; };
+		188CFE10159C12A8008ACCB8 /* EZEnvTagCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZEnvTagCtrl.h; sourceTree = "<group>"; };
+		188CFE11159C12AB008ACCB8 /* EZEnvTagCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZEnvTagCtrl.m; sourceTree = "<group>"; };
 		188D55141584883000142394 /* EZEnvFlag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZEnvFlag.h; sourceTree = "<group>"; };
 		188D55151584883000142394 /* EZEnvFlag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZEnvFlag.m; sourceTree = "<group>"; };
 		188D551815848B3A00142394 /* MEnvFlag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEnvFlag.h; sourceTree = "<group>"; };
@@ -504,6 +507,8 @@
 				188CFE0415985D85008ACCB8 /* EZScheduledTaskSlider.m */,
 				188CFE0D159C051F008ACCB8 /* EZConfigureCtrl.h */,
 				188CFE0E159C0529008ACCB8 /* EZConfigureCtrl.m */,
+				188CFE10159C12A8008ACCB8 /* EZEnvTagCtrl.h */,
+				188CFE11159C12AB008ACCB8 /* EZEnvTagCtrl.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -810,6 +815,7 @@
 				188CFE0515985D88008ACCB8 /* EZScheduledTaskSlider.m in Sources */,
 				188CFE0815999BDB008ACCB8 /* EZTestTableViewCtrl.m in Sources */,
 				188CFE0F159C0530008ACCB8 /* EZConfigureCtrl.m in Sources */,
+				188CFE12159C12B0008ACCB8 /* EZEnvTagCtrl.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

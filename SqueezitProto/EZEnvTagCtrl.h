@@ -1,5 +1,5 @@
 //
-//  EZConfigureCtrl.h
+//  EZEnvTagCtrl.h
 //  SqueezitProto
 //
 //  Created by Apple on 12-6-28.
@@ -7,8 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "EZPickerWrapper.h"
 
-@interface EZConfigureCtrl : UITableViewController<EZPickerWrapperDelegate>
+@interface EZEnvTagCtrl : UITableViewController<UITextFieldDelegate>
 
 @end

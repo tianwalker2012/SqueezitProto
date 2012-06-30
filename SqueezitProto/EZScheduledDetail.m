@@ -110,7 +110,7 @@
                 buttonCell = [EZEditLabelCellHolder createButtonCell];
             }
             
-            if(indexPath.section == 4){
+            if(indexPath.section == 4 || [schTask.startTime isPassed:[NSDate date]]){
                 [buttonCell.button setTitle:Local(@"Delete") forState:UIControlStateNormal];
             }else{
                 [buttonCell.button setTitle:Local(@"Re-Schedule") forState:UIControlStateNormal];
@@ -119,7 +119,7 @@
             
             buttonCell.clickedOps = ^(id sender){
                 [self.navigationController popViewControllerAnimated:YES];
-                if(indexPath.section==4){
+                if(indexPath.section==4 || [schTask.startTime isPassed:[NSDate date]]){
                     if(deleteBlock){
                         deleteBlock();
                     }

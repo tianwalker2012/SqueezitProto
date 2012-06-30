@@ -10,8 +10,17 @@
 #import "Constants.h"
 #import "EZTaskHelper.h"
 
+@interface EZPureEditCell()
+
+- (void) indentTextField;
+
+- (void) unIndentTextField;
+
+@end
+
+
 @implementation EZPureEditCell
-@synthesize editField, isAlwaysEditable, editColor, nonEditColor;
+@synthesize editField, isChangeWithCellEdit, editColor, nonEditColor, isFieldEditable, placeHolder, identWhileEdit;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -23,6 +32,25 @@
     return self;
 }
 
+- (void) indentTextField
+{
+    [editField left:44];
+}
+
+- (void) unIndentTextField
+{
+    [editField left:10];
+}
+
+- (void)awakeFromNib
+{
+    editColor = [UIColor createByHex:EZEditColor];
+    nonEditColor = [UIColor blackColor];
+    identWhileEdit = false;
+    isChangeWithCellEdit = false;
+    self.isFieldEditable = false;
+    
+}
 
 - (BOOL) shouldIndentWhileEditing
 {
@@ -32,36 +60,35 @@
 //Assume the initial status is not editable. 
 //If it is not the case, just call setupEditField is enough to fix this.
 //We are in good shape.
-- (void) setIsAlwaysEditable:(BOOL)aEditable
+//Better do nothing special here. 
+//Mean this function better not have side effect.
+//Or it will make things complicated.
+- (void) setIsChangeWithCellEdit:(BOOL)ice
 {
-    isAlwaysEditable = aEditable;
-    if(aEditable){
-        [self setupEditField:true];
-    }else{
-        [self setupEditField:false];
-    }
+    isChangeWithCellEdit = ice;
 }
+
+  
 
 //The edit field to proper status
 //1. Identation add it during next iteration
 //2. Text color
 //3. UserInteractionEnabled
-- (void) setupEditField:(BOOL)isEditStatus
+- (void) setIsFieldEditable:(BOOL)isEditStatus
 {
+    isFieldEditable = isEditStatus;
     if(isEditStatus){
-        if(editColor){
-            editField.textColor = editColor;
-        }else{
-            editField.textColor = [UIColor createByHex:EZEditColor];
-        }
+        editField.textColor = [UIColor createByHex:EZEditColor];
         editField.userInteractionEnabled = true;
-    }else{
-        if(nonEditColor){
-            editField.textColor = nonEditColor;
-        }else{
-            editField.textColor = [UIColor blackColor];
+        editField.placeholder = self.placeHolder;
+        if(identWhileEdit){
+            [self indentTextField];
         }
+    }else{
+        editField.textColor = nonEditColor;
         editField.userInteractionEnabled = false;
+        editField.placeholder = @"";
+        [self unIndentTextField];
     }
 }
 
@@ -69,7 +96,6 @@
 - (id) init
 {
     self = [super init];
-    EZDEBUG(@"PureCell init get called,%@",[NSThread callStackSymbols]);
     return self;
 }
 
@@ -89,9 +115,10 @@
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
 {
+    EZDEBUG(@"setEditting called:%@", (editing?@"YES":@"NO"));
     [super setEditing:editing animated:animated];
-    if(!isAlwaysEditable){//Only when is not always editable we care.
-        [self setupEditField:editing];
+    if(isChangeWithCellEdit){//Only when is not always editable we care.
+        self.isFieldEditable = editing;
     }
 }
 

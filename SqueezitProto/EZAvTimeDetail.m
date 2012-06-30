@@ -108,7 +108,7 @@
     if(indexPath.section == 0){
         EZPureEditCell* titleCell = [EZEditLabelCellHolder createPureEditCellWithDelegate:self];
         titleCell.editField.text = avTime.name;
-        titleCell.isAlwaysEditable = true;
+        titleCell.isFieldEditable = true;
         res = titleCell;
     }else if(indexPath.section == 1){
         EZBeginEndTimeCell* timeCell = [EZEditLabelCellHolder createBeginEndTimeCell];

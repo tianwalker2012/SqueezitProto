@@ -116,6 +116,28 @@
 - (IBAction) addButtonClicked:(id)sender
 {
     EZDEBUG(@"Add Button get clicked");
+    EZAvTimeDetail* avTimeDetail = [[EZAvTimeDetail alloc] initWithStyle:UITableViewStyleGrouped];
+    
+    EZAvailableTime* avTime = [[EZAvailableTime alloc] init:[NSDate date] name:@"" duration:30 environment:EZ_ENV_LISTENING];
+    //avTimeDetail.avTime = avTime.cloneVO;
+    avTimeDetail.avTime = avTime;
+    avTimeDetail.doneBlock = ^(){
+        [avDay.availableTimes addObject:avTimeDetail.avTime];
+        [avDay.availableTimes sortUsingComparator:^NSComparisonResult(EZAvailableTime* obj1, EZAvailableTime* obj2) {
+            return [obj1.start compare:obj2.start];
+        }];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+        [[EZTaskStore getInstance] storeObject:avDay];
+    };
+    avTimeDetail.cancelBlock = ^(){
+        EZDEBUG(@"Cancel get callled");
+    };
+    [self performBlock:^(){
+        EZDEBUG(@"performBlock get called");
+        [avTimeDetail.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:YES scrollPosition:UITableViewScrollPositionNone];
+    } withDelay:0.2];
+    [self.navigationController pushViewController:avTimeDetail animated:YES];
+    
 }
 
 - (void) addAvTime
@@ -186,9 +208,9 @@
             if(editCell == nil){
                 editCell = [EZEditLabelCellHolder createPureEditCellWithDelegate:self];
             }
-            editCell.isAlwaysEditable = false;
             editCell.editField.text = avDay.name;
-            editCell.editField.placeholder = Local(@"Name for time config...");
+            editCell.placeHolder = Local(@"Name for time config...");
+            editCell.isFieldEditable = false;
             
             return editCell;
         }else{

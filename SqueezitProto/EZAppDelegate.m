@@ -27,6 +27,8 @@
 #import "EZScheduledTaskSlider.h"
 #import "EZGlobalLocalize.h"
 #import "EZConfigureCtrl.h"
+#import "MEnvFlag.h"
+#import "EZEnvFlag.h"
 
 @interface EZAppDelegate() {
     EZRootTabCtrl* tabCtrl;
@@ -208,13 +210,26 @@
     
 }
 
+- (void) testRelatedActivity
+{
+    //[[EZTaskStore getInstance] removeScheduledTaskByDate:[[NSDate date]adjustDays:1]];
+    //[self disableTomorrowNotification];
+    //[self setupTomorrowNotification];
+    [EZTestSuite testSchedule];
+    
+    //NSArray* flags = [[EZTaskStore getInstance] fetchAllWithVO:[EZEnvFlag class] PO:[MEnvFlag class] sortField:@"flag"];
+    //EZDEBUG(@"Before delete, EnvFlag count %i,  The last flag is %i", flags.count, ((EZEnvFlag*)[flags objectAtIndex:flags.count -1]).flag);
+    //[[EZTaskStore getInstance] removeObjects:flags];
+    
+    //[[EZTaskStore getInstance] fillEnvFlag];
+    //EZDEBUG(@"EnvFlag count %i", [EZTaskStore getInstance].envFlags.count);
+    
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     EZDEBUG(@"Lanch options:%@", launchOptions);
-    [[EZTaskStore getInstance] removeScheduledTaskByDate:[[NSDate date]adjustDays:1]];
-    [self disableTomorrowNotification];
-    [self setupTomorrowNotification];
-    [EZTestSuite testSchedule];
+    [self testRelatedActivity];
     //[EZCoreAccessor cleanDefaultDB];
     //Make sure the persistence layer initialization completeds
     [EZCoreAccessor getInstance];
@@ -270,18 +285,10 @@
     EZSlideViewWrapper* slider = [[EZSlideViewWrapper alloc] init];
     UINavigationController* sliderNav = [[UINavigationController alloc] initWithRootViewController:slider];
     
-    //Test the layout
-    EZViewLayoutTester* father = [[EZViewLayoutTester alloc] initWithName:@"father"];
-    father.view.backgroundColor = [UIColor grayColor];
+    EZConfigureCtrl* configurePage = [[EZConfigureCtrl alloc] initWithStyle:UITableViewStyleGrouped];
+    UINavigationController* configNav = [[UINavigationController alloc] initWithRootViewController:configurePage];
     
-    EZViewLayoutTester* daughter = [[EZViewLayoutTester alloc] initWithName:@"daughter"];
-    daughter.view.backgroundColor = [UIColor yellowColor];
-    
-    //[father addChildViewController:daughter];
-    [father.view addSubview:daughter.view];
-    
-    
-    tabCtrl.viewControllers = [NSArray arrayWithObjects:scheduledNav, taskNav, timeSettingNav, sliderNav, daughter, nil];
+    tabCtrl.viewControllers = [NSArray arrayWithObjects:scheduledNav, taskNav, timeSettingNav, sliderNav, configNav, nil];
     //self.window.rootViewController = tabCtrl;
     [self.rootCtrl addChildViewController:tabCtrl];
     [self.rootCtrl.view addSubview:tabCtrl.view];

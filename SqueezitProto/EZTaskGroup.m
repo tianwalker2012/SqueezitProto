@@ -48,7 +48,7 @@
 - (void) refresh
 {
     if(self.PO){
-        [self.PO.managedObjectContext refreshObject:self.PO mergeChanges:NO];
+        [self.PO.managedObjectContext refreshObject:self.PO mergeChanges:YES];
         self.name = self.PO.name;
         self.createdTime = self.PO.createdTime;
         self.displayOrder = self.PO.displayOrder.intValue;

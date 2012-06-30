@@ -260,6 +260,14 @@ typedef int(^ClosureTest)();
 
 + (void) testLRUMap;
 
++ (void) testArrayExchange;
+
++ (void) testAvDayCascadeStore;
+
++ (void) testTaskGroupCascade;
+
+//Used to clean the notification, make a clean room for myself.
++ (void) cleanAllLocalNotification;
 
 
 @end
@@ -275,7 +283,11 @@ typedef int(^ClosureTest)();
     //
     //[EZTestSuite testArrayContainAndStringEqual];
    //[EZTestSuite innerTestAll];
-    [EZTestSuite testLRUMap];
+    //[EZTestSuite cleanAllLocalNotification];
+    [EZTestSuite testArrayExchange];
+    [EZTestSuite testAvDayCascadeStore];
+    [EZTestSuite testTaskGroupCascade];
+    [EZCoreAccessor setInstance:nil];
     
 }
 
@@ -329,6 +341,7 @@ typedef int(^ClosureTest)();
     [EZTestSuite testFetchWithPredicate];
     [EZTestSuite testBooleanAccessor];
     [EZTestSuite testPredicateForScheduledDay];
+    [EZTestSuite testLRUMap];
     //Clear all the test data.
     //In the future what should I do with this.
     //Seems in this case, we need the test case ready
@@ -337,8 +350,143 @@ typedef int(^ClosureTest)();
     
     //Make sure the application don't use 
     //Test database.
-    [EZCoreAccessor setInstance:nil];
     
+    
+}
+
++ (void) cleanAllLocalNotification
+{
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
+    EZDEBUG(@"All local notification get called");
+    assert(false);
+}
+
+
+//The first time must be ok, why?
+//Because I can fill test data into the database. 
+//Things maybe happened with the second time
+//Let's verify it
++ (void) testAvDayCascadeStore
+{
+    [EZTestSuite initializeDB];
+    EZAvailableDay* avDay = [[EZAvailableDay alloc] initWithName:@"TestDay" weeks:2];
+    EZAvailableTime* avTime1 = [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm" dateString:@"07:00"] name:@"Daily practice" duration:90 environment:EZ_ENV_FITTING];
+    
+    EZAvailableTime* avTime2 = [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm" dateString:@"10:30"] name:@"Morning flow" duration:120 environment:EZ_ENV_FLOWING];
+    [avDay.availableTimes addObject:avTime1];
+    [avDay.availableTimes addObject:avTime2];
+    [[EZTaskStore getInstance] storeObject:avDay];
+    
+    NSArray* res = [[EZTaskStore getInstance]fetchAllWithVO:[EZAvailableDay class] PO:[MAvailableDay class] sortField:nil];
+    assert(res.count == 1);
+    
+    EZAvailableDay* avDayRes = res.lastObject;
+    
+    assert(avDayRes.availableTimes.count == 2);
+    
+    EZAvailableTime* avTime3 = [[EZAvailableTime alloc] init:[NSDate stringToDate:@"HH:mm" dateString:@"14:30"] name:@"Afternoon flow" duration:240 environment:EZ_ENV_FLOWING];
+    [avDay.availableTimes addObject:avTime3];
+    [[EZTaskStore getInstance] storeObject:avDay];
+    
+    res = [[EZTaskStore getInstance] fetchAllWithVO:[EZAvailableDay class] PO:[MAvailableDay class] sortField:nil];
+    avDayRes = res.lastObject;
+    
+    assert(avDayRes.availableTimes.count == 3);
+    
+    [avDayRes.availableTimes removeObjectAtIndex:2];
+    [[EZTaskStore getInstance] storeObject:avDayRes];
+    
+    res = [[EZTaskStore getInstance] fetchAllWithVO:[EZAvailableDay class] PO:[MAvailableDay class] sortField:nil];
+    avDayRes = res.lastObject;
+    assert(avDayRes.availableTimes.count == 2);
+    
+    
+    
+    
+    
+    res = [[EZTaskStore getInstance] fetchAllWithVO:[EZAvailableTime class] PO:[MAvailableTime class] sortField:nil];
+    EZDEBUG(@"res count:%i", res.count);
+    assert(res.count == 3);
+    
+    EZAvailableTime* avTimeRes = avDayRes.availableTimes.lastObject;
+    EZDEBUG(@"time name:%@",avTimeRes.name);
+    [[EZTaskStore getInstance] removeObject:avTimeRes];
+    EZDEBUG(@"after remove");
+    
+    EZAvailableDay* avDayUpdated = [[EZTaskStore getInstance]fetchAllWithVO:[EZAvailableDay class] PO:[MAvailableDay class] sortField:nil].lastObject;
+    EZDEBUG(@"get updated");
+    assert(avDayUpdated.availableTimes.count == 1);
+    
+    EZDEBUG(@"Before refresh, count:%i", avDayRes.availableTimes.count);
+    [avDayRes refresh];
+    EZDEBUG(@"After refresh, count:%i", avDayRes.availableTimes.count);
+    assert(avDayRes.availableTimes.count == 1);
+    
+    
+    
+    [[EZTaskStore getInstance] removeObject:avDayRes];
+    res = [[EZTaskStore getInstance] fetchAllWithVO:[EZAvailableDay class] PO:[MAvailableDay class] sortField:nil];
+    assert(res.count == 0);
+    
+    res = [[EZTaskStore getInstance] fetchAllWithVO:[EZAvailableTime class] PO:[MAvailableTime class] sortField:nil];
+    
+    //Remove parent, will not get child removed?
+    //Didn't I get the cascade setting write?
+    //Mean the cascade deletion is work. 
+    //But we have a availableTime left in previous disband operation.
+    //So, 1 have been removed with the availableDay.
+    assert(res.count == 1);
+    //assert(false);
+    
+    
+}
+
++ (void) testTaskGroupCascade
+{
+    [EZTestSuite initializeDB];
+    EZTaskGroup* group = [[EZTaskGroup alloc] init];
+    group.name = @"Test Group";
+    EZTask* task1 = [[EZTask alloc] initWithName:@"iOS coding"];
+    EZTask* task2 = [[EZTask alloc] initWithName:@"Lisp study"];
+    [group.tasks addObjectsFromArray:[NSArray arrayWithObjects:task1, task2, nil]];
+    [[EZTaskStore getInstance] storeObject:group];
+    EZTaskGroup* resGroup = [[EZTaskStore getInstance] fetchAllWithVO:[EZTaskGroup class] PO:[MTaskGroup class] sortField:nil].lastObject;
+    assert(resGroup.tasks.count == 2);
+    [resGroup.tasks removeObjectAtIndex:1];
+    [[EZTaskStore getInstance] storeObject:resGroup];
+    resGroup = [[EZTaskStore getInstance] fetchAllWithVO:[EZTaskGroup class] PO:[MTaskGroup class] sortField:nil].lastObject;
+    assert(resGroup.tasks.count == 1);
+    
+    
+    EZDEBUG(@"Before refresh");
+    [group refresh];
+    EZDEBUG(@"After refresh:%i",group.tasks.count);
+    assert(group.tasks.count == 1);
+    
+    EZTask* task3 = [[EZTask alloc] initWithName:@"Feynman reading"];
+    [group.tasks addObject:task3];
+    [[EZTaskStore getInstance] storeObject:group];
+    
+    [resGroup refresh];
+    assert(resGroup.tasks.count == 2);
+    
+    NSArray* allTasks = [[EZTaskStore getInstance] fetchAllWithVO:[EZTask class] PO:[MTask class] sortField:nil];
+    assert(allTasks.count == 3);
+    [[EZTaskStore getInstance]removeObject:resGroup];
+    
+    allTasks = [[EZTaskStore getInstance] fetchAllWithVO:[EZTask class] PO:[MTask class] sortField:nil];
+    assert(allTasks.count == 1);
+    //assert(false);
+}
+
+
++ (void) testArrayExchange
+{
+    NSMutableArray* arr = [NSMutableArray arrayWithObjects:@"1", @"2", @"3", nil];
+    [arr exchangeObjectAtIndex:0 withObjectAtIndex:2];
+    assert([@"3" isEqualToString:[arr objectAtIndex:0]]);
+    assert([@"1" isEqualToString:[arr objectAtIndex:2]]);
+   //assert(false);
 }
 
 + (void) testLRUMap

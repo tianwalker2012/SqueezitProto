@@ -52,6 +52,19 @@ typedef void  (^ IterateOperation)(id obj);
 
 @end
 
+
+@interface UIView(EZPrivate)
+
+- (void) left:(CGFloat)distance;
+
+- (void) top:(CGFloat)distance;
+
+- (void) right:(CGFloat)distance;
+
+- (void) bottom:(CGFloat)distance;
+
+@end
+
 @interface UIColor(EZPrivate)
 
 + (UIColor*) createByHex:(NSString*)hexStr;
@@ -70,6 +83,13 @@ typedef void  (^ IterateOperation)(id obj);
 
 @end
 
+@interface NSObject(EZPrivate)
+
+- (void) performBlock:(EZOperationBlock)block withDelay:(NSTimeInterval)delay;
+
+- (void) executeBlock:(EZOperationBlock)block;
+
+@end
 
 @interface NSDate(EZPrivate) 
 
@@ -120,6 +140,8 @@ NSUInteger combineFlags(NSUInteger flag, NSUInteger envFlags);
 
 //The flags mean all the existed prime number, make sure the all the prime number are found on sequence
 NSUInteger findNextFlag(EZArray* flags);
+
+NSUInteger findPrimeAfter(NSUInteger primed);
 
 @interface EZTaskHelper : NSObject
 

@@ -27,7 +27,7 @@
 @end
 
 @implementation EZPickerWrapper
-@synthesize wrapperDelegate;
+@synthesize wrapperDelegate, speedupWin;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -65,7 +65,7 @@
     EZDEBUG(@"viewDidLoad end");
 }
 
-- (void) viewDidAppear:(BOOL)animated
+- (void) viewWillAppear:(BOOL)animated
 {
     EZDEBUG(@"in viewDidApprear");
     [self.tableView reloadData];
@@ -74,9 +74,8 @@
     if(selectedPath == nil){
         selectedPath = [NSIndexPath indexPathForRow:0 inSection:0];
     }
-    //[self performSelector:@selector(animateSelect:) withObject:selectedPath afterDelay:0.3];
-    //I guess the Window are ready at this time
-    [self animateSelect:selectedPath];
+    //[self animateSelect:selectedPath];
+    [self performSelector:@selector(animateSelect:) withObject:selectedPath afterDelay:0.05];
 }
 
 
@@ -95,7 +94,7 @@
     }
     
     [UIView beginAnimations:@"Raise Keyboard" context:nil];
-    [UIView animateWithDuration:0.3 animations:^(){
+    [UIView animateWithDuration:0.15 animations:^(){
         [keyboard setFrame:CGRectMake(keyboard.frame.origin.x, win.bounds.size.height - keyboard.frame.size.height, keyboard.frame.size.width, keyboard.frame.size.height)];
     } completion:^(BOOL finished){
         if(complete){

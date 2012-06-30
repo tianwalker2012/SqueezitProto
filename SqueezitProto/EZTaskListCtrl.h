@@ -7,10 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "EZTaskHelper.h"
 
 @class EZEditCell;
 
-typedef void(^AlertOperation)();
+
+//Take time to write down it's functionality
+//Then start to change the code to match the described functionality
+//All the task list will be showing on this page. 
+//Once the edit was clicked, The editableCell become editable.
+//You can click the last editable button you can input things.
+//Each edit table will change color to editable color.
+//This behavior will be consistent in this applciation.
 
 @interface EZTaskListCtrl : UITableViewController<UITextFieldDelegate> {
     NSMutableArray* taskGroups;
@@ -19,16 +27,14 @@ typedef void(^AlertOperation)();
 
 - (void) editClicked:(id)sender;
 
-//Will do some check before disable 
-- (void) setCellTextField:(UITableViewCell*)cell enabled:(BOOL)enabled;
-
 @property (strong, nonatomic) UIBarButtonItem* editButton;
 @property (strong, nonatomic) UIBarButtonItem* doneButton;
-@property (weak, nonatomic) UITableViewCell* addCell;
-@property (strong, nonatomic) AlertOperation operation;
 
-@property (strong, nonatomic) IBOutlet EZEditCell* addCellView;
-@property (strong, nonatomic) IBOutlet UITextField* inputGroupName;
+@property (strong, nonatomic) EZOperationBlock operation;
+
+//Whether we serve tasklist or TimeSetting?
+@property (assign, nonatomic) BOOL isServeTaskList;
+
 
 
 @end

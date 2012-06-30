@@ -64,11 +64,13 @@
 
 //@property (strong, nonatomic) UIView* keyboard;
 @property (strong, nonatomic) id<EZPickerWrapperDelegate> wrapperDelegate;
+@property (strong, nonatomic) UIWindow* speedupWin;
 
 //Return the index of the current selected cell
 - (NSIndexPath*) getSelectedRow;
 
 - (UITableViewCell*) getCellByIndexPath:(NSIndexPath*)indexPath;
+
 
 //It is for sync up the status.
 //Use to address following scenerio.

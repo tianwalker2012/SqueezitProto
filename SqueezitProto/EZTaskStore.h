@@ -10,7 +10,7 @@
 #import "Constants.h"
 #import "EZTaskHelper.h"
 
-@class EZScheduledDay,EZAvailableDay, EZTask, EZCoreAccessor, EZArray, EZScheduledTask;
+@class EZScheduledDay,EZAvailableDay, EZTask, EZCoreAccessor, EZArray, EZScheduledTask, EZEnvFlag;
 
 NSString* envTraitsToString(NSUInteger envTraits);
 
@@ -86,5 +86,13 @@ NSString* envTraitsToString(NSUInteger envTraits);
 
 //Will cancel the old notification and store and setup the new notification
 - (void) setDailyNotification:(UILocalNotification*)notification;
+
+
+//What's the purpose of this method?
+//Because the envFlags flag will need to be the next prime number so can not be 
+//Initialize at will. 
+//This Method will generate the next prime number and instantiate EZEnvFlag 
+//It will be created and stored and added the envFlags
+- (EZEnvFlag*) createNextFlagWithName:(NSString*)name;
 
 @end

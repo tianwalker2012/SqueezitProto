@@ -26,6 +26,7 @@
     self = [super init];
     self.name = valueObj.name;
     self.flag = valueObj.flag;
+    self.PO = valueObj.PO;
     return self;
 }
 
@@ -39,6 +40,7 @@
     self = [super init];
     self.name = mtk.name;
     self.flag = mtk.flag.unsignedIntegerValue;
+    self.PO = mtk;
     return self;
 }
 
