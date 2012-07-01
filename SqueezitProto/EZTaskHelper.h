@@ -113,6 +113,8 @@ typedef void  (^ IterateOperation)(id obj);
 
 - (NSDate*) adjust:(NSTimeInterval)delta;
 
+- (NSComparisonResult) compareTime:(NSDate*)date;
+
 - (NSDate*) combineTime:(NSDate*)time;
 
 //True mean they are equal with the format, False mean not equal. 

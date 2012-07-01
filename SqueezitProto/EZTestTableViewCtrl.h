@@ -10,4 +10,12 @@
 
 @interface EZTestTableViewCtrl : UITableViewController
 
+- (id)initWithStyle:(UITableViewStyle)style isFamily:(BOOL)family;
+
+@property (assign, readonly) BOOL isFamily;
+
+@property (strong, nonatomic) NSString* familyName;
+
+@property (strong, nonatomic) UINavigationController* selfNavCtrl;
+
 @end

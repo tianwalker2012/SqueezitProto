@@ -10,13 +10,18 @@
 #import "Constants.h"
 
 @interface EZTestTableViewCtrl ()
+{
+    NSArray* names;
+}
 
 @end
 
 @implementation EZTestTableViewCtrl
+@synthesize isFamily, familyName, selfNavCtrl;
 
-- (id)initWithStyle:(UITableViewStyle)style
+- (id)initWithStyle:(UITableViewStyle)style isFamily:(BOOL)family
 {
+    isFamily = family;
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
@@ -27,12 +32,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    if(isFamily){
+        names = [UIFont familyNames];
+    }else{
+        names = [UIFont fontNamesForFamilyName:familyName];
+    }
+    
 }
 
 - (void)viewDidUnload
@@ -56,7 +61,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 100;
+    return names.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -65,9 +70,19 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if(cell == nil){
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
-    cell.textLabel.text = [NSString stringWithFormat:@"Row:%i", indexPath.row];
+    //UIFont* font = [[UIFont alloc] init];
+    //cell.textLabel.font = 
+    //cell.textLabel.text = [NSString stringWithFormat:@"Row:%i", indexPath.row];
+    if(isFamily){
+        cell.textLabel.text = [NSString stringWithFormat:@"%@", [names objectAtIndex:indexPath.row]];
+    }else{
+        NSString* fontName = [NSString stringWithFormat:@"%@:曾因酒醉鞭名马", [names objectAtIndex:indexPath.row]];
+        cell.textLabel.text = fontName;
+        cell.detailTextLabel.text = familyName;
+        cell.textLabel.font = [UIFont fontWithName:fontName size:17];
+    }
     
     return cell;
 }
@@ -116,6 +131,12 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {   
     EZDEBUG(@"selected:%i",indexPath.row);
+    if(isFamily){
+        EZDEBUG(@"About to show new view");
+        EZTestTableViewCtrl* ctrl = [[EZTestTableViewCtrl alloc]initWithStyle:UITableViewStylePlain isFamily:false];
+        ctrl.familyName = [names objectAtIndex:indexPath.row];
+        [selfNavCtrl pushViewController:ctrl animated:YES];
+    }
 }
 
 @end

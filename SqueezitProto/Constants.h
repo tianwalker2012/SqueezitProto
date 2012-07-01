@@ -43,7 +43,8 @@ EZDEBUG(xx, ##__VA_ARGS__); \
 
 
 typedef enum EZEnvironmentTraits {
-    EZ_ENV_NONE = 1,
+    EZ_ENV_SUIT_ALL = 0, //Once time snippet choose this all task can assigned
+    EZ_ENV_NO_REQ = 1, //Once task choose you can assign it to any time snippet.
     EZ_ENV_FITTING = 2,
     EZ_ENV_READING = 3,
     EZ_ENV_LISTENING = 5,
@@ -65,6 +66,7 @@ typedef enum EZScheduledStatus{
 } EZScheduledStatus;
 
 typedef enum EZWeekDayValue {
+    NONEDAY = 0,
     SUNDAY = 1,
     MONDAY = 2,
     TUESDAY = 4,

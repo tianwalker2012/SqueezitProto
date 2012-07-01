@@ -11,7 +11,7 @@
 #import "EZTaskHelper.h"
 
 @implementation EZTaskGroupCell
-@synthesize groupInfo, titleField, editableColor, noneEditableColor, titleEditable;
+@synthesize groupInfo, titleField, editableColor, noneEditableColor, titleEditable, placeholder;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -21,6 +21,12 @@
         // Initialization code
     }
     return self;
+}
+
+- (void) setPlaceholder:(NSString *)ph
+{
+    placeholder = ph;
+    titleField.placeholder = ph;
 }
 
 - (void) setTitleEditable:(BOOL)editable

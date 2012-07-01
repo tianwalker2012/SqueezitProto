@@ -9,7 +9,7 @@
 #import "EZMainCtrl.h"
 #import "Constants.h"
 #import "EZScheduledTaskController.h"
-#import "EZTaskListCtrl.h"
+#import "EZListCtrl.h"
 
 @interface EZMainCtrl ()
 

@@ -231,6 +231,11 @@ NSString* doubleString(NSString* str)
     return [self adjust:minutes*60];
 }
 
+- (NSComparisonResult) compareTime:(NSDate*)date
+{
+    NSDate* combinedTime = [self combineTime:date];
+    return [self compare:combinedTime];
+}
 
 - (NSDate*) adjust:(NSTimeInterval)delta
 {
@@ -450,6 +455,12 @@ NSUInteger findNextFlag(EZArray* flags)
 + (NSString*) weekFlagToWeekString:(NSInteger)weekFlags
 {
     NSMutableArray* res = [[NSMutableArray alloc] initWithCapacity:7];
+    if((weekFlags & ALLDAYS) == 0){
+        return Local(@"No Assigned Week Day");
+    }
+    if(weekFlags == ALLDAYS){
+        return Local(@"All Week Days");
+    }
     if((weekFlags & SUNDAY) == SUNDAY){
         [res addObject:Local(@"Sunday")];
     }

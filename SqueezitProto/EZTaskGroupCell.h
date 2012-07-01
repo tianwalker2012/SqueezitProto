@@ -16,5 +16,7 @@
 @property (strong, nonatomic) UIColor* noneEditableColor;
 
 @property (assign, nonatomic) BOOL titleEditable;
+@property (strong, nonatomic) NSString* placeholder;
+
 
 @end

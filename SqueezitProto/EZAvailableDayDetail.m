@@ -42,8 +42,6 @@
 
 - (void) enableAddButton:(BOOL)enable;
 
-- (void) sortAvTime:(NSMutableArray*)times;
-
 - (void) pickerChanged:(UIDatePicker*)picker;
 
 @end
@@ -65,7 +63,7 @@
 {
     [times sortUsingComparator:
      ^(EZAvailableTime* t1, EZAvailableTime* t2){
-         return [t1.start compare:t2.start];
+         return [t1.start compareTime:t2.start];
      }
      ];
      
@@ -91,7 +89,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    EZDEBUG(@"viewDidLoad get called");
     editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editClicked)];
     doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(editClicked)];
     self.navigationItem.rightBarButtonItem = editButton;
@@ -102,13 +100,17 @@
     header.title.text = Local(@"Available Times");
     [header.addButton addTarget:self action:@selector(addButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [header setupCellWithButton:NO];
-    [self sortAvTime:avDay.availableTimes];
+    
     if(avDay.date){
         assignDate = avDay.date;
     }else{
         assignDate = [[NSDate date] adjustDays:2];
     }
     currentAssignWeeks = avDay.assignedWeeks;
+    [avDay.availableTimes sortUsingComparator:^(EZAvailableTime* time1, EZAvailableTime* time2){
+        return [time1.start compareTime:time2.start];
+    }
+     ];
 }
 
 
@@ -124,7 +126,7 @@
     avTimeDetail.doneBlock = ^(){
         [avDay.availableTimes addObject:avTimeDetail.avTime];
         [avDay.availableTimes sortUsingComparator:^NSComparisonResult(EZAvailableTime* obj1, EZAvailableTime* obj2) {
-            return [obj1.start compare:obj2.start];
+            return [obj1.start compareTime:obj2.start];
         }];
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
         [[EZTaskStore getInstance] storeObject:avDay];
@@ -140,10 +142,7 @@
     
 }
 
-- (void) addAvTime
-{
-    
-}
+
 
 - (void)viewDidUnload
 {
@@ -211,7 +210,7 @@
             editCell.editField.text = avDay.name;
             editCell.placeHolder = Local(@"Name for time config...");
             editCell.isFieldEditable = false;
-            
+            editCell.isChangeWithCellEdit = true;
             return editCell;
         }else{
             NSString* cellID = @"propertyCell";
@@ -274,11 +273,14 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
-        
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
         EZAvailableTime* avTime = [avDay.availableTimes objectAtIndex:indexPath.row];
+        EZDEBUG(@"Removed time name:%@",avTime.name);
         [avDay.availableTimes removeObjectAtIndex:indexPath.row];
+        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
         [[EZTaskStore getInstance] removeObject:avTime];
+        if(updateBlock){
+            updateBlock();
+        }
     }   
     else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
@@ -418,6 +420,9 @@
         [[EZTaskStore getInstance] storeObject:avDay];
         
     }
+    if(updateBlock){
+        updateBlock();
+    }
 }
 
 - (void) cancelClicked:(id)pickerWrapper
@@ -453,7 +458,7 @@
         }
     }
     if(indexPath.row % 2){
-        res.backgroundColor = [UIColor colorWithRed:0.8 green:0.8 blue:0.8 alpha:1];
+        res.backgroundColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1];
     }else{
         res.backgroundColor = [UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:1];
     }
@@ -466,7 +471,7 @@
         currentAssignWeeks = 0;
         [selector selectOnly:indexPath];
     }else{
-        NSUInteger flag = 1 << indexPath.row;
+        NSUInteger flag = 1 << (indexPath.row -1);
         if((currentAssignWeeks & flag) == flag){
             currentAssignWeeks = currentAssignWeeks & ~flag;
             [selector selectNot:indexPath];
@@ -488,6 +493,10 @@
         textField.text = avDay.name;
     }else{
         avDay.name = textField.text;
+        [[EZTaskStore getInstance] storeObject:avDay];
+        if(updateBlock){
+            updateBlock();
+        }
     }
 }
 

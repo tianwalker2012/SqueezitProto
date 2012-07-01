@@ -358,4 +358,35 @@
     }
 }
 
+
+- (NSInteger) getSection:(EZTableSelector*)selector
+{
+    
+}
+- (NSInteger) getRow:(EZTableSelector*)selector
+{
+    
+}
+
+- (UITableViewCell*) tableSelector:(EZTableSelector*)selector getCell:(NSIndexPath*)indexPath
+{
+    
+}
+
+- (void) tableSelector:(EZTableSelector*)selector selected:(NSIndexPath*)indexPath
+{
+    
+}
+
+- (void) doneClicked:(EZTableSelector*)selector
+{
+    
+}
+
+- (void) cancelClicked:(EZTableSelector*)selector
+{
+    
+}
+
+
 @end

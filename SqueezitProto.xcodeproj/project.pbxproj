@@ -44,7 +44,7 @@
 		184C2AC8157759D000852B35 /* MTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2AC7157759CF00852B35 /* MTask.m */; };
 		184C2ACB157768DB00852B35 /* MImageOwner.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2ACA157768DA00852B35 /* MImageOwner.m */; };
 		184C2ACE1579BBA600852B35 /* EZCoreHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2ACD1579BBA600852B35 /* EZCoreHelper.m */; };
-		184C2ADC157B136F00852B35 /* EZTaskListCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2ADA157B136800852B35 /* EZTaskListCtrl.m */; };
+		184C2ADC157B136F00852B35 /* EZListCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2ADA157B136800852B35 /* EZListCtrl.m */; };
 		184C2ADD157B136F00852B35 /* EZTaskListCtrl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 184C2ADB157B136C00852B35 /* EZTaskListCtrl.xib */; };
 		184C2AE6157B3B2F00852B35 /* EZTaskGroupDetailCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2AE4157B3B2400852B35 /* EZTaskGroupDetailCtrl.m */; };
 		184C2AE7157B3B2F00852B35 /* EZTaskGroupDetailCtrl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 184C2AE5157B3B2800852B35 /* EZTaskGroupDetailCtrl.xib */; };
@@ -190,8 +190,8 @@
 		184C2ACA157768DA00852B35 /* MImageOwner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MImageOwner.m; sourceTree = "<group>"; };
 		184C2ACC1579BBA600852B35 /* EZCoreHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZCoreHelper.h; sourceTree = "<group>"; };
 		184C2ACD1579BBA600852B35 /* EZCoreHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZCoreHelper.m; sourceTree = "<group>"; };
-		184C2AD9157B136700852B35 /* EZTaskListCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTaskListCtrl.h; sourceTree = "<group>"; };
-		184C2ADA157B136800852B35 /* EZTaskListCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTaskListCtrl.m; sourceTree = "<group>"; };
+		184C2AD9157B136700852B35 /* EZListCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; path = EZListCtrl.h; sourceTree = "<group>"; };
+		184C2ADA157B136800852B35 /* EZListCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; path = EZListCtrl.m; sourceTree = "<group>"; };
 		184C2ADB157B136C00852B35 /* EZTaskListCtrl.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZTaskListCtrl.xib; sourceTree = "<group>"; };
 		184C2AE3157B3B2200852B35 /* EZTaskGroupDetailCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTaskGroupDetailCtrl.h; sourceTree = "<group>"; };
 		184C2AE4157B3B2400852B35 /* EZTaskGroupDetailCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTaskGroupDetailCtrl.m; sourceTree = "<group>"; };
@@ -470,8 +470,8 @@
 				184C29DA156CE21E00852B35 /* EZScheduledTaskController.h */,
 				184C29DB156CE21E00852B35 /* EZScheduledTaskController.m */,
 				184C29DC156CE21E00852B35 /* EZScheduledTaskController.xib */,
-				184C2AD9157B136700852B35 /* EZTaskListCtrl.h */,
-				184C2ADA157B136800852B35 /* EZTaskListCtrl.m */,
+				184C2AD9157B136700852B35 /* EZListCtrl.h */,
+				184C2ADA157B136800852B35 /* EZListCtrl.m */,
 				184C2ADB157B136C00852B35 /* EZTaskListCtrl.xib */,
 				184C2AE3157B3B2200852B35 /* EZTaskGroupDetailCtrl.h */,
 				184C2AE4157B3B2400852B35 /* EZTaskGroupDetailCtrl.m */,
@@ -763,7 +763,7 @@
 				184C2AC8157759D000852B35 /* MTask.m in Sources */,
 				184C2ACB157768DB00852B35 /* MImageOwner.m in Sources */,
 				184C2ACE1579BBA600852B35 /* EZCoreHelper.m in Sources */,
-				184C2ADC157B136F00852B35 /* EZTaskListCtrl.m in Sources */,
+				184C2ADC157B136F00852B35 /* EZListCtrl.m in Sources */,
 				184C2AE6157B3B2F00852B35 /* EZTaskGroupDetailCtrl.m in Sources */,
 				184C2AF5157CA9A300852B35 /* EZMainCtrl.m in Sources */,
 				184C2AFB157CBA5A00852B35 /* EZRootTabCtrl.m in Sources */,

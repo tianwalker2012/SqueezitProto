@@ -6,7 +6,7 @@
 //  Copyright (c) 2012年 __MyCompanyName__. All rights reserved.
 //
 
-#import "EZTaskListCtrl.h"
+#import "EZListCtrl.h"
 #import "EZTaskGroup.h"
 #import "EZCoreAccessor.h"
 #import "EZTaskGroupDetailCtrl.h"
@@ -17,9 +17,14 @@
 #import "EZGlobalLocalize.h"
 #import "EZPureEditCell.h"
 #import "EZTaskHelper.h"
+#import "EZAvailableDay.h"
+#import "MAvailableDay.h"
+#import "EZAvailableTime.h"
+#import "MAvailableTime.h"
+#import "EZAvailableDayDetail.h"
 
 
-@interface EZTaskListCtrl ()
+@interface EZListCtrl ()
 {
     //EZOperationBlock smallBlock;
     NSIndexPath* previousDestine;
@@ -35,16 +40,25 @@
 //Let's try later.For time being let's get this refresh done.
 - (void) refreshCellForIndex:(NSIndexPath*)path;
 
+- (void) setCellContent:(EZTaskGroupCell*)cell path:(NSIndexPath*)path;
+
+- (void) exchangeValue:(NSInteger)from to:(NSInteger)to;
+
+- (void) raiseDeletionAlert:(NSIndexPath*)path;
+
 @end
 
-@implementation EZTaskListCtrl
-@synthesize editButton, doneButton, operation;
+@implementation EZListCtrl
+@synthesize editButton, doneButton, operation, isServeTaskList;
 
-- (id)initWithStyle:(UITableViewStyle)style
+- (id)initWithStyle:(UITableViewStyle)style isTasklist:(BOOL)tasklist
 {
     self = [super initWithStyle:style];
+    isServeTaskList = tasklist;
     if (self) {
         // Custom initialization
+        //TODO will change it to different icon according to the 
+        //Value it is serving.
         self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemFavorites tag:2];
         self.editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editClicked:)];
         self.doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(editClicked:)];
@@ -74,7 +88,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    taskGroups = [NSMutableArray arrayWithArray:[[EZTaskStore getInstance] fetchAllWithVO:[EZTaskGroup class] PO:[MTaskGroup class] sortField:@"displayOrder"]];
+    if(isServeTaskList){
+        values = [NSMutableArray arrayWithArray:[[EZTaskStore getInstance] fetchAllWithVO:[EZTaskGroup class] PO:[MTaskGroup class] sortField:@"displayOrder"]];
+    }else{
+        values = [NSMutableArray arrayWithArray:[[EZTaskStore getInstance]fetchAllWithVO:[EZAvailableDay class] PO:[MAvailableDay class] sortField:@"displayOrder"]];
+    }
 
 }
 
@@ -100,32 +118,48 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     EZDEBUG(@"numberOfRowsInSection get called");
-    return taskGroups.count + 1;
+    return values.count + 1;
 }
 
 - (void) refreshCellForIndex:(NSIndexPath*)path
 {
     EZTaskGroupCell* tgCell = (EZTaskGroupCell*)[self.tableView cellForRowAtIndexPath:path];
-    EZTaskGroup* taskGroup = [taskGroups objectAtIndex:path.row];
-    
-    EZDEBUG(@"Cell's orginal text:%@, replace text:%@, orginal groupInfo:%@",tgCell.titleField.text, taskGroup.name, tgCell.groupInfo.text);
-    
-    tgCell.titleField.text = taskGroup.name;
-    tgCell.groupInfo.text = [NSString stringWithFormat:@"Tasks:%i, displayOrder:%i",[taskGroup.tasks count], taskGroup.displayOrder];
-    //tgCell.titleField.placeholder = Local(@"Task Group Name...");
-
+    [self setCellContent:tgCell path:path];
 }
 
+- (void) setCellContent:(EZTaskGroupCell*)tgCell path:(NSIndexPath*)path
+{
+    if(isServeTaskList){
+        EZTaskGroup* taskGroup = [values objectAtIndex:path.row];
+        tgCell.titleField.text = taskGroup.name;
+        tgCell.groupInfo.text = [NSString stringWithFormat:@"Tasks:%i, displayOrder:%i",[taskGroup.tasks count], taskGroup.displayOrder];
+        tgCell.placeholder = Local(@"Task Group Name...");
+    }else{
+        EZAvailableDay* avDay = [values objectAtIndex:path.row];
+        tgCell.titleField.text = avDay.name;
+        tgCell.placeholder = Local(@"Available Day Name...");
+        if(avDay.date){
+            tgCell.groupInfo.text = [avDay.date stringWithFormat:@"yyyyMMdd"];
+        }else{
+            tgCell.groupInfo.text = [EZTaskHelper weekFlagToWeekString:avDay.assignedWeeks];
+        }
+    }
+
+}
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     EZDEBUG(@"cellForRowAtIndexPath:%@",indexPath);
-    if(indexPath.row >= [taskGroups count]){
+    if(indexPath.row >= [values count]){
         static NSString* insertIdentifier = @"PureEdit";
         EZPureEditCell *cell = [tableView dequeueReusableCellWithIdentifier:insertIdentifier];
         if(!cell){
             cell = [EZEditLabelCellHolder createPureEditCellWithDelegate:self];
         }
-        cell.placeHolder = Local(@"Task Group Name...");
+        if(isServeTaskList){
+            cell.placeHolder = Local(@"Task Group Name...");
+        }else{
+            cell.placeHolder = Local(@"Available Day Name...");
+        }
         cell.isChangeWithCellEdit = true;
         cell.identWhileEdit = true;
         return cell;
@@ -137,11 +171,7 @@
         cell = [EZEditLabelCellHolder createTaskGroupCellWithDelegate:self];
         //cell.editingStyle = UITableViewCellEditingStyleDelete;
     }
-    EZTaskGroup* taskGroup = [taskGroups objectAtIndex:indexPath.row];
-    
-    cell.titleField.text = taskGroup.name;
-    cell.groupInfo.text = [NSString stringWithFormat:@"Tasks:%i, displayOrder:%i",[taskGroup.tasks count], taskGroup.displayOrder];
-    cell.titleField.placeholder = Local(@"Task Group Name...");
+    [self setCellContent:cell path:indexPath];
     return cell;
 }
 
@@ -149,8 +179,7 @@
 //Check if some cell is moveable or not.
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-    EZDEBUG(@"canMoveRowAtIndexPath:%i",indexPath.row);
-    if(indexPath.row < [taskGroups count]){
+    if(indexPath.row < [values count]){
         return true;
     }
     return false;
@@ -160,23 +189,35 @@
 {
     EZDEBUG(@"TableView cell move get called, sourceIndex row:%i, destinationRow:%i, previousDestine:%i", sourceIndexPath.row, proposedDestinationIndexPath.row, previousDestine.row);
     
-    if(proposedDestinationIndexPath.row >= taskGroups.count){
-        proposedDestinationIndexPath = [NSIndexPath indexPathForRow:taskGroups.count - 1 inSection:0];
+    if(proposedDestinationIndexPath.row >= values.count){
+        proposedDestinationIndexPath = [NSIndexPath indexPathForRow:values.count - 1 inSection:0];
     }
     if(previousDestine == nil){
         previousDestine = sourceIndexPath;
     }
     
-    EZTaskGroup* srcGroup = [taskGroups objectAtIndex:previousDestine.row];
-    EZTaskGroup* proposedGroup = [taskGroups objectAtIndex:proposedDestinationIndexPath.row];
-    NSInteger srcOrder = srcGroup.displayOrder;
-    srcGroup.displayOrder = proposedGroup.displayOrder;
-    proposedGroup.displayOrder = srcOrder;
-    [taskGroups exchangeObjectAtIndex:previousDestine.row withObjectAtIndex:proposedDestinationIndexPath.row];
+    [self exchangeValue:previousDestine.row to:proposedDestinationIndexPath.row];
     previousDestine = proposedDestinationIndexPath;
     return proposedDestinationIndexPath;
 }
 
+- (void) exchangeValue:(NSInteger)from to:(NSInteger)to
+{
+    if(isServeTaskList){
+        EZTaskGroup* srcGroup = [values objectAtIndex:from];
+        EZTaskGroup* proposedGroup = [values objectAtIndex:to];
+        NSInteger srcOrder = srcGroup.displayOrder;
+        srcGroup.displayOrder = proposedGroup.displayOrder;
+        proposedGroup.displayOrder = srcOrder;
+    }else{
+        EZAvailableDay* srcAv = [values objectAtIndex:from];
+        EZAvailableDay* destAv = [values objectAtIndex:to];
+        NSInteger srcOrder = srcAv.displayOrder;
+        srcAv.displayOrder = destAv.displayOrder;
+        destAv.displayOrder = srcOrder;
+    }
+    [values exchangeObjectAtIndex:from withObjectAtIndex:to];
+}
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath 
 {
@@ -186,7 +227,7 @@
         [self refreshCellForIndex:toIndexPath];
     } withDelay:0.3];
     //Better store the whole thing
-    [[EZTaskStore getInstance] storeObjects:taskGroups];
+    [[EZTaskStore getInstance] storeObjects:values];
     //Make the next movement normal.
     previousDestine = nil;
 }
@@ -212,7 +253,7 @@
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(indexPath.row < [taskGroups count]){
+    if(indexPath.row < [values count]){
         return UITableViewCellEditingStyleDelete;
     } 
     return UITableViewCellEditingStyleNone;
@@ -229,22 +270,39 @@
     }
 }
 
+- (void) raiseDeletionAlert:(NSIndexPath *)indexPath
+{
+    if(isServeTaskList){
+        EZTaskGroup* tg = [values objectAtIndex:indexPath.row];
+        UIAlertView* alamView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:EZLocalizedString(@"Delete \"%@\"?",nil),tg.name] message:[NSString stringWithFormat: EZLocalizedString(@"This will permanently delete all tasks in \"%@\".", nil),tg.name] delegate:self cancelButtonTitle:EZLocalizedString(@"Cancel",nil) otherButtonTitles:EZLocalizedString(@"Delete",nil), nil];
+        NSMutableArray* groups = values;
+        self.operation = ^(){
+            EZDEBUG(@"Operation get called");
+            [groups removeObject:tg];
+            [[EZTaskStore getInstance] removeObject:tg];
+            [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        };
+        [alamView show];
+    }else{
+        EZAvailableDay* avDay = [values objectAtIndex:indexPath.row];
+        UIAlertView* alamView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:EZLocalizedString(@"Delete \"%@\"?",nil), avDay.name] message:[NSString stringWithFormat: EZLocalizedString(@"This will permanently delete all time snippets in \"%@\".", nil),avDay.name] delegate:self cancelButtonTitle:EZLocalizedString(@"Cancel",nil) otherButtonTitles:EZLocalizedString(@"Delete",nil), nil];
+        NSMutableArray* groups = values;
+        self.operation = ^(){
+            EZDEBUG(@"Operation get called");
+            [groups removeObject:avDay];
+            [[EZTaskStore getInstance] removeObject:avDay];
+            [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        };
+        [alamView show];
+    }
+
+}
+
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     EZDEBUG(@"commitEditingStyle get called, row:%i", indexPath.row);
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        EZTaskGroup* tg = [taskGroups objectAtIndex:indexPath.row];
-            UIAlertView* alamView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:EZLocalizedString(@"Delete \"%@\"?",nil),tg.name] message:[NSString stringWithFormat: EZLocalizedString(@"This will permanently delete all tasks in \"%@\".", nil),tg.name] delegate:self cancelButtonTitle:EZLocalizedString(@"Cancel",nil) otherButtonTitles:EZLocalizedString(@"Delete",nil), nil];
-            NSMutableArray* groups = taskGroups;
-            self.operation = ^(){
-                EZDEBUG(@"Operation get called");
-                [groups removeObject:tg];
-                [[EZTaskStore getInstance] removeObject:tg];
-                [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-            };
-            [alamView show];
-        
+        [self raiseDeletionAlert:indexPath];
     }   
     else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
@@ -252,36 +310,6 @@
 }
 
 
-
-//Collision check
-- (BOOL) collisionCheck:(NSString*)groupName
-{
-    for(EZTaskGroup* taskGp in taskGroups){
-        if([taskGp.name isEqualToString:groupName]){
-            return true;
-        }
-    }
-    return false;
-}
-
-//Will inform user something going on
-- (void) fireAlarm:(NSString*)info delay:(NSTimeInterval)delay
-{
-    EZDEBUG(@"fireAlarm get called, with info:%@", info);
-    alertView = [[UIAlertView alloc] initWithTitle:@"Input Errors" message:info delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
-    
-    [alertView show];
-    
-    [self performSelector:@selector(cancelAlert) withObject:nil afterDelay:delay];
-    
-}
-
-- (void) cancelAlert
-{
-    EZDEBUG(@"cancelAlert get called");
-    [alertView dismissWithClickedButtonIndex:0 animated:YES];
-    alertView = nil;
-}
 
 //1. Will resign the respond.[False, only resigned textField will call this method]
 //2. Verify if it is a empty space, if it is do nothing.
@@ -294,26 +322,42 @@
     EZDEBUG(@"didEndEditing, Text:%@", textField.text);
     NSIndexPath* path = [self textFieldToIndexPath:textField];
     NSString* trimmed = textField.text.trim;
-    if(path.row < taskGroups.count){
-        EZTaskGroup* tg = [taskGroups objectAtIndex:path.row];
+    if(path.row < values.count){
+        id tg = [values objectAtIndex:path.row];
         if([trimmed isEqualToString:@""]){
             //If the modified place is only space, then nothing will be changed
-            textField.text = tg.name;
+            if(isServeTaskList){
+                textField.text = ((EZTaskGroup*)tg).name;
+            }else{
+                textField.text = ((EZAvailableDay*)tg).name;
+            }
             return;
         }
-        tg.name = trimmed;
+        if(isServeTaskList){
+            ((EZTaskGroup*)tg).name = trimmed;
+        }else{
+            ((EZAvailableDay*)tg).name = trimmed;
+        }
         [[EZTaskStore getInstance] storeObject:tg];
     }else{
         if([trimmed isEqualToString:@""]){
             textField.text = @"";
             return;
         }
-        EZTaskGroup* tg = [[EZTaskGroup alloc] init];
-        tg.name = trimmed;
-        tg.displayOrder =  ((EZTaskGroup*)taskGroups.lastObject).displayOrder + 1;
-        [[EZTaskStore getInstance] storeObject:tg];
-        [taskGroups addObject:tg];
-        [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:taskGroups.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+        id createdObj = nil;
+        if(isServeTaskList){
+            EZTaskGroup* tg = [[EZTaskGroup alloc] init];
+            tg.name = trimmed;
+            tg.displayOrder =  ((EZTaskGroup*)values.lastObject).displayOrder + 1;
+            createdObj = tg;
+        }else{
+            EZAvailableDay* avDay = [[EZAvailableDay alloc] initWithName:trimmed weeks:NONEDAY];
+            avDay.displayOrder = ((EZAvailableDay*)values.lastObject).displayOrder + 1;
+            createdObj = avDay;
+        }
+        [[EZTaskStore getInstance] storeObject:createdObj];
+        [values addObject:createdObj];
+        [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:values.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
         textField.text = @"";
     }
     //[textField becomeFirstResponder];
@@ -344,16 +388,27 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    EZDEBUG(@"didSelect get calld, indexPath.row:%i, taskGroups.count:%i",indexPath.row,taskGroups.count);
-    if(indexPath.row < taskGroups.count){
-        EZTaskGroup* tgrp = [taskGroups objectAtIndex:indexPath.row];
-        EZTaskGroupDetailCtrl* tgc = [[EZTaskGroupDetailCtrl alloc] initWithStyle:UITableViewStylePlain];
-        tgc.taskGroup = tgrp;
-        tgc.superUpdateBlock = ^(){
-            [tgrp refresh];
-            [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:NO];
-        };
-        [self.navigationController pushViewController:tgc animated:YES];
+    EZDEBUG(@"didSelect get calld, indexPath.row:%i, taskGroups.count:%i",indexPath.row,values.count);
+    if(indexPath.row < values.count){
+        if(isServeTaskList){
+            EZTaskGroup* tgrp = [values objectAtIndex:indexPath.row];
+            EZTaskGroupDetailCtrl* tgc = [[EZTaskGroupDetailCtrl alloc] initWithStyle:UITableViewStylePlain];
+            tgc.taskGroup = tgrp;
+            tgc.superUpdateBlock = ^(){
+                [tgrp refresh];
+                [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:NO];
+            };
+            [self.navigationController pushViewController:tgc animated:YES];
+        }else{
+            EZAvailableDay* avDay = [values objectAtIndex:indexPath.row];
+            EZAvailableDayDetail* detailPage = [[EZAvailableDayDetail alloc] initWithStyle:UITableViewStyleGrouped];
+            EZDEBUG(@"After initialized");
+            detailPage.avDay = avDay;
+            detailPage.updateBlock = ^(){
+                [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            };
+            [self.navigationController pushViewController:detailPage animated:YES];
+        }
     }
 }
 

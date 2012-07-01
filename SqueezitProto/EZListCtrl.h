@@ -9,8 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "EZTaskHelper.h"
 
-@class EZEditCell;
-
 
 //Take time to write down it's functionality
 //Then start to change the code to match the described functionality
@@ -20,12 +18,16 @@
 //Each edit table will change color to editable color.
 //This behavior will be consistent in this applciation.
 
-@interface EZTaskListCtrl : UITableViewController<UITextFieldDelegate> {
-    NSMutableArray* taskGroups;
+@interface EZListCtrl : UITableViewController<UITextFieldDelegate> {
+    NSMutableArray* values;
     UIAlertView* alertView;
 }
 
 - (void) editClicked:(id)sender;
+
+
+- (id)initWithStyle:(UITableViewStyle)style isTasklist:(BOOL)tasklist;
+
 
 @property (strong, nonatomic) UIBarButtonItem* editButton;
 @property (strong, nonatomic) UIBarButtonItem* doneButton;

@@ -14,7 +14,7 @@
 #import "MAvailableDay.h"
 #import "EZMainCtrl.h"
 #import "EZScheduledTaskController.h"
-#import "EZTaskListCtrl.h"
+#import "EZListCtrl.h"
 #import "EZRootTabCtrl.h"
 #import "EZAvailableDayList.h"
 #import "EZTask.h"
@@ -276,10 +276,12 @@
     //stc.currentDate = [NSDate date];
     scheduledNav = [[UINavigationController alloc] initWithRootViewController:taskSlider];
     
-    EZTaskListCtrl* tlc = [[EZTaskListCtrl alloc] initWithStyle:UITableViewStylePlain];
+    //For the task configure
+    EZListCtrl* tlc = [[EZListCtrl alloc] initWithStyle:UITableViewStylePlain isTasklist:YES];
     taskNav = [[UINavigationController alloc] initWithRootViewController:tlc];
     
-    EZAvailableDayList* tsl = [[EZAvailableDayList alloc] initWithStyle:UITableViewStylePlain];
+    //For the time configure
+    EZListCtrl* tsl = [[EZListCtrl alloc] initWithStyle:UITableViewStylePlain isTasklist:NO];
     timeSettingNav = [[UINavigationController alloc] initWithRootViewController:tsl];
     
     EZSlideViewWrapper* slider = [[EZSlideViewWrapper alloc] init];

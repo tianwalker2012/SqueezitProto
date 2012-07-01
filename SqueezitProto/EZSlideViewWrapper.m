@@ -90,7 +90,8 @@
     
     if(res == nil){
         EZDEBUG(@"Create view for page:%i",page);
-        EZTestTableViewCtrl* layoutTester = [[EZTestTableViewCtrl alloc] initWithStyle:UITableViewStylePlain];
+        EZTestTableViewCtrl* layoutTester = [[EZTestTableViewCtrl alloc] initWithStyle:UITableViewStylePlain isFamily:YES];
+        layoutTester.selfNavCtrl = self.navigationController;
         [layoutTester.view setFrame:CGRectMake(0, 0, 320, 367)];
         UIView* vw = layoutTester.view;
         vw.backgroundColor = [UIColor colorWithRed:0.1*page green:0.1*page blue:0.1*page alpha:1];
@@ -98,7 +99,7 @@
         label.textAlignment = UITextAlignmentCenter;
         label.textColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:1];
         label.tag = labelTag;
-        [vw addSubview:label];
+        //[vw addSubview:label];
 
         res = [[EZViewWrapper alloc] initWithView:vw identifier:testID];
         res.controller = layoutTester;
