@@ -16,10 +16,13 @@
 #import "EZAvTimeHeader.h"
 #import "EZButtonCell.h"
 #import "EZScheduledV2Cell.h"
+#import "EZPrematureCell.h"
 
 @implementation EZEditLabelCellHolder
 @synthesize editCell, groupCell, pureEditCell, settingCell, flagCell, timeCell, scheduledCell, avTimeCell, avTimeHeader, beginEndTimeCell, scheduledTaskCell, timeCounterView, buttonCell, scheduleV2Cell;
 
+
+@synthesize prematureCell;
 
 //Singleton, save memory?
 + (EZEditLabelCellHolder*) getInstance
@@ -152,6 +155,13 @@
     EZEditLabelCellHolder* cellHolder = [EZEditLabelCellHolder getInstance];
     [[NSBundle mainBundle] loadNibNamed:@"EZScheduledV2Cell" owner:cellHolder options:nil];
     return cellHolder.scheduleV2Cell;  
+}
+
++ (EZPrematureCell*) createPrematureCell
+{
+    EZEditLabelCellHolder* cellHolder = [EZEditLabelCellHolder getInstance];
+    [[NSBundle mainBundle] loadNibNamed:@"PrematureCell" owner:cellHolder options:nil];
+    return cellHolder.prematureCell; 
 }
 
 @end

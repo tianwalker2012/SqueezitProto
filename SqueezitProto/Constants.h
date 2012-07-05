@@ -37,6 +37,7 @@ EZDEBUG(xx, ##__VA_ARGS__); \
 #define CoreFetchResultCache @"Root"
 
 #define EZEditColor @"324F85"
+#define EZSpecialSelection @"002080"
 
 #define EZNotificationKey @"taskURL"
 #define EZAssignNotificationKey @"assignedDate"

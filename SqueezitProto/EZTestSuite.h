@@ -12,4 +12,9 @@
 
 + (void) testSchedule;
 
+//The purpose of this task is to clean all the orphaned tasks
+//What's the definition of orphan task?
+//The task which do not belong to any taskgroup are orphaned task.
++ (void) cleanOrphanTask;
+
 @end

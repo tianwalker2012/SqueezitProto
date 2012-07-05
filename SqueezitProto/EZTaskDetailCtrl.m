@@ -18,9 +18,13 @@
 #import "EZEnvFlagPicker.h"
 #import "EZGoalSetter.h"
 #import "EZButtonCell.h"
-
+#import "EZEnvFlag.h"
+#import "EZButtonCell.h"
 
 @interface EZTaskDetailCtrl ()
+{
+    NSUInteger currentEnvTraits;
+}
 
 @property (assign, nonatomic) BOOL cancelled;
 
@@ -248,44 +252,7 @@
     EZDEBUG(@"Why come here, section:%i",section);
     return nil;
 }
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 #pragma mark - Table view delegate
 
@@ -335,15 +302,10 @@
         };
         [self.navigationController pushViewController:timeSetter animated:YES];
     }else if(indexPath.section == 2){
-        EZEnvFlagPicker* picker = [[EZEnvFlagPicker alloc] initWithStyle:UITableViewStyleGrouped];
-        picker.settedFlags = task.envTraits;
-        picker.doneBlock = ^(){
-            EZDEBUG(@"Done: final value:%i", picker.settedFlags);
-            task.envTraits = picker.settedFlags;
-            [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
-        };
-        //EZDEBUG(@"Before PushViewController");
-        [self.navigationController pushViewController:picker animated:YES];
+        currentEnvTraits = task.envTraits;
+        EZTableSelector* ts = [[EZTableSelector alloc] initWithStyle:UITableViewStyleGrouped];
+        ts.selectorDelegate = self;
+        [self.navigationController pushViewController:ts animated:YES];
         //EZDEBUG(@"After PushViewController");
     }else if(indexPath.section == 3){
         EZGoalSetter* goalSetter = [[EZGoalSetter alloc] initWithStyle:UITableViewStyleGrouped];
@@ -361,31 +323,80 @@
 
 - (NSInteger) getSection:(EZTableSelector*)selector
 {
-    
+    return 1;
 }
 - (NSInteger) getRow:(EZTableSelector*)selector
 {
-    
+    return [EZTaskStore getInstance].envFlags.count + 1;
 }
 
+//Position zero is the 
 - (UITableViewCell*) tableSelector:(EZTableSelector*)selector getCell:(NSIndexPath*)indexPath
 {
-    
+    NSString* cellID = @"cell";
+    UITableViewCell* cell = [selector.tableView dequeueReusableCellWithIdentifier:cellID];
+    if(cell == nil){
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+    }
+    if(indexPath.row == 0){
+        cell.textLabel.text = Local(@"None");
+        if(currentEnvTraits == 1){
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        }else {
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        }
+    }else{
+        NSInteger pos = indexPath.row - 1;
+        EZEnvFlag* flag = [[EZTaskStore getInstance].envFlags objectAtIndex:pos];
+        cell.textLabel.text = Local(flag.name);
+        if(isContained(flag.flag, currentEnvTraits)){
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        }else{
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        }
+    }
+    return cell;
 }
 
 - (void) tableSelector:(EZTableSelector*)selector selected:(NSIndexPath*)indexPath
 {
-    
+    if(indexPath.row == 0){//Mean No env requirement get selected
+        if(currentEnvTraits != 1){//Only when it is not selected 
+            [selector selectOnly:indexPath];
+            currentEnvTraits = 1;
+        }
+    }else{
+        EZEnvFlag* flag = [[EZTaskStore getInstance].envFlags objectAtIndex:indexPath.row - 1];
+        if(currentEnvTraits == 1){
+            [selector selectAdd:indexPath];
+            currentEnvTraits = flag.flag;
+        }
+        else if(isContained(flag.flag, currentEnvTraits)){
+            [selector selectNot:indexPath];
+            currentEnvTraits = removeFrom(flag.flag, currentEnvTraits);
+        }else{
+            [selector selectAdd:indexPath];
+            currentEnvTraits = combineFlags(flag.flag, currentEnvTraits);
+        }
+        //If turns out the net effect is no requirement, get no requirements selected
+        if(currentEnvTraits == 1){
+            [selector selectOnly:[NSIndexPath indexPathForRow:0 inSection:0]];
+        }else{
+            [selector selectNot:[NSIndexPath indexPathForRow:0 inSection:0]];
+        }
+    }
 }
 
 - (void) doneClicked:(EZTableSelector*)selector
 {
-    
+    EZDEBUG(@"currentEnvTraits:%i", currentEnvTraits);
+    task.envTraits = currentEnvTraits;
+    [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 - (void) cancelClicked:(EZTableSelector*)selector
 {
-    
+    //Do nothing.
 }
 
 

@@ -54,7 +54,7 @@
         }
         [flagSelectionStatus setValue:[[NSNumber alloc] initWithInt:value] forKey:[NSString stringWithFormat:@"%i", i]];
     }
-    if(settedFlags == EZ_ENV_NONE){
+    if(settedFlags == EZ_ENV_NO_REQ){
         [flagSelectionStatus setValue:[[NSNumber alloc] initWithInt:0] forKey:[NSString stringWithFormat:@"%i", availableFlags.count+1]];
 
     }

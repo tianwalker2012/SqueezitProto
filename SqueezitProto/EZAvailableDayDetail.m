@@ -288,22 +288,6 @@
 }
 
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -330,7 +314,7 @@
         avTimeDetail.doneBlock = ^(){
             [avDay.availableTimes replaceObjectAtIndex:indexPath.row withObject:avTimeDetail.avTime];
             [avDay.availableTimes sortUsingComparator:^NSComparisonResult(EZAvailableTime* obj1, EZAvailableTime* obj2) {
-                return [obj1.start compare:obj2.start];
+                return [obj1.start compareTime:obj2.start];
             }];
             [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
             [[EZTaskStore getInstance] storeObject:avTimeDetail.avTime];

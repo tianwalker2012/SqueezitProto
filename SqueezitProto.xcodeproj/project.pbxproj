@@ -59,7 +59,6 @@
 		184C2B26157F36E500852B35 /* EZEditLabelCellHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2B25157F36E300852B35 /* EZEditLabelCellHolder.m */; };
 		184C2B28157F38C000852B35 /* EZEditLabelCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 184C2B27157F38BF00852B35 /* EZEditLabelCell.xib */; };
 		184C2B2B157F3C8B00852B35 /* EZTaskDetailCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 184C2B2A157F3C8800852B35 /* EZTaskDetailCtrl.m */; };
-		187ED026158B138900B499D3 /* EZAvailableDayList.m in Sources */ = {isa = PBXBuildFile; fileRef = 187ED025158B138900B499D3 /* EZAvailableDayList.m */; };
 		187ED02A158C68FF00B499D3 /* EZAvailableDayDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = 187ED029158C68FF00B499D3 /* EZAvailableDayDetail.m */; };
 		187ED02C158C743C00B499D3 /* EZAvTimeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 187ED02B158C743C00B499D3 /* EZAvTimeCell.xib */; };
 		187ED02F158C75F900B499D3 /* EZAvTimeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 187ED02E158C75F900B499D3 /* EZAvTimeCell.m */; };
@@ -107,6 +106,8 @@
 		188D553C158870F300142394 /* EZPickerKeyboardDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D553B158870F300142394 /* EZPickerKeyboardDate.m */; };
 		188D553E1588908100142394 /* EZScheduledCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 188D553D1588908000142394 /* EZScheduledCell.xib */; };
 		188D55411588920900142394 /* EZScheduledCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D55401588920800142394 /* EZScheduledCell.m */; };
+		18BDFC7D15A3FC8200F7ACE3 /* PrematureCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18BDFC7C15A3FC8200F7ACE3 /* PrematureCell.xib */; };
+		18BDFC8115A3FCE400F7ACE3 /* EZPrematureCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BDFC8015A3FCE400F7ACE3 /* EZPrematureCell.m */; };
 		18D47CB41589EBA6009B0012 /* EZScheduledDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D47CB31589EBA6009B0012 /* EZScheduledDetail.m */; };
 		18E035D415808A16003B3D3E /* EZTaskGroupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E035D315808A16003B3D3E /* EZTaskGroupCell.m */; };
 		18E035D615808BB4003B3D3E /* EZTaskGroupCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18E035D515808BB4003B3D3E /* EZTaskGroupCell.xib */; };
@@ -190,8 +191,8 @@
 		184C2ACA157768DA00852B35 /* MImageOwner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MImageOwner.m; sourceTree = "<group>"; };
 		184C2ACC1579BBA600852B35 /* EZCoreHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZCoreHelper.h; sourceTree = "<group>"; };
 		184C2ACD1579BBA600852B35 /* EZCoreHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZCoreHelper.m; sourceTree = "<group>"; };
-		184C2AD9157B136700852B35 /* EZListCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; path = EZListCtrl.h; sourceTree = "<group>"; };
-		184C2ADA157B136800852B35 /* EZListCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; path = EZListCtrl.m; sourceTree = "<group>"; };
+		184C2AD9157B136700852B35 /* EZListCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZListCtrl.h; sourceTree = "<group>"; };
+		184C2ADA157B136800852B35 /* EZListCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZListCtrl.m; sourceTree = "<group>"; };
 		184C2ADB157B136C00852B35 /* EZTaskListCtrl.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZTaskListCtrl.xib; sourceTree = "<group>"; };
 		184C2AE3157B3B2200852B35 /* EZTaskGroupDetailCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTaskGroupDetailCtrl.h; sourceTree = "<group>"; };
 		184C2AE4157B3B2400852B35 /* EZTaskGroupDetailCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTaskGroupDetailCtrl.m; sourceTree = "<group>"; };
@@ -214,8 +215,6 @@
 		184C2B27157F38BF00852B35 /* EZEditLabelCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZEditLabelCell.xib; sourceTree = "<group>"; };
 		184C2B29157F3C8600852B35 /* EZTaskDetailCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTaskDetailCtrl.h; sourceTree = "<group>"; };
 		184C2B2A157F3C8800852B35 /* EZTaskDetailCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTaskDetailCtrl.m; sourceTree = "<group>"; };
-		187ED024158B138900B499D3 /* EZAvailableDayList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAvailableDayList.h; sourceTree = "<group>"; };
-		187ED025158B138900B499D3 /* EZAvailableDayList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAvailableDayList.m; sourceTree = "<group>"; };
 		187ED028158C68FF00B499D3 /* EZAvailableDayDetail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAvailableDayDetail.h; sourceTree = "<group>"; };
 		187ED029158C68FF00B499D3 /* EZAvailableDayDetail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAvailableDayDetail.m; sourceTree = "<group>"; };
 		187ED02B158C743C00B499D3 /* EZAvTimeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZAvTimeCell.xib; sourceTree = "<group>"; };
@@ -273,6 +272,7 @@
 		188CFE0E159C0529008ACCB8 /* EZConfigureCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZConfigureCtrl.m; sourceTree = "<group>"; };
 		188CFE10159C12A8008ACCB8 /* EZEnvTagCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZEnvTagCtrl.h; sourceTree = "<group>"; };
 		188CFE11159C12AB008ACCB8 /* EZEnvTagCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZEnvTagCtrl.m; sourceTree = "<group>"; };
+		188CFE2015A3E729008ACCB8 /* SqueezitProto.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = SqueezitProto.xcodeproj; sourceTree = SOURCE_ROOT; };
 		188D55141584883000142394 /* EZEnvFlag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZEnvFlag.h; sourceTree = "<group>"; };
 		188D55151584883000142394 /* EZEnvFlag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZEnvFlag.m; sourceTree = "<group>"; };
 		188D551815848B3A00142394 /* MEnvFlag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEnvFlag.h; sourceTree = "<group>"; };
@@ -299,6 +299,9 @@
 		188D553D1588908000142394 /* EZScheduledCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZScheduledCell.xib; sourceTree = "<group>"; };
 		188D553F1588920700142394 /* EZScheduledCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZScheduledCell.h; sourceTree = "<group>"; };
 		188D55401588920800142394 /* EZScheduledCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZScheduledCell.m; sourceTree = "<group>"; };
+		18BDFC7C15A3FC8200F7ACE3 /* PrematureCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PrematureCell.xib; sourceTree = "<group>"; };
+		18BDFC7F15A3FCE400F7ACE3 /* EZPrematureCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZPrematureCell.h; sourceTree = "<group>"; };
+		18BDFC8015A3FCE400F7ACE3 /* EZPrematureCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZPrematureCell.m; sourceTree = "<group>"; };
 		18D47CB21589EBA6009B0012 /* EZScheduledDetail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZScheduledDetail.h; sourceTree = "<group>"; };
 		18D47CB31589EBA6009B0012 /* EZScheduledDetail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZScheduledDetail.m; sourceTree = "<group>"; };
 		18E035D215808A16003B3D3E /* EZTaskGroupCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTaskGroupCell.h; sourceTree = "<group>"; };
@@ -437,6 +440,7 @@
 			isa = PBXGroup;
 			children = (
 				184C298A156A175800852B35 /* Constants.h */,
+				188CFE2015A3E729008ACCB8 /* SqueezitProto.xcodeproj */,
 			);
 			name = Constants;
 			sourceTree = "<group>";
@@ -493,8 +497,6 @@
 				188D55321587392B00142394 /* EZGoalTimeSetter.m */,
 				18D47CB21589EBA6009B0012 /* EZScheduledDetail.h */,
 				18D47CB31589EBA6009B0012 /* EZScheduledDetail.m */,
-				187ED024158B138900B499D3 /* EZAvailableDayList.h */,
-				187ED025158B138900B499D3 /* EZAvailableDayList.m */,
 				187ED028158C68FF00B499D3 /* EZAvailableDayDetail.h */,
 				187ED029158C68FF00B499D3 /* EZAvailableDayDetail.m */,
 				188CFDC2158D88F8008ACCB8 /* EZPickerWrapper.h */,
@@ -621,6 +623,9 @@
 				188CFDE61595BD66008ACCB8 /* EZScheduledV2Cell.xib */,
 				188CFDE81595C07D008ACCB8 /* EZScheduledV2Cell.h */,
 				188CFDE91595C07E008ACCB8 /* EZScheduledV2Cell.m */,
+				18BDFC7C15A3FC8200F7ACE3 /* PrematureCell.xib */,
+				18BDFC7F15A3FCE400F7ACE3 /* EZPrematureCell.h */,
+				18BDFC8015A3FCE400F7ACE3 /* EZPrematureCell.m */,
 			);
 			name = "Customized Cells";
 			sourceTree = "<group>";
@@ -631,6 +636,11 @@
 				184C2B0E157E4DA000852B35 /* Squeezit.bundle */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		188CFE2115A3E729008ACCB8 /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
 			sourceTree = "<group>";
 		};
 		18E035E4158350F4003B3D3E /* Customize popup */ = {
@@ -687,6 +697,12 @@
 			mainGroup = 184C294A1569E19800852B35;
 			productRefGroup = 184C29561569E19900852B35 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 188CFE2115A3E729008ACCB8 /* Products */;
+					ProjectRef = 188CFE2015A3E729008ACCB8 /* SqueezitProto.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				184C29541569E19900852B35 /* SqueezitProto */,
@@ -723,6 +739,7 @@
 				188CFDDA1591BD6C008ACCB8 /* EZTimeCounterView.xib in Resources */,
 				188CFDE21592D9BF008ACCB8 /* EZButtonCell.xib in Resources */,
 				188CFDE71595BD6A008ACCB8 /* EZScheduledV2Cell.xib in Resources */,
+				18BDFC7D15A3FC8200F7ACE3 /* PrematureCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -790,7 +807,6 @@
 				188D553C158870F300142394 /* EZPickerKeyboardDate.m in Sources */,
 				188D55411588920900142394 /* EZScheduledCell.m in Sources */,
 				18D47CB41589EBA6009B0012 /* EZScheduledDetail.m in Sources */,
-				187ED026158B138900B499D3 /* EZAvailableDayList.m in Sources */,
 				187ED02A158C68FF00B499D3 /* EZAvailableDayDetail.m in Sources */,
 				187ED02F158C75F900B499D3 /* EZAvTimeCell.m in Sources */,
 				187ED034158C7A0F00B499D3 /* EZAvTimeHeader.m in Sources */,
@@ -816,6 +832,7 @@
 				188CFE0815999BDB008ACCB8 /* EZTestTableViewCtrl.m in Sources */,
 				188CFE0F159C0530008ACCB8 /* EZConfigureCtrl.m in Sources */,
 				188CFE12159C12B0008ACCB8 /* EZEnvTagCtrl.m in Sources */,
+				18BDFC8115A3FCE400F7ACE3 /* EZPrematureCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

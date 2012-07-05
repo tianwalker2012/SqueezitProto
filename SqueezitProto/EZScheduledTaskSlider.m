@@ -25,6 +25,7 @@
     NSMutableArray* cachedControllers;
     NSInteger todayPage;
     BOOL initialized;
+    UIPageControl* pageControl;
 }
 
 //Get the related date for this page
@@ -84,11 +85,21 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    EZDEBUG(@"ViewWillAppear get called");
+    EZDEBUG(@"ViewWillAppear get called, frame:%@",NSStringFromCGRect(self.view.frame));
     if(viewAppearBlock){
         viewAppearBlock();
     }
     self.viewAppearBlock = nil;
+}
+
+
+- (void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    pageControl.frame = CGRectMake(0, self.view.frame.size.height - 10, 320, 10);
+    pageControl.backgroundColor = [UIColor blackColor];
+    [self.view addSubview:pageControl];
+    
 }
 
 //You can actully treat this as init method.
@@ -111,9 +122,9 @@
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:Local(@"Today") style:UIBarButtonItemStyleBordered target:self action:@selector(scroll2Today)];
     self.navigationItem.leftBarButtonItem.enabled = false;
-    
-    //currentPage = scheduledDates.count - 1;
-    
+    pageControl = [[UIPageControl alloc] init];
+    pageControl.numberOfPages = scheduledDates.count;
+    pageControl.currentPage = todayPage;
 }
 
 - (NSInteger) dateToPage:(NSDate *)date
@@ -229,7 +240,7 @@
     if(res == nil){
         EZScheduledTaskController* stc = [[EZScheduledTaskController alloc] initWithStyle:UITableViewStylePlain];
         [stc.view setFrame:CGRectMake(0, 0, 320, 367)];
-        [self addChildViewController:stc];
+        //[self addChildViewController:stc];
         res = [[EZViewWrapper alloc] initWithView:stc.view identifier:identifier];
         res.controller = stc;
         stc.superController = self;
@@ -271,6 +282,7 @@
     }else{
         self.navigationItem.rightBarButtonItem.enabled = true;
     }
+    pageControl.currentPage = page;
 }
 //The purpose of this function call it that
 //If the container reach the end of the page, it will call this method
@@ -291,6 +303,7 @@
     EZScheduledDay* schDay = [[EZScheduledDay alloc] init];
     schDay.scheduledDate = [lastDate adjustDays:1];
     [scheduledDates addObject:schDay];
+    pageControl.numberOfPages = scheduledDates.count;
     return nextP;
 }
 

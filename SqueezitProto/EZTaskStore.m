@@ -479,8 +479,11 @@
 
 NSString* envTraitsToString(NSUInteger envTraits)
 {
-    if(envTraits == EZ_ENV_NONE){
+    if(envTraits == EZ_ENV_NO_REQ){
         return Local(@"None");
+    }
+    if(envTraits == EZ_ENV_SUIT_ALL){
+        return Local(@"Suitable For All");
     }
     //NSMutableString* res = [[NSMutableString alloc] init];
     NSMutableArray* arr = [[NSMutableArray alloc] init];

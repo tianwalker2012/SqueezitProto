@@ -270,6 +270,7 @@ typedef int(^ClosureTest)();
 + (void) cleanAllLocalNotification;
 
 
+
 @end
 
 @implementation EZTestSuite
@@ -287,6 +288,7 @@ typedef int(^ClosureTest)();
     [EZTestSuite testArrayExchange];
     [EZTestSuite testAvDayCascadeStore];
     [EZTestSuite testTaskGroupCascade];
+    //[EZTestSuite cleanOrphanTask];
     [EZCoreAccessor setInstance:nil];
     
 }
@@ -351,6 +353,45 @@ typedef int(^ClosureTest)();
     //Make sure the application don't use 
     //Test database.
     
+    
+}
+
++ (BOOL) isTaskExist:(EZTask*)tk inList:(NSArray*)tkList
+{
+    for(EZTask* task in tkList){
+        if([task.PO.objectID isEqual:tk.PO.objectID]){
+            return true;
+        }
+    }
+    return false;
+}
+
++ (void) cleanOrphanTask
+{
+    NSArray* groups = [[EZTaskStore getInstance] fetchAllWithVO:[EZTaskGroup class] PO:[MTaskGroup class] sortField:nil];
+    
+    NSMutableArray* tasks =[NSMutableArray arrayWithArray:[[EZTaskStore getInstance] fetchAllWithVO:[EZTask class] PO:[MTask class] sortField:nil]];
+    
+    NSMutableArray* taskInGroups = [[NSMutableArray alloc] initWithCapacity:tasks.count];
+    for(EZTaskGroup* tg in groups){
+        [taskInGroups addObjectsFromArray:tg.tasks];
+    }
+    
+    EZDEBUG(@"Test in group:%i, total tasks:%i",taskInGroups.count, tasks.count);
+    NSMutableArray* remove = [[NSMutableArray alloc] init];
+    for(int i = 0; i < tasks.count; i++){
+        EZTask* cTask = [tasks objectAtIndex:i];
+        if(![EZTestSuite isTaskExist:cTask inList:taskInGroups]){
+            [remove addObject:cTask];
+            EZDEBUG(@"Found orphan:%@",cTask.name);
+        }
+    }
+    EZDEBUG(@"Total orphan is:%i", remove.count);
+    if(remove.count > 0){
+        [[EZTaskStore getInstance] removeObjects:remove];
+        [EZTestSuite cleanOrphanTask];
+    }
+    //assert(false);
     
 }
 
@@ -1918,13 +1959,13 @@ typedef int(^ClosureTest)();
 + (void) testTaskFetch
 {
     EZTaskStore* store = [EZTaskStore getInstance];
-    EZTask* task1 = [[EZTask alloc] initWithName:@"Read" duration:10 maxDur:10 envTraits:EZ_ENV_NONE];
+    EZTask* task1 = [[EZTask alloc] initWithName:@"Read" duration:10 maxDur:10 envTraits:EZ_ENV_NO_REQ];
     task1.envTraits = 2*3;
     
-    EZTask* task2 = [[EZTask alloc] initWithName:@"Write" duration:10 maxDur:10 envTraits:EZ_ENV_NONE];
+    EZTask* task2 = [[EZTask alloc] initWithName:@"Write" duration:10 maxDur:10 envTraits:EZ_ENV_NO_REQ];
     task2.envTraits = 2;
     
-    EZTask* task3 = [[EZTask alloc] initWithName:@"Think" duration:10 maxDur:10 envTraits:EZ_ENV_NONE];
+    EZTask* task3 = [[EZTask alloc] initWithName:@"Think" duration:10 maxDur:10 envTraits:EZ_ENV_NO_REQ];
     task3.envTraits = 5;
     [store storeObjects:[NSArray arrayWithObjects:task1, task2, task3, nil]];
     
@@ -1996,17 +2037,17 @@ typedef int(^ClosureTest)();
 {
     NSLog(@"My second test");
     NSDate* startTime = [NSDate date];
-    EZAvailableTime* avTime = [[EZAvailableTime alloc] init:startTime name:@"Test scheduler" duration:13 environment:EZ_ENV_NONE];
+    EZAvailableTime* avTime = [[EZAvailableTime alloc] init:startTime name:@"Test scheduler" duration:13 environment:EZ_ENV_NO_REQ];
     EZTaskScheduler* scheduler = [[EZTaskScheduler alloc] init];
     // NSArray* tasks = [EZTaskStore getTasks:avTime.environmentTraits];
     
     EZTask* smallTk = [[EZTask alloc]
-                       initWithName:@"small" duration:1 maxDur:1 envTraits:EZ_ENV_NONE]; 
-    EZTask* middleTk  = [[EZTask alloc]initWithName:@"middle" duration:2 maxDur:2 envTraits:EZ_ENV_NONE];
-    EZTask* largeTk = [[EZTask alloc]initWithName:@"large" duration:5 maxDur:5 envTraits:EZ_ENV_NONE];
-    EZTask* illFitTask = [[EZTask alloc]initWithName:@"illFitTask" duration:14 maxDur:14 envTraits:EZ_ENV_NONE];
+                       initWithName:@"small" duration:1 maxDur:1 envTraits:EZ_ENV_NO_REQ]; 
+    EZTask* middleTk  = [[EZTask alloc]initWithName:@"middle" duration:2 maxDur:2 envTraits:EZ_ENV_NO_REQ];
+    EZTask* largeTk = [[EZTask alloc]initWithName:@"large" duration:5 maxDur:5 envTraits:EZ_ENV_NO_REQ];
+    EZTask* illFitTask = [[EZTask alloc]initWithName:@"illFitTask" duration:14 maxDur:14 envTraits:EZ_ENV_NO_REQ];
     
-    EZTask* adjustTask = [[EZTask alloc]initWithName:@"adjustTask" duration:3 maxDur:3 envTraits:EZ_ENV_NONE];
+    EZTask* adjustTask = [[EZTask alloc]initWithName:@"adjustTask" duration:3 maxDur:3 envTraits:EZ_ENV_NO_REQ];
     adjustTask.maxDuration = 4;
     
     NSArray* tasks = [NSArray arrayWithObjects:smallTk,
@@ -2041,12 +2082,12 @@ typedef int(^ClosureTest)();
 + (void) testMainCase
 {
     NSLog(@"My first home made test");
-    EZAvailableTime* avTime = [[EZAvailableTime alloc] init:[NSDate date] name:@"Test scheduler" duration:10 environment:EZ_ENV_NONE];
+    EZAvailableTime* avTime = [[EZAvailableTime alloc] init:[NSDate date] name:@"Test scheduler" duration:10 environment:EZ_ENV_NO_REQ];
     EZTaskScheduler* scheduler = [[EZTaskScheduler alloc] init];
     // NSArray* tasks = [EZTaskStore getTasks:avTime.environmentTraits];
-    NSArray* tasks = [NSArray arrayWithObjects:[[EZTask alloc]initWithName:@"small" duration:1 maxDur:1 envTraits:EZ_ENV_NONE],
-                      [[EZTask alloc]initWithName:@"middle" duration:2 maxDur:2 envTraits:EZ_ENV_NONE],
-                      [[EZTask alloc]initWithName:@"large" duration:5 maxDur:5 envTraits:EZ_ENV_NONE],nil
+    NSArray* tasks = [NSArray arrayWithObjects:[[EZTask alloc]initWithName:@"small" duration:1 maxDur:1 envTraits:EZ_ENV_NO_REQ],
+                      [[EZTask alloc]initWithName:@"middle" duration:2 maxDur:2 envTraits:EZ_ENV_NO_REQ],
+                      [[EZTask alloc]initWithName:@"large" duration:5 maxDur:5 envTraits:EZ_ENV_NO_REQ],nil
                       ];
     NSArray* scheduledTask = [scheduler scheduleTaskByBulk:avTime exclusiveList:[[NSArray alloc]init] tasks:tasks];
     NSLog(@"Result array length:%i, detail:%@",[scheduledTask count],[scheduledTask description]);

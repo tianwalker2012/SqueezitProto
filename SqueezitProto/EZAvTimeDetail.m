@@ -133,44 +133,6 @@
     }
     return 44;
 }
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 #pragma mark - Table view delegate
 
@@ -320,13 +282,29 @@
 - (UITableViewCell*) tableSelector:(EZTableSelector*)selector getCell:(NSIndexPath*)indexPath
 {
     EZTaskStore* store = [EZTaskStore getInstance];
-    EZEnvFlag* flag = [store.envFlags objectAtIndex:indexPath.row];
+    EZEnvFlag* flag = nil;
     UITableViewCell* cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Cell"];
-    cell.textLabel.text = Local(flag.name);
-    if(isContained(flag.flag, currEnvFlags)){
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    if(indexPath.row == 0){
+        cell.textLabel.text = Local(@"Select All");
+        cell.textLabel.textColor = [UIColor createByHex:EZSpecialSelection];
+        if(currEnvFlags == 0){
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        }else{
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        }
     }else{
-        cell.accessoryType = UITableViewCellAccessoryNone;
+        flag = [store.envFlags objectAtIndex:indexPath.row-1];
+        cell.textLabel.text = Local(flag.name);
+        if(currEnvFlags && isContained(flag.flag, currEnvFlags)){
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        }else{
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        }
+    }
+    if(indexPath.row % 2){
+        cell.backgroundColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1];
+    }else{
+        cell.backgroundColor = [UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:1];
     }
     return cell;
 }
@@ -334,15 +312,35 @@
 - (void) tableSelector:(EZTableSelector*)selector selected:(NSIndexPath*)indexPath
 {
     EZTaskStore* store = [EZTaskStore getInstance];
-    EZEnvFlag* flag = [store.envFlags objectAtIndex:indexPath.row];
-    //If already included, exclude it. vice versa.
-    //Exposed the inner mechanism.
-    if(isContained(flag.flag, currEnvFlags)){
-        currEnvFlags = currEnvFlags/flag.flag;
-        [selector selectNot:indexPath];
+    
+    if(indexPath.row == 0){
+        if(currEnvFlags == 0){//already selected
+            //What do we need to do?
+            return;
+        }else{
+            currEnvFlags = 0;
+            [selector selectOnly:indexPath];
+        }
     }else{
-        currEnvFlags = currEnvFlags * flag.flag;
-        [selector selectAdd:indexPath];
+        EZEnvFlag* flag = [store.envFlags objectAtIndex:(indexPath.row-1)];
+        //If already included, exclude it. vice versa.
+        //Exposed the inner mechanism.
+        if(currEnvFlags == 0){
+            currEnvFlags = 1;
+        }
+        if(isContained(flag.flag, currEnvFlags)){
+            currEnvFlags = currEnvFlags/flag.flag;
+            [selector selectNot:indexPath];
+        }else{
+            currEnvFlags = currEnvFlags * flag.flag;
+            [selector selectAdd:indexPath];
+        }
+        if(currEnvFlags == 1){
+            currEnvFlags = 0;
+            [selector selectOnly:[NSIndexPath indexPathForRow:0 inSection:0]];
+        }else{
+            [selector selectNot:[NSIndexPath indexPathForRow:0 inSection:0]];
+        }
     }
 }
 

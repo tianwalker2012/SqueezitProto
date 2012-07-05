@@ -254,6 +254,7 @@
         self.taskGroup.tasks = [NSMutableArray arrayWithArray:self.tasks];
         //The reason I do this because the store have side effect
         [[EZTaskStore getInstance] storeObject:self.taskGroup];
+        [[EZTaskStore getInstance] removeObject:task];
         [self performSelector:@selector(removeCellAtIndex:) withObject:indexPath afterDelay:0.3];
         self.superUpdateBlock();
     };

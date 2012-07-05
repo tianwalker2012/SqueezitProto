@@ -11,6 +11,10 @@
 @class EZEditLabelCell, EZTaskGroupCell, EZPureEditCell, EZSettingCell, EZEnvFlagPickerCell, EZAvailableTimeCell, EZScheduledCell, EZAvTimeCell, EZAvTimeHeader, EZBeginEndTimeCell, EZScheduledTaskCell, EZTimeCounterView, EZButtonCell, EZScheduledV2Cell;
 //The purpose of this holder is serve as the file owner, 
 //So that this cell could be used by many controllers.
+
+//For test purpose only
+@class EZPrematureCell;
+
 @interface EZEditLabelCellHolder : NSObject
 
 @property (strong, nonatomic) IBOutlet EZEditLabelCell* editCell;
@@ -39,6 +43,8 @@
 @property (strong, nonatomic) IBOutlet EZButtonCell* buttonCell;
 
 @property (strong, nonatomic) IBOutlet EZScheduledV2Cell* scheduleV2Cell;
+
+@property (strong, nonatomic) IBOutlet EZPrematureCell* prematureCell;
 
 //@property (strong, nonatomic) id<UITextFieldDelegate> delegate;
 
@@ -72,5 +78,7 @@
 + (EZButtonCell*) createButtonCell;
 
 + (EZScheduledV2Cell*) createScheduledV2Cell;
+
++ (EZPrematureCell*) createPrematureCell;
 
 @end

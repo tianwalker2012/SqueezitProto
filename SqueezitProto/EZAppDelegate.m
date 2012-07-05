@@ -16,7 +16,6 @@
 #import "EZScheduledTaskController.h"
 #import "EZListCtrl.h"
 #import "EZRootTabCtrl.h"
-#import "EZAvailableDayList.h"
 #import "EZTask.h"
 #import "EZScheduledTask.h"
 #import "EZTaskHelper.h"
@@ -29,6 +28,7 @@
 #import "EZConfigureCtrl.h"
 #import "MEnvFlag.h"
 #import "EZEnvFlag.h"
+#import "EZAlarmUtility.h"
 
 @interface EZAppDelegate() {
     EZRootTabCtrl* tabCtrl;
@@ -142,14 +142,20 @@
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     
     NSString* taskIDURL = [notification.userInfo objectForKey:EZNotificationKey];
+    
+    
     NSString* tomorrowStr = [notification.userInfo objectForKey:EZAssignNotificationKey];    
 
+    EZDEBUG(@"userInfo:%@, taskIDURL:%@, tomorrowStr:%@", notification.userInfo, taskIDURL, tomorrowStr);
+    
     if(taskIDURL){
         [self processTaskNotify:taskIDURL];
-    }else{
+    }else if(tomorrowStr){
         //I don't need to care which days notify it is.
         //I only need to show them tomorrow.
         [self processTomorrowNotify];
+    }else{
+        EZDEBUG(@"Why notification with no task nor tomorrow");
     }
 }
 
@@ -202,7 +208,7 @@
     nofication.applicationIconBadgeNumber = 1;
     nofication.repeatCalendar = nil;
     nofication.repeatInterval = kCFCalendarUnitDay;
-    NSDictionary* infoDict = [NSDictionary dictionaryWithObjectsAndKeys:[tomorrow stringWithFormat:@"yyyyMMdd"], EZAssignNotificationKey ,nil];
+    NSDictionary* infoDict = [NSDictionary dictionaryWithObjectsAndKeys:@"AnyThing", EZAssignNotificationKey ,nil];
     nofication.userInfo = infoDict;
     [[UIApplication sharedApplication] scheduleLocalNotification:nofication];
     [userSetting setValue:[NSKeyedArchiver archivedDataWithRootObject:nofication] forKey:tomorrowNofityKey];
@@ -216,6 +222,11 @@
     //[self disableTomorrowNotification];
     //[self setupTomorrowNotification];
     [EZTestSuite testSchedule];
+    EZScheduledTask* schTask = [[EZScheduledTask alloc] init];
+    EZTask* notificationTest = [[EZTask alloc] initWithName:@"Notification Test"];
+    schTask.startTime = [[NSDate date] adjust:20];
+    schTask.task = notificationTest;
+    //[EZAlarmUtility setupAlarm:schTask];
     
     //NSArray* flags = [[EZTaskStore getInstance] fetchAllWithVO:[EZEnvFlag class] PO:[MEnvFlag class] sortField:@"flag"];
     //EZDEBUG(@"Before delete, EnvFlag count %i,  The last flag is %i", flags.count, ((EZEnvFlag*)[flags objectAtIndex:flags.count -1]).flag);
@@ -238,16 +249,24 @@
         [[EZTaskStore getInstance] fillTestData];
     }
     [[EZTaskStore getInstance] populateEnvFlags];
+    [EZTestSuite cleanOrphanTask];
     //[self setupNotification];
     //Notification related code
     NSString* optionKey = @"UIApplicationLaunchOptionsLocalNotificationKey";
     UILocalNotification* notification = [launchOptions objectForKey:optionKey];
+    EZScheduledTask* schTask = nil;
+    NSString* tomorrowStr = nil;
     if(notification != nil){
         [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-    }
-    EZScheduledTask* schTask = [[EZTaskStore getInstance] fetchScheduledTaskByURL:[notification.userInfo objectForKey:EZNotificationKey]];
+        NSString* taskID = [notification.userInfo objectForKey:EZNotificationKey];
+        if(taskID){
+            schTask = [[EZTaskStore getInstance] fetchScheduledTaskByURL:taskID];
+        }
     
-    NSString* tomorrowStr = [notification.userInfo objectForKey:EZAssignNotificationKey];
+        tomorrowStr = [notification.userInfo objectForKey:EZAssignNotificationKey];
+        EZDEBUG(@"Try to get data from notification, taskID:%@, tomorrowStr:%@",taskID, tomorrowStr);
+        
+    }
     //End of get notification
     
     
@@ -260,14 +279,13 @@
     
     taskSlider = [[EZScheduledTaskSlider alloc] init];
     
+    //Will not show off at the same time
     if(schTask){
         //__weak EZAppDelegate* weakSelf = self;
         taskSlider.viewAppearBlock = ^(){
             [taskSlider presentScheduledTask:schTask];
         };
-    }
-    
-    if(tomorrowStr){
+    }else if(tomorrowStr){
         taskSlider.viewAppearBlock = ^(){
             [taskSlider scheduleForTomorrow];
         };
@@ -286,6 +304,9 @@
     
     EZSlideViewWrapper* slider = [[EZSlideViewWrapper alloc] init];
     UINavigationController* sliderNav = [[UINavigationController alloc] initWithRootViewController:slider];
+    
+    EZViewLayoutTester* viewTester = [[EZViewLayoutTester alloc] initWithName:@"Tester"];
+    
     
     EZConfigureCtrl* configurePage = [[EZConfigureCtrl alloc] initWithStyle:UITableViewStyleGrouped];
     UINavigationController* configNav = [[UINavigationController alloc] initWithRootViewController:configurePage];

@@ -31,6 +31,11 @@
     EZDEBUG(@"%@'s frame:%@, callstack:%@", name, NSStringFromCGRect(self.view.frame), [NSThread callStackSymbols]);
 }
 
+- (void) viewWillDisappear:(BOOL)animated
+{
+    EZDEBUG(@"%@ will disappear. callstack:%@",name, [NSThread callStackSymbols]);
+}
+
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     EZDEBUG(@"TouchBegan");

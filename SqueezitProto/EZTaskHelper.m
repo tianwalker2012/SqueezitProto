@@ -52,21 +52,34 @@ NSString* doubleString(NSString* str)
 
 @implementation UIView(EZPrivate)
 
-- (void) left:(CGFloat)distance
+- (void) setLeft:(CGFloat)distance
 {
+    EZDEBUG(@"Set left get called");
     CGRect changed = self.frame;
     changed.origin.x = distance;
     [self setFrame:changed];
 }
 
-- (void) top:(CGFloat)distance
+- (CGFloat) left
+{
+    EZDEBUG(@"Return left get called");
+    return self.frame.origin.x;
+}
+
+
+- (void) setTop:(CGFloat)distance
 {
     CGRect changed = self.frame;
     changed.origin.y = distance;
     [self setFrame:changed];
 }
 
-- (void) right:(CGFloat)distance
+- (CGFloat) top
+{
+    return self.frame.origin.y;
+}
+
+- (void) setRight:(CGFloat)distance
 {
     if(self.superview == nil){
         return;
@@ -79,7 +92,19 @@ NSString* doubleString(NSString* str)
     [self setFrame:changed];
 }
 
-- (void) bottom:(CGFloat)distance
+- (CGFloat) right
+{
+    if(self.superview == nil){
+        return 0;
+    }
+
+    CGFloat totalWidth = self.superview.bounds.size.width;
+    CGRect changed = self.frame;
+    CGFloat selfWidth = changed.size.width;
+    return totalWidth - (selfWidth + changed.origin.x);
+}
+
+- (void) setBottom:(CGFloat)distance
 {
     if(self.superview == nil){
         return;
@@ -89,6 +114,17 @@ NSString* doubleString(NSString* str)
     CGFloat selfHeight = changed.size.height;
     changed.origin.y = totalHeight - selfHeight - distance;
     [self setFrame:changed];
+}
+
+- (CGFloat) bottom
+{
+    if(self.superview == nil){
+        return 0;
+    }
+    CGFloat totalHeight = self.superview.bounds.size.height;
+    CGRect changed = self.frame;
+    CGFloat selfHeight = changed.size.height;
+    return totalHeight - (selfHeight + changed.origin.y);
 }
 
 @end
@@ -389,6 +425,11 @@ NSString* doubleString(NSString* str)
     
     return res;
 
+}
+
+NSUInteger removeFrom(NSUInteger flag, NSUInteger envFlags)
+{
+    return envFlags/flag;
 }
 
 //If flag can be divide cleanly from envFlags

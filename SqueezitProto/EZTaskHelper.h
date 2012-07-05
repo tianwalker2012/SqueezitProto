@@ -55,13 +55,18 @@ typedef void  (^ IterateOperation)(id obj);
 
 @interface UIView(EZPrivate)
 
-- (void) left:(CGFloat)distance;
+- (void) setLeft:(CGFloat)distance;
+- (CGFloat) left;
 
-- (void) top:(CGFloat)distance;
 
-- (void) right:(CGFloat)distance;
+- (void) setTop:(CGFloat)distance;
+- (CGFloat) top;
 
-- (void) bottom:(CGFloat)distance;
+- (void) setRight:(CGFloat)distance;
+- (CGFloat) right;
+
+- (void) setBottom:(CGFloat)distance;
+- (CGFloat) bottom;
 
 @end
 
@@ -132,6 +137,8 @@ typedef void  (^ IterateOperation)(id obj);
 @end
 
 @class EZAvailableDay, EZQuotas;
+
+NSUInteger removeFrom(NSUInteger flag, NSUInteger envFlags);
 
 BOOL isContained(NSUInteger flag, NSUInteger envFlags);
 

@@ -137,8 +137,8 @@
     }
     
     scheduledTasks = [scheduler rescheduleAll:scheduledTasks date:currentDate];
-    [EZAlarmUtility setupAlarmBulk:scheduledTasks];
     [[EZTaskStore getInstance] storeObjects:scheduledTasks];
+    [EZAlarmUtility setupAlarmBulk:scheduledTasks];
     [self.tableView reloadData];
     
 }
@@ -222,6 +222,7 @@
             //Be shared by different days.
             //When we switch back and forth some issue will show off
             if(ct.counterView.superview == nil){
+                EZDEBUG(@"ct.counterView is removed from super");
                 if(counter.ongoingTaskPos > -1){
                     NSMutableArray* arr = [NSMutableArray arrayWithObject:[NSIndexPath indexPathForRow:counter.ongoingTaskPos inSection:0]];
                     if((counter.ongoingTaskPos-1) > -1){
@@ -233,6 +234,7 @@
         }
     };
     counter.timeupOps = ^(EZTimeCounter* ct){
+        EZDEBUG(@"TimeCounter timeout");
         ct.isCounting = false;
         [ct.counterView removeFromSuperview];
         //The the time message again
@@ -313,9 +315,10 @@
         NSArray* schTasks = [[EZTaskScheduler getInstance] rescheduleStoredTask:task];
         if([schTasks count] > 0){
             [EZAlarmUtility cancelAlarm:task];
-            [EZAlarmUtility setupAlarmBulk:schTasks];
             [[EZTaskStore getInstance] removeObject:task];
+            
             [[EZTaskStore getInstance] storeObjects:schTasks];
+            [EZAlarmUtility setupAlarmBulk:schTasks];
             if(pos > -1){
                 NSMutableArray* mutArr = [NSMutableArray arrayWithArray:self.scheduledTasks];
                 [mutArr removeObjectAtIndex:pos];
@@ -342,21 +345,27 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    EZDEBUG(@"Get cell for:%@, tableView frame:%@",indexPath, NSStringFromCGRect(self.tableView.frame));
     static NSString *CellIdentifier = @"ScheduledV2";
+    EZScheduledTask* task = [scheduledTasks objectAtIndex:indexPath.row];
     EZScheduledV2Cell *cell = (EZScheduledV2Cell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if(!cell){
         cell = [EZEditLabelCellHolder createScheduledV2Cell];
         //cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }else{
+        EZDEBUG(@"Recycled:%@, for taskName:%@",cell.taskName.text, task.task.name);
     }
-    EZScheduledTask* task = [scheduledTasks objectAtIndex:indexPath.row];
+    
     
     cell.taskName.text = task.task.name;
     
     NSDate* endTime = [NSDate dateWithTimeInterval:task.duration*60 sinceDate:task.startTime];
     NSDate* now = [NSDate date];
     if([now InBetween:task.startTime end:endTime] ){
+        EZDEBUG(@"Find current task.");
         [cell setStatus:EZ_NOW];
         if(cell.nowSign == nil){
+            EZDEBUG(@"Add the counter now");
             cell.nowSign = counter.counterView;
             [cell addSubview:counter.counterView];
         }
@@ -423,9 +432,9 @@
         NSArray* schTasks = [[EZTaskScheduler getInstance] rescheduleTask:task existTasks:scheduledTasks];
         if([schTasks count] > 0){
             [EZAlarmUtility cancelAlarm:task];
-            [EZAlarmUtility setupAlarmBulk:schTasks];
             [[EZTaskStore getInstance] removeObject:task];
             [[EZTaskStore getInstance] storeObjects:schTasks];
+            [EZAlarmUtility setupAlarmBulk:schTasks];
             [mutArr removeObjectAtIndex:indexPath.row];
             [mutArr addObjectsFromArray:schTasks];
             [mutArr sortUsingComparator:^(id obj1, id obj2) {
@@ -443,7 +452,7 @@
         
     };
     
-    [self.navigationController pushViewController:scheduleDetail animated:YES];
+    [self.superController.navigationController pushViewController:scheduleDetail animated:YES];
 
 }
 

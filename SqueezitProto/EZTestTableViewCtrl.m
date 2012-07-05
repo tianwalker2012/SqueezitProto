@@ -8,6 +8,8 @@
 
 #import "EZTestTableViewCtrl.h"
 #import "Constants.h"
+#import "EZPrematureCell.h"
+#import "EZEditLabelCellHolder.h"
 
 @interface EZTestTableViewCtrl ()
 {
@@ -40,6 +42,18 @@
     
 }
 
+- (void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    EZDEBUG(@"viewWillDisappear");
+}
+
+- (void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    EZDEBUG(@"ViewWillAppear");
+}
+
 - (void)viewDidUnload
 {
     [super viewDidUnload];
@@ -64,67 +78,41 @@
     return names.count;
 }
 
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 44;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    EZDEBUG(@"load index:%@", indexPath);
+    static NSString *CellIdentifier = @"Premature";
+    EZPrematureCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if(cell == nil){
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        cell = [EZEditLabelCellHolder createPrematureCell];
+    }else{
+        EZDEBUG(@"Recycled content:%@",cell.upTitle.text);  
     }
     //UIFont* font = [[UIFont alloc] init];
     //cell.textLabel.font = 
     //cell.textLabel.text = [NSString stringWithFormat:@"Row:%i", indexPath.row];
     if(isFamily){
-        cell.textLabel.text = [NSString stringWithFormat:@"%@", [names objectAtIndex:indexPath.row]];
+        cell.upTitle.text = [NSString stringWithFormat:@"%@", [names objectAtIndex:indexPath.row]];
+        cell.downTitle.text = [NSString stringWithFormat:@"%@", [names objectAtIndex:indexPath.row]];
     }else{
-        NSString* fontName = [NSString stringWithFormat:@"%@:曾因酒醉鞭名马", [names objectAtIndex:indexPath.row]];
-        cell.textLabel.text = fontName;
-        cell.detailTextLabel.text = familyName;
-        cell.textLabel.font = [UIFont fontWithName:fontName size:17];
+        NSString* fontName = [NSString stringWithFormat:@"12:34:56%@", [names objectAtIndex:indexPath.row]];
+        
+        cell.downTitle.text = [NSString stringWithFormat:@"%@:开心", familyName];
+        cell.downTitle.font = [UIFont fontWithName:[names objectAtIndex:indexPath.row] size:17];
+        
+        cell.upTitle.text = fontName;
+        cell.upTitle.font = [UIFont fontWithName:[names objectAtIndex:indexPath.row] size:17];
     }
     
     return cell;
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 #pragma mark - Table view delegate
 

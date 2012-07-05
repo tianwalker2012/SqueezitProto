@@ -34,12 +34,12 @@
 
 - (void) indentTextField
 {
-    [editField left:44];
+    editField.left = 44;
 }
 
 - (void) unIndentTextField
 {
-    [editField left:10];
+    editField.left = 10;
 }
 
 - (void)awakeFromNib

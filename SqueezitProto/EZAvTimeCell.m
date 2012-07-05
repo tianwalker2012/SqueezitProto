@@ -9,8 +9,17 @@
 #import "EZAvTimeCell.h"
 #import "EZTaskHelper.h"
 
+@interface EZAvTimeCell()
+{
+    CGFloat startTimeOrgLeft;
+    CGFloat endTimeOrgLeft;
+}
+
+@end
+
 @implementation EZAvTimeCell
 @synthesize name, envLabel, startTime, endTime;
+
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -27,17 +36,49 @@
     // Configure the view for the selected state
 }
 
-- (void) setEditing:(BOOL)editing animated:(BOOL)animated
+- (void)awakeFromNib
 {
-    [super setEditing:editing animated:animated];
+    startTimeOrgLeft = startTime.left;
+    endTimeOrgLeft = endTime.left;
+    EZDEBUG(@"startTimeOrgLeft:%f", startTimeOrgLeft);
+}
+
+- (void) hideTime
+{
+    EZDEBUG(@"hideTime");
+    startTime.alpha = 0;
+    endTime.alpha = 0;
+}
+
+- (void) showTime
+{
+    EZDEBUG(@"showTime");
+    startTime.alpha = 1;
+    endTime.alpha = 1;
+}
+
+- (void)willTransitionToState:(UITableViewCellStateMask)state
+{
+    [super willTransitionToState:state];
+    EZDEBUG(@"Will transitionState called, mask value:%i",state);
+    if(state & UITableViewCellStateShowingDeleteConfirmationMask){
+        [self hideTime];
+    }else{
+        [self showTime];
+    }
+}
+
+- (void) setEditing:(BOOL)et animated:(BOOL)animated
+{
+    [super setEditing:et animated:animated];
     
     EZOperationBlock block = ^(){
-        if(editing){
-            startTime.alpha = 0;
-            endTime.alpha = 0;
+        if(et){
+            startTime.left = startTimeOrgLeft - 10;
+            endTime.left = endTimeOrgLeft - 10;
         }else{
-            startTime.alpha = 1;
-            endTime.alpha = 1;
+            startTime.left = startTimeOrgLeft + 10;
+            endTime.left = endTimeOrgLeft + 10;
         }
     };
     if(animated){
