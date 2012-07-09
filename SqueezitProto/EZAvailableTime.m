@@ -11,7 +11,7 @@
 #import "EZCoreAccessor.h"
 
 @implementation EZAvailableTime
-@synthesize start, duration, envTraits, name, PO;
+@synthesize start, duration, envTraits, name, PO, collide;
 
 - (id) init:(NSDate*)st name:(NSString*)nm duration:(int)dur environment:(NSUInteger)env
 {

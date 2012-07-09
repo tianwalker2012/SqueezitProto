@@ -8,8 +8,16 @@
 
 #import "EZScheduledV2Cell.h"
 
+@interface EZScheduledV2Cell()
+{
+    UIView* nowSign;
+}
+
+@end
+
+
 @implementation EZScheduledV2Cell
-@synthesize taskName, startTime, endTime, alarmTitle, alarmStatus, nowSign;
+@synthesize taskName, startTime, endTime, alarmTitle, alarmStatus;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -20,17 +28,34 @@
     return self;
 }
 
-- (void) setStatus:(EZScheduledStatus)status
+- (void) setStatus:(EZScheduledStatus)status nowSign:(UIView*)cv
 {
     if(status == EZ_NOW){
         taskName.textColor = [UIColor blackColor];
         startTime.alpha = 0;
         endTime.alpha = 0;
+        if(nowSign == nil){
+            nowSign = cv;
+            [self addSubview:nowSign];
+            EZDEBUG(@"Add counter view for current task cell:%@, counterView:%@",self.taskName.text, nowSign);
+        }else{
+            EZDEBUG(@"Current task cell, already have counter view,%@",self.taskName.text);
+        }
     }else if(status == EZ_FUTURE){
+        if(nowSign){
+           [nowSign removeFromSuperview];
+            nowSign = nil;
+            EZDEBUG(@"Remove for future:%@", self.taskName.text);
+        }
         taskName.textColor = [UIColor blackColor];
         startTime.alpha = 1;
         endTime.alpha = 1;
     }else if(status == EZ_PASSED){
+        if(nowSign){
+            [nowSign removeFromSuperview];
+            nowSign = nil;
+            EZDEBUG(@"Remove for passed:%@", self.taskName.text);
+        }
         taskName.textColor = [UIColor grayColor];
         startTime.alpha = 1;
         endTime.alpha = 1;

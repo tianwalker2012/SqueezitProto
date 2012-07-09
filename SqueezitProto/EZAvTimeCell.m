@@ -40,19 +40,19 @@
 {
     startTimeOrgLeft = startTime.left;
     endTimeOrgLeft = endTime.left;
-    EZDEBUG(@"startTimeOrgLeft:%f", startTimeOrgLeft);
+    //EZDEBUG(@"startTimeOrgLeft:%f", startTimeOrgLeft);
 }
 
 - (void) hideTime
 {
-    EZDEBUG(@"hideTime");
+    //EZDEBUG(@"hideTime");
     startTime.alpha = 0;
     endTime.alpha = 0;
 }
 
 - (void) showTime
 {
-    EZDEBUG(@"showTime");
+    //EZDEBUG(@"showTime");
     startTime.alpha = 1;
     endTime.alpha = 1;
 }
@@ -60,7 +60,7 @@
 - (void)willTransitionToState:(UITableViewCellStateMask)state
 {
     [super willTransitionToState:state];
-    EZDEBUG(@"Will transitionState called, mask value:%i",state);
+    //EZDEBUG(@"Will transitionState called, mask value:%i",state);
     if(state & UITableViewCellStateShowingDeleteConfirmationMask){
         [self hideTime];
     }else{

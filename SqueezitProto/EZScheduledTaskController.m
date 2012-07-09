@@ -22,6 +22,10 @@
 #import "EZTimeCounter.h"
 #import "MScheduledTask.h"
 #import "EZScheduledV2Cell.h"
+#import "EZScheduledDay.h"
+#import "EZScheduledLayer.h"
+#import "EZKeyBoardHolder.h"
+#import "EZActivityLayer.h"
 
 @interface EZNumberWrapper : NSObject 
 
@@ -37,6 +41,9 @@
 @interface EZScheduledTaskController () {
     EZTimeCounterView* counterView;
     EZTimeCounter* counter;
+    EZScheduledLayer* noTasklayer;
+    EZActivityLayer* activityLayer;
+    BOOL displayed;
 }
 
 - (EZTimeCounter*) createTimeCounter; 
@@ -47,12 +54,72 @@
 //The influence from Lisp
 - (NSInteger) findOngoingTask:(NSArray*)tks;
 
+- (void) showNoTaskLayout;
+
+- (void) hideNoTaskLayout;
+
+- (void) showActivityLayer;
+
+- (void) hideActivityLayer;
+
 @end
 
 @implementation EZScheduledTaskController
 @synthesize currentDate, scheduledTasks, viewAppearBlock, superController;
 
 
+- (void) showNoTaskLayout
+{
+    __weak EZScheduledTaskController* weakSelf = self;
+    if(!noTasklayer){
+        noTasklayer = [EZKeyBoardHolder createScheduledLayer];
+        noTasklayer.infoLabel.text = Local(@"No Scheduled Tasks");
+        noTasklayer.clickedBlock = ^(){
+            //[weakSelf hideNoTaskLayout];
+            noTasklayer.activityView.alpha = 1;
+            [noTasklayer.activityView startAnimating];
+            EZDEBUG(@"Main threadID:%i",(NSInteger)[NSThread currentThread]);
+            [weakSelf executeBlockInBackground:^(){
+                [weakSelf rescheduleTasks];
+                EZDEBUG(@"Background threadID:%i", (NSInteger)[NSThread currentThread]);
+                [weakSelf executeBlockInMainThread:^(){
+                    [weakSelf.tableView reloadData];
+                    [noTasklayer.activityView stopAnimating];
+                    noTasklayer.activityView.alpha = 0;
+                    [weakSelf hideNoTaskLayout];
+                }];
+            } inThread:nil];
+        };
+    }
+    EZDEBUG(@"about to displayNoTaskLayer:%@", noTasklayer);
+    self.tableView.scrollEnabled = false;
+    [self.tableView addSubview:noTasklayer];
+}
+
+- (void) hideNoTaskLayout
+{
+    self.tableView.scrollEnabled = true;
+    [noTasklayer removeFromSuperview];
+}
+
+- (void) showActivityLayer
+{
+    if(activityLayer == nil){
+        activityLayer = [EZKeyBoardHolder createActivityLayer];
+    }
+    CGRect org = activityLayer.frame;
+    activityLayer.frame = CGRectMake(0, self.tableView.contentOffset.y, org.size.width, org.size.height);
+    self.tableView.scrollEnabled = false;
+    [self.view addSubview:activityLayer];
+    [activityLayer.activityView startAnimating];
+}
+
+- (void) hideActivityLayer
+{
+    self.tableView.scrollEnabled = true;
+    [activityLayer.activityView stopAnimating];
+    [activityLayer removeFromSuperview];
+}
 
 //Just create the counter and the counter view.
 //Set the proper frame for the counterView.
@@ -60,9 +127,9 @@
 - (EZTimeCounter*) createTimeCounter
 {
     EZTimeCounter* tc = [[EZTimeCounter alloc] init];
-    EZTimeCounterView* cView = [EZEditLabelCellHolder createTimeCounterView];
-    cView.frame = CGRectMake(200, 2, cView.frame.size.width, counterView.frame.size.height);
-    tc.counterView = cView;
+    counterView = [EZEditLabelCellHolder createTimeCounterView];
+    counterView.frame = CGRectMake(200, 2, counterView.frame.size.width, counterView.frame.size.height);
+    tc.counterView = counterView;
     return tc;
 }
 
@@ -81,11 +148,29 @@
         viewAppearBlock();
         self.viewAppearBlock = nil;
     }
+    displayed = true;
+    
+}
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    displayed = false;
 }
 
 - (void) reloadScheduledTask:(NSDate *)date
 {
     [self loadWithTask:[[EZTaskStore getInstance]getScheduledTaskByDate:date] date:date];
+    if(scheduledTasks.count == 0){
+        if(displayed){
+            [self showNoTaskLayout];
+        }else{
+            [self performBlock:^(){
+                [self showNoTaskLayout];
+            } withDelay:0.01];
+        }
+    }else{
+        [self hideNoTaskLayout];
+    }
 }
 
 - (void) loadWithTask:(NSArray *)tasks date:(NSDate *)date
@@ -135,12 +220,22 @@
     if([currentDate equalWith:[NSDate date] format:@"yyyyMMdd"]){
         currentDate = [currentDate combineTime:[NSDate date]];
     }
-    
-    scheduledTasks = [scheduler rescheduleAll:scheduledTasks date:currentDate];
-    [[EZTaskStore getInstance] storeObjects:scheduledTasks];
-    [EZAlarmUtility setupAlarmBulk:scheduledTasks];
-    [self.tableView reloadData];
-    
+    [self showActivityLayer];
+    [self executeBlockInBackground:^(){
+        scheduledTasks = [scheduler rescheduleAll:scheduledTasks date:currentDate];
+        [[EZTaskStore getInstance] storeObjects:scheduledTasks];
+        [EZAlarmUtility setupAlarmBulk:scheduledTasks];
+        EZScheduledDay* schDay = [[EZScheduledDay alloc] init];
+        schDay.scheduledDate = currentDate;
+        [[EZTaskStore getInstance] storeObject:schDay];
+        
+        [self executeBlockInMainThread:^(){
+            [self.tableView reloadData];
+            [self hideActivityLayer];
+        }];
+        counter.isCounting = false;
+    } inThread:nil];
+
 }
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -200,6 +295,7 @@
     //    [self presentShakeMessage:@"Shake shake"];
     //}
     //self.navigationItem.title = Local(@"Scheduled");
+    displayed = false;
     counter = [self createTimeCounter];
     counter.isCounting = false;
     __weak EZScheduledTaskController* weakSelf = self;
@@ -215,12 +311,18 @@
             NSDate* endTime = [st.startTime adjustMinutes:st.duration];
             ct.remainTime = endTime.timeIntervalSinceNow;
             ct.isCounting = true;
+            EZDEBUG(@"remainTime:%f, startTime:%@, duration:%i",ct.remainTime,[st.startTime stringWithFormat:@"HH:mm:ss"], st.duration);
             [ct update];
-            [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:counter.ongoingTaskPos inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+            EZScheduledV2Cell* cell = (EZScheduledV2Cell*)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:counter.ongoingTaskPos inSection:0]]; 
+            [cell setStatus:EZ_NOW nowSign:counterView];
+            
         }else{
             //Why do I need this. because the controller will
             //Be shared by different days.
             //When we switch back and forth some issue will show off
+            //Honestly, which cases do I need this?
+            //Comments them out. See what's will happen.
+            /**
             if(ct.counterView.superview == nil){
                 EZDEBUG(@"ct.counterView is removed from super");
                 if(counter.ongoingTaskPos > -1){
@@ -231,15 +333,15 @@
                     [self.tableView reloadRowsAtIndexPaths:arr withRowAnimation:UITableViewRowAnimationFade];
                 }
             }
+             **/
         }
     };
     counter.timeupOps = ^(EZTimeCounter* ct){
-        EZDEBUG(@"TimeCounter timeout");
+        EZDEBUG(@"TimeCounter timeout, threadID:%i",(NSInteger)[NSThread currentThread]);
         ct.isCounting = false;
-        [ct.counterView removeFromSuperview];
-        //The the time message again
         if(counter.ongoingTaskPos > -1){
-            [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:counter.ongoingTaskPos inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+            EZScheduledV2Cell* cell = (EZScheduledV2Cell*)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:counter.ongoingTaskPos inSection:0]];
+            [cell setStatus:EZ_PASSED nowSign:counterView];
         }
     };
     [counter start:1];
@@ -320,6 +422,10 @@
             [[EZTaskStore getInstance] storeObjects:schTasks];
             [EZAlarmUtility setupAlarmBulk:schTasks];
             if(pos > -1){
+                //Why? need to calculate the time again.
+                counter.isCounting = false;
+                
+                
                 NSMutableArray* mutArr = [NSMutableArray arrayWithArray:self.scheduledTasks];
                 [mutArr removeObjectAtIndex:pos];
                 [mutArr addObjectsFromArray:schTasks];
@@ -343,6 +449,12 @@
     EZDEBUG(@"After push detail");
 }
 
+- (void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];    
+    
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     EZDEBUG(@"Get cell for:%@, tableView frame:%@",indexPath, NSStringFromCGRect(self.tableView.frame));
@@ -363,27 +475,14 @@
     NSDate* now = [NSDate date];
     if([now InBetween:task.startTime end:endTime] ){
         EZDEBUG(@"Find current task.");
-        [cell setStatus:EZ_NOW];
-        if(cell.nowSign == nil){
-            EZDEBUG(@"Add the counter now");
-            cell.nowSign = counter.counterView;
-            [cell addSubview:counter.counterView];
-        }
-        //cell.switchButton.enabled = false;
+        [cell setStatus:EZ_NOW nowSign:counterView];
+        
     }else if([task.startTime isPassed:now]) { //Passed task
-        [cell setStatus:EZ_PASSED];
-        if(cell.nowSign){
-            [cell.nowSign removeFromSuperview];
-            cell.nowSign = nil;
-        }
+        [cell setStatus:EZ_PASSED nowSign:counterView];
         //cell.switchButton.enabled = false;
     } else {
         //cell.textLabel.textColor = FutureTaskColor;
-        [cell setStatus:EZ_FUTURE];
-        if(cell.nowSign){
-            [cell.nowSign removeFromSuperview];
-            cell.nowSign = nil;
-        }
+        [cell setStatus:EZ_FUTURE nowSign:counterView];
     }
     cell.startTime.text = [task.startTime stringWithFormat:@"MMM-dd HH:mm"];
     cell.endTime.text = [endTime stringWithFormat:@"HH:mm"];
@@ -405,7 +504,7 @@
 #pragma mark - Table view delegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 66;
+    return 61;
 }
 
 

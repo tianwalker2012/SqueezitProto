@@ -97,7 +97,7 @@
 							<object class="IBUILabel" id="663181210">
 								<reference key="NSNextResponder" ref="886033276"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{185, 9}, {86, 21}}</string>
+								<string key="NSFrame">{{182, 9}, {86, 21}}</string>
 								<reference key="NSSuperview" ref="886033276"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="61725649"/>
@@ -129,7 +129,7 @@
 							<object class="IBUILabel" id="341171363">
 								<reference key="NSNextResponder" ref="886033276"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{185, 38}, {86, 21}}</string>
+								<string key="NSFrame">{{182, 38}, {86, 21}}</string>
 								<reference key="NSSuperview" ref="886033276"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView"/>
@@ -466,6 +466,7 @@
 						<string key="editCell">EZEditLabelCell</string>
 						<string key="flagCell">EZEnvFlagPickerCell</string>
 						<string key="groupCell">EZTaskGroupCell</string>
+						<string key="prematureCell">EZPrematureCell</string>
 						<string key="pureEditCell">EZPureEditCell</string>
 						<string key="scheduleV2Cell">EZScheduledV2Cell</string>
 						<string key="scheduledCell">EZScheduledCell</string>
@@ -502,6 +503,10 @@
 						<object class="IBToOneOutletInfo" key="groupCell">
 							<string key="name">groupCell</string>
 							<string key="candidateClassName">EZTaskGroupCell</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="prematureCell">
+							<string key="name">prematureCell</string>
+							<string key="candidateClassName">EZPrematureCell</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="pureEditCell">
 							<string key="name">pureEditCell</string>
@@ -568,6 +573,28 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/EZEnvFlagPickerCell.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">EZPrematureCell</string>
+					<string key="superclassName">UITableViewCell</string>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="downTitle">UILabel</string>
+						<string key="upTitle">UILabel</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="downTitle">
+							<string key="name">downTitle</string>
+							<string key="candidateClassName">UILabel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="upTitle">
+							<string key="name">upTitle</string>
+							<string key="candidateClassName">UILabel</string>
+						</object>
+					</dictionary>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/EZPrematureCell.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

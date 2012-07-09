@@ -44,6 +44,15 @@
 
 - (void) pickerChanged:(UIDatePicker*)picker;
 
+//Assume the time have already sorted.
+//Whether it sorted or not, doesn't matter
+//I will mark all collided out.
+//The complexity is n^2
+- (void) markCollision:(NSArray*)collision;
+
+//Show the information that some time period was collide with each other
+- (void) decorateCollideCell:(EZAvTimeCell*)cell avTime:(EZAvailableTime*)avTime;
+
 @end
 
 @implementation EZAvailableDayDetail
@@ -104,15 +113,27 @@
     if(avDay.date){
         assignDate = avDay.date;
     }else{
+        //Why? used as initial value for the datepicker
         assignDate = [[NSDate date] adjustDays:2];
     }
     currentAssignWeeks = avDay.assignedWeeks;
     [avDay.availableTimes sortUsingComparator:^(EZAvailableTime* time1, EZAvailableTime* time2){
         return [time1.start compareTime:time2.start];
-    }
-     ];
+    }];
+    [self executeBlockInBackground:^(){
+        [self markCollision:avDay.availableTimes];
+        [self executeBlockInMainThread:^(){
+            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+        }];
+    } inThread:nil];
+
 }
 
+- (void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    EZDEBUG(@"viewDidAppear");
+}
 
 //The add button on the header get clicked
 - (IBAction) addButtonClicked:(id)sender
@@ -124,12 +145,17 @@
     //avTimeDetail.avTime = avTime.cloneVO;
     avTimeDetail.avTime = avTime;
     avTimeDetail.doneBlock = ^(){
+        [self executeBlockInBackground:^(){
         [avDay.availableTimes addObject:avTimeDetail.avTime];
         [avDay.availableTimes sortUsingComparator:^NSComparisonResult(EZAvailableTime* obj1, EZAvailableTime* obj2) {
             return [obj1.start compareTime:obj2.start];
         }];
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+        [self markCollision:avDay.availableTimes];
         [[EZTaskStore getInstance] storeObject:avDay];
+        [self executeBlockInMainThread:^(){
+                [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+        }];
+        } inThread:nil];
     };
     avTimeDetail.cancelBlock = ^(){
         EZDEBUG(@"Cancel get callled");
@@ -242,6 +268,7 @@
         timeCell.startTime.text = [avTime.start stringWithFormat:@"HH:mm"];
         timeCell.endTime.text = [[avTime.start adjustMinutes:avTime.duration] stringWithFormat:@"HH:mm"];
         timeCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        [self decorateCollideCell:timeCell avTime:avTime];
         return timeCell;
     }
 }
@@ -288,6 +315,37 @@
 }
 
 
+//
+- (void) markCollision:(NSArray *)times
+{
+    //Clean the collide data
+    [times iterate:^(EZAvailableTime* tm){
+        tm.collide = false;
+    }];
+    EZDEBUG(@"End clean");
+    [times iterate:^(EZAvailableTime* avTime){
+        [times iterate:^(EZAvailableTime* avTime2){
+            if(avTime != avTime2){
+                NSDate* now = [NSDate date];
+                NSDate* begin1 = [now combineTime:avTime.start];
+                NSDate* end1 = [begin1 adjustMinutes:avTime.duration];
+                
+                NSDate* begin2 = [now combineTime:avTime2.start];
+                NSDate* end2 = [begin2 adjustMinutes:avTime2.duration];
+                if([begin2 InBetween:begin1 end:end1]){
+                    //EZDEBUG(@"Collision detected: ")
+                    avTime.collide = true;
+                    avTime2.collide = true;
+                }else if([begin1 InBetween:begin2 end:end2]){
+                    avTime.collide = true;
+                    avTime2.collide = true;
+                }
+                
+            }
+        }];
+    }];
+}
+
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -311,13 +369,20 @@
         EZAvailableTime* avTime = [avDay.availableTimes objectAtIndex:indexPath.row];
         avTimeDetail.avTime = avTime.cloneVO;
         
+        //For the sake of fluid experience
         avTimeDetail.doneBlock = ^(){
-            [avDay.availableTimes replaceObjectAtIndex:indexPath.row withObject:avTimeDetail.avTime];
-            [avDay.availableTimes sortUsingComparator:^NSComparisonResult(EZAvailableTime* obj1, EZAvailableTime* obj2) {
-                return [obj1.start compareTime:obj2.start];
-            }];
-            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
-            [[EZTaskStore getInstance] storeObject:avTimeDetail.avTime];
+            [self executeBlockInBackground:^(){
+                [avDay.availableTimes replaceObjectAtIndex:indexPath.row withObject:avTimeDetail.avTime];
+                [avDay.availableTimes sortUsingComparator:^NSComparisonResult(EZAvailableTime* obj1, EZAvailableTime* obj2) {
+                    return [obj1.start compareTime:obj2.start];
+                }];
+                [self markCollision:avDay.availableTimes];
+                [[EZTaskStore getInstance] storeObject:avTimeDetail.avTime];
+                [self executeBlockInMainThread:^(){
+                    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+                }];
+             } inThread:nil];
+            
         };
         avTimeDetail.cancelBlock = ^(){
             EZDEBUG(@"Cancel get callled");
@@ -490,5 +555,15 @@
     return true;
 }
 
+- (void) decorateCollideCell:(EZAvTimeCell*)cell avTime:(EZAvailableTime*)avTime
+{
+    if(avTime.collide){
+        cell.startTime.textColor = [UIColor redColor];
+        cell.endTime.textColor = [UIColor redColor];
+    }else{
+        cell.startTime.textColor = [UIColor createByHex:EZEditColor];
+        cell.endTime.textColor = [UIColor createByHex:EZEditColor];
+    }
+}
 
 @end

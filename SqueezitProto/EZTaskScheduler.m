@@ -279,6 +279,9 @@
         EZDEBUG(@"Didn't find schedule for %@",[date stringWithFormat:@"yyyy-MM-dd"]);
         return res;
     }
+    for(EZAvailableTime* time in day.availableTimes){
+        EZDEBUG(@"AvailableTime:%@, flag:%i, startTime:%@, duration:%i",time.name, time.envTraits,[time.start stringWithFormat:@"HH:mm"], time.duration);
+    }
     NSArray* tasks = store.getAllTasks;
     EZQuotasResult* qres = [self scheduleQuotasTask:tasks date:date avDay:day];
     NSMutableArray* exclusiveMut = [NSMutableArray arrayWithArray:exclusive];

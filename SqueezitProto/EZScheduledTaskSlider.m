@@ -15,6 +15,8 @@
 #import "EZGlobalLocalize.h"
 #import "EZScheduledTask.h"
 #import "EZTaskScheduler.h"
+#import "EZKeyBoardHolder.h"
+#import "EZPageControl.h"
 
 @interface EZScheduledTaskSlider ()
 {
@@ -25,7 +27,7 @@
     NSMutableArray* cachedControllers;
     NSInteger todayPage;
     BOOL initialized;
-    UIPageControl* pageControl;
+    EZPageControl* pageControl;
 }
 
 //Get the related date for this page
@@ -96,9 +98,19 @@
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    pageControl.frame = CGRectMake(0, self.view.frame.size.height - 10, 320, 10);
-    pageControl.backgroundColor = [UIColor blackColor];
+    CGRect frame = pageControl.frame;
+    pageControl.frame = CGRectMake((self.view.frame.size.width - frame.size.width)/2, self.view.frame.size.height - 10, frame.size.width, frame.size.height);
+    EZDEBUG(@"view frame:%@, pagecontrol frame:%@",NSStringFromCGRect(self.view.frame), NSStringFromCGRect(pageControl.frame));
+    //pageControl.backgroundColor = [UIColor blackColor];
     [self.view addSubview:pageControl];
+    [pageControl setInitialCurrentPage:todayPage];
+    UIView* parentView = [[UIView alloc] initWithFrame:CGRectMake((self.view.frame.size.width -100)/2, 44, 100, 44)];
+    parentView.backgroundColor = [UIColor grayColor];
+    UIView* childView = [[UIView alloc] initWithFrame:CGRectMake(-50, 0, 100, 44)];
+    childView.backgroundColor = [UIColor blueColor];
+    [parentView addSubview:childView];
+    parentView.clipsToBounds = true;
+    [self.view addSubview:parentView];
     
 }
 
@@ -122,9 +134,9 @@
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:Local(@"Today") style:UIBarButtonItemStyleBordered target:self action:@selector(scroll2Today)];
     self.navigationItem.leftBarButtonItem.enabled = false;
-    pageControl = [[UIPageControl alloc] init];
-    pageControl.numberOfPages = scheduledDates.count;
-    pageControl.currentPage = todayPage;
+    pageControl = [[EZPageControl alloc] initWithFrame:CGRectMake(0, 0, 160, 10)];
+    //pageControl.numberOfPages = scheduledDates.count;
+    
 }
 
 - (NSInteger) dateToPage:(NSDate *)date
@@ -303,7 +315,7 @@
     EZScheduledDay* schDay = [[EZScheduledDay alloc] init];
     schDay.scheduledDate = [lastDate adjustDays:1];
     [scheduledDates addObject:schDay];
-    pageControl.numberOfPages = scheduledDates.count;
+    //pageControl.numberOfPages = scheduledDates.count;
     return nextP;
 }
 

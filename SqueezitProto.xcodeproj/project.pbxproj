@@ -106,8 +106,16 @@
 		188D553C158870F300142394 /* EZPickerKeyboardDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D553B158870F300142394 /* EZPickerKeyboardDate.m */; };
 		188D553E1588908100142394 /* EZScheduledCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 188D553D1588908000142394 /* EZScheduledCell.xib */; };
 		188D55411588920900142394 /* EZScheduledCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D55401588920800142394 /* EZScheduledCell.m */; };
+		18A0F0E215A81D2900671E53 /* EZCycleDraw.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A0F0E115A81D2900671E53 /* EZCycleDraw.m */; };
+		18A0F0F515A98DAA00671E53 /* EZCanvas.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A0F0F415A98DAA00671E53 /* EZCanvas.m */; };
 		18BDFC7D15A3FC8200F7ACE3 /* PrematureCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18BDFC7C15A3FC8200F7ACE3 /* PrematureCell.xib */; };
 		18BDFC8115A3FCE400F7ACE3 /* EZPrematureCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BDFC8015A3FCE400F7ACE3 /* EZPrematureCell.m */; };
+		18BDFC8815A5B88B00F7ACE3 /* EZScheduledLayer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18BDFC8715A5B88B00F7ACE3 /* EZScheduledLayer.xib */; };
+		18BDFC8C15A5BA3000F7ACE3 /* EZScheduledLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BDFC8B15A5BA2F00F7ACE3 /* EZScheduledLayer.m */; };
+		18BDFC9815A69BD700F7ACE3 /* EZActivityLayer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18BDFC9715A69BD600F7ACE3 /* EZActivityLayer.xib */; };
+		18BDFC9B15A69C7B00F7ACE3 /* EZActivityLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BDFC9A15A69C7B00F7ACE3 /* EZActivityLayer.m */; };
+		18BDFC9F15A6D16700F7ACE3 /* EZPageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BDFC9E15A6D16700F7ACE3 /* EZPageControl.m */; };
+		18BDFCA115A6D90400F7ACE3 /* EZPageControl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18BDFCA015A6D90400F7ACE3 /* EZPageControl.xib */; };
 		18D47CB41589EBA6009B0012 /* EZScheduledDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D47CB31589EBA6009B0012 /* EZScheduledDetail.m */; };
 		18E035D415808A16003B3D3E /* EZTaskGroupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E035D315808A16003B3D3E /* EZTaskGroupCell.m */; };
 		18E035D615808BB4003B3D3E /* EZTaskGroupCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18E035D515808BB4003B3D3E /* EZTaskGroupCell.xib */; };
@@ -299,9 +307,22 @@
 		188D553D1588908000142394 /* EZScheduledCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZScheduledCell.xib; sourceTree = "<group>"; };
 		188D553F1588920700142394 /* EZScheduledCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZScheduledCell.h; sourceTree = "<group>"; };
 		188D55401588920800142394 /* EZScheduledCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZScheduledCell.m; sourceTree = "<group>"; };
+		18A0F0E015A81D2900671E53 /* EZCycleDraw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZCycleDraw.h; sourceTree = "<group>"; };
+		18A0F0E115A81D2900671E53 /* EZCycleDraw.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZCycleDraw.m; sourceTree = "<group>"; };
+		18A0F0F315A98DAA00671E53 /* EZCanvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZCanvas.h; sourceTree = "<group>"; };
+		18A0F0F415A98DAA00671E53 /* EZCanvas.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZCanvas.m; sourceTree = "<group>"; };
 		18BDFC7C15A3FC8200F7ACE3 /* PrematureCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PrematureCell.xib; sourceTree = "<group>"; };
 		18BDFC7F15A3FCE400F7ACE3 /* EZPrematureCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZPrematureCell.h; sourceTree = "<group>"; };
 		18BDFC8015A3FCE400F7ACE3 /* EZPrematureCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZPrematureCell.m; sourceTree = "<group>"; };
+		18BDFC8715A5B88B00F7ACE3 /* EZScheduledLayer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZScheduledLayer.xib; sourceTree = "<group>"; };
+		18BDFC8A15A5BA2F00F7ACE3 /* EZScheduledLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZScheduledLayer.h; sourceTree = "<group>"; };
+		18BDFC8B15A5BA2F00F7ACE3 /* EZScheduledLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZScheduledLayer.m; sourceTree = "<group>"; };
+		18BDFC9715A69BD600F7ACE3 /* EZActivityLayer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZActivityLayer.xib; sourceTree = "<group>"; };
+		18BDFC9915A69C7A00F7ACE3 /* EZActivityLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZActivityLayer.h; sourceTree = "<group>"; };
+		18BDFC9A15A69C7B00F7ACE3 /* EZActivityLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZActivityLayer.m; sourceTree = "<group>"; };
+		18BDFC9D15A6D16700F7ACE3 /* EZPageControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZPageControl.h; sourceTree = "<group>"; };
+		18BDFC9E15A6D16700F7ACE3 /* EZPageControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZPageControl.m; sourceTree = "<group>"; };
+		18BDFCA015A6D90400F7ACE3 /* EZPageControl.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZPageControl.xib; sourceTree = "<group>"; };
 		18D47CB21589EBA6009B0012 /* EZScheduledDetail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZScheduledDetail.h; sourceTree = "<group>"; };
 		18D47CB31589EBA6009B0012 /* EZScheduledDetail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZScheduledDetail.m; sourceTree = "<group>"; };
 		18E035D215808A16003B3D3E /* EZTaskGroupCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTaskGroupCell.h; sourceTree = "<group>"; };
@@ -368,6 +389,7 @@
 		184C295F1569E19900852B35 /* SqueezitProto */ = {
 			isa = PBXGroup;
 			children = (
+				18BDFC9C15A6D10800F7ACE3 /* Home Made Control */,
 				18E035E4158350F4003B3D3E /* Customize popup */,
 				184C2B0D157E4D6F00852B35 /* Resources */,
 				184C2B06157DE09600852B35 /* Customized Cells */,
@@ -557,8 +579,6 @@
 			children = (
 				184C2990156B36D200852B35 /* EZTestSuite.m */,
 				184C298F156B36D100852B35 /* EZTestSuite.h */,
-				188CFDEB1595D93D008ACCB8 /* EZSlideViewContainer.h */,
-				188CFDEC1595D93D008ACCB8 /* EZSlideViewContainer.m */,
 				188CFDEE1595F438008ACCB8 /* EZSlideViewTester.h */,
 				188CFDEF1595F438008ACCB8 /* EZSlideViewTester.m */,
 				188CFDF11596C30B008ACCB8 /* EZViewLayoutTester.h */,
@@ -569,6 +589,8 @@
 				188CFDFE15980D3A008ACCB8 /* EZViewWrapper.m */,
 				188CFE0615999BD5008ACCB8 /* EZTestTableViewCtrl.h */,
 				188CFE0715999BD8008ACCB8 /* EZTestTableViewCtrl.m */,
+				18A0F0F315A98DAA00671E53 /* EZCanvas.h */,
+				18A0F0F415A98DAA00671E53 /* EZCanvas.m */,
 			);
 			name = TestCases;
 			sourceTree = "<group>";
@@ -643,6 +665,20 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		18BDFC9C15A6D10800F7ACE3 /* Home Made Control */ = {
+			isa = PBXGroup;
+			children = (
+				188CFDEB1595D93D008ACCB8 /* EZSlideViewContainer.h */,
+				188CFDEC1595D93D008ACCB8 /* EZSlideViewContainer.m */,
+				18BDFC9D15A6D16700F7ACE3 /* EZPageControl.h */,
+				18BDFC9E15A6D16700F7ACE3 /* EZPageControl.m */,
+				18BDFCA015A6D90400F7ACE3 /* EZPageControl.xib */,
+				18A0F0E015A81D2900671E53 /* EZCycleDraw.h */,
+				18A0F0E115A81D2900671E53 /* EZCycleDraw.m */,
+			);
+			name = "Home Made Control";
+			sourceTree = "<group>";
+		};
 		18E035E4158350F4003B3D3E /* Customize popup */ = {
 			isa = PBXGroup;
 			children = (
@@ -654,6 +690,12 @@
 				188D55381588702C00142394 /* PickerKeyboardDate.xib */,
 				188D553A158870F300142394 /* EZPickerKeyboardDate.h */,
 				188D553B158870F300142394 /* EZPickerKeyboardDate.m */,
+				18BDFC8715A5B88B00F7ACE3 /* EZScheduledLayer.xib */,
+				18BDFC8A15A5BA2F00F7ACE3 /* EZScheduledLayer.h */,
+				18BDFC8B15A5BA2F00F7ACE3 /* EZScheduledLayer.m */,
+				18BDFC9715A69BD600F7ACE3 /* EZActivityLayer.xib */,
+				18BDFC9915A69C7A00F7ACE3 /* EZActivityLayer.h */,
+				18BDFC9A15A69C7B00F7ACE3 /* EZActivityLayer.m */,
 			);
 			name = "Customize popup";
 			sourceTree = "<group>";
@@ -740,6 +782,9 @@
 				188CFDE21592D9BF008ACCB8 /* EZButtonCell.xib in Resources */,
 				188CFDE71595BD6A008ACCB8 /* EZScheduledV2Cell.xib in Resources */,
 				18BDFC7D15A3FC8200F7ACE3 /* PrematureCell.xib in Resources */,
+				18BDFC8815A5B88B00F7ACE3 /* EZScheduledLayer.xib in Resources */,
+				18BDFC9815A69BD700F7ACE3 /* EZActivityLayer.xib in Resources */,
+				18BDFCA115A6D90400F7ACE3 /* EZPageControl.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -833,6 +878,11 @@
 				188CFE0F159C0530008ACCB8 /* EZConfigureCtrl.m in Sources */,
 				188CFE12159C12B0008ACCB8 /* EZEnvTagCtrl.m in Sources */,
 				18BDFC8115A3FCE400F7ACE3 /* EZPrematureCell.m in Sources */,
+				18BDFC8C15A5BA3000F7ACE3 /* EZScheduledLayer.m in Sources */,
+				18BDFC9B15A69C7B00F7ACE3 /* EZActivityLayer.m in Sources */,
+				18BDFC9F15A6D16700F7ACE3 /* EZPageControl.m in Sources */,
+				18A0F0E215A81D2900671E53 /* EZCycleDraw.m in Sources */,
+				18A0F0F515A98DAA00671E53 /* EZCanvas.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

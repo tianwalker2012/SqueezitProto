@@ -11,6 +11,12 @@
 #import "EZViewWrapper.h"
 #import "EZViewLayoutTester.h"
 #import "EZTestTableViewCtrl.h"
+#import "EZScheduledTask.h"
+#import "EZTaskScheduler.h"
+#import "EZTaskStore.h"
+#import "EZScheduledTaskController.h"
+#import "EZAlarmUtility.h"
+#import "Constants.h"
 
 @interface EZSlideViewWrapper () {
     //NSMutableDictionary* currentViews;
@@ -53,6 +59,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    //self.wantsFullScreenLayout = true;
+    
+    [self performBlock:^(){
+    UIPageControl* pc = [[UIPageControl alloc] initWithFrame:CGRectMake(0,0, 320, 10)];
+    pc.backgroundColor = [UIColor grayColor];
+    pc.numberOfPages = 20;
+    pc.currentPage = 0;
+    [self.view addSubview:pc];
+    } withDelay:0.1];
 	// Do any additional setup after loading the view.
 }
 
@@ -79,6 +94,41 @@
     EZDEBUG(@"Page count get called");
     return curPageCount;
 }
+
+/**
+- (EZViewWrapper*) container:(EZSlideViewContainer*)container viewForPage:(NSInteger)page
+{
+    EZDEBUG(@"viewForPage %i",page);
+    NSString* identifier = @"TaskController";
+    EZViewWrapper* res = [self dequeueWithIdentifier:identifier];
+    if(res == nil){
+        EZScheduledTaskController* stc = [[EZScheduledTaskController alloc] initWithStyle:UITableViewStylePlain];
+        
+        stc.currentDate = [NSDate date];
+        NSArray* schTasks = [[EZTaskStore getInstance]getScheduledTaskByDate:stc.currentDate];
+        if(schTasks.count == 0){
+            schTasks = [[[EZTaskScheduler alloc]init] scheduleTaskByDate:stc.currentDate exclusiveList:nil];
+            [[EZTaskStore getInstance] storeObjects:schTasks];
+            [EZAlarmUtility setupAlarmBulk:schTasks];
+        }
+        
+        [stc.tableView setFrame:CGRectMake(0, 0, 320, 367)];
+        EZDEBUG(@"Content offset:%@, contentSize:%@", NSStringFromCGPoint( stc.tableView.contentOffset), NSStringFromCGSize(stc.tableView.contentSize));
+        res = [[EZViewWrapper alloc] initWithView:stc.view identifier:identifier];
+        res.controller = stc;
+        stc.superController = self;
+        //stc.navigationItem = self.navigationItem;
+        
+    }
+    EZScheduledTaskController* taskController = (EZScheduledTaskController*)res.controller;
+    
+    //taskController.currentDate = [self pageToDate:page];
+    [taskController reloadScheduledTask:[NSDate date]];
+    return res;
+    
+}
+**/
+
 - (EZViewWrapper*) container:(EZSlideViewContainer*)container viewForPage:(NSInteger)page;
 {
     EZDEBUG(@"viewForPage get called:%i", page);
@@ -95,10 +145,6 @@
         [layoutTester.view setFrame:CGRectMake(0, 0, 320, 367)];
         UIView* vw = layoutTester.view;
         vw.backgroundColor = [UIColor colorWithRed:0.1*page green:0.1*page blue:0.1*page alpha:1];
-        UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
-        label.textAlignment = UITextAlignmentCenter;
-        label.textColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:1];
-        label.tag = labelTag;
         //[vw addSubview:label];
 
         res = [[EZViewWrapper alloc] initWithView:vw identifier:testID];
@@ -109,6 +155,7 @@
     label.text = [NSString stringWithFormat:@"Page:%i", page];
     return res;
 }
+
 //Why not tell view?
 - (void) container:(EZSlideViewContainer*)container pageDisplayed:(NSInteger)page
 {

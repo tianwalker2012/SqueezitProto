@@ -16,4 +16,7 @@
 @property (strong, nonatomic) IBOutlet UILabel* beginTime;
 @property (strong, nonatomic) IBOutlet UILabel* endTime;
 
+- (void) setHaveAccessor:(BOOL)haveAccessor;
+
+
 @end

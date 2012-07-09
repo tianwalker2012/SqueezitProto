@@ -10,6 +10,8 @@
 #import "Constants.h"
 #import "EZPrematureCell.h"
 #import "EZEditLabelCellHolder.h"
+#import "EZCanvas.h"
+#import "EZTaskHelper.h"
 
 @interface EZTestTableViewCtrl ()
 {
@@ -40,6 +42,11 @@
         names = [UIFont fontNamesForFamilyName:familyName];
     }
     
+    EZCanvas* ec = [[EZCanvas alloc] initWithFrame:CGRectMake(0, 0, 100, 200)];
+    [self performBlock:^(){
+        [self.view addSubview:ec];
+    } withDelay:0.1];
+    
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -51,6 +58,8 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    
     EZDEBUG(@"ViewWillAppear");
 }
 
@@ -80,7 +89,7 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 44;
+    return 66;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -92,7 +101,7 @@
     if(cell == nil){
         cell = [EZEditLabelCellHolder createPrematureCell];
     }else{
-        EZDEBUG(@"Recycled content:%@",cell.upTitle.text);  
+        EZDEBUG(@"Recycled content:%@, for:%@",cell.upTitle.text,[names objectAtIndex:indexPath.row]);  
     }
     //UIFont* font = [[UIFont alloc] init];
     //cell.textLabel.font = 

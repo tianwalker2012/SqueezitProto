@@ -13,6 +13,36 @@
 #import "EZGlobalLocalize.h"
 #import "EZArray.h"
 
+
+@interface BlockCarrier : NSObject
+
+- (id) initWithBlock:(EZOperationBlock)bk;
+
+@property (strong, nonatomic) EZOperationBlock block;
+
+- (void) runBlock;
+
+@end
+
+@implementation BlockCarrier
+@synthesize block;
+
+- (id) initWithBlock:(EZOperationBlock)bk
+{
+    self = [super init];
+    block = bk;
+    return self;
+}
+
+- (void) runBlock
+{
+    if(block){
+        block();
+    }
+}
+
+@end
+
 NSString* doubleString(NSString* str)
 {
     return [NSString stringWithFormat:@"%@%@", str, str];
@@ -47,6 +77,23 @@ NSString* doubleString(NSString* str)
     }
 }
 
+//If Most of the time it is ok
+- (void) executeBlockInBackground:(EZOperationBlock)block inThread:(NSThread *)thread
+{
+    //[EZTaskHelper executeBlockInBG:block];
+    BlockCarrier* bc = [[BlockCarrier alloc] initWithBlock:block];
+    if(thread == nil){
+        [bc performSelectorInBackground:@selector(runBlock) withObject:nil];
+    }else{
+        [bc performSelector:@selector(runBlock) onThread:thread withObject:nil waitUntilDone:NO];
+    }
+}
+
+- (void) executeBlockInMainThread:(EZOperationBlock)block
+{
+    [EZTaskHelper executeBlockInMain:block];
+}
+
 @end
 
 
@@ -54,7 +101,7 @@ NSString* doubleString(NSString* str)
 
 - (void) setLeft:(CGFloat)distance
 {
-    EZDEBUG(@"Set left get called");
+    //EZDEBUG(@"Set left get called");
     CGRect changed = self.frame;
     changed.origin.x = distance;
     [self setFrame:changed];
@@ -62,7 +109,7 @@ NSString* doubleString(NSString* str)
 
 - (CGFloat) left
 {
-    EZDEBUG(@"Return left get called");
+    //EZDEBUG(@"Return left get called");
     return self.frame.origin.x;
 }
 
@@ -186,18 +233,18 @@ NSString* doubleString(NSString* str)
 - (NSArray*) filter:(FilterOperation)opts
 {
     NSMutableArray* res = [[NSMutableArray alloc] initWithCapacity:self.count];
-    for(id obj in self){
+    [self iterate:^(id obj){
         if(opts(obj)){
             [res addObject:obj];
         }
-    }
+    }];
     return res;
 }
 
 - (void) iterate:(IterateOperation) opts
 {
-    for(id obj in self){
-        opts(obj);
+    for(int i = 0; i < self.count; i++){
+        opts([self objectAtIndex:i]);
     }
 }
 
@@ -254,12 +301,14 @@ NSString* doubleString(NSString* str)
 
 //Combine the date with the time. 
 //I love this, relentlessly refractor.
+//Since I only need minutes precision,
+//So I will only combine minutes
 - (NSDate*) combineTime:(NSDate*)time
 {
     NSString* dateStr = [self stringWithFormat:@"yyyy-MM-dd"];
-    NSString* timeStr = [time stringWithFormat:@"HH:mm:ss"];
+    NSString* timeStr = [time stringWithFormat:@"HH:mm"];
     NSString* combineStr = [NSString stringWithFormat:@"%@ %@",dateStr,timeStr];
-    return [NSDate stringToDate:@"yyyy-MM-dd HH:mm:ss" dateString:combineStr];
+    return [NSDate stringToDate:@"yyyy-MM-dd HH:mm" dateString:combineStr];
 }
 
 - (NSDate*) adjustMinutes:(int)minutes
@@ -396,6 +445,48 @@ NSString* doubleString(NSString* str)
     return res;
 }
 
++ (void) innerTaskLoop:(id)__unused object
+{
+    do{
+        @autoreleasepool{
+            [[NSRunLoop currentRunLoop] run];
+        }
+    }while(YES);
+}
+
++ (NSThread*) getBackgroundThread
+{
+    static NSThread* res;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        res = [[NSThread alloc] initWithTarget:self selector:@selector(innerTaskLoop:) object:nil];
+        [res start];
+    });
+    return res;
+}
+
+//This will be executed in the natural background.
+//I am afraid, if long time task executed in this will block many things
+//Relay on this background.
+//Don't necessary.
+//Change directly NSObject.
+//+ (void) executeBlockInBackground:(EZOperationBlock)block
+//{
+//    BlockCarrier* bc = [[BlockCarrier alloc] initWithBlock:block];
+//    [bc performSelectorInBackground:@selector(runBlock) withObject:nil];
+//}
+
++ (void) executeBlockInBG:(EZOperationBlock)block
+{
+    BlockCarrier* bc = [[BlockCarrier alloc] initWithBlock:block];
+    [bc performSelector:@selector(runBlock) onThread:[EZTaskHelper getBackgroundThread] withObject:nil waitUntilDone:NO];
+}
+
++ (void) executeBlockInMain:(EZOperationBlock)block
+{
+    BlockCarrier* bc = [[BlockCarrier alloc] initWithBlock:block];
+    [bc performSelectorOnMainThread:@selector(runBlock) withObject:nil waitUntilDone:NO];
+}
 
 //Calculate how many days still left for in current cycle
 + (int) cycleRemains:(EZQuotas*)quotas date:(NSDate*)date

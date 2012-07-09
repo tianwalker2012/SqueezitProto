@@ -41,6 +41,9 @@
 @property (strong, nonatomic) NSString* name;
 @property (strong, nonatomic) MAvailableTime* PO;
 
+//This field will not persist into the database
+@property (assign, nonatomic) BOOL collide;
+
 - (id) initWithPO:(MAvailableTime*)mtk;
 
 - (MAvailableTime*) createPO;

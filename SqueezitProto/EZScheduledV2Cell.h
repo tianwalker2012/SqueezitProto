@@ -17,13 +17,13 @@
 @property (strong, nonatomic) IBOutlet UILabel* alarmTitle;
 @property (strong, nonatomic) IBOutlet UILabel* alarmStatus;
 
-@property (strong, nonatomic) UIView* nowSign;
+//@property (strong, nonatomic) UIView* nowSign;
 
 //The status will have now, passed, future
 //The cell will change it's appearance accordingly.
 //For example
 //IF passed: I will turn the task name into gray
 //IF now: I will hide the start time and end time.
-- (void) setStatus:(EZScheduledStatus)status;
+- (void) setStatus:(EZScheduledStatus)status  nowSign:(UIView*)cv;
 
 @end

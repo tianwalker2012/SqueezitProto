@@ -93,6 +93,7 @@
             
             timeCell.beginTime.text =  [schTask.startTime stringWithFormat:@"HH:mm"];
             timeCell.endTime.text = [[schTask.startTime adjustMinutes:schTask.duration] stringWithFormat:@"HH:mm"];
+            [timeCell setHaveAccessor:NO];
                                     
             cell = timeCell;
         }

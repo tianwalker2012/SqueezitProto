@@ -94,6 +94,10 @@ typedef void  (^ IterateOperation)(id obj);
 
 - (void) executeBlock:(EZOperationBlock)block;
 
+- (void) executeBlockInBackground:(EZOperationBlock)block inThread:(NSThread*)thread;
+
+- (void) executeBlockInMainThread:(EZOperationBlock)block;
+
 @end
 
 @interface NSDate(EZPrivate) 
@@ -170,6 +174,14 @@ NSUInteger findPrimeAfter(NSUInteger primed);
 
 + (NSString*) weekFlagToWeekString:(NSInteger)weekFlags;
 
++ (NSThread*) getBackgroundThread;
+
+//This will be executed in the natural background.
+//+ (void) executeBlockInBackground:(EZOperationBlock)block;
+
++ (void) executeBlockInBG:(EZOperationBlock)block;
+
++ (void) executeBlockInMain:(EZOperationBlock)block;
 //+ (NSString*) envTraitsToString:(NSInteger)envTraits;
 
 @end

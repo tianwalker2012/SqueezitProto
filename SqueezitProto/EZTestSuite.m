@@ -269,6 +269,8 @@ typedef int(^ClosureTest)();
 //Used to clean the notification, make a clean room for myself.
 + (void) cleanAllLocalNotification;
 
++ (void) testPageControllerSize;
+
 
 
 @end
@@ -288,6 +290,7 @@ typedef int(^ClosureTest)();
     [EZTestSuite testArrayExchange];
     [EZTestSuite testAvDayCascadeStore];
     [EZTestSuite testTaskGroupCascade];
+    [EZTestSuite testPageControllerSize];
     //[EZTestSuite cleanOrphanTask];
     [EZCoreAccessor setInstance:nil];
     
@@ -356,6 +359,18 @@ typedef int(^ClosureTest)();
     
 }
 
++ (void) testPageControllerSize
+{
+    UIPageControl* pageCtrl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
+    CGSize oneSize = [pageCtrl sizeForNumberOfPages:1];
+    CGSize twoSize = [pageCtrl sizeForNumberOfPages:2];
+    CGSize tenSize = [pageCtrl sizeForNumberOfPages:10];
+    CGSize eleven = [pageCtrl sizeForNumberOfPages:11];
+    CGSize twtSize = [pageCtrl sizeForNumberOfPages:20];
+    CGSize twtOne = [pageCtrl sizeForNumberOfPages:21];
+    EZDEBUG(@"one:%@, two:%@, 10:%@, 11:%@, 20:%@,21:%@", NSStringFromCGSize(oneSize), NSStringFromCGSize(twoSize), NSStringFromCGSize(tenSize), NSStringFromCGSize(eleven),  NSStringFromCGSize(twtSize), NSStringFromCGSize(twtOne));
+    //assert(false);
+}
 + (BOOL) isTaskExist:(EZTask*)tk inList:(NSArray*)tkList
 {
     for(EZTask* task in tkList){

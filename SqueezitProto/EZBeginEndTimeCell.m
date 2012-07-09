@@ -7,9 +7,36 @@
 //
 
 #import "EZBeginEndTimeCell.h"
+#import "EZTaskHelper.h"
+
+@interface EZBeginEndTimeCell()
+{
+    CGFloat orgRight;
+}
+
+@end
 
 @implementation EZBeginEndTimeCell
 @synthesize beginTime, endTime, endTitle, beginTitle;
+
+
+- (void) awakeFromNib
+{
+    orgRight = beginTime.right;
+}
+
+//Made a assumption, that is the width set in the cell are for having accessory.
+- (void) setHaveAccessor:(BOOL)haveAccessor
+{
+    EZDEBUG(@"Orginal right:%f", orgRight);
+    if(haveAccessor){
+        beginTime.right = orgRight;
+        endTime.right = orgRight;
+    }else{
+        beginTime.right = orgRight - 20;
+        endTime.right = orgRight - 20;
+    }
+}
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
