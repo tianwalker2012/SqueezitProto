@@ -26,6 +26,7 @@
 #import "EZGlobalLocalize.h"
 #import "MEnvFlag.h"
 #import "EZArray.h"
+#import "EZScheduleStats.h"
 
 
 @interface EZTaskStore(private)
@@ -221,8 +222,115 @@
     return res;
 }
 
+//Who need clean? 
+//What's the purpose of clean?
+//Clean of what?
 - (void) clean
 {
+}
+
+//The stats for all the tasks during a period of times
+- (NSArray*) statsTaskFrom:(NSDate*)from to:(NSDate*)to
+{
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"startTime > %@ AND startTime < %@", from, to];
+    NSArray* tasks = [self fetchWithPredication:predicate VO:[EZScheduledTask class] PO:[MScheduledTask class] sortField:nil];
+    
+    //Alloc larger dictionary size
+    //EZDEBUG(@"ScheduledTask count:%i", tasks.count);
+    NSMutableDictionary* taskIDToStats = [[NSMutableDictionary alloc] initWithCapacity:tasks.count];
+    [tasks iterate:^(EZScheduledTask* schTask){
+        //EZDEBUG(@"fetch stats from dictionary, for:%@",schTask.task.name);
+        EZScheduleStats* stats = [taskIDToStats objectForKey:schTask.task.PO.objectID];
+        if(stats == nil){
+            stats = [[EZScheduleStats alloc] initWithName:schTask.task.name];
+            stats.statsStart = from;
+            stats.statesEnd = to;
+            [taskIDToStats setObject:stats forKey:schTask.task.PO.objectID];
+        }
+        stats.totalTime += schTask.duration;
+    }];
+ 
+    return [taskIDToStats.allValues sortedArrayUsingComparator:^(EZScheduleStats* stat1, EZScheduleStats* stat2){
+        return stat2.totalTime - stat1.totalTime;
+    }];
+}
+
+- (NSArray*) statsTaskClusterByGroupFrom:(NSDate*)from to:(NSDate*)to
+{
+    NSArray* taskGroups = [self fetchAllWithVO:[EZTaskGroup class] PO:[MTaskGroup class] sortField:nil];
+    
+    NSMutableDictionary* taskToGroup = [[NSMutableDictionary alloc] init];
+    [taskGroups iterate:^(EZTaskGroup* group){
+        [group.tasks iterate:^(EZTask* tk){
+            [taskToGroup setObject:group forKey:tk.PO.objectID];
+        }];
+    }];
+    
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"startTime > %@ AND startTime < %@", from, to];
+    NSArray* schTasks = [self fetchWithPredication:predicate VO:[EZScheduledTask class] PO:[MScheduledTask class] sortField:nil];
+    
+    NSMutableDictionary* statsMap = [[NSMutableDictionary alloc] init];
+    [schTasks iterate:^(EZScheduledTask* schTk){
+        EZTaskGroup* tg = [taskToGroup objectForKey:schTk.task.PO.objectID];
+        EZScheduleStats* stats = [statsMap objectForKey:tg.PO.objectID];
+        if(stats == nil){
+            stats = [[EZScheduleStats alloc] initWithName:tg.name];
+            stats.statsStart = from;
+            stats.statesEnd = to;
+            [statsMap setObject:stats forKey:tg.PO.objectID];
+        }
+        stats.totalTime += schTk.duration;
+        [stats.datas addObject:schTk];
+    }];
+    
+    //Sort by the most consumed time
+    return [statsMap.allValues sortedArrayUsingComparator:^(EZScheduleStats* stat1, EZScheduleStats* stat2){
+        return stat2.totalTime - stat1.totalTime;
+    }];
+}
+
+//Find the statistics for one particular task at this particular time period
+- (EZScheduleStats*) findTaskStats:(EZTask*)tk from:(NSDate*)from to:(NSDate*)to
+{
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"task.objectID = %@ AND startTime > %@ AND startTime < %@", tk.PO.objectID, from, to];
+    NSArray* schTasks = [self fetchWithPredication:predicate VO:[EZScheduledTask class] PO:[MScheduledTask class] sortField:nil];
+    EZScheduleStats* res = [[EZScheduleStats alloc] initWithName:tk.name];
+    res.statsStart = from;
+    res.statesEnd = to;
+    EZDEBUG(@"Scheduled:%@, between:%@ and %@ is %i",tk.name, [from stringWithFormat:@"yyyyMMdd"], [to stringWithFormat:@"yyyyMMdd"],schTasks.count);
+    [schTasks iterate:^(EZScheduledTask* scTk){
+        res.totalTime += scTk.duration;
+    }];
+    return res;
+    
+}
+
+//This will get all the schedule task from to to.
+//A EZScheduleStats object was created. 
+//A total hours will be recorded in this object.
+//Who will use this method?
+//At the history stats page, I will pick the top 3 tasks to show off.
+- (NSArray*) statsFetchScheduledTaskFrom:(NSDate*)from to:(NSDate*)to
+{
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"startTime > %@ AND startTime < %@",from ,to];
+    NSArray* schTasks = [self fetchWithPredication:predicate VO:[EZScheduledTask class] PO:[MScheduledTask class] sortField:nil];
+    NSMutableDictionary* dicts = [[NSMutableDictionary alloc] init];
+    [schTasks iterate:^(EZScheduledTask* schTk){
+        EZScheduleStats* ss = [dicts objectForKey:schTk.task.PO.objectID];
+        if(ss == nil){
+            ss = [[EZScheduleStats alloc] initWithName:schTk.task.name];
+            [dicts setObject:ss forKey:schTk.task.PO.objectID];
+            ss.statsStart = from;
+            ss.statesEnd = to;
+        }
+        ss.totalTime += schTk.duration;
+        [ss.datas addObject:schTk];
+    }];
+    
+    //I will resturn a reverse organized objects. 
+    return [dicts.allValues sortedArrayUsingComparator:^(EZScheduleStats* stat1, EZScheduleStats* stat2){
+        return stat2.totalTime - stat1.totalTime;
+    }];
 }
 
 - (id) init

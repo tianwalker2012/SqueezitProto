@@ -37,6 +37,7 @@
 #import "EZScheduledDay.h"
 #import "MScheduledDay.h"
 #import "EZLRUMap.h"
+#import "EZScheduleStats.h"
 
 
 #define TestValue 60*20
@@ -271,6 +272,7 @@ typedef int(^ClosureTest)();
 
 + (void) testPageControllerSize;
 
++ (void) testScheduledTaskStats;
 
 
 @end
@@ -287,11 +289,9 @@ typedef int(^ClosureTest)();
     //[EZTestSuite testArrayContainAndStringEqual];
    //[EZTestSuite innerTestAll];
     //[EZTestSuite cleanAllLocalNotification];
-    [EZTestSuite testArrayExchange];
-    [EZTestSuite testAvDayCascadeStore];
-    [EZTestSuite testTaskGroupCascade];
-    [EZTestSuite testPageControllerSize];
+
     //[EZTestSuite cleanOrphanTask];
+    [EZTestSuite testScheduledTaskStats];
     [EZCoreAccessor setInstance:nil];
     
 }
@@ -347,6 +347,10 @@ typedef int(^ClosureTest)();
     [EZTestSuite testBooleanAccessor];
     [EZTestSuite testPredicateForScheduledDay];
     [EZTestSuite testLRUMap];
+    [EZTestSuite testArrayExchange];
+    [EZTestSuite testAvDayCascadeStore];
+    [EZTestSuite testTaskGroupCascade];
+    [EZTestSuite testPageControllerSize];
     //Clear all the test data.
     //In the future what should I do with this.
     //Seems in this case, we need the test case ready
@@ -357,6 +361,53 @@ typedef int(^ClosureTest)();
     //Test database.
     
     
+}
+
++ (void) testScheduledTaskStats
+{
+    [EZTestSuite initializeDB];
+    EZTask* task1 = [[EZTask alloc] initWithName:@"Taiji"];
+    EZTask* task2 = [[EZTask alloc] initWithName:@"iOS"];
+    EZTask* task3 = [[EZTask alloc] initWithName:@"Design"];
+    [[EZTaskStore getInstance] storeObjects:[NSArray arrayWithObjects:task1, task2, task3, nil]];
+    
+    EZScheduledTask* schTask1 = [[EZScheduledTask alloc] init];
+    schTask1.task = task1;
+    schTask1.startTime = [NSDate stringToDate:@"yyyyMMdd HH:mm" dateString:@"20120711 07:30"];
+    schTask1.duration = 90;
+    
+    EZScheduledTask* schTask12 = [[EZScheduledTask alloc] init];
+    schTask12.task = task1;
+    schTask12.startTime = [NSDate stringToDate:@"yyyyMMdd HH:mm" dateString:@"20120710 07:30"];
+    schTask12.duration = 91;
+    
+    EZScheduledTask* schTask13 = [[EZScheduledTask alloc] init];
+    schTask13.task = task1;
+    schTask13.startTime = [NSDate stringToDate:@"yyyyMMdd HH:mm" dateString:@"20120709 07:30"];
+    schTask13.duration = 92;
+    
+    EZScheduledTask* schTask2 = [[EZScheduledTask alloc] init];
+    schTask2.task = task2;
+    schTask2.startTime = [NSDate stringToDate:@"yyyyMMdd HH:mm" dateString:@"20120711 10:40"];
+    schTask2.duration = 105;
+    
+    EZScheduledTask* schTask3 = [[EZScheduledTask alloc] init];
+    schTask3.task = task3;
+    schTask3.startTime = [NSDate stringToDate:@"yyyyMMdd HH:mm" dateString:@"20120711 15:40"];
+    schTask3.duration = 120;
+    [[EZTaskStore getInstance] storeObjects:[NSArray arrayWithObjects:schTask1, schTask2, schTask3, schTask12, schTask13, nil]];
+    NSDate* startDate = [NSDate stringToDate:@"yyyyMMdd" dateString:@"20120710"];
+    NSDate* endDate = [NSDate stringToDate:@"yyyyMMdd" dateString:@"20120711"].ending;
+    
+    NSArray* stats = [[EZTaskStore getInstance] statsTaskFrom:startDate to:endDate];
+    assert(stats.count == 3);
+    EZScheduleStats* stats1 = [stats objectAtIndex:0];
+    EZScheduleStats* stats2 = [stats objectAtIndex:1];
+    EZScheduleStats* stats3 = [stats objectAtIndex:2];
+    assert(stats1.totalTime == 181);
+    assert(stats2.totalTime == 120);
+    assert(stats3.totalTime == 105);
+    //assert(false);
 }
 
 + (void) testPageControllerSize

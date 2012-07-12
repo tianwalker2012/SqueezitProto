@@ -29,6 +29,7 @@
 #import "MEnvFlag.h"
 #import "EZEnvFlag.h"
 #import "EZAlarmUtility.h"
+#import "EZStatisticMainCtrl.h"
 
 @interface EZAppDelegate() {
     EZRootTabCtrl* tabCtrl;
@@ -265,7 +266,6 @@
     
         tomorrowStr = [notification.userInfo objectForKey:EZAssignNotificationKey];
         EZDEBUG(@"Try to get data from notification, taskID:%@, tomorrowStr:%@",taskID, tomorrowStr);
-        
     }
     //End of get notification
     
@@ -302,10 +302,11 @@
     EZListCtrl* tsl = [[EZListCtrl alloc] initWithStyle:UITableViewStylePlain isTasklist:NO];
     timeSettingNav = [[UINavigationController alloc] initWithRootViewController:tsl];
     
-    EZSlideViewWrapper* slider = [[EZSlideViewWrapper alloc] init];
-    UINavigationController* sliderNav = [[UINavigationController alloc] initWithRootViewController:slider];
+    //EZSlideViewWrapper* slider = [[EZSlideViewWrapper alloc] init];
+    EZStatisticMainCtrl* stats = [[EZStatisticMainCtrl alloc] initWithStyle:UITableViewStyleGrouped];
+    UINavigationController* sliderNav = [[UINavigationController alloc] initWithRootViewController:stats];
     
-    EZViewLayoutTester* viewTester = [[EZViewLayoutTester alloc] initWithName:@"Tester"];
+    //EZViewLayoutTester* viewTester = [[EZViewLayoutTester alloc] initWithName:@"Tester"];
     
     
     EZConfigureCtrl* configurePage = [[EZConfigureCtrl alloc] initWithStyle:UITableViewStyleGrouped];

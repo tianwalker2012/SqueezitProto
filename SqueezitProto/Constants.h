@@ -8,6 +8,7 @@
 
 #ifndef SqueezitProto_Constants_h
 #define SqueezitProto_Constants_h
+#import <math.h>
 
 #ifdef DEBUG
 #define EZCONDITIONLOG(condition, xx, ...) { if ((condition)) { \
@@ -42,6 +43,7 @@ EZDEBUG(xx, ##__VA_ARGS__); \
 #define EZNotificationKey @"taskURL"
 #define EZAssignNotificationKey @"assignedDate"
 
+#define radians(degrees)  degrees * M_PI/180.0
 
 typedef enum EZEnvironmentTraits {
     EZ_ENV_SUIT_ALL = 0, //Once time snippet choose this all task can assigned

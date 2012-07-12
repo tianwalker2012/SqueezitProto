@@ -108,6 +108,8 @@ typedef void  (^ IterateOperation)(id obj);
 
 - (NSDate*) beginning;
 
+- (NSDate*) ending;
+
 - (int) orgWeekDay;
 
 - (int) monthDay;

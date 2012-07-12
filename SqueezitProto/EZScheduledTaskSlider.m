@@ -100,17 +100,9 @@
     [super viewDidAppear:animated];
     CGRect frame = pageControl.frame;
     pageControl.frame = CGRectMake((self.view.frame.size.width - frame.size.width)/2, self.view.frame.size.height - 10, frame.size.width, frame.size.height);
-    EZDEBUG(@"view frame:%@, pagecontrol frame:%@",NSStringFromCGRect(self.view.frame), NSStringFromCGRect(pageControl.frame));
     //pageControl.backgroundColor = [UIColor blackColor];
     [self.view addSubview:pageControl];
     [pageControl setInitialCurrentPage:todayPage];
-    UIView* parentView = [[UIView alloc] initWithFrame:CGRectMake((self.view.frame.size.width -100)/2, 44, 100, 44)];
-    parentView.backgroundColor = [UIColor grayColor];
-    UIView* childView = [[UIView alloc] initWithFrame:CGRectMake(-50, 0, 100, 44)];
-    childView.backgroundColor = [UIColor blueColor];
-    [parentView addSubview:childView];
-    parentView.clipsToBounds = true;
-    [self.view addSubview:parentView];
     
 }
 

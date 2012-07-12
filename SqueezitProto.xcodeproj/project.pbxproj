@@ -108,6 +108,9 @@
 		188D55411588920900142394 /* EZScheduledCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D55401588920800142394 /* EZScheduledCell.m */; };
 		18A0F0E215A81D2900671E53 /* EZCycleDraw.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A0F0E115A81D2900671E53 /* EZCycleDraw.m */; };
 		18A0F0F515A98DAA00671E53 /* EZCanvas.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A0F0F415A98DAA00671E53 /* EZCanvas.m */; };
+		18A0F0FD15AD1D3400671E53 /* EZStatisticMainCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A0F0FC15AD1D3400671E53 /* EZStatisticMainCtrl.m */; };
+		18A0F10015AD250400671E53 /* EZScheduleStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A0F0FF15AD250400671E53 /* EZScheduleStats.m */; };
+		18A0F10315AD7C8000671E53 /* EZAllTaskStatsCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A0F10215AD7C7F00671E53 /* EZAllTaskStatsCtrl.m */; };
 		18BDFC7D15A3FC8200F7ACE3 /* PrematureCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18BDFC7C15A3FC8200F7ACE3 /* PrematureCell.xib */; };
 		18BDFC8115A3FCE400F7ACE3 /* EZPrematureCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BDFC8015A3FCE400F7ACE3 /* EZPrematureCell.m */; };
 		18BDFC8815A5B88B00F7ACE3 /* EZScheduledLayer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18BDFC8715A5B88B00F7ACE3 /* EZScheduledLayer.xib */; };
@@ -311,6 +314,12 @@
 		18A0F0E115A81D2900671E53 /* EZCycleDraw.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZCycleDraw.m; sourceTree = "<group>"; };
 		18A0F0F315A98DAA00671E53 /* EZCanvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZCanvas.h; sourceTree = "<group>"; };
 		18A0F0F415A98DAA00671E53 /* EZCanvas.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZCanvas.m; sourceTree = "<group>"; };
+		18A0F0FB15AD1D3300671E53 /* EZStatisticMainCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZStatisticMainCtrl.h; sourceTree = "<group>"; };
+		18A0F0FC15AD1D3400671E53 /* EZStatisticMainCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZStatisticMainCtrl.m; sourceTree = "<group>"; };
+		18A0F0FE15AD250400671E53 /* EZScheduleStats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZScheduleStats.h; sourceTree = "<group>"; };
+		18A0F0FF15AD250400671E53 /* EZScheduleStats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZScheduleStats.m; sourceTree = "<group>"; };
+		18A0F10115AD7C7F00671E53 /* EZAllTaskStatsCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAllTaskStatsCtrl.h; sourceTree = "<group>"; };
+		18A0F10215AD7C7F00671E53 /* EZAllTaskStatsCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAllTaskStatsCtrl.m; sourceTree = "<group>"; };
 		18BDFC7C15A3FC8200F7ACE3 /* PrematureCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PrematureCell.xib; sourceTree = "<group>"; };
 		18BDFC7F15A3FCE400F7ACE3 /* EZPrematureCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZPrematureCell.h; sourceTree = "<group>"; };
 		18BDFC8015A3FCE400F7ACE3 /* EZPrematureCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZPrematureCell.m; sourceTree = "<group>"; };
@@ -454,6 +463,8 @@
 				188D55151584883000142394 /* EZEnvFlag.m */,
 				188CFDD115905380008ACCB8 /* EZCycleResult.h */,
 				188CFDD215905381008ACCB8 /* EZCycleResult.m */,
+				18A0F0FE15AD250400671E53 /* EZScheduleStats.h */,
+				18A0F0FF15AD250400671E53 /* EZScheduleStats.m */,
 			);
 			name = "Task objects";
 			sourceTree = "<group>";
@@ -533,6 +544,10 @@
 				188CFE0E159C0529008ACCB8 /* EZConfigureCtrl.m */,
 				188CFE10159C12A8008ACCB8 /* EZEnvTagCtrl.h */,
 				188CFE11159C12AB008ACCB8 /* EZEnvTagCtrl.m */,
+				18A0F0FB15AD1D3300671E53 /* EZStatisticMainCtrl.h */,
+				18A0F0FC15AD1D3400671E53 /* EZStatisticMainCtrl.m */,
+				18A0F10115AD7C7F00671E53 /* EZAllTaskStatsCtrl.h */,
+				18A0F10215AD7C7F00671E53 /* EZAllTaskStatsCtrl.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -883,6 +898,9 @@
 				18BDFC9F15A6D16700F7ACE3 /* EZPageControl.m in Sources */,
 				18A0F0E215A81D2900671E53 /* EZCycleDraw.m in Sources */,
 				18A0F0F515A98DAA00671E53 /* EZCanvas.m in Sources */,
+				18A0F0FD15AD1D3400671E53 /* EZStatisticMainCtrl.m in Sources */,
+				18A0F10015AD250400671E53 /* EZScheduleStats.m in Sources */,
+				18A0F10315AD7C8000671E53 /* EZAllTaskStatsCtrl.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

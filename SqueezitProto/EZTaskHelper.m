@@ -286,6 +286,11 @@ NSString* doubleString(NSString* str)
     return [NSDate stringToDate:@"yyyyMMdd" dateString:[self stringWithFormat:@"yyyyMMdd"]];
 }
 
+- (NSDate*) ending
+{
+    return [self.beginning adjust:SecondsPerDay-1];
+}
+
 - (BOOL) InBetweenDays:(NSDate*)start end:(NSDate*)end
 {
     NSTimeInterval curDay = self.timeIntervalSince1970/SecondsPerDay;

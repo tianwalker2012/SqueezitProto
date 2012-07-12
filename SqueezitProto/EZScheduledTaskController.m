@@ -317,23 +317,18 @@
             [cell setStatus:EZ_NOW nowSign:counterView];
             
         }else{
-            //Why do I need this. because the controller will
-            //Be shared by different days.
-            //When we switch back and forth some issue will show off
-            //Honestly, which cases do I need this?
-            //Comments them out. See what's will happen.
-            /**
-            if(ct.counterView.superview == nil){
-                EZDEBUG(@"ct.counterView is removed from super");
-                if(counter.ongoingTaskPos > -1){
-                    NSMutableArray* arr = [NSMutableArray arrayWithObject:[NSIndexPath indexPathForRow:counter.ongoingTaskPos inSection:0]];
-                    if((counter.ongoingTaskPos-1) > -1){
-                        [arr addObject:[NSIndexPath indexPathForRow:counter.ongoingTaskPos - 1 inSection:0]];
-                    }
-                    [self.tableView reloadRowsAtIndexPaths:arr withRowAnimation:UITableViewRowAnimationFade];
+            //Finally, I figure out why do I need to check whether the cell 
+            //Have been recyled or not?
+            //Because table view recycle the cell not according to my assumption. 
+            //What should we do?
+            //I guess this is the right solution
+            if(ct.counterView.superview == nil && counter.ongoingTaskPos > -1){
+                if([currentDate equalWith:[NSDate date] format:@"yyyyMMdd"]){
+                    EZScheduledV2Cell* v2Cell = (EZScheduledV2Cell*)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:counter.ongoingTaskPos inSection:0]];
+                    [v2Cell setStatus:EZ_NOW nowSign:ct.counterView];
                 }
             }
-             **/
+            
         }
     };
     counter.timeupOps = ^(EZTimeCounter* ct){
@@ -444,8 +439,9 @@
         }
         
     };
-    EZDEBUG(@"Before push detail");
-    [self.navigationController pushViewController:scheduleDetail animated:NO];
+    EZDEBUG(@"Before push detail:%@", self.navigationController);
+    //[self.navigationController pushViewController:scheduleDetail animated:YES];
+    [self.superController.navigationController pushViewController:scheduleDetail animated:NO];
     EZDEBUG(@"After push detail");
 }
 

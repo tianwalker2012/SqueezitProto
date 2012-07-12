@@ -74,6 +74,24 @@ NSString* envTraitsToString(NSUInteger envTraits);
 
 - (EZScheduledTask*) fetchScheduledTaskByURL:(NSString*)urlStr;
 
+//This will get all the schedule task from to to.
+//A EZScheduleStats object was created. 
+//A total hours will be recorded in this object.
+- (NSArray*) statsFetchScheduledTaskFrom:(NSDate*)from to:(NSDate*)to;
+
+
+//I may need to add the inverse field of the TaskGroup in the EZTask to help 
+//Make the group by Task group easy
+//I am afraid the memory will blow up for the stats related functionality. 
+//I may need raw sql query to accomplish this.
+//Current iteration let's implement the most inefficient one for fun. 
+//Enjoy
+- (NSArray*) statsTaskClusterByGroupFrom:(NSDate*)from to:(NSDate*)to;
+
+
+//The stats for all the tasks during a period of times
+- (NSArray*) statsTaskFrom:(NSDate*)from to:(NSDate*)to;
+
 // Currently only for test purpose. Clean the influence among different test cases
 - (void) clean;
 

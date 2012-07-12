@@ -42,7 +42,7 @@
         names = [UIFont fontNamesForFamilyName:familyName];
     }
     
-    EZCanvas* ec = [[EZCanvas alloc] initWithFrame:CGRectMake(0, 0, 100, 200)];
+    EZCanvas* ec = [[EZCanvas alloc] initWithFrame:CGRectMake(0, 0, 320, 367)];
     [self performBlock:^(){
         [self.view addSubview:ec];
     } withDelay:0.1];
