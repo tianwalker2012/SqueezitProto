@@ -127,7 +127,7 @@ static EZCoreAccessor* accessor = nil;
 - (BOOL) remove:(NSManagedObject*)po
 {
     [po.managedObjectContext deleteObject:po];
-    return TRUE;
+    return true;
 }
 
 //If passing nil, System will use "name" to sort the result.

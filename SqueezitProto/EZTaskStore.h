@@ -105,6 +105,11 @@ NSString* envTraitsToString(NSUInteger envTraits);
 //Will cancel the old notification and store and setup the new notification
 - (void) setDailyNotification:(UILocalNotification*)notification;
 
+//Will be called to check if it is the first time application start
+- (BOOL) isFirstTime;
+
+//Setup the firstTime flag.
+- (void) setFirstTime:(BOOL)firstTime;
 
 //What's the purpose of this method?
 //Because the envFlags flag will need to be the next prime number so can not be 

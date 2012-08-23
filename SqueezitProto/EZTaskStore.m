@@ -355,7 +355,9 @@
 
 - (void) removeObject:(NSObject<EZValueObject>*)obj
 {
+    EZDEBUG(@"Remove object in TaskStore, PO is:%@", obj.PO);
     if(obj.PO){
+        EZDEBUG(@"Remove object");
         [[EZCoreAccessor getInstance] remove:obj.PO];
     }
 }
@@ -554,19 +556,36 @@
 - (void) setDailyNotification:(UILocalNotification*)notification
 {
     NSString* tomorrowNofityKey = @"TomorrowNotificationKey";
-    
     NSUserDefaults* userSetting = [NSUserDefaults standardUserDefaults];
-    id notifyObj = [userSetting objectForKey:tomorrowNofityKey];
-    
-    UILocalNotification* storeNotify = [NSKeyedUnarchiver unarchiveObjectWithData:notifyObj];
-    if(notifyObj){
-        EZDEBUG(@"cancel existing nofication");
-        [[UIApplication sharedApplication] cancelLocalNotification:storeNotify];
-    }
-    [[UIApplication sharedApplication] scheduleLocalNotification:notification];
     [userSetting setValue:[NSKeyedArchiver archivedDataWithRootObject:notification] forKey:tomorrowNofityKey];
 }
 
+
+//Will be called to check if it is the first time application start
+//So the logic is simple and straightforward
+//If it is the first time mean there is not value under the key
+//Otherwise mean it is not the first time
+- (BOOL) isFirstTime
+{
+    NSString* firstTimeKey = @"FirstTimeKey";
+    NSUserDefaults* userSetting = [NSUserDefaults standardUserDefaults];
+    return [userSetting valueForKey:firstTimeKey] ? false:true;
+}
+
+//Setup the firstTime flag.
+- (void) setFirstTime:(BOOL)firstTime
+{
+    NSString* firstTimeKey = @"FirstTimeKey";
+    NSUserDefaults* userSetting = [NSUserDefaults standardUserDefaults];
+    if(firstTime){
+        //Mean I want to continue first Time what should I do?
+        //Remove the flag from the dictionary.
+        [userSetting removeObjectForKey:firstTimeKey];
+        
+    }else{
+        [userSetting setValue:@"SecondTime" forKey:firstTimeKey];
+    }
+}
 
 //What's the purpose of this method?
 //Because the envFlags flag will need to be the next prime number so can not be 

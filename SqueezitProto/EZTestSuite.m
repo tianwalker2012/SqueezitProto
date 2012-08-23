@@ -38,6 +38,8 @@
 #import "MScheduledDay.h"
 #import "EZLRUMap.h"
 #import "EZScheduleStats.h"
+#import "Parent.h"
+#import "Child.h"
 
 
 #define TestValue 60*20
@@ -274,10 +276,32 @@ typedef int(^ClosureTest)();
 
 + (void) testScheduledTaskStats;
 
+//The purpose of this class is to generate a notification. 
+//Mainly for test purpose. 
++ (void) testSetupNotification;
+
+
+//Describe the phenomenon. I delete a scheduled task from the scheduled task screen.
+//When I restart application the task showed again.
+//1. Recur the problem first
++ (void) test0823ScheduledTaskDeleteBug;
+
+
+//Why I create following case?
+//Because seems even the basic cases of CoreData didn't pass the test.
+//I need to figure out why?
++ (void) initTestModelDB;
+
++ (void) cleanTestModelDB;
+
++ (void) testSimplestModel;
+
++ (void) testRawFormCoreData;
 
 @end
 
 @implementation EZTestSuite
+
 
 
 
@@ -291,11 +315,41 @@ typedef int(^ClosureTest)();
     //[EZTestSuite cleanAllLocalNotification];
 
     //[EZTestSuite cleanOrphanTask];
-    [EZTestSuite testScheduledTaskStats];
+    //[EZTestSuite testScheduledTaskStats];
+    //[EZTestSuite testRawFormCoreData];
+    //[EZTestSuite testSimplestModel];
+    //[EZTestSuite test0823ScheduledTaskDeleteBug];
     [EZCoreAccessor setInstance:nil];
     
 }
 
+//The IDE provide the LRU cache for the auto complete suggestions
++ (void) test0823ScheduledTaskDeleteBug
+{
+    [EZTestSuite initializeDB];
+    EZTaskStore* store = [EZTaskStore getInstance];
+    EZTask* task = [[EZTask alloc] initWithName:@"0823 deletion test"];
+    [store storeObject:task];
+    EZScheduledTask* schTask = [[EZScheduledTask alloc] init];
+    schTask.task = task;
+    schTask.startTime = [NSDate stringToDate:@"HH:mm" dateString:@"08:08"];
+    [store storeObject:schTask];
+    
+    NSArray* searchBack = [store fetchAllWithVO:[EZScheduledTask class] PO:[MScheduledTask class] sortField:nil];
+    assert(searchBack.count == 1);
+    [store removeObject:schTask];
+    
+    [store removeObject:task];
+    
+    NSArray* backTasks = [store fetchAllWithVO:[EZTask class] PO:[MTask class] sortField:nil];
+    assert(backTasks.count == 0);
+    
+    searchBack = [store fetchAllWithVO:[EZScheduledTask class] PO:[MScheduledTask class] sortField:nil];
+    assert(searchBack.count == 0);
+    
+    assert(false);
+    
+}
 
 + (void) innerTestAll
 {
@@ -361,6 +415,181 @@ typedef int(^ClosureTest)();
     //Test database.
     
     
+}
+
++ (void) testRawFormCoreData
+{
+    [EZTestSuite initializeDB];
+    EZCoreAccessor* accessor = [EZCoreAccessor getInstance];
+    MTask* task = (MTask*)[accessor create:[MTask class]];
+    task.name = @"Core bug 0823";
+    [accessor store:task];
+    
+    NSArray* fetched = [accessor fetchAll:[MTask class] sortField:nil];
+    assert(fetched.count == 1);
+    [accessor remove:task];
+    
+    fetched = [accessor fetchAll:[MTask class] sortField:nil];
+    assert(fetched.count == 0);
+    
+    EZTask* myTask = [[EZTask alloc] initWithName:@"cool"];
+    EZTaskStore* store = [EZTaskStore getInstance];
+    [store storeObject:myTask];
+    NSArray* myFetched = [store fetchAllWithVO:[EZTask class] PO:[MTask class] sortField:nil];
+    assert(myFetched.count == 1);
+    
+    [store removeObject:myTask];
+    
+    myFetched = [store fetchAllWithVO:[EZTask class] PO:[MTask class] sortField:nil];
+    assert(myFetched.count == 0);
+    //This is also normal. 
+    
+    myTask = [[EZTask alloc] initWithName:@"cool2"];
+    EZScheduledTask* schTask = [[EZScheduledTask alloc] init];
+    schTask.task = myTask;
+    [store storeObject:schTask];
+    
+    NSArray* schTasks = [store fetchAllWithVO:[EZScheduledTask class] PO:[MScheduledTask class] sortField:nil];
+    assert(schTasks.count == 1);
+    
+    [store removeObject:schTask];
+    
+    schTasks = [store fetchAllWithVO:[EZScheduledTask class] PO:[MScheduledTask class] sortField:nil];
+    assert(schTasks.count == 0);
+                
+    
+    
+    
+    
+    assert(false);
+    
+}
+
+//Because the CoreData test crashed, so I create another model with the simplest data, seem at with part the thing crashed
++ (void) testSimplestModel
+{
+    [EZTestSuite initTestModelDB];
+    
+    EZCoreAccessor* accessor = [EZCoreAccessor getInstance];
+    Parent* pa = (Parent*)[accessor create:[Parent class]];
+    pa.name = @"Coolguy";
+    [accessor store:pa];
+    
+    NSArray* fetched = [accessor fetchAll:[Parent class] sortField:nil];
+    assert(fetched.count == 1);
+    
+    [accessor remove:pa];
+    
+    fetched = [accessor fetchAll:[Parent class] sortField:nil];
+    assert(fetched.count == 0);
+    
+    pa = (Parent*) [accessor create:[Parent class]];
+    Child* child = (Child*) [accessor create:[Child class]];
+    pa.name = @"Xie Tian";
+    child.name = @"Cheng yue";
+    child.father = pa;
+    [accessor store:child];
+    
+    NSArray* res = [accessor fetchAll:[child class] sortField:nil];
+    assert(res.count == 1);
+    
+    Child* fetchild = [res objectAtIndex:0];
+    
+    Parent* father = fetchild.father;
+    assert([father.name isEqualToString:pa.name]);
+    
+    [accessor remove:fetchild];
+    res = [accessor fetchAll:[child class] sortField:nil];
+    assert(res.count == 0);
+    //Test with proper relationship
+    
+    //[EZTestSuite cleanTestModelDB];
+    
+    assert(false);
+}
+
+
+
++ (void) initTestModelDB
+{
+    NSString* testDB = @"TestModel.sqlite";
+    [EZCoreAccessor cleanDB:testDB];
+    EZCoreAccessor* accessor = [[EZCoreAccessor alloc] initWithDBName:testDB modelName:@"TestModel"];
+    [EZCoreAccessor setInstance:accessor];
+}
+
++ (void) cleanTestModelDB
+{
+    NSString* testDB = @"TestModel.sqlite";
+    [EZCoreAccessor cleanDB:testDB];
+}
+
+//Who will call this?
+//When user setup the tomorrow notification.
+//For the first time user enter our Application. What's the behavior?
+//I could setup a global flag. in Application so user could tell if this is the first time user start the
+//Application or not. 
+//People can do things according to this flag.
+//After that done, come back to this. 
+//Strange This method look like a test method. Let's remove it.
+//I assume this is the test method. 
+- (void) setupTomorrowNotification
+{
+    NSString* tomorrowNofityKey = @"TomorrowNotificationKey";
+    NSString* disableTomorrowKey = @"DisableTomorrow";
+    NSUserDefaults* userSetting = [NSUserDefaults standardUserDefaults];
+    BOOL disabled = [userSetting boolForKey:disableTomorrowKey];
+    if(disabled){
+        EZDEBUG(@"Disabled by user");
+        return;
+    }
+    id notifyObj = [userSetting objectForKey:tomorrowNofityKey];
+    
+    UILocalNotification* storeNotify = [NSKeyedUnarchiver unarchiveObjectWithData:notifyObj];
+    if(notifyObj){
+        EZDEBUG(@"already setup nofication, alertBody:%@",storeNotify.alertBody);
+        return;
+    }
+    UILocalNotification* nofication = [[UILocalNotification alloc] init];
+    NSDate* tomorrow = [[NSDate date] adjustDays:1];
+    nofication.fireDate = [[NSDate date] adjust:20];
+    nofication.alertBody = Local(@"Time to schedule tomorrow's task for you.");
+    //Mean I can pick my own customized name?
+    nofication.soundName = UILocalNotificationDefaultSoundName;
+    nofication.applicationIconBadgeNumber = 1;
+    nofication.repeatCalendar = nil;
+    nofication.repeatInterval = kCFCalendarUnitDay;
+    NSDictionary* infoDict = [NSDictionary dictionaryWithObjectsAndKeys:@"AnyThing", EZAssignNotificationKey ,nil];
+    nofication.userInfo = infoDict;
+    [[UIApplication sharedApplication] scheduleLocalNotification:nofication];
+    [userSetting setValue:[NSKeyedArchiver archivedDataWithRootObject:nofication] forKey:tomorrowNofityKey];
+    
+}
+
+//The purpose of this class is to generate a notification. 
+//Mainly for test purpose. 
++ (void) testSetupNotification
+{
+    
+    EZScheduledTask* schTask = [[EZScheduledTask alloc] init];
+    schTask.startTime = [[NSDate date] adjustDays:-2];
+    EZTask* task = [[EZTask alloc] initWithName:@"Tomorrow Test" duration:20 maxDur:20 envTraits:3];
+    schTask.task = task;
+    schTask.duration = 40;
+    [[EZTaskStore getInstance] storeObject:schTask];
+    
+    NSString* taskURL = schTask.PO.objectID.URIRepresentation.absoluteString;
+    UILocalNotification* nofication = [[UILocalNotification alloc] init];
+    nofication.fireDate = [[NSDate date] adjust:20];
+    nofication.alertBody = @"Test notification";
+    //Mean I can pick my own customized name?
+    nofication.soundName = UILocalNotificationDefaultSoundName;
+    nofication.applicationIconBadgeNumber = 3;
+    EZDEBUG(@"Notification creation,absolute taskURL:%@",taskURL);
+    NSDictionary* infoDict = [NSDictionary dictionaryWithObjectsAndKeys:taskURL , EZNotificationKey,nil];
+    nofication.userInfo = infoDict;
+    [[UIApplication sharedApplication] scheduleLocalNotification:nofication];
+    EZDEBUG(@"Complete setup Nofication");
 }
 
 + (void) testScheduledTaskStats
@@ -1393,6 +1622,8 @@ typedef int(^ClosureTest)();
     
     
 }
+
+
 
 //The store will get the list fetched again.
 + (void) testStoreSideEffect

@@ -23,6 +23,13 @@
 
 + (void) changeAlarmMode:(EZScheduledTask*)task;
 
+//Outside world will call this to setup the notification
+//Previously it is locate at the EZTaskStore not a proper place to call. 
++ (void) setupDailyNotification:(UILocalNotification*)notification;
+
+//Hide all the notification setup detail.
++ (void) setupDailyNotificationDate:(NSDate*)date;
+
 //Who will call this? 
 //Application level will call it. 
 //If will try to fetch from the NSUserDefault

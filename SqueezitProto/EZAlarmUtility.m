@@ -11,6 +11,8 @@
 #import "EZScheduledTask.h"
 #import "EZTask.h"
 #import "MScheduledTask.h"
+#import "EZTaskStore.h"
+#import "EZGlobalLocalize.h"
 
 @implementation EZAlarmUtility
 
@@ -72,5 +74,40 @@
         task.alarmNotification = nil;
     }
 }
+
+//No test case to cover this. 
+//Add one. As long as you are dealing with the code act as if you have the whole universe time with you.
++ (void) setupDailyNotification:(UILocalNotification*)notification
+{
+    EZTaskStore* store = [EZTaskStore getInstance];
+    UILocalNotification* storeNotify = [store getDailyNotification];
+    if(storeNotify){
+        EZDEBUG(@"cancel existing nofication");
+        [[UIApplication sharedApplication] cancelLocalNotification:storeNotify];
+    }
+    [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+    [store setDailyNotification:notification];
+}
+
+
++ (void) setupDailyNotificationDate:(NSDate*)date
+{
+    UILocalNotification* nofication = [[UILocalNotification alloc] init];
+    //NSDate* tomorrow = [[NSDate date] adjustDays:1];
+    nofication.fireDate = date;
+    nofication.alertBody = Local(@"Time to schedule tomorrow's task for you.");
+    //Mean I can pick my own customized name?
+    nofication.soundName = UILocalNotificationDefaultSoundName;
+    nofication.applicationIconBadgeNumber = 1;
+    nofication.repeatCalendar = nil;
+    nofication.repeatInterval = kCFCalendarUnitDay;
+    
+    //Anything it is very confusing and misleading, seems this is a test method.
+    //Fix them one after another.
+    NSDictionary* infoDict = [NSDictionary dictionaryWithObjectsAndKeys:@"Tomorrow", EZAssignNotificationKey ,nil];
+    nofication.userInfo = infoDict;
+
+}
+
 
 @end

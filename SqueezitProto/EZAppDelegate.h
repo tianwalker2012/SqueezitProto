@@ -14,4 +14,11 @@
 
 @property (strong, nonatomic) UIViewController* rootCtrl;
 
+//All component could check this see if user start the application for the first time. 
+//One thing is that, if user never close our application, should we treat this as first time also?
+//Interesting question. 
+//This policy should be determined by us,
+//Honestly gloabl status is meaningless, each component should keep their own status. 
+@property (assign, nonatomic) BOOL firstTimeUser;
+
 @end

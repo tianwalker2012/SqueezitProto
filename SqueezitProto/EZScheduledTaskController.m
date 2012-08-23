@@ -43,6 +43,9 @@
     EZTimeCounter* counter;
     EZScheduledLayer* noTasklayer;
     EZActivityLayer* activityLayer;
+    //What's the meaning of this flag?
+    //Check it out. I will not allow vague naming like this in my code
+    //This is unbearable. It seriously affect my intimate relationship with my code.
     BOOL displayed;
 }
 
@@ -62,11 +65,33 @@
 
 - (void) hideActivityLayer;
 
+//This is the function without animation.
+//Only have the logic of reschedule.
+- (void) rawReschedule;
+
 @end
 
 @implementation EZScheduledTaskController
 @synthesize currentDate, scheduledTasks, viewAppearBlock, superController;
 
+
+//What's logic will be included in this method?
+//If the currentDate is today,
+//We can just get the date right. 
+//The rescheduleAll will handle all the logic right.
+- (void) rescheduleTasks
+{
+    [self showActivityLayer];
+    [self executeBlockInBackground:^(){
+        [self rawReschedule];
+        [self executeBlockInMainThread:^(){
+            [self.tableView reloadData];
+            [self hideActivityLayer];
+        }];
+        counter.isCounting = false;
+    } inThread:nil];
+    
+}
 
 - (void) showNoTaskLayout
 {
@@ -78,10 +103,10 @@
             //[weakSelf hideNoTaskLayout];
             noTasklayer.activityView.alpha = 1;
             [noTasklayer.activityView startAnimating];
-            EZDEBUG(@"Main threadID:%i",(NSInteger)[NSThread currentThread]);
+            //EZDEBUG(@"Main threadID:%i",(NSInteger)[NSThread currentThread]);
             [weakSelf executeBlockInBackground:^(){
-                [weakSelf rescheduleTasks];
-                EZDEBUG(@"Background threadID:%i", (NSInteger)[NSThread currentThread]);
+                [weakSelf rawReschedule];
+                //EZDEBUG(@"Background threadID:%i", (NSInteger)[NSThread currentThread]);
                 [weakSelf executeBlockInMainThread:^(){
                     [weakSelf.tableView reloadData];
                     [noTasklayer.activityView stopAnimating];
@@ -92,8 +117,24 @@
         };
     }
     EZDEBUG(@"about to displayNoTaskLayer:%@", noTasklayer);
+    //Why have this code? This is need explaination
     self.tableView.scrollEnabled = false;
     [self.tableView addSubview:noTasklayer];
+}
+
+- (void) rawReschedule
+{
+    EZTaskScheduler* scheduler = [EZTaskScheduler getInstance];
+    if([currentDate equalWith:[NSDate date] format:@"yyyyMMdd"]){
+        currentDate = [currentDate combineTime:[NSDate date]];
+    }
+    scheduledTasks = [scheduler rescheduleAll:scheduledTasks date:currentDate];
+    [[EZTaskStore getInstance] storeObjects:scheduledTasks];
+    [EZAlarmUtility setupAlarmBulk:scheduledTasks];
+    EZScheduledDay* schDay = [[EZScheduledDay alloc] init];
+    schDay.scheduledDate = currentDate;
+    [[EZTaskStore getInstance] storeObject:schDay];
+    
 }
 
 - (void) hideNoTaskLayout
@@ -124,6 +165,11 @@
 //Just create the counter and the counter view.
 //Set the proper frame for the counterView.
 //The caller will take responsibility to restart it.
+//Who will call timeCounter?
+//What's it's responsibility?
+//It will create the time counter.
+//What's the responsibility of TimeCounter?
+//Will in charge of update the timer on the cell. 
 - (EZTimeCounter*) createTimeCounter
 {
     EZTimeCounter* tc = [[EZTimeCounter alloc] init];
@@ -153,10 +199,15 @@
 }
 - (void)viewWillDisappear:(BOOL)animated
 {
+    EZDEBUG(@"viewWillDisappear get called");
     [super viewWillDisappear:animated];
     displayed = false;
 }
 
+
+//Who will call it.
+//What's it's responsibility?
+//Is this deprecated code.
 - (void) reloadScheduledTask:(NSDate *)date
 {
     [self loadWithTask:[[EZTaskStore getInstance]getScheduledTaskByDate:date] date:date];
@@ -192,51 +243,6 @@
     }
 }
 
-- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
-{
-    //EZDEBUG(@"Get motion event:%i",motion);
-    if(motion == UIEventSubtypeMotionShake){
-        EZDEBUG(@"I encounter shake event");
-        if(scheduledTasks.count > 0){
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:Local(@"Reschedule?") message:Local(@"Are you sure you want reschedule? current schedule will be deleted") delegate:self cancelButtonTitle:Local(@"Cancel") otherButtonTitles:Local(@"Yes"), nil];
-            [alert show];
-        }else{
-        //message.text = @"Shaked";
-            [self rescheduleTasks];
-        }
-    }
-    
-}
-
-
-//What's logic will be included in this method?
-//If the currentDate is today,
-//We can just get the date right. 
-//The rescheduleAll will handle all the logic right.
-- (void) rescheduleTasks
-{
-  
-    EZTaskScheduler* scheduler = [EZTaskScheduler getInstance];
-    if([currentDate equalWith:[NSDate date] format:@"yyyyMMdd"]){
-        currentDate = [currentDate combineTime:[NSDate date]];
-    }
-    [self showActivityLayer];
-    [self executeBlockInBackground:^(){
-        scheduledTasks = [scheduler rescheduleAll:scheduledTasks date:currentDate];
-        [[EZTaskStore getInstance] storeObjects:scheduledTasks];
-        [EZAlarmUtility setupAlarmBulk:scheduledTasks];
-        EZScheduledDay* schDay = [[EZScheduledDay alloc] init];
-        schDay.scheduledDate = currentDate;
-        [[EZTaskStore getInstance] storeObject:schDay];
-        
-        [self executeBlockInMainThread:^(){
-            [self.tableView reloadData];
-            [self hideActivityLayer];
-        }];
-        counter.isCounting = false;
-    } inThread:nil];
-
-}
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -512,12 +518,16 @@
     scheduleDetail.schTask = task; 
    
     scheduleDetail.deleteBlock = ^(){
-        EZDEBUG(@"DeleteOp get called");
+        EZDEBUG(@"DeleteOp get called, task.name:%@, id:%@",task.task.name, task.PO.objectID);
         [EZAlarmUtility cancelAlarm:task];
         NSMutableArray* mutArr = [NSMutableArray arrayWithArray:self.scheduledTasks];
         [mutArr removeObjectAtIndex:indexPath.row];
         self.scheduledTasks = mutArr;
         [[EZTaskStore getInstance] removeObject:task];
+        
+        EZScheduledTask* fetched = [[EZTaskStore getInstance] fetchScheduledTaskByURL:task.PO.objectID.URIRepresentation.absoluteString];
+        assert(fetched == nil);
+        
         [self performSelector:@selector(deleteRow:) withObject:indexPath afterDelay:0.3];
     };
     

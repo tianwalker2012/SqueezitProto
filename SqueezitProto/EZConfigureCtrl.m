@@ -13,6 +13,7 @@
 #import "EZEnvTagCtrl.h"
 #import "EZPickerKeyboardDate.h"
 #import "EZKeyBoardHolder.h"
+#import "EZAlarmUtility.h"
 
 @interface EZConfigureCtrl ()
 {
@@ -169,7 +170,7 @@
     EZDEBUG(@"Done clicked:%@", [keyboard.picker.date stringWithFormat:@"yyyyMMdd HH:mm:ss"]);
     UILocalNotification* notification = [[EZTaskStore getInstance] getDailyNotification];
     notification.fireDate = keyboard.picker.date;
-    [[EZTaskStore getInstance] setDailyNotification:notification];
+    [EZAlarmUtility setupDailyNotification:notification];
     [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationAutomatic];
                                  
 }
