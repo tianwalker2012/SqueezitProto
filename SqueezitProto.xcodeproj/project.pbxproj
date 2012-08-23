@@ -111,6 +111,11 @@
 		18A0F0FD15AD1D3400671E53 /* EZStatisticMainCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A0F0FC15AD1D3400671E53 /* EZStatisticMainCtrl.m */; };
 		18A0F10015AD250400671E53 /* EZScheduleStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A0F0FF15AD250400671E53 /* EZScheduleStats.m */; };
 		18A0F10315AD7C8000671E53 /* EZAllTaskStatsCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A0F10215AD7C7F00671E53 /* EZAllTaskStatsCtrl.m */; };
+		18A0F71115AEB5EC00671E53 /* libCorePlot-CocoaTouch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18A0F70E15AEB5C800671E53 /* libCorePlot-CocoaTouch.a */; };
+		18A0F72515AF050700671E53 /* EZBarChartItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A0F72415AF050700671E53 /* EZBarChartItem.m */; };
+		18A0F72815AF052D00671E53 /* EZBaseChartItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A0F72715AF052D00671E53 /* EZBaseChartItem.m */; };
+		18A0F72A15AFC91200671E53 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18A0F72915AFC91000671E53 /* QuartzCore.framework */; };
+		18A0F72D15AFD55000671E53 /* EZGraphHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A0F72C15AFD55000671E53 /* EZGraphHelper.m */; };
 		18BDFC7D15A3FC8200F7ACE3 /* PrematureCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18BDFC7C15A3FC8200F7ACE3 /* PrematureCell.xib */; };
 		18BDFC8115A3FCE400F7ACE3 /* EZPrematureCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BDFC8015A3FCE400F7ACE3 /* EZPrematureCell.m */; };
 		18BDFC8815A5B88B00F7ACE3 /* EZScheduledLayer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18BDFC8715A5B88B00F7ACE3 /* EZScheduledLayer.xib */; };
@@ -131,6 +136,23 @@
 		18E035E9158351E5003B3D3E /* EZPickerKeyboardTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E035E8158351E5003B3D3E /* EZPickerKeyboardTime.m */; };
 		18E035EC15836161003B3D3E /* EZKeyBoardHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E035EB15836161003B3D3E /* EZKeyBoardHolder.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		18A0F70D15AEB5C800671E53 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 18A0F70415AEB5C700671E53 /* CorePlot-CocoaTouch.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BC9B83470FB8A0A40035D8DA;
+			remoteInfo = "CorePlot-CocoaTouch";
+		};
+		18A0F70F15AEB5E000671E53 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 18A0F70415AEB5C700671E53 /* CorePlot-CocoaTouch.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = BC9B83460FB8A0A40035D8DA;
+			remoteInfo = "CorePlot-CocoaTouch";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		184C29551569E19900852B35 /* SqueezitProto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SqueezitProto.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -320,6 +342,14 @@
 		18A0F0FF15AD250400671E53 /* EZScheduleStats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZScheduleStats.m; sourceTree = "<group>"; };
 		18A0F10115AD7C7F00671E53 /* EZAllTaskStatsCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAllTaskStatsCtrl.h; sourceTree = "<group>"; };
 		18A0F10215AD7C7F00671E53 /* EZAllTaskStatsCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAllTaskStatsCtrl.m; sourceTree = "<group>"; };
+		18A0F70415AEB5C700671E53 /* CorePlot-CocoaTouch.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "CorePlot-CocoaTouch.xcodeproj"; path = "../CorePlot_1.0/Source/framework/CorePlot-CocoaTouch.xcodeproj"; sourceTree = "<group>"; };
+		18A0F72315AF050700671E53 /* EZBarChartItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZBarChartItem.h; sourceTree = "<group>"; };
+		18A0F72415AF050700671E53 /* EZBarChartItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZBarChartItem.m; sourceTree = "<group>"; };
+		18A0F72615AF052D00671E53 /* EZBaseChartItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZBaseChartItem.h; sourceTree = "<group>"; };
+		18A0F72715AF052D00671E53 /* EZBaseChartItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZBaseChartItem.m; sourceTree = "<group>"; };
+		18A0F72915AFC91000671E53 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		18A0F72B15AFD54F00671E53 /* EZGraphHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZGraphHelper.h; sourceTree = "<group>"; };
+		18A0F72C15AFD55000671E53 /* EZGraphHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZGraphHelper.m; sourceTree = "<group>"; };
 		18BDFC7C15A3FC8200F7ACE3 /* PrematureCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PrematureCell.xib; sourceTree = "<group>"; };
 		18BDFC7F15A3FCE400F7ACE3 /* EZPrematureCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZPrematureCell.h; sourceTree = "<group>"; };
 		18BDFC8015A3FCE400F7ACE3 /* EZPrematureCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZPrematureCell.m; sourceTree = "<group>"; };
@@ -357,6 +387,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18A0F72A15AFC91200671E53 /* QuartzCore.framework in Frameworks */,
+				18A0F71115AEB5EC00671E53 /* libCorePlot-CocoaTouch.a in Frameworks */,
 				184C2A7A15770F7F00852B35 /* CoreData.framework in Frameworks */,
 				184C295A1569E19900852B35 /* UIKit.framework in Frameworks */,
 				184C295C1569E19900852B35 /* Foundation.framework in Frameworks */,
@@ -387,6 +419,8 @@
 		184C29581569E19900852B35 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				18A0F72915AFC91000671E53 /* QuartzCore.framework */,
+				18A0F70415AEB5C700671E53 /* CorePlot-CocoaTouch.xcodeproj */,
 				184C2A7915770F7E00852B35 /* CoreData.framework */,
 				184C29591569E19900852B35 /* UIKit.framework */,
 				184C295B1569E19900852B35 /* Foundation.framework */,
@@ -398,6 +432,7 @@
 		184C295F1569E19900852B35 /* SqueezitProto */ = {
 			isa = PBXGroup;
 			children = (
+				18A0F72215AF04B900671E53 /* Graph Tools */,
 				18BDFC9C15A6D10800F7ACE3 /* Home Made Control */,
 				18E035E4158350F4003B3D3E /* Customize popup */,
 				184C2B0D157E4D6F00852B35 /* Resources */,
@@ -680,6 +715,27 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		18A0F70515AEB5C700671E53 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				18A0F70E15AEB5C800671E53 /* libCorePlot-CocoaTouch.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		18A0F72215AF04B900671E53 /* Graph Tools */ = {
+			isa = PBXGroup;
+			children = (
+				18A0F72315AF050700671E53 /* EZBarChartItem.h */,
+				18A0F72415AF050700671E53 /* EZBarChartItem.m */,
+				18A0F72615AF052D00671E53 /* EZBaseChartItem.h */,
+				18A0F72715AF052D00671E53 /* EZBaseChartItem.m */,
+				18A0F72B15AFD54F00671E53 /* EZGraphHelper.h */,
+				18A0F72C15AFD55000671E53 /* EZGraphHelper.m */,
+			);
+			name = "Graph Tools";
+			sourceTree = "<group>";
+		};
 		18BDFC9C15A6D10800F7ACE3 /* Home Made Control */ = {
 			isa = PBXGroup;
 			children = (
@@ -729,6 +785,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				18A0F71015AEB5E000671E53 /* PBXTargetDependency */,
 			);
 			name = SqueezitProto;
 			productName = SqueezitProto;
@@ -750,11 +807,16 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				English,
 			);
 			mainGroup = 184C294A1569E19800852B35;
 			productRefGroup = 184C29561569E19900852B35 /* Products */;
 			projectDirPath = "";
 			projectReferences = (
+				{
+					ProductGroup = 18A0F70515AEB5C700671E53 /* Products */;
+					ProjectRef = 18A0F70415AEB5C700671E53 /* CorePlot-CocoaTouch.xcodeproj */;
+				},
 				{
 					ProductGroup = 188CFE2115A3E729008ACCB8 /* Products */;
 					ProjectRef = 188CFE2015A3E729008ACCB8 /* SqueezitProto.xcodeproj */;
@@ -766,6 +828,16 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		18A0F70E15AEB5C800671E53 /* libCorePlot-CocoaTouch.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libCorePlot-CocoaTouch.a";
+			remoteRef = 18A0F70D15AEB5C800671E53 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		184C29531569E19900852B35 /* Resources */ = {
@@ -901,10 +973,21 @@
 				18A0F0FD15AD1D3400671E53 /* EZStatisticMainCtrl.m in Sources */,
 				18A0F10015AD250400671E53 /* EZScheduleStats.m in Sources */,
 				18A0F10315AD7C8000671E53 /* EZAllTaskStatsCtrl.m in Sources */,
+				18A0F72515AF050700671E53 /* EZBarChartItem.m in Sources */,
+				18A0F72815AF052D00671E53 /* EZBaseChartItem.m in Sources */,
+				18A0F72D15AFD55000671E53 /* EZGraphHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		18A0F71015AEB5E000671E53 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "CorePlot-CocoaTouch";
+			targetProxy = 18A0F70F15AEB5E000671E53 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		184C29621569E19900852B35 /* InfoPlist.strings */ = {
@@ -976,8 +1059,14 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SqueezitProto/SqueezitProto-Prefix.pch";
+				"HEADER_SEARCH_PATHS[arch=*]" = /Users/apple/work_foot/ios/CorePlot_1.0/Source/framework/Source;
 				INFOPLIST_FILE = "SqueezitProto/SqueezitProto-Info.plist";
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-ObjC",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				REZ_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -987,8 +1076,14 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SqueezitProto/SqueezitProto-Prefix.pch";
+				"HEADER_SEARCH_PATHS[arch=*]" = /Users/apple/work_foot/ios/CorePlot_1.0/Source/framework/Source;
 				INFOPLIST_FILE = "SqueezitProto/SqueezitProto-Info.plist";
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-ObjC",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				REZ_SEARCH_PATHS = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "EZBarChartItem.h"
 
-@interface EZAllTaskStatsCtrl : UIViewController
+@interface EZAllTaskStatsCtrl : UIViewController<CPTPlotDataSource, EZGraphDataSource>
 
 @end
