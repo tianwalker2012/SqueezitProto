@@ -70,6 +70,7 @@
 		18893D5D15EA15CB000A1216 /* EZThreadPool.m in Sources */ = {isa = PBXBuildFile; fileRef = 18893D5C15EA15CA000A1216 /* EZThreadPool.m */; };
 		18893D6015EB289C000A1216 /* Child.m in Sources */ = {isa = PBXBuildFile; fileRef = 18893D5F15EB289C000A1216 /* Child.m */; };
 		18893D6315EB28A6000A1216 /* Parent.m in Sources */ = {isa = PBXBuildFile; fileRef = 18893D6215EB28A4000A1216 /* Parent.m */; };
+		18893D6615EB7611000A1216 /* MEnvFlag.m in Sources */ = {isa = PBXBuildFile; fileRef = 18893D6515EB7611000A1216 /* MEnvFlag.m */; };
 		188CFDC4158D88F8008ACCB8 /* EZPickerWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDC3158D88F8008ACCB8 /* EZPickerWrapper.m */; };
 		188CFDC8158DE888008ACCB8 /* EZTableSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDC7158DE887008ACCB8 /* EZTableSelector.m */; };
 		188CFDCB158ED73F008ACCB8 /* EZAvTimeDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDCA158ED73E008ACCB8 /* EZAvTimeDetail.m */; };
@@ -98,7 +99,6 @@
 		188CFE0F159C0530008ACCB8 /* EZConfigureCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFE0E159C0529008ACCB8 /* EZConfigureCtrl.m */; };
 		188CFE12159C12B0008ACCB8 /* EZEnvTagCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFE11159C12AB008ACCB8 /* EZEnvTagCtrl.m */; };
 		188D55161584883000142394 /* EZEnvFlag.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D55151584883000142394 /* EZEnvFlag.m */; };
-		188D551A15848B3A00142394 /* MEnvFlag.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D551915848B3A00142394 /* MEnvFlag.m */; };
 		188D551D1584ACB000142394 /* EZArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D551C1584ACB000142394 /* EZArray.m */; };
 		188D55201585C70800142394 /* EZEnvFlagPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 188D551F1585C70700142394 /* EZEnvFlagPicker.m */; };
 		188D55221585C73600142394 /* EZFlagPickerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 188D55211585C73600142394 /* EZFlagPickerCell.xib */; };
@@ -273,6 +273,8 @@
 		18893D5F15EB289C000A1216 /* Child.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Child.m; sourceTree = "<group>"; };
 		18893D6115EB28A0000A1216 /* Parent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Parent.h; sourceTree = "<group>"; };
 		18893D6215EB28A4000A1216 /* Parent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Parent.m; sourceTree = "<group>"; };
+		18893D6415EB7610000A1216 /* MEnvFlag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEnvFlag.h; sourceTree = "<group>"; };
+		18893D6515EB7611000A1216 /* MEnvFlag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEnvFlag.m; sourceTree = "<group>"; };
 		188CFDC2158D88F8008ACCB8 /* EZPickerWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZPickerWrapper.h; sourceTree = "<group>"; };
 		188CFDC3158D88F8008ACCB8 /* EZPickerWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZPickerWrapper.m; sourceTree = "<group>"; };
 		188CFDC6158DE887008ACCB8 /* EZTableSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTableSelector.h; sourceTree = "<group>"; };
@@ -325,8 +327,6 @@
 		188CFE2015A3E729008ACCB8 /* SqueezitProto.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = SqueezitProto.xcodeproj; sourceTree = SOURCE_ROOT; };
 		188D55141584883000142394 /* EZEnvFlag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZEnvFlag.h; sourceTree = "<group>"; };
 		188D55151584883000142394 /* EZEnvFlag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZEnvFlag.m; sourceTree = "<group>"; };
-		188D551815848B3A00142394 /* MEnvFlag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MEnvFlag.h; sourceTree = "<group>"; };
-		188D551915848B3A00142394 /* MEnvFlag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MEnvFlag.m; sourceTree = "<group>"; };
 		188D551B1584ACB000142394 /* EZArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZArray.h; sourceTree = "<group>"; };
 		188D551C1584ACB000142394 /* EZArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZArray.m; sourceTree = "<group>"; };
 		188D551E1585C70600142394 /* EZEnvFlagPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZEnvFlagPicker.h; sourceTree = "<group>"; };
@@ -624,10 +624,10 @@
 				184C2AC7157759CF00852B35 /* MTask.m */,
 				184C2AC9157768DA00852B35 /* MImageOwner.h */,
 				184C2ACA157768DA00852B35 /* MImageOwner.m */,
-				188D551815848B3A00142394 /* MEnvFlag.h */,
-				188D551915848B3A00142394 /* MEnvFlag.m */,
 				188CFE00159852EE008ACCB8 /* MScheduledDay.h */,
 				188CFE01159852EE008ACCB8 /* MScheduledDay.m */,
+				18893D6415EB7610000A1216 /* MEnvFlag.h */,
+				18893D6515EB7611000A1216 /* MEnvFlag.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -956,7 +956,6 @@
 				18E035E9158351E5003B3D3E /* EZPickerKeyboardTime.m in Sources */,
 				18E035EC15836161003B3D3E /* EZKeyBoardHolder.m in Sources */,
 				188D55161584883000142394 /* EZEnvFlag.m in Sources */,
-				188D551A15848B3A00142394 /* MEnvFlag.m in Sources */,
 				188D551D1584ACB000142394 /* EZArray.m in Sources */,
 				188D55201585C70800142394 /* EZEnvFlagPicker.m in Sources */,
 				188D55251585C85D00142394 /* EZEnvFlagPickerCell.m in Sources */,
@@ -1010,6 +1009,7 @@
 				18893D5D15EA15CB000A1216 /* EZThreadPool.m in Sources */,
 				18893D6015EB289C000A1216 /* Child.m in Sources */,
 				18893D6315EB28A6000A1216 /* Parent.m in Sources */,
+				18893D6615EB7611000A1216 /* MEnvFlag.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

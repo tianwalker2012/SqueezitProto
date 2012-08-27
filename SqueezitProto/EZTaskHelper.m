@@ -559,6 +559,9 @@ BOOL isPrime(NSUInteger divider)
 }
 
 NSUInteger findPrimeAfter(NSUInteger prime){
+    if(prime == 0 || prime == 1){
+        return 2;
+    }
     NSUInteger odd = prime % 2;
     if(odd){
         prime += 2;

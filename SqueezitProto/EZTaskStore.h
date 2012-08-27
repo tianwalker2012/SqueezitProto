@@ -21,8 +21,13 @@ NSString* envTraitsToString(NSUInteger envTraits);
 
 //@property (strong, nonatomic) EZCoreAccessor* accessor;
 
+//Why use mutable?
 @property (strong, nonatomic) NSMutableDictionary* flagToEnvFlag;
+@property (strong, nonatomic) NSMutableDictionary* allFlagToEnvFlag;
+
+//Why mutable?
 @property (strong, nonatomic) NSMutableArray* envFlags;
+@property (strong, nonatomic) NSMutableArray* allEnvFlags;
 
 - (id) init;
 
@@ -127,6 +132,8 @@ NSString* envTraitsToString(NSUInteger envTraits);
 - (void) deleteTask:(EZTask*)task;
 
 - (void) deleteTasks:(NSArray *)tasks;
+
+- (void) deleteFlag:(EZEnvFlag*)evFlag;
 
 //This method will only return tasks which delete flags is false;
 - (NSArray*) getTasks;

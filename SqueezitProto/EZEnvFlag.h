@@ -20,6 +20,7 @@
 
 @property (assign, nonatomic) NSUInteger flag;
 @property (strong, nonatomic) NSString* name;
+@property (assign, nonatomic) BOOL deleted;
 @property (strong, nonatomic) MEnvFlag* PO;
 
 - (EZEnvFlag*) initWithName:(NSString*)nm flag:(NSUInteger)fg;

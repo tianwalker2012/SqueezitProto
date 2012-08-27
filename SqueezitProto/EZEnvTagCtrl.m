@@ -18,11 +18,15 @@
 @interface EZEnvTagCtrl ()
 {
     NSMutableArray* flags;
+    UIBarButtonItem* editButton;
+    UIBarButtonItem* doneButton;
 }
 
 - (NSIndexPath*) fieldToPath:(UITextField*)field;
 
 - (void) addClicked;
+
+- (void) editClicked;
 
 @end
 
@@ -48,9 +52,31 @@
     [super viewDidLoad];
     EZDEBUG(@"didLoad get called:%@",[NSThread callStackSymbols]);
     flags = [NSMutableArray arrayWithArray:[EZTaskStore getInstance].envFlags];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addClicked)];
+    
+    //self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addClicked)];
+    editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editClicked)];
+    
+    doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(editClicked)];
+    
+    
+    self.navigationItem.rightBarButtonItem = editButton;
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:Local(@"Back") style:UIBarButtonItemStyleBordered target:self action:@selector(back)];
+    
+    
+}
+
+- (void) editClicked
+{
+    if(self.tableView.isEditing){
+        self.navigationItem.rightBarButtonItem = editButton;
+        [self.tableView setEditing:false animated:YES];
+        //[self.navigationItem.rightBarButtonItem set
+    }else{
+        self.navigationItem.rightBarButtonItem = doneButton;
+        [self.tableView setEditing:true animated:YES];
+    }
+    
 }
 
 - (void)viewDidUnload
@@ -88,6 +114,30 @@
 }
 
 
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(indexPath.row < [flags count]){
+        return UITableViewCellEditingStyleDelete;
+    } 
+    return UITableViewCellEditingStyleNone;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    EZDEBUG(@"commitEditingStyle get called, row:%i", indexPath.row);
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        //[self raiseDeletionAlert:indexPath];
+        EZEnvFlag* ef = [flags objectAtIndex:indexPath.row];
+        [flags removeObjectAtIndex:indexPath.row];
+        [[EZTaskStore getInstance] deleteFlag:ef];
+        [[EZTaskStore getInstance] populateEnvFlags];
+        [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+        
+    }   
+    else if (editingStyle == UITableViewCellEditingStyleInsert) {
+        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+    }   
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -96,19 +146,25 @@
         cell = [EZEditLabelCellHolder createPureEditCellWithDelegate:self];
     }
     cell.placeHolder = Local(@"Name ...");
-    cell.isFieldEditable = true;
+    //cell.isFieldEditable = true;
     //cell.mustShowClearButton = true;
-    CGRect editFrame = cell.editField.frame;
-    
-    CGFloat gap = cell.frame.size.width - editFrame.size.width - editFrame.origin.x;
-    gap -= 10;
-    
-    cell.editField.frame = CGRectMake(editFrame.origin.x, editFrame.origin.y, editFrame.size.width + gap, editFrame.size.height);
+    cell.isChangeWithCellEdit = true;
+   
+    //[cell adjustRightPadding:];
     
     if(indexPath.row < flags.count){
         cell.editField.text = ((EZEnvFlag*)[flags objectAtIndex:indexPath.row]).name;
+        [cell adjustRightPadding:36];
     }else{
+        cell.identWhileEdit = true;
+        [cell adjustRightPadding:39];
         cell.editField.text = @"";
+    }
+    
+    if(indexPath.row % 2){
+        cell.backgroundColor = [UIColor createByHex:EZGapDarkColor];
+    }else{
+        cell.backgroundColor = [UIColor createByHex:EZGapWhiteColor];
     }
     return cell;
 }
@@ -159,6 +215,7 @@
         }
         EZEnvFlag* addFlag = [[EZTaskStore getInstance]createNextFlagWithName:modified]; 
         [flags addObject:addFlag];
+        [[EZTaskStore getInstance] populateEnvFlags];
         //[self.tableView beginUpdates];
         [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:flags.count - 1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
         textField.text = @"";

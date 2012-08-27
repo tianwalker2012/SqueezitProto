@@ -292,15 +292,13 @@
     //Test related behavior happened in this method
     [self testRelatedActivity];
   
-    //[EZCoreAccessor cleanDB:CoreDBName];
+    [EZCoreAccessor cleanDB:CoreDBName];
+    [[EZTaskStore getInstance] fillTestData];
     //EZDEBUG(@"After clean the database");
     //[[EZTaskStore getInstance] setFirstTime:true];
     EZDEBUG(@"initialize staff");
     [EZCoreAccessor getInstance];
     //[[EZTaskStore getInstance] setFirstTime:TRUE];
-    //[[EZTaskStore getInstance] fillTestData];
-    
-    
     if([[EZTaskStore getInstance] isFirstTime]){
         [self firstTimeCall];
         [[EZTaskStore getInstance] setFirstTime:false];

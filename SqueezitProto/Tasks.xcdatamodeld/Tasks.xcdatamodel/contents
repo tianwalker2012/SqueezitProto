@@ -14,7 +14,8 @@
         <attribute name="startTime" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="avDay" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="MAvailableDay" inverseName="availableTimes" inverseEntity="MAvailableDay" syncable="YES"/>
     </entity>
-    <entity name="MEnvFlag" syncable="YES">
+    <entity name="MEnvFlag" representedClassName="MEnvFlag" syncable="YES">
+        <attribute name="deleted" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="flag" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
@@ -61,12 +62,12 @@
     <elements>
         <element name="MAvailableDay" positionX="160" positionY="192" width="128" height="120"/>
         <element name="MAvailableTime" positionX="160" positionY="192" width="128" height="105"/>
-        <element name="MEnvFlag" positionX="160" positionY="192" width="128" height="75"/>
+        <element name="MEnvFlag" positionX="160" positionY="192" width="128" height="90"/>
         <element name="MImageOwner" positionX="160" positionY="192" width="128" height="75"/>
         <element name="MQuotas" positionX="160" positionY="192" width="128" height="150"/>
         <element name="MScheduledDay" positionX="160" positionY="192" width="128" height="60"/>
         <element name="MScheduledTask" positionX="160" positionY="192" width="128" height="150"/>
-        <element name="MTask" positionX="160" positionY="192" width="128" height="150"/>
+        <element name="MTask" positionX="160" positionY="192" width="128" height="135"/>
         <element name="MTaskGroup" positionX="160" positionY="192" width="128" height="105"/>
     </elements>
 </model>

@@ -17,6 +17,7 @@
 #import "EZPickerWrapper.h"
 #import "EZPickerKeyboardDate.h"
 #import "EZEnvFlag.h"
+#import "EZTaskHelper.h"
 
 @interface EZAvTimeDetail () {
     EZPickerKeyboardDate* dateKeyboard;
@@ -304,9 +305,9 @@
         }
     }
     if(indexPath.row % 2){
-        cell.backgroundColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1];
+        cell.backgroundColor = [UIColor createByHex:EZGapDarkColor];
     }else{
-        cell.backgroundColor = [UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:1];
+        cell.backgroundColor = [UIColor createByHex:EZGapWhiteColor];
     }
     return cell;
 }

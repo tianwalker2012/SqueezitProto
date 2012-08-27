@@ -36,7 +36,7 @@
 
 
 @implementation EZTaskStore
-@synthesize flagToEnvFlag, envFlags;
+@synthesize flagToEnvFlag, envFlags, allFlagToEnvFlag, allEnvFlags;
 
 //The purpose of this functionality is to fill the data which is necessary for the environment flag. 
 //Previously, I am using the enum, but not extensible. 
@@ -202,12 +202,22 @@
 //Every tiem somebody added a flag, this method will get called
 - (void) populateEnvFlags
 {
-    NSArray* flags = [self fetchAllWithVO:[EZEnvFlag class] PO:[MEnvFlag class] sortField:@"flag"];
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"deleted != 1"];
+    NSArray* flags = [self fetchWithPredication:predicate VO:[EZEnvFlag class] PO:[MEnvFlag class] sortField:@"flag"];
     self.envFlags = [NSMutableArray arrayWithArray:flags];
     //EZDEBUG(@"The last flag:%i, array Count:%i", ((EZEnvFlag*)[self.envFlags objectAtIndex:envFlags.count-1]).flag, self.envFlags.count);
     self.flagToEnvFlag = [[NSMutableDictionary alloc] init];
     for(EZEnvFlag* flag in flags){
         [self.flagToEnvFlag setObject:flag forKey:[[NSNumber alloc] initWithUnsignedInteger:flag.flag]];
+    }
+    
+    //Even deleted flags will be included in this.
+    NSArray* allFlags = [self fetchAllWithVO:[EZEnvFlag class] PO:[MEnvFlag class] sortField:@"flag"];
+    
+    self.allEnvFlags = [NSMutableArray arrayWithArray:allFlags];
+    self.allFlagToEnvFlag = [[NSMutableDictionary alloc] init];
+    for(EZEnvFlag* flag in allFlags){
+        [self.allFlagToEnvFlag setObject:flag forKey:[[NSNumber alloc] initWithUnsignedInteger:flag.flag]];
     }
     
 }
@@ -460,6 +470,11 @@
     
 }
 
+- (void) deleteFlag:(EZEnvFlag*)evFlag
+{
+    evFlag.deleted = TRUE;
+    [self storeObject:evFlag];
+}
 
 - (void) deleteTask:(EZTask*)task
 {
@@ -580,7 +595,7 @@
 - (NSArray*) StringArrayForFlags:(NSUInteger)flags
 {
     NSMutableArray* res = [[NSMutableArray alloc] init];
-    for(EZEnvFlag* flag in self.envFlags){
+    for(EZEnvFlag* flag in self.allEnvFlags){
         if(isContained(flag.flag, flags)){
             [res addObject:EZLocalizedString(flag.name, nil)];
         }
@@ -663,11 +678,11 @@
 //This Method will generate the next prime number and instantiate EZEnvFlag 
 - (EZEnvFlag*) createNextFlagWithName:(NSString *)name
 {
-    NSUInteger nextFlag = findPrimeAfter(((EZEnvFlag*)envFlags.lastObject).flag);
+    NSUInteger nextFlag = findPrimeAfter(((EZEnvFlag*)allEnvFlags.lastObject).flag);
     EZDEBUG(@"The nextFlag is:%i", nextFlag);
     EZEnvFlag* res = [[EZEnvFlag alloc] initWithName:name flag:nextFlag];
     [self storeObject:res];
-    [self.envFlags addObject:res];
+    //[self.envFlags addObject:res];
     return res;
     
 }
@@ -684,7 +699,7 @@ NSString* envTraitsToString(NSUInteger envTraits)
     }
     //NSMutableString* res = [[NSMutableString alloc] init];
     NSMutableArray* arr = [[NSMutableArray alloc] init];
-    NSArray* flags = [EZTaskStore getInstance].envFlags;
+    NSArray* flags = [EZTaskStore getInstance].allEnvFlags;
     NSUInteger flagCount = envTraits;
     for(EZEnvFlag* flag in flags){
         if(flagCount== 1){

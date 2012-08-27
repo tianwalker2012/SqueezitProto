@@ -11,13 +11,14 @@
 #import "EZCoreAccessor.h"
 
 @implementation EZEnvFlag
-@synthesize flag, name, PO;
+@synthesize flag, name, deleted, PO;
 
 - (EZEnvFlag*) initWithName:(NSString*)nm flag:(NSUInteger)fg
 {
     self = [super init];
     self.name = nm;
     self.flag = fg;
+    self.deleted = false;
     return self;
 }
 
@@ -26,6 +27,7 @@
     self = [super init];
     self.name = valueObj.name;
     self.flag = valueObj.flag;
+    self.deleted = valueObj.deleted;
     self.PO = valueObj.PO;
     return self;
 }
@@ -40,6 +42,7 @@
     self = [super init];
     self.name = mtk.name;
     self.flag = mtk.flag.unsignedIntegerValue;
+    self.deleted = mtk.deleted.boolValue;
     self.PO = mtk;
     return self;
 }
@@ -56,6 +59,7 @@
 {
     po.name = self.name;
     po.flag = [[NSNumber alloc] initWithUnsignedInteger:self.flag];
+    po.deleted = [[NSNumber alloc] initWithBool:self.deleted];
     return po;
 }
 
@@ -65,6 +69,7 @@
         [self.PO.managedObjectContext refreshObject:self.PO mergeChanges:NO];
         self.name = self.PO.name;
         self.flag = self.PO.flag.unsignedIntegerValue;
+        self.deleted = self.PO.deleted.boolValue;
     }
 
 }

@@ -195,7 +195,7 @@
                 
                 eLabelCell.detailTextLabel.text = timeStr;
             }else if(section == 2){
-                eLabelCell.textLabel.text = Local(@"Environment");
+                eLabelCell.textLabel.text = Local(@"Tags");
                 eLabelCell.detailTextLabel.text = [[EZTaskStore getInstance] StringForFlags:task.envTraits];
             } else { // == 3
                 if(task.quotas == nil){

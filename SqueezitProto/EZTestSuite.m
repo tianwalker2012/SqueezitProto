@@ -41,6 +41,7 @@
 #import "Parent.h"
 #import "Child.h"
 #import "EZAlarmUtility.h"
+#import "EZEnvFlag.h"
 
 
 #define TestValue 60*20
@@ -308,6 +309,8 @@ typedef int(^ClosureTest)();
 
 + (void) testTaskGroupDelete;
 
++ (void) testEnvFlagDeletion;
+
 @end
 
 @implementation EZTestSuite
@@ -333,7 +336,49 @@ typedef int(^ClosureTest)();
     //[EZTestSuite testAllocateTimeForTask];
     //[EZTestSuite fireAlarmEvent];
     //[EZTestSuite testTaskGroupDelete];
+    //[EZTestSuite testEnvFlagDeletion];
     [EZCoreAccessor setInstance:nil];
+    
+}
+
+//Added the same mechanism as the Task
++ (void) testEnvFlagDeletion
+{
+    [EZTestSuite initializeDB];
+    [[EZTaskStore getInstance] populateEnvFlags];
+    EZEnvFlag* ef = [[EZTaskStore getInstance] createNextFlagWithName:@"First flag"];
+    assert(ef.flag == 2);
+    
+    [[EZTaskStore getInstance] populateEnvFlags];
+    
+    
+    EZEnvFlag* ef2 = [[EZTaskStore getInstance] createNextFlagWithName:@"Second flag"];
+    assert(ef2.flag == 3);
+    
+    [[EZTaskStore getInstance] populateEnvFlags];
+    
+    assert([EZTaskStore getInstance].envFlags.count == 2);
+    
+    assert([EZTaskStore getInstance].allEnvFlags.count == 2);
+    
+    
+    [[EZTaskStore getInstance] deleteFlag:ef2];
+    
+    [[EZTaskStore getInstance] populateEnvFlags];
+    
+    assert([EZTaskStore getInstance].envFlags.count == 1);
+    assert([EZTaskStore getInstance].allEnvFlags.count == 2);
+    
+    NSString* efstr = envTraitsToString(ef.flag);
+    
+    NSString* ef2str = envTraitsToString(ef2.flag);
+    
+    assert([efstr isEqualToString:ef.name]);
+    
+    assert([ef2str isEqualToString:ef2.name]);
+    
+    assert(false);
+    
     
 }
 

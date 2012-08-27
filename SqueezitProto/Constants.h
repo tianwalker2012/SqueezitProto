@@ -43,6 +43,12 @@ EZDEBUG(xx, ##__VA_ARGS__); \
 #define EZNotificationKey @"taskURL"
 #define EZAssignNotificationKey @"assignedDate"
 
+#define EZGapDarkColor @"E1E1E1"
+
+#define EZGapWhiteColor @"EEEEEE"
+
+
+
 #define radians(degrees)  degrees * M_PI/180.0
 
 #define EditPadding 23
