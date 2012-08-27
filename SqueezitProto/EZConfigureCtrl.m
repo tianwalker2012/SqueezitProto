@@ -103,6 +103,10 @@
     }else if(indexPath.section == 1){
         pickerWrapper = [[EZPickerWrapper alloc] initWithStyle:UITableViewStyleGrouped];
         pickerWrapper.wrapperDelegate = self;
+        //The name is funny. What's the meaning of speedupWin?
+        //Interesting, I have no idea what's the meaning of this. 
+        //Once this bug fixed I will turn to this code and review it like 
+        //Look at my own journal. 
         pickerWrapper.speedupWin = self.view.window;
         [self.navigationController pushViewController:pickerWrapper animated:YES];
     }

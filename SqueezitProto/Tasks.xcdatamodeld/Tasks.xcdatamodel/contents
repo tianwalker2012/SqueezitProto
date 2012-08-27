@@ -45,6 +45,7 @@
     </entity>
     <entity name="MTask" representedClassName="MZTask" syncable="YES">
         <attribute name="createdTime" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="deleted" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="duration" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="envTraits" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="maxDuration" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -63,9 +64,9 @@
         <element name="MEnvFlag" positionX="160" positionY="192" width="128" height="75"/>
         <element name="MImageOwner" positionX="160" positionY="192" width="128" height="75"/>
         <element name="MQuotas" positionX="160" positionY="192" width="128" height="150"/>
-        <element name="MScheduledTask" positionX="160" positionY="192" width="128" height="150"/>
-        <element name="MTask" positionX="160" positionY="192" width="128" height="135"/>
-        <element name="MTaskGroup" positionX="160" positionY="192" width="128" height="105"/>
         <element name="MScheduledDay" positionX="160" positionY="192" width="128" height="60"/>
+        <element name="MScheduledTask" positionX="160" positionY="192" width="128" height="150"/>
+        <element name="MTask" positionX="160" positionY="192" width="128" height="150"/>
+        <element name="MTaskGroup" positionX="160" positionY="192" width="128" height="105"/>
     </elements>
 </model>

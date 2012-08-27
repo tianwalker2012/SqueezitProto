@@ -93,6 +93,7 @@
     if(pureCell == nil){
         pureCell = [EZEditLabelCellHolder createPureEditCellWithDelegate:self];
         pureCell.placeHolder = EZLocalizedString(@"Task name ...", nil);
+        [pureCell adjustRightPadding:10];
         self.editField = pureCell.editField;
     }
     //pureCell.isChangeWithCellEdit = true;
@@ -254,7 +255,9 @@
         self.taskGroup.tasks = [NSMutableArray arrayWithArray:self.tasks];
         //The reason I do this because the store have side effect
         [[EZTaskStore getInstance] storeObject:self.taskGroup];
-        [[EZTaskStore getInstance] removeObject:task];
+        
+        //Only setup the delete flag.
+        [[EZTaskStore getInstance] deleteTask:task];
         [self performSelector:@selector(removeCellAtIndex:) withObject:indexPath afterDelay:0.3];
         self.superUpdateBlock();
     };

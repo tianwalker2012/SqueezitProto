@@ -162,6 +162,10 @@
         }
         cell.isChangeWithCellEdit = true;
         cell.identWhileEdit = true;
+        
+        //Found the reason, there is identWhileEdit.
+        [cell adjustRightPadding:41];
+        
         return cell;
     }
     
@@ -279,7 +283,8 @@
         self.operation = ^(){
             EZDEBUG(@"Operation get called");
             [groups removeObject:tg];
-            [[EZTaskStore getInstance] removeObject:tg];
+            [[EZTaskStore getInstance] deleteTaskgroup:tg];
+            //[[EZTaskStore getInstance] removeObject:tg];
             [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
         };
         [alamView show];

@@ -13,8 +13,19 @@
 
 
 @interface EZSlideViewContainer () {
+    //What's the purpose of this flag.
+    //Some step I only do once, use this to keep the status.
+    //Why not do it in the init?
     BOOL initailized;
+    
+    //Why do we need this?
+    //Page in it could be reused. The least Used one will be served.
+    //Why? I don't get it.
+    //What I mean my use?
+    //Since it is already in the cache, how people could use it?
+    //Hit count?
     EZLRUMap* cachedPage;
+    
     NSMutableDictionary* identifierMap;
     
     NSInteger pageCount;
@@ -128,22 +139,6 @@
 - (void) scrollFrom:(NSInteger)fromPage  to:(NSInteger)toPage  animate:(BOOL)animate
 {
     [self loadPageCluster:toPage];
-    
-    /**
-    if(fromPage != toPage){
-        NSInteger begin = fromPage;
-        NSInteger end = toPage;
-        if(fromPage > toPage){
-            begin = toPage;
-            end = fromPage;
-        }
-        for(NSInteger i = (begin+1); i <  end; i++){
-            [self loadPage:i];
-        }
-    }
-     **/
-    //scrollAnimated = YES;
-    EZDEBUG(@"toPage is:%i",toPage);
     [scrollView setContentOffset:CGPointMake(toPage*scrollView.frame.size.width, 0) animated:animate];
     //scrollAnimated = animate;
 }
@@ -192,7 +187,11 @@
 
 - (void) reloadPage:(NSInteger)page
 {
+    //I understand why remove the page from cache now.
+    //Otherwise, the delegate will not get called. I will use the page in 
+    //The cache and present it.
     [cachedPage removeObjectForKey:[[NSNumber alloc] initWithInt:page]];
+    
     [self loadPage:page];
 }
 
@@ -286,6 +285,10 @@
     [self scrollFrom:currentPage to:currentPage animate:NO];
 }
 
+//When will viewWillAppear get called?
+//When it show on screen. 
+//Could I make it simpler, mean it add into Window and window about to display it?
+//It maybe called multiple times so I use initialize to indicate this.
 -(void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -299,6 +302,9 @@
     
 }
 
+//The only reason I could think of doing this it to update the weight in the cache.
+//Now conception connected, This is the source of usage. 
+//Should we have a suitable name for it?
 - (EZViewWrapper*) getViewWrapperByPage:(NSInteger)page
 {
     return [cachedPage getObjectForKey:[[NSNumber alloc] initWithInt:page]];

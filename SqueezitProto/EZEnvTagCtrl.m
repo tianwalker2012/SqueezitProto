@@ -38,6 +38,10 @@
 }
 
 
+- (void) back
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 - (void)viewDidLoad
 {
@@ -45,6 +49,8 @@
     EZDEBUG(@"didLoad get called:%@",[NSThread callStackSymbols]);
     flags = [NSMutableArray arrayWithArray:[EZTaskStore getInstance].envFlags];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addClicked)];
+    
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:Local(@"Back") style:UIBarButtonItemStyleBordered target:self action:@selector(back)];
 }
 
 - (void)viewDidUnload
@@ -81,6 +87,8 @@
     return [arr objectAtIndex:0];
 }
 
+
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     EZPureEditCell* cell = [self.tableView dequeueReusableCellWithIdentifier:@"PureEdit"];
@@ -89,6 +97,14 @@
     }
     cell.placeHolder = Local(@"Name ...");
     cell.isFieldEditable = true;
+    //cell.mustShowClearButton = true;
+    CGRect editFrame = cell.editField.frame;
+    
+    CGFloat gap = cell.frame.size.width - editFrame.size.width - editFrame.origin.x;
+    gap -= 10;
+    
+    cell.editField.frame = CGRectMake(editFrame.origin.x, editFrame.origin.y, editFrame.size.width + gap, editFrame.size.height);
+    
     if(indexPath.row < flags.count){
         cell.editField.text = ((EZEnvFlag*)[flags objectAtIndex:indexPath.row]).name;
     }else{
@@ -98,21 +114,45 @@
 }
 
 
+//Why do I override this method.
+//I want to disable the return button.
+//Can I do that?
+//If not I can use the UIView to cover it.
+//Yes. Smart boy.
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    EZDEBUG(@"BeginEditing");
+    self.navigationItem.leftBarButtonItem.enabled = false;
+    self.navigationItem.rightBarButtonItem.enabled = false;
+    return true;
+}
+
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
+    
+    self.navigationItem.leftBarButtonItem.enabled = true;
+    self.navigationItem.rightBarButtonItem.enabled = true;
     NSString* modified = textField.text.trim;
     NSIndexPath* path = [self fieldToPath:textField];
+    EZDEBUG(@"EndEditing:%@",textField);
+    //It will be created and stored and add the envFlag
+    
     if(path.row < flags.count){
         EZEnvFlag* ef = [flags objectAtIndex:path.row];
+        if([@"" isEqualToString:modified]){
+            EZDEBUG(@"Do nothing for empty string");
+            textField.text = ef.name;
+            return;
+        }
         if([ef.name isEqualToString:modified]){
             //Not changed, do nothing
             return;
         }else{
             ef.name = modified;
             [[EZTaskStore getInstance] storeObject:ef];
+            [[EZTaskStore getInstance] populateEnvFlags];
         }
     }else{
-        //It will be created and stored and add the envFlag
         if([@"" isEqualToString:modified]){
             EZDEBUG(@"Do nothing for empty string");
             return;

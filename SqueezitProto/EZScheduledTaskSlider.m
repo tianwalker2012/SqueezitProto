@@ -17,6 +17,7 @@
 #import "EZTaskScheduler.h"
 #import "EZKeyBoardHolder.h"
 #import "EZPageControl.h"
+#import "EZDotRoller.h"
 
 @interface EZScheduledTaskSlider ()
 {
@@ -24,10 +25,12 @@
     //No need to including future date. 
     //If today is not included, will add today into it
     NSMutableArray* scheduledDates;
-    NSMutableArray* cachedControllers;
+    //NSMutableArray* cachedControllers;
+    //Why do we keep the cached Controllers?,suppose nobody will use it.
     NSInteger todayPage;
     BOOL initialized;
-    EZPageControl* pageControl;
+    //EZPageControl* pageControl;
+    EZDotRoller* roller;
 }
 
 //Get the related date for this page
@@ -98,11 +101,25 @@
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    CGRect frame = pageControl.frame;
-    pageControl.frame = CGRectMake((self.view.frame.size.width - frame.size.width)/2, self.view.frame.size.height - 10, frame.size.width, frame.size.height);
+    CGRect frame = roller.frame;
+    roller.frame = CGRectMake(0, self.view.frame.size.height - frame.size.height, frame.size.width, frame.size.height);
     //pageControl.backgroundColor = [UIColor blackColor];
-    [self.view addSubview:pageControl];
-    [pageControl setInitialCurrentPage:todayPage];
+    roller.backgroundColor = [UIColor clearColor];
+    roller.currentDotColor = [UIColor greenColor];//[UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:0.5];
+    roller.otherDotColor = [UIColor colorWithRed:0.6 green:0.6 blue:0.6 alpha:0.5];
+    roller.dotsNumber = 10;
+    [self.view addSubview:roller];
+    
+    //NSInteger totalPages = scheduledDates.count;
+    
+    if(todayPage < (roller.dotsNumber - 1)){
+        roller.currentDot = todayPage;
+    }else{
+        roller.currentDot = (roller.dotsNumber - 2);
+    }
+    roller.actualCurPage = todayPage;
+    [roller setNeedsDisplay];
+    //[pageControl setInitialCurrentPage:todayPage];
     
 }
 
@@ -115,7 +132,7 @@
     NSDate* today = [[NSDate date] beginning];
 	scheduledDates = [NSMutableArray arrayWithArray:[[EZTaskStore getInstance] fetchWithPredication:[NSPredicate predicateWithFormat:@"scheduledDate < %@",today] VO:[EZScheduledDay class] PO:[MScheduledDay class] sortField:@"scheduledDate"]];
     EZDEBUG(@"history date number:%i",scheduledDates.count);
-    cachedControllers = [[NSMutableArray alloc] init];
+    //cachedControllers = [[NSMutableArray alloc] init];
     EZScheduledDay* todaySchedule = [[EZScheduledDay alloc] init];
     todaySchedule.scheduledDate = today;
     [scheduledDates addObject:todaySchedule];
@@ -126,7 +143,9 @@
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:Local(@"Today") style:UIBarButtonItemStyleBordered target:self action:@selector(scroll2Today)];
     self.navigationItem.leftBarButtonItem.enabled = false;
-    pageControl = [[EZPageControl alloc] initWithFrame:CGRectMake(0, 0, 160, 10)];
+    //pageControl = [[EZPageControl alloc] initWithFrame:CGRectMake(0, 0, 160, 10)];
+    roller = [[EZDotRoller alloc] initWithFrame:CGRectMake(0, 0, 320, 20)];
+                              
     //pageControl.numberOfPages = scheduledDates.count;
     
 }
@@ -142,22 +161,6 @@
     return -1;
 }
 
-- (EZScheduledDay*) createDayNotExist:(NSDate*)date
-{
-    NSDate* begin = date.beginning;
-    NSDate* end = [begin adjust:SecondsPerDay - 1];
-    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"scheduleDate >= %@ AND scheduledDate <= %@",begin, end];
-    NSArray* scheduledDayArr = [[EZTaskStore getInstance] fetchWithPredication:predicate VO:[EZScheduledDay class] PO:[MScheduledDay class] sortField:nil];
-    if(scheduledDayArr.count == 0){
-        EZScheduledDay* sd = [[EZScheduledDay alloc] init];
-        sd.scheduledDate = date;
-        [[EZTaskStore getInstance] storeObject:sd];
-        return sd;
-    }else{
-        assert(scheduledDayArr.count == 1);
-        return [scheduledDayArr objectAtIndex:0];
-    }
-}
 
 //What I will do in this method?
 //Add tomorrow into the scheduledDay.
@@ -173,7 +176,7 @@
         //My page will not jump ahead. So far I provide no mean to do so.
         //Tomorrow not read out doesn't mean it is not exist right?
         //Fix it now
-        EZScheduledDay* day = [self createDayNotExist:tomorrow];
+        EZScheduledDay* day = [[EZTaskStore getInstance] createDayNotExist:tomorrow];
         [scheduledDates addObject:day];
         page = scheduledDates.count - 1;
     }
@@ -231,7 +234,7 @@
 
 - (NSInteger) pageCount:(EZSlideViewContainer*)container
 {
-    EZDEBUG(@"Page count get called");
+    //EZDEBUG(@"Page count get called");
     return scheduledDates.count;
 }
 
@@ -244,8 +247,10 @@
     if(res == nil){
         EZScheduledTaskController* stc = [[EZScheduledTaskController alloc] initWithStyle:UITableViewStylePlain];
         [stc.view setFrame:CGRectMake(0, 0, 320, 367)];
+        stc.frameView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 367)];
+        [stc.frameView addSubview:stc.view];
         //[self addChildViewController:stc];
-        res = [[EZViewWrapper alloc] initWithView:stc.view identifier:identifier];
+        res = [[EZViewWrapper alloc] initWithView:stc.frameView identifier:identifier];
         res.controller = stc;
         stc.superController = self;
         //stc.navigationItem = self.navigationItem;
@@ -286,7 +291,9 @@
     }else{
         self.navigationItem.rightBarButtonItem.enabled = true;
     }
-    pageControl.currentPage = page;
+    //pageControl.currentPage = page;
+    [roller adjustCurPage:page];
+    
 }
 //The purpose of this function call it that
 //If the container reach the end of the page, it will call this method

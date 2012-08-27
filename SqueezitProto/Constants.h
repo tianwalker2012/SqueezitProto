@@ -45,6 +45,8 @@ EZDEBUG(xx, ##__VA_ARGS__); \
 
 #define radians(degrees)  degrees * M_PI/180.0
 
+#define EditPadding 23
+
 typedef enum EZEnvironmentTraits {
     EZ_ENV_SUIT_ALL = 0, //Once time snippet choose this all task can assigned
     EZ_ENV_NO_REQ = 1, //Once task choose you can assign it to any time snippet.

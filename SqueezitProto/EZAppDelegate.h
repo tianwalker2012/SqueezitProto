@@ -19,6 +19,6 @@
 //Interesting question. 
 //This policy should be determined by us,
 //Honestly gloabl status is meaningless, each component should keep their own status. 
-@property (assign, nonatomic) BOOL firstTimeUser;
+//@property (assign, nonatomic) BOOL firstTimeUser;
 
 @end

@@ -19,15 +19,24 @@
 
 @end
 
+
+//What's the purpose of this class?
+//It will take care of all the schedule related activity.
+//It have 2 inputs, the available task and available time.
+//It will assign the available task randomly or specifically into a availableTime span.
 @interface EZTaskScheduler : NSObject<EZValueObject>
 
 
 + (EZTaskScheduler*) getInstance;
 
 // The exlusive list mean, do NOT choose from those already choosed
+// Why Do I have exlusive?
+// Because I don't want the task already allocated at today to be allocated again.
+// Give other task a chance to get allocated.
 - (EZScheduledTask*) scheduleTask:(NSDate*)startTime duration:(int)duration exclusiveList:(NSArray*)exclusive;
 
 // Will select multiple task to assign, actually, I think, I actually need this method a lot.
+// What's the difference between scheduleTaskByBulk and scheduleTask
 - (NSArray*) scheduleTaskByBulk:(EZAvailableTime*)timeSlot exclusiveList:(NSArray*)exclusive tasks:(NSArray*)tasks;
 
 //I am not satisfied so I need to change the task
@@ -85,5 +94,13 @@
 // What if I got zero tasks?
 // Then ask user to take a vacation.
 - (NSArray*) changeScheduledTask:(EZScheduledTask*)change;
+
+//What's the purpose of exposing this method. 
+//For the test purpose.
+- (NSArray*) allocTimeForTasks:(EZTask*)task avTimes:(NSArray*)times amount:(int)amount date:(NSDate*)date;
+
+//Only expose this method for the test purpose.
+//Complete this functionality before 9:00PM.
+- (EZScheduledTask*) getTaskFromList:(NSArray*)tasks timeSlot:(EZAvailableTime*)timeSlot;
 
 @end

@@ -20,7 +20,7 @@
 
 
 @implementation EZPureEditCell
-@synthesize editField, isChangeWithCellEdit, editColor, nonEditColor, isFieldEditable, placeHolder, identWhileEdit;
+@synthesize editField, isChangeWithCellEdit, editColor, nonEditColor, isFieldEditable, placeHolder, identWhileEdit, mustShowClearButton;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -49,6 +49,8 @@
     identWhileEdit = false;
     isChangeWithCellEdit = false;
     self.isFieldEditable = false;
+    editField.clearButtonMode = UITextFieldViewModeNever;
+    mustShowClearButton = false;
     
 }
 
@@ -76,11 +78,19 @@
 //3. UserInteractionEnabled
 - (void) setIsFieldEditable:(BOOL)isEditStatus
 {
+    EZDEBUG(@"Why only show the clearbutton while edit?");
     isFieldEditable = isEditStatus;
     if(isEditStatus){
         editField.textColor = [UIColor createByHex:EZEditColor];
         editField.userInteractionEnabled = true;
         editField.placeholder = self.placeHolder;
+        editField.clearButtonMode = UITextFieldViewModeAlways;
+        
+        //Add a empty space so that the field will get showed
+        //So that trim is very important before store anything.
+        if([editField.text isEqualToString:@""] && mustShowClearButton){
+            editField.text = @" ";
+        }
         if(identWhileEdit){
             [self indentTextField];
         }
@@ -88,6 +98,7 @@
         editField.textColor = nonEditColor;
         editField.userInteractionEnabled = false;
         editField.placeholder = @"";
+        editField.clearButtonMode = UITextFieldViewModeNever;
         [self unIndentTextField];
     }
 }
@@ -120,6 +131,16 @@
     if(isChangeWithCellEdit){//Only when is not always editable we care.
         self.isFieldEditable = editing;
     }
+}
+
+//Fit the bound with specified rightPadding.
+- (void) adjustRightPadding:(CGFloat)padding
+{
+    CGRect editFrame = editField.frame;
+    CGFloat gap = self.frame.size.width - editFrame.origin.x - editFrame.size.width;
+    gap -= padding;
+    editField.frame = CGRectMake(editFrame.origin.x, editFrame.origin.y, editFrame.size.width + gap, editFrame.size.height);
+    
 }
 
 @end

@@ -237,6 +237,7 @@
             editCell.placeHolder = Local(@"Name for time config...");
             editCell.isFieldEditable = false;
             editCell.isChangeWithCellEdit = true;
+            [editCell adjustRightPadding:EditPadding];
             return editCell;
         }else{
             NSString* cellID = @"propertyCell";

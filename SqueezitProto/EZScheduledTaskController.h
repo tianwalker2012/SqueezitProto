@@ -15,8 +15,9 @@
     NSDate* currentDate;
     NSArray* scheduledTasks;
     NSArray* repalceTasks;
-    UIView* shakeMessage;
+    //UIView* shakeMessage;
     UILabel* message;
+    //UIView* frameView;
 }
 
 - (void) presentShakeMessage:(NSString*)msg;
@@ -48,6 +49,12 @@
 //This will be executed the in the viewDidAppear. and only executed once.
 @property (strong, nonatomic) EZOperationBlock viewAppearBlock;
 @property (strong, nonatomic) UIViewController* superController;
+
+//Why do I add this view?
+//To solve the problem, some time the tableView will cover the no Task View. 
+//Even it is a minor visual bug. But it is unbearable to me. 
+//So I decided to fix it. 
+@property (strong, nonatomic) UIView* frameView;
 
 
 @end

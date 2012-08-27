@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1171" systemVersion="11E53" minimumToolsVersion="Xcode 4.1" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Child" representedClassName="Child" syncable="YES">
+        <attribute name="flag" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="father" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Parent" syncable="YES"/>
     </entity>
@@ -9,6 +10,6 @@
     </entity>
     <elements>
         <element name="Parent" positionX="160" positionY="192" width="128" height="60"/>
-        <element name="Child" positionX="160" positionY="192" width="128" height="75"/>
+        <element name="Child" positionX="160" positionY="192" width="128" height="90"/>
     </elements>
 </model>

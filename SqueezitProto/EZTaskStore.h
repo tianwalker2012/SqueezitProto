@@ -10,7 +10,8 @@
 #import "Constants.h"
 #import "EZTaskHelper.h"
 
-@class EZScheduledDay,EZAvailableDay, EZTask, EZCoreAccessor, EZArray, EZScheduledTask, EZEnvFlag;
+@class EZScheduledDay,EZAvailableDay, EZTask, EZCoreAccessor, 
+    EZArray, EZScheduledTask, EZEnvFlag, EZTaskGroup;
 
 NSString* envTraitsToString(NSUInteger envTraits);
 
@@ -117,5 +118,17 @@ NSString* envTraitsToString(NSUInteger envTraits);
 //This Method will generate the next prime number and instantiate EZEnvFlag 
 //It will be created and stored and added the envFlags
 - (EZEnvFlag*) createNextFlagWithName:(NSString*)name;
+
+//We need to check in which date we already have schedule for it. 
+- (EZScheduledDay*) createDayNotExist:(NSDate*)date;
+
+- (void) deleteTaskgroup:(EZTaskGroup*) tgroup;
+
+- (void) deleteTask:(EZTask*)task;
+
+- (void) deleteTasks:(NSArray *)tasks;
+
+//This method will only return tasks which delete flags is false;
+- (NSArray*) getTasks;
 
 @end

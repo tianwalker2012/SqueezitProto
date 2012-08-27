@@ -37,9 +37,9 @@
         if(nowSign == nil){
             nowSign = cv;
             [self addSubview:nowSign];
-            EZDEBUG(@"Add counter view for current task cell:%@, counterView:%@",self.taskName.text, nowSign);
+            //EZDEBUG(@"Add counter view for current task cell:%@, counterView:%@",self.taskName.text, nowSign);
         }else{
-            EZDEBUG(@"Current task cell, already have counter view,%@",self.taskName.text);
+            //EZDEBUG(@"Current task cell, already have counter view,%@",self.taskName.text);
         }
     }else if(status == EZ_FUTURE){
         if(nowSign){

@@ -37,6 +37,8 @@
     
     //For important task, I have minimum time quota on some period of time
     EZQuotas* quotas;
+    
+    BOOL deleted;
 
 }
 
@@ -52,6 +54,7 @@
 @property (strong, nonatomic) NSString* soundName;
 @property (strong, nonatomic) MTask* PO;
 @property (strong, nonatomic) NSDate* createdTime;
+@property (assign, nonatomic) BOOL deleted;
 
 
 - (id) initWithName:(NSString*) nm duration:(int)dur maxDur:(int)mdur envTraits:(NSUInteger)traits;

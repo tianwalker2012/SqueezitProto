@@ -168,6 +168,7 @@
             pureCell.placeHolder = Local(@"Task Name ...");
             pureCell.editField.text = task.name;
             //pureCell.editField.textAlignment = UITextAlignmentCenter;
+            [pureCell adjustRightPadding:23];
             pureCell.isFieldEditable = true;
             return pureCell;
             break;
@@ -198,7 +199,7 @@
                 eLabelCell.detailTextLabel.text = [[EZTaskStore getInstance] StringForFlags:task.envTraits];
             } else { // == 3
                 if(task.quotas == nil){
-                    eLabelCell.textLabel.text = Local(@"Weekly Minimum");
+                    eLabelCell.textLabel.text = Local(@"No Minimum");
                     eLabelCell.detailTextLabel.text = Local(@"None");
                 }
                 else if(task.quotas.cycleType == WeekCycle){
@@ -310,10 +311,20 @@
     }else if(indexPath.section == 3){
         EZGoalSetter* goalSetter = [[EZGoalSetter alloc] initWithStyle:UITableViewStyleGrouped];
         //Add the clone later
-        goalSetter.quotas = task.quotas.cloneVO;
+        goalSetter.quotas = nil;
+        if(task.quotas){
+            goalSetter.quotas = task.quotas.cloneVO;
+        }else{
+            goalSetter.quotas = [[EZQuotas alloc] init];
+            goalSetter.quotas.cycleType = QuotasNone;
+        }
         goalSetter.doneBlock = ^(){
-            EZDEBUG(@"Done block get called"); 
-            task.quotas = goalSetter.quotas;
+            EZDEBUG(@"Done block get called");
+            if(goalSetter.quotas.cycleType == QuotasNone){
+                task.quotas = nil;
+            }else{
+                task.quotas = goalSetter.quotas;
+            }
             [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
         };
         [self.navigationController pushViewController:goalSetter animated:YES];

@@ -43,6 +43,7 @@
 {
     EZDEBUG(@"Setup alarm for:%@",[task detail]);
     if(task.alarmNotification){
+        EZDEBUG(@"Cancel alarm first");
         [self cancelAlarm:task];
     }
     
@@ -60,15 +61,19 @@
     nofication.applicationIconBadgeNumber = 1;
     NSDictionary* infoDict = [NSDictionary dictionaryWithObjectsAndKeys:task.PO.objectID.URIRepresentation.absoluteString ,EZNotificationKey ,nil];
     nofication.userInfo = infoDict;
+    //EZDEBUG(@"Before scheduleLocalNotification");
     [[UIApplication sharedApplication] scheduleLocalNotification:nofication];
+    //EZDEBUG(@"After scheduleLocationNotification");
     task.alarmNotification = nofication;
+    //EZDEBUG(@"Complete the notification setup");
+    //EZDEBUG(@"assigned notification:%@",task.alarmNotification);
     
 }
 
 //Cancel the alarm for task
 + (void) cancelAlarm:(EZScheduledTask*)task
 {
-    EZDEBUG(@"Cancel alarm for:%@",[task detail]);
+    EZDEBUG(@"Cancel alarm for:%@,alerm:%@",[task detail], task.alarmNotification);
     if(task.alarmNotification){
         [[UIApplication sharedApplication] cancelLocalNotification:task.alarmNotification];
         task.alarmNotification = nil;
@@ -90,7 +95,7 @@
 }
 
 
-+ (void) setupDailyNotificationDate:(NSDate*)date
++ (UILocalNotification*) createNotificationFromDate:(NSDate*)date
 {
     UILocalNotification* nofication = [[UILocalNotification alloc] init];
     //NSDate* tomorrow = [[NSDate date] adjustDays:1];
@@ -106,6 +111,7 @@
     //Fix them one after another.
     NSDictionary* infoDict = [NSDictionary dictionaryWithObjectsAndKeys:@"Tomorrow", EZAssignNotificationKey ,nil];
     nofication.userInfo = infoDict;
+    return nofication;
 
 }
 

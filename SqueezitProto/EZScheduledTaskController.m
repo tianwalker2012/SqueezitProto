@@ -26,6 +26,8 @@
 #import "EZScheduledLayer.h"
 #import "EZKeyBoardHolder.h"
 #import "EZActivityLayer.h"
+#import "EZDotRoller.h"
+#import "EZThreadPool.h"
 
 @interface EZNumberWrapper : NSObject 
 
@@ -46,7 +48,7 @@
     //What's the meaning of this flag?
     //Check it out. I will not allow vague naming like this in my code
     //This is unbearable. It seriously affect my intimate relationship with my code.
-    BOOL displayed;
+    //BOOL displayed;
 }
 
 - (EZTimeCounter*) createTimeCounter; 
@@ -72,7 +74,7 @@
 @end
 
 @implementation EZScheduledTaskController
-@synthesize currentDate, scheduledTasks, viewAppearBlock, superController;
+@synthesize currentDate, scheduledTasks, viewAppearBlock, superController, frameView;
 
 
 //What's logic will be included in this method?
@@ -81,6 +83,7 @@
 //The rescheduleAll will handle all the logic right.
 - (void) rescheduleTasks
 {
+    [self hideNoTaskLayout];
     [self showActivityLayer];
     [self executeBlockInBackground:^(){
         [self rawReschedule];
@@ -89,10 +92,12 @@
             [self hideActivityLayer];
         }];
         counter.isCounting = false;
-    } inThread:nil];
+    } inThread:[EZThreadPool getWorkerThread]];
     
 }
 
+//This will called when have no data.
+//When it was dismissed?
 - (void) showNoTaskLayout
 {
     __weak EZScheduledTaskController* weakSelf = self;
@@ -113,25 +118,30 @@
                     noTasklayer.activityView.alpha = 0;
                     [weakSelf hideNoTaskLayout];
                 }];
-            } inThread:nil];
+            } inThread:[EZThreadPool getWorkerThread]];
         };
     }
     EZDEBUG(@"about to displayNoTaskLayer:%@", noTasklayer);
     //Why have this code? This is need explaination
     self.tableView.scrollEnabled = false;
-    [self.tableView addSubview:noTasklayer];
+    [self.frameView addSubview:noTasklayer];
 }
 
 - (void) rawReschedule
 {
+    EZDEBUG(@"date for the schedule is: %@", [currentDate stringWithFormat:@"yyyy-MM-dd"]);
     EZTaskScheduler* scheduler = [EZTaskScheduler getInstance];
     if([currentDate equalWith:[NSDate date] format:@"yyyyMMdd"]){
         currentDate = [currentDate combineTime:[NSDate date]];
     }
     scheduledTasks = [scheduler rescheduleAll:scheduledTasks date:currentDate];
-    [[EZTaskStore getInstance] storeObjects:scheduledTasks];
-    [EZAlarmUtility setupAlarmBulk:scheduledTasks];
-    EZScheduledDay* schDay = [[EZScheduledDay alloc] init];
+    //[[EZTaskStore getInstance] storeObjects:scheduledTasks];
+    //[EZAlarmUtility setupAlarmBulk:scheduledTasks];
+    
+    //Why do we have this?
+    //I guess it is to display the day on the slider window, right?
+    //Should we check if we already have this date or not right?
+    EZScheduledDay* schDay = [[EZTaskStore getInstance] createDayNotExist:currentDate];
     schDay.scheduledDate = currentDate;
     [[EZTaskStore getInstance] storeObject:schDay];
     
@@ -179,30 +189,6 @@
     return tc;
 }
 
-- (BOOL)canBecomeFirstResponder
-{
-    //EZDEBUG(@"canBecomeFirstResponder get called,stack trace %@",[NSThread callStackSymbols]);
-    return TRUE;
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    EZDEBUG(@"viewDidAppear get called");
-    [self becomeFirstResponder];
-    //currentDate = [NSDate date];
-    //currentDate = [NSDate stringToDate:@"yyyyMMdd" dateString:@"20120629"];
-    if(viewAppearBlock){
-        viewAppearBlock();
-        self.viewAppearBlock = nil;
-    }
-    displayed = true;
-    
-}
-- (void)viewWillDisappear:(BOOL)animated
-{
-    EZDEBUG(@"viewWillDisappear get called");
-    [super viewWillDisappear:animated];
-    displayed = false;
-}
 
 
 //Who will call it.
@@ -210,25 +196,26 @@
 //Is this deprecated code.
 - (void) reloadScheduledTask:(NSDate *)date
 {
-    [self loadWithTask:[[EZTaskStore getInstance]getScheduledTaskByDate:date] date:date];
-    if(scheduledTasks.count == 0){
-        if(displayed){
-            [self showNoTaskLayout];
-        }else{
-            [self performBlock:^(){
+    [self showActivityLayer];
+    [self executeBlockInBackground:^(){
+        [self  loadWithTask:[[EZTaskStore getInstance]getScheduledTaskByDate:date] date:date];
+        [self executeBlockInMainThread:^(){
+            [self hideActivityLayer];
+            if(scheduledTasks.count == 0){
                 [self showNoTaskLayout];
-            } withDelay:0.01];
-        }
-    }else{
-        [self hideNoTaskLayout];
-    }
+            }else{
+                [self hideNoTaskLayout];
+            }
+        }];
+    } inThread:[EZThreadPool getWorkerThread]];
+     
 }
 
 - (void) loadWithTask:(NSArray *)tasks date:(NSDate *)date
 {
     currentDate = date;
     scheduledTasks = [NSMutableArray arrayWithArray:tasks];
-    EZDEBUG(@"Before reload");
+    //EZDEBUG(@"Before reload");
     [self.tableView reloadData];
     EZDEBUG(@"task count:%i for date:%@",scheduledTasks.count,[currentDate stringWithFormat:@"yyyyMMdd"]);
 }
@@ -256,7 +243,7 @@
 
 
 
-
+//Will delete data in tableView, not the data in persistent layer
 - (void) deleteRow:(NSIndexPath*)indexPath
 {
     [self.tableView beginUpdates];
@@ -281,6 +268,7 @@
 }
 
 //Return -1 mean not found, is this a norm, I can make it a norm
+//Who will call this?
 - (NSInteger) findOngoingTask:(NSArray*)tks
 {
     for(int i = 0; i < tks.count; i++){
@@ -301,7 +289,7 @@
     //    [self presentShakeMessage:@"Shake shake"];
     //}
     //self.navigationItem.title = Local(@"Scheduled");
-    displayed = false;
+    //displayed = false;
     counter = [self createTimeCounter];
     counter.isCounting = false;
     __weak EZScheduledTaskController* weakSelf = self;
@@ -346,6 +334,7 @@
         }
     };
     [counter start:1];
+
 }
 
 - (void)viewDidUnload
@@ -355,6 +344,37 @@
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
+
+- (BOOL)canBecomeFirstResponder
+{
+    //EZDEBUG(@"canBecomeFirstResponder get called,stack trace %@",[NSThread callStackSymbols]);
+    return TRUE;
+}
+
+//This method will not be called, because they are not in the controller list.
+//So no event will pass to them. as far as I know. 
+//What should I do to enable the event. 
+//Why? 
+- (void)viewDidAppear:(BOOL)animated {
+    EZDEBUG(@"viewDidAppear get called");
+    [self becomeFirstResponder];
+    //currentDate = [NSDate date];
+    //currentDate = [NSDate stringToDate:@"yyyyMMdd" dateString:@"20120629"];
+    if(viewAppearBlock){
+        viewAppearBlock();
+        self.viewAppearBlock = nil;
+    }
+    
+    //Re add it again. 
+    
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    EZDEBUG(@"viewWillDisappear get called");
+    [super viewWillDisappear:animated];
+}
+
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
@@ -415,13 +435,25 @@
     
     scheduleDetail.rescheduleBlock = ^(){
         EZDEBUG(@"RescheduleOp get called");
+        //Some places the storage happened within, some place the storage happened outside.
+        //Can I call this persistence inconsistency?
+        //Nice name. 
+        //Let's fix them.
+        //I forget to do one thing, that is asking why? The reason is:
+        //If I could not successfully find the replacement, I will not delete the old one.
+        //That's why deletion should not happen within the method.
         NSArray* schTasks = [[EZTaskScheduler getInstance] rescheduleStoredTask:task];
         if([schTasks count] > 0){
             [EZAlarmUtility cancelAlarm:task];
             [[EZTaskStore getInstance] removeObject:task];
             
+            //Do you feel this sandwitch like code are ugly?
+            //How to fix them? No other way but the way of sandwitch. 
+            //Because alarm need the objectID from stored object.
             [[EZTaskStore getInstance] storeObjects:schTasks];
             [EZAlarmUtility setupAlarmBulk:schTasks];
+            [[EZTaskStore getInstance] storeObjects:schTasks];
+            
             if(pos > -1){
                 //Why? need to calculate the time again.
                 counter.isCounting = false;
@@ -445,21 +477,23 @@
         }
         
     };
-    EZDEBUG(@"Before push detail:%@", self.navigationController);
+    //EZDEBUG(@"Before push detail:%@", self.navigationController);
     //[self.navigationController pushViewController:scheduleDetail animated:YES];
     [self.superController.navigationController pushViewController:scheduleDetail animated:NO];
     EZDEBUG(@"After push detail");
 }
 
+//Need to review the live cycle of the View controller to really understand what's going on. 
+//This will have no effect, since it will not be called. Only the view get used.
 - (void) viewWillAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];    
-    
+    [super viewWillAppear:animated]; 
+    EZDEBUG(@"Readd no task layer see if problem solved");
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    EZDEBUG(@"Get cell for:%@, tableView frame:%@",indexPath, NSStringFromCGRect(self.tableView.frame));
+    //EZDEBUG(@"Get cell for:%@, tableView frame:%@",indexPath, NSStringFromCGRect(self.tableView.frame));
     static NSString *CellIdentifier = @"ScheduledV2";
     EZScheduledTask* task = [scheduledTasks objectAtIndex:indexPath.row];
     EZScheduledV2Cell *cell = (EZScheduledV2Cell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -467,7 +501,7 @@
         cell = [EZEditLabelCellHolder createScheduledV2Cell];
         //cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }else{
-        EZDEBUG(@"Recycled:%@, for taskName:%@",cell.taskName.text, task.task.name);
+        //EZDEBUG(@"Recycled:%@, for taskName:%@",cell.taskName.text, task.task.name);
     }
     
     
@@ -524,11 +558,10 @@
         [mutArr removeObjectAtIndex:indexPath.row];
         self.scheduledTasks = mutArr;
         [[EZTaskStore getInstance] removeObject:task];
-        
-        EZScheduledTask* fetched = [[EZTaskStore getInstance] fetchScheduledTaskByURL:task.PO.objectID.URIRepresentation.absoluteString];
-        assert(fetched == nil);
-        
         [self performSelector:@selector(deleteRow:) withObject:indexPath afterDelay:0.3];
+        //Why? to fix the bug of after delete and reschedule some task will not show.
+        counter.isCounting = false;
+        
     };
     
     scheduleDetail.rescheduleBlock = ^(){

@@ -248,7 +248,7 @@ NSString* doubleString(NSString* str)
     }
 }
 
-- (NSArray*) recreate:(RecreateOperation)opts
+- (NSArray*) mapcar:(MapCarOperation)opts
 {
     NSMutableArray* res = [[NSMutableArray alloc] initWithCapacity:self.count];
     for(id obj in self){

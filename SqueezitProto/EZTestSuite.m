@@ -40,6 +40,7 @@
 #import "EZScheduleStats.h"
 #import "Parent.h"
 #import "Child.h"
+#import "EZAlarmUtility.h"
 
 
 #define TestValue 60*20
@@ -298,6 +299,15 @@ typedef int(^ClosureTest)();
 
 + (void) testRawFormCoreData;
 
+//0823 For the newly added antialaise functionality;
++ (void) testAllocateTimeForTask;
+
++ (void) testGetTaskFromList; 
+
++ (void) fireAlarmEvent;
+
++ (void) testTaskGroupDelete;
+
 @end
 
 @implementation EZTestSuite
@@ -319,10 +329,106 @@ typedef int(^ClosureTest)();
     //[EZTestSuite testRawFormCoreData];
     //[EZTestSuite testSimplestModel];
     //[EZTestSuite test0823ScheduledTaskDeleteBug];
+    //[EZTestSuite testGetTaskFromList];
+    //[EZTestSuite testAllocateTimeForTask];
+    //[EZTestSuite fireAlarmEvent];
+    //[EZTestSuite testTaskGroupDelete];
     [EZCoreAccessor setInstance:nil];
     
 }
 
++ (void) testTaskGroupDelete
+{
+    //Setup the database and set it to the EZAccessor
+    [EZTestSuite initializeDB];
+    EZTaskGroup* group = [[EZTaskGroup alloc] init];
+    group.name = @"Test Group";
+    
+    EZTask* task1 = [[EZTask alloc] initWithName:@"Task1"];
+    EZTask* task2 = [[EZTask alloc] initWithName:@"Task2"];
+    assert(!task1.deleted);
+    assert(!task2.deleted);
+    [group.tasks addObjectsFromArray:[NSArray arrayWithObjects:task1, task2, nil]];
+    
+    [[EZTaskStore getInstance] storeObject:group];
+    
+    
+    NSArray* tasks = [[EZTaskStore getInstance] getTasks];
+    NSArray* groups = [[EZTaskStore getInstance] fetchAllWithVO:[EZTaskGroup class] PO:[MTaskGroup class] sortField:nil];
+    assert(groups.count == 1);
+    assert(tasks.count == 2);
+    
+    //[[EZTaskStore getInstance] removeObject:group];
+    [[EZTaskStore getInstance] deleteTaskgroup:group];
+    
+    tasks = [[EZTaskStore getInstance] getTasks];
+    assert(tasks.count == 0);
+    
+    groups = [[EZTaskStore getInstance] fetchAllWithVO:[EZTaskGroup class] PO:[MTaskGroup class] sortField:nil];
+    assert(groups.count == 0);
+    
+    //What's the meaning of this line?
+    //The task not actually get deleted. Only the flag set to false
+    tasks = [[EZTaskStore getInstance] fetchAllWithVO:[EZTask class] PO:[MTask class] sortField:nil];
+    assert(tasks.count == 2);
+    
+
+    [tasks iterate:^(EZTask* tk){
+        assert(tk.deleted);
+    }];
+    
+    //assert(false);
+}
+
++ (void) fireAlarmEvent
+{
+    [EZTestSuite initializeDB];
+    EZTask* tk = [[EZTask alloc] initWithName:@"Test First"];
+    EZScheduledTask* schTk = [[EZScheduledTask alloc] init];
+    schTk.startTime = [[NSDate date] adjust:40];
+    schTk.task = tk;
+    [[EZTaskStore getInstance] storeObject:schTk];
+    [EZAlarmUtility setupAlarm:schTk];
+    EZDEBUG(@"SendAlarm out:%@",schTk.alarmNotification);
+}
+
+//0823 For the newly added antialaise functionality;
++ (void) testAllocateTimeForTask
+{
+    EZTaskScheduler* scheduler = [EZTaskScheduler getInstance];
+    EZTask* task = [[EZTask alloc] initWithName:@"AntiAlaise"];
+    task.envTraits = EZ_ENV_FLOWING;
+    task.duration = 30;
+    
+    EZAvailableTime* avTime = [[EZAvailableTime alloc] init:[NSDate date] name:@"AntiAlaise test" duration:37 environment:EZ_ENV_FLOWING];
+    NSArray* schTasks = [scheduler allocTimeForTasks:task avTimes:[NSArray arrayWithObjects:avTime, nil] amount:35 date:[NSDate date]];
+    assert(schTasks.count == 1);
+    EZScheduledTask* schTask = [schTasks objectAtIndex:0];
+    EZDEBUG(@"Task duration:%i",schTask.duration);
+    assert(schTask.duration == 37);
+    assert(avTime.duration == 0);
+    assert(false);
+    
+}
+
++ (void) testGetTaskFromList{
+    EZTaskScheduler* scheduler = [EZTaskScheduler getInstance];
+    EZTask* task = [[EZTask alloc] initWithName:@"AntiAlaise"];
+    task.envTraits = EZ_ENV_FLOWING;
+    task.duration = 30;
+    task.maxDuration = 30;
+    
+    EZAvailableTime* avTime = [[EZAvailableTime alloc] init:[NSDate date] name:@"AntiAlaise test" duration:37 environment:EZ_ENV_FLOWING];
+    //The name of the method is very misleading. 
+    //What's the actual purpose of this method?
+    //It is to pick a task from the list randomly and allocate some time for it
+    EZScheduledTask* schTask = [scheduler getTaskFromList:[NSArray arrayWithObject:task] timeSlot:avTime];
+    
+    EZDEBUG(@"Task duration:%i",schTask.duration);
+    assert(schTask.duration == 37);
+    assert(avTime.duration == 0);
+    assert(false);
+}
 //The IDE provide the LRU cache for the auto complete suggestions
 + (void) test0823ScheduledTaskDeleteBug
 {
@@ -2042,6 +2148,7 @@ typedef int(^ClosureTest)();
 }
 
 //The simplest Quotas test cases
+//0823, Change this test to test the antialaise functionality
 + (void) testQuotasTask
 {
     [EZTestSuite initializeDB];

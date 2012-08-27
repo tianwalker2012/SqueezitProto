@@ -28,7 +28,7 @@
 + (void) setupDailyNotification:(UILocalNotification*)notification;
 
 //Hide all the notification setup detail.
-+ (void) setupDailyNotificationDate:(NSDate*)date;
++ (UILocalNotification*) createNotificationFromDate:(NSDate*)date;
 
 //Who will call this? 
 //Application level will call it. 

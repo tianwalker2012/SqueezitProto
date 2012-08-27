@@ -16,7 +16,7 @@ typedef void (^ EZEventOpsBlock) (id sender);
 
 typedef BOOL (^ FilterOperation)(id obj);
 
-typedef id (^ RecreateOperation)(id obj);
+typedef id (^ MapCarOperation)(id obj);
 
 typedef void  (^ IterateOperation)(id obj);
 
@@ -82,7 +82,7 @@ typedef void  (^ IterateOperation)(id obj);
 
 - (NSArray*) filter:(FilterOperation)opts;
 
-- (NSArray*) recreate:(RecreateOperation)opts;
+- (NSArray*) mapcar:(MapCarOperation)opts;
 
 - (void) iterate:(IterateOperation) opts;
 

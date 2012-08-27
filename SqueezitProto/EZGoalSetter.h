@@ -11,6 +11,8 @@
 
 @class EZQuotas;
 
+//The name for this class is very misleading. 
+//How to fix them?
 @interface EZGoalSetter : UITableViewController
 
 @property (strong, nonatomic) EZQuotas* quotas;

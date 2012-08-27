@@ -13,7 +13,7 @@
 
 
 @implementation EZTask
-@synthesize name, duration, maxDuration, fixedTime, fixedDate, time, date, envTraits, quotas, soundName, PO, createdTime;
+@synthesize name, duration, maxDuration, fixedTime, fixedDate, time, date, envTraits, quotas, soundName, PO, createdTime, deleted;
 
 //Cool implementation. Keep the redundency code to minimum. 
 - (id) initWithName:(NSString*) nm
@@ -38,6 +38,7 @@
     self.createdTime = valueObj.createdTime;
     self.quotas = valueObj.quotas.cloneVO;
     self.PO = valueObj.PO;
+    self.deleted = valueObj.deleted;
     return self;
 }
 
@@ -51,6 +52,7 @@
     //Task can choose it's own name, I love it.
     self.soundName = UILocalNotificationDefaultSoundName;
     self.createdTime = [NSDate date];
+    self.deleted = false;
     return self;
 
 }
@@ -74,6 +76,7 @@
         self.duration = self.PO.duration.intValue;
         self.maxDuration = self.PO.maxDuration.intValue;
         self.envTraits = self.PO.envTraits.unsignedIntegerValue;
+        self.deleted = self.PO.deleted.boolValue;
         if(PO.quotas){
             self.quotas = [[EZQuotas alloc] initWithPO:PO.quotas];
         }
@@ -88,6 +91,7 @@
     self.duration = mtk.duration.intValue;
     self.maxDuration = mtk.maxDuration.intValue;
     self.envTraits = mtk.envTraits.unsignedIntegerValue;
+    self.deleted = mtk.deleted.boolValue;
     if(mtk.quotas){
         self.quotas = [[EZQuotas alloc] initWithPO:mtk.quotas];
     }
@@ -124,6 +128,7 @@
         po.quotas = nil;
     }
     po.createdTime = self.createdTime;
+    po.deleted = [[NSNumber alloc] initWithBool:self.deleted];
     return po;
 }
 

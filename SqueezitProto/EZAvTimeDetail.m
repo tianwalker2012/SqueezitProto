@@ -109,6 +109,7 @@
         EZPureEditCell* titleCell = [EZEditLabelCellHolder createPureEditCellWithDelegate:self];
         titleCell.editField.text = avTime.name;
         titleCell.isFieldEditable = true;
+        [titleCell adjustRightPadding:EditPadding];
         res = titleCell;
     }else if(indexPath.section == 1){
         EZBeginEndTimeCell* timeCell = [EZEditLabelCellHolder createBeginEndTimeCell];
@@ -165,7 +166,8 @@
     if([picker isKindOfClass:[EZPickerWrapper class]]){
         return 1;
     }
-    return [EZTaskStore getInstance].envFlags.count;
+    //Why, because I Added a SelectAll flag.
+    return [EZTaskStore getInstance].envFlags.count + 1;
 }
 
 //It is shared by both delegate, so, I have to check for class to differentiate it.

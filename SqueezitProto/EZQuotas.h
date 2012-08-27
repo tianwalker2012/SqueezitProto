@@ -11,6 +11,7 @@
 
 //The one week, two week, could safely represented by customized cyle.
 typedef enum CycleType {
+    QuotasNone = 0,
     MonthCycle = 1,
     BiMonthCyle = 2,
     TriMonthCycle = 3,

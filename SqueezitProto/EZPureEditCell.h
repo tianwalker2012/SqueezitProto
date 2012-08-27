@@ -49,5 +49,11 @@
 //3. UserInteractionEnabled
 //- (void) setupEditField:(BOOL)isEditStatus;
 
+@property (assign, nonatomic) BOOL mustShowClearButton;
+
+
+//Fit the bound with specified rightPadding.
+- (void) adjustRightPadding:(CGFloat)padding;
+
 
 @end

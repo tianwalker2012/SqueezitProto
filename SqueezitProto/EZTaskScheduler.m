@@ -54,6 +54,12 @@
 
 - (NSArray*) sortAvailableTimes:(NSArray*)avTimes;
 
+//What's the purpose of this method?
+//For some smalled changes left in my code which seems stupid
+//Give it to current allocated task
+- (NSInteger) antialaise:(NSInteger)remains;
+
+
 @end
 
 @implementation EZTaskScheduler
@@ -66,6 +72,14 @@
         instance = [[EZTaskScheduler alloc] init];
     }
     return instance;
+}
+
+- (NSInteger) antialaise:(NSInteger)remains
+{
+    if(remains < 10){
+        return remains;
+    }
+    return 0;
 }
 
 - (EZAvailableTime*) createAvTimeFromScheduledTask:(EZScheduledTask*)schTask
@@ -100,7 +114,8 @@
         }
         return true;
     }]];
-    return [self scheduleTaskByBulk:avTime exclusiveList:exclusive tasks:[[EZTaskStore getInstance] getAllTasks]];
+    //The first place
+    return [self scheduleTaskByBulk:avTime exclusiveList:exclusive tasks:[[EZTaskStore getInstance] getTasks]];
 }
 
 //Why do we need this?
@@ -129,7 +144,7 @@
     if(![historyStart equalWith:date format:@"yyyyMMdd"]){
         EZTaskStore* store = [EZTaskStore getInstance];
         taskTime = [store getTaskTime:task start:historyStart end:[date adjustDays:-1]];
-        EZDEBUG(@"taskTime between:%@ and %@ is:%i",[historyStart stringWithFormat:@"yyyyMMdd"], [[date adjustDays:-1] stringWithFormat:@"yyyyMMdd"], taskTime);
+        //EZDEBUG(@"taskTime between:%@ and %@ is:%i",[historyStart stringWithFormat:@"yyyyMMdd"], [[date adjustDays:-1] stringWithFormat:@"yyyyMMdd"], taskTime);
     }
     //This is only for the cases of the first iteration of the quotas.
     //But we need to handle this cases since this case happen a lot. 
@@ -160,12 +175,19 @@
         if(time.duration >= miniDur){
             int actualAmount = MIN(maxDur, time.duration);
             EZScheduledTask* schTask = [[EZScheduledTask alloc] init];
-            schTask.duration = actualAmount;
+            //schTask.duration = actualAmount;
             schTask.envTraits = time.envTraits;
             schTask.startTime = time.start;
             schTask.task = task;
-            [res addObject:schTask];
+            
             time.duration = time.duration - actualAmount;
+            NSInteger changes = [self antialaise:time.duration];
+            time.duration -= changes;
+            actualAmount += changes;
+            
+            schTask.duration = actualAmount; 
+            [res addObject:schTask];
+            
             time.start = [time.start adjustMinutes:actualAmount];
             totalAmount -= actualAmount;
         }else{
@@ -178,6 +200,9 @@
 }
 
 //Abosolutely need some test to make sure this is correctly implmented
+//What's the purpose of this method?
+//Mean only fetch the available Time when the time not due yet.
+//And will change the availableTime accordingly.
 - (EZAvailableDay*) filterAvailebleDay:(EZAvailableDay*)avDay  byTime:(NSDate*)currentDate
 {
     EZAvailableDay* res = avDay.cloneVO;
@@ -221,9 +246,14 @@
             int remain = tk.quotas.quotasPerCycle - historyTime;
             int avg = remain/[EZTaskHelper cycleRemains:tk.quotas date:date];
             int amount = avg * 1.1;
+            
+            //The purpose is to make this on 5 minutes bounds
+            int removed = amount % 5;
+            amount -= removed;
+            
             NSArray* scts = [self allocTimeForTasks:tk avTimes:[self sortAvailableTimes:avDay.availableTimes] amount:amount date:date];
             [res.scheduledTasks addObjectsFromArray:scts];
-            EZDEBUG(@"[%@]historyTime:%i, %@:remain:%i,avg:%i,currentAmount:%i,createdTask:%i",[date stringWithFormat:@"yyyyMMdd"],historyTime, tk.name,remain,avg,amount,[scts count]);
+            //EZDEBUG(@"[%@]historyTime:%i, %@:remain:%i,avg:%i,currentAmount:%i,createdTask:%i",[date stringWithFormat:@"yyyyMMdd"],historyTime, tk.name,remain,avg,amount,[scts count]);
         }
     }
     res.availableDay = avDay;
@@ -256,7 +286,8 @@
     //EZDEBUG(@"Available Time count:%i",[avDay.availableTimes count]);
     for(EZAvailableTime* avTime in avDay.availableTimes){
         avTime.start = [date combineTime:avTime.start];
-        NSArray* scheduledTasks = [self scheduleTaskByBulk:avTime exclusiveList:exclusiveTasks tasks:[store getAllTasks]];
+        //Second places
+        NSArray* scheduledTasks = [self scheduleTaskByBulk:avTime exclusiveList:exclusiveTasks tasks:[store getTasks]];
         [self addExclusive:exclusiveTasks tasks:scheduledTasks];
         //EZDEBUG(@"add %i tasks to %@(%@)",[scheduledTasks count],avTime.description,[avTime.start stringWithFormat:@"yyyy-MM-dd HH:mm:ss"]);
         [res addObjectsFromArray:scheduledTasks];
@@ -279,10 +310,11 @@
         EZDEBUG(@"Didn't find schedule for %@",[date stringWithFormat:@"yyyy-MM-dd"]);
         return res;
     }
-    for(EZAvailableTime* time in day.availableTimes){
-        EZDEBUG(@"AvailableTime:%@, flag:%i, startTime:%@, duration:%i",time.name, time.envTraits,[time.start stringWithFormat:@"HH:mm"], time.duration);
-    }
-    NSArray* tasks = store.getAllTasks;
+    //for(EZAvailableTime* time in day.availableTimes){
+        //EZDEBUG(@"AvailableTime:%@, flag:%i, startTime:%@, duration:%i",time.name, time.envTraits,[time.start stringWithFormat:@"HH:mm"], time.duration);
+    //}
+    //Use the same style. Which could be helpful when I try to find things out.
+    NSArray* tasks = [store getTasks];
     EZQuotasResult* qres = [self scheduleQuotasTask:tasks date:date avDay:day];
     NSMutableArray* exclusiveMut = [NSMutableArray arrayWithArray:exclusive];
     [self addExclusive:exclusiveMut tasks:qres.scheduledTasks];
@@ -386,11 +418,18 @@
     if(actualDur > timeSlot.duration){
         actualDur = timeSlot.duration;
     }
-    res.duration = actualDur;
+    //res.duration = actualDur;
     res.startTime = timeSlot.start;
     res.envTraits = timeSlot.envTraits;
     //res.description = timeSlot.description;
     timeSlot.duration = timeSlot.duration - actualDur;
+    
+    //Antialaise
+    NSInteger changes = [self antialaise:timeSlot.duration];
+    timeSlot.duration -= changes;
+    actualDur += changes;
+    res.duration = actualDur;
+    
     [timeSlot adjustStartTime:actualDur];
     //EZDEBUG(@"Find task:%@, duration:%i, remain time:%i", tk.name, res.duration, timeSlot.duration);
     return res;
@@ -436,9 +475,31 @@
     EZDEBUG(@"Removed tasks count:%i, remaining task count:%i, adjustedDate:%@", sfr.removedTasks.count, sfr.remainingTasks.count, [sfr.adjustedDate stringWithFormat:@"yyyyMMdd-HH:mm"]);
     [[EZTaskStore getInstance] removeObjects:sfr.removedTasks];
     [EZAlarmUtility cancelAlarmBulk:sfr.removedTasks];
-    [sfr.remainingTasks addObjectsFromArray:[self scheduleTaskByDate:sfr.adjustedDate exclusiveList:[sfr.remainingTasks recreate:^(EZScheduledTask* st){
+    
+    //[sfr.removedTasks iterate:^(EZScheduledTask* tk){
+    //    EZDEBUG(@"Removed:%@,Time:%@,Duration:%i",tk.task.name, [tk.startTime stringWithFormat:@"DD-HH:mm"], tk.duration);
+    //}];
+    
+    //I defined a recreate method on the NSArray.
+    //Basically what's the purpose of this method?
+    //It is like the mapcar in lisp.
+    NSArray* rescheduledList = [self scheduleTaskByDate:sfr.adjustedDate exclusiveList:[sfr.remainingTasks mapcar:^(EZScheduledTask* st){
         return st.task;
-    }]]];
+    }]];
+    
+    //Moved this line from outside to here caused the bug.
+    //Do not derive experience arbitrarily. 
+    //The root of the evil is the bad encapsulation caused.
+    [[EZTaskStore getInstance] storeObjects:rescheduledList];
+    [EZAlarmUtility setupAlarmBulk:rescheduledList];
+    //Why? because, otherwise I could not cancel the alarm correctly
+    [[EZTaskStore getInstance] storeObjects:rescheduledList];
+    
+    //[rescheduledList iterate:^(EZScheduledTask* tk){
+    //    EZDEBUG(@"Reschedule Result:%@,Time:%@,Duration:%i",tk.task.name, [tk.startTime stringWithFormat:@"dd-HH:mm"], tk.duration);
+    //}];
+    
+    [sfr.remainingTasks addObjectsFromArray:rescheduledList];
     return sfr.remainingTasks;
 }
 

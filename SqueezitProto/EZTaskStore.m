@@ -27,6 +27,7 @@
 #import "MEnvFlag.h"
 #import "EZArray.h"
 #import "EZScheduleStats.h"
+#import "MScheduledDay.h"
 
 
 @interface EZTaskStore(private)
@@ -401,6 +402,32 @@
     
 }
 
+//Strange I do the duplication check here.
+//Should have no duplication of the date exist.
+//Let's check where other place EZScheduledDay
+//I get the point now.
+//This is not a right place for this method. 
+//Let's put it to EZTaskStore
+- (EZScheduledDay*) createDayNotExist:(NSDate*)date
+{
+    NSDate* begin = date.beginning;
+    NSDate* end = [begin adjust:SecondsPerDay - 1];
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"scheduledDate >= %@ AND scheduledDate <= %@",begin, end];
+    NSArray* scheduledDayArr = [self fetchWithPredication:predicate VO:[EZScheduledDay class] PO:[MScheduledDay class] sortField:nil];
+    if(scheduledDayArr.count == 0){
+        EZScheduledDay* sd = [[EZScheduledDay alloc] init];
+        sd.scheduledDate = date;
+        [self storeObject:sd];
+        return sd;
+    }else{
+        //[scheduledDayArr iterate:^(EZScheduledDay* sd){
+            //EZDEBUG(@"Date:%@",[sd.scheduledDate stringWithFormat:@"yyyyMMdd"]);
+        //}];
+        //assert(scheduledDayArr.count == 1);
+        return [scheduledDayArr objectAtIndex:0];
+    }
+}
+
 //Need refractor later.
 //As the history data keep increasing. 
 //Learn how to do conditional query to get only record I interested out. 
@@ -410,6 +437,49 @@
     NSDate* end = [begin adjust:SecondsPerDay-1];
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"startTime > %@ AND startTime < %@",begin, end];
     return [[EZTaskStore getInstance]fetchWithPredication:predicate VO:[EZScheduledTask class] PO:[MScheduledTask class] sortField:@"startTime"];
+}
+
+//Why do we need a specific method for delete taskGroup.
+//Because we want to only delete the group still keep the task. 
+//Why?
+//Otherwise, the history scheduledTask will failed to get any information.
+//Man, this is cool.
+//Only code walk through could give you idea like this.
+- (void) deleteTaskgroup:(EZTaskGroup*) tgroup
+{
+    //I have an assumption here. Mean system will on delete the group without touch the tasks.
+    //Need a test.
+    //Do you understand why we encounter errors?
+    //Because the tgroups will remove all the tasks under it. 
+    //So it will store the tasks with ObjectID, coreData have some rule regarding the objectID. I guess. So it failed
+    NSArray* tasks =[NSArray arrayWithArray: tgroup.tasks];
+    [tgroup.tasks removeAllObjects];
+    [self storeObject:tgroup];
+    [self removeObject:tgroup];
+    [self deleteTasks:tasks];
+    
+}
+
+
+- (void) deleteTask:(EZTask*)task
+{
+    task.deleted = true;
+    [self storeObject:task];
+}
+
+- (void) deleteTasks:(NSArray*)tasks
+{
+    [tasks iterate:^(EZTask* tk){
+        [self deleteTask:tk];
+    }];
+}
+
+//I assume the flag in database is 1 for true, zero for false.
+//Let's test it accordingly.
+- (NSArray*) getTasks
+{
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"deleted != 1"];
+    return [[EZTaskStore getInstance]fetchWithPredication:predicate VO:[EZTask class] PO:[MTask class] sortField:nil];
 }
 
 //Remove the tasks in one particular day

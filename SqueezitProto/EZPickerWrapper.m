@@ -57,19 +57,19 @@
 
 - (void)viewDidLoad
 {
-    EZDEBUG(@"viewDidLoad begin");
+    //EZDEBUG(@"viewDidLoad begin");
     [super viewDidLoad];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelClicked)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneClicked)];
     //Animation to select the first row, call the cell selected after the animation is completed. 
-    EZDEBUG(@"viewDidLoad end");
+    //EZDEBUG(@"viewDidLoad end");
 }
 
 - (void) viewWillAppear:(BOOL)animated
 {
-    EZDEBUG(@"in viewDidApprear");
+    //EZDEBUG(@"in viewDidApprear");
     [self.tableView reloadData];
-    EZDEBUG(@"after reloadData");
+    //EZDEBUG(@"after reloadData");
     NSIndexPath* selectedPath = [wrapperDelegate getDefaultSelected:self];
     if(selectedPath == nil){
         selectedPath = [NSIndexPath indexPathForRow:0 inSection:0];
@@ -82,7 +82,7 @@
 - (void) raiseKeyboard:(UIView*)keyboard animated:(BOOL)animated complete:(EZOperationBlock)complete
 {
     UIWindow* win = self.view.window;
-    EZDEBUG(@"raiseKeyBoard get called, win frame:%@, keyboard frame:%@",NSStringFromCGRect(win.frame), NSStringFromCGRect(keyboard.frame));
+    //EZDEBUG(@"raiseKeyBoard get called, win frame:%@, keyboard frame:%@",NSStringFromCGRect(win.frame), NSStringFromCGRect(keyboard.frame));
     [keyboard setFrame:CGRectMake(keyboard.frame.origin.x, win.bounds.size.height, keyboard.frame.size.width, keyboard.frame.size.height)];
     [win addSubview:keyboard];
     if(!animated){

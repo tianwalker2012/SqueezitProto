@@ -65,8 +65,11 @@
 		187ED031158C78C500B499D3 /* EZAvTimeHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 187ED030158C78C500B499D3 /* EZAvTimeHeader.xib */; };
 		187ED034158C7A0F00B499D3 /* EZAvTimeHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 187ED033158C7A0F00B499D3 /* EZAvTimeHeader.m */; };
 		18893D4B15E61E20000A1216 /* TestModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 18893D4915E61E20000A1216 /* TestModel.xcdatamodeld */; };
-		18893D5115E6233B000A1216 /* Child.m in Sources */ = {isa = PBXBuildFile; fileRef = 18893D5015E6233B000A1216 /* Child.m */; };
-		18893D5415E6233C000A1216 /* Parent.m in Sources */ = {isa = PBXBuildFile; fileRef = 18893D5315E6233C000A1216 /* Parent.m */; };
+		18893D5715E88ED6000A1216 /* EZDotRoller.m in Sources */ = {isa = PBXBuildFile; fileRef = 18893D5615E88ED6000A1216 /* EZDotRoller.m */; };
+		18893D5A15E8C43F000A1216 /* EZTestDotRoller.m in Sources */ = {isa = PBXBuildFile; fileRef = 18893D5915E8C43F000A1216 /* EZTestDotRoller.m */; };
+		18893D5D15EA15CB000A1216 /* EZThreadPool.m in Sources */ = {isa = PBXBuildFile; fileRef = 18893D5C15EA15CA000A1216 /* EZThreadPool.m */; };
+		18893D6015EB289C000A1216 /* Child.m in Sources */ = {isa = PBXBuildFile; fileRef = 18893D5F15EB289C000A1216 /* Child.m */; };
+		18893D6315EB28A6000A1216 /* Parent.m in Sources */ = {isa = PBXBuildFile; fileRef = 18893D6215EB28A4000A1216 /* Parent.m */; };
 		188CFDC4158D88F8008ACCB8 /* EZPickerWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDC3158D88F8008ACCB8 /* EZPickerWrapper.m */; };
 		188CFDC8158DE888008ACCB8 /* EZTableSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDC7158DE887008ACCB8 /* EZTableSelector.m */; };
 		188CFDCB158ED73F008ACCB8 /* EZAvTimeDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDCA158ED73E008ACCB8 /* EZAvTimeDetail.m */; };
@@ -260,10 +263,16 @@
 		187ED032158C7A0E00B499D3 /* EZAvTimeHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAvTimeHeader.h; sourceTree = "<group>"; };
 		187ED033158C7A0F00B499D3 /* EZAvTimeHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAvTimeHeader.m; sourceTree = "<group>"; };
 		18893D4A15E61E20000A1216 /* TestModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TestModel.xcdatamodel; sourceTree = "<group>"; };
-		18893D4F15E6233B000A1216 /* Child.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Child.h; sourceTree = "<group>"; };
-		18893D5015E6233B000A1216 /* Child.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Child.m; sourceTree = "<group>"; };
-		18893D5215E6233C000A1216 /* Parent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Parent.h; sourceTree = "<group>"; };
-		18893D5315E6233C000A1216 /* Parent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Parent.m; sourceTree = "<group>"; };
+		18893D5515E88ED5000A1216 /* EZDotRoller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZDotRoller.h; sourceTree = "<group>"; };
+		18893D5615E88ED6000A1216 /* EZDotRoller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZDotRoller.m; sourceTree = "<group>"; };
+		18893D5815E8C43E000A1216 /* EZTestDotRoller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTestDotRoller.h; sourceTree = "<group>"; };
+		18893D5915E8C43F000A1216 /* EZTestDotRoller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZTestDotRoller.m; sourceTree = "<group>"; };
+		18893D5B15EA15CA000A1216 /* EZThreadPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZThreadPool.h; sourceTree = "<group>"; };
+		18893D5C15EA15CA000A1216 /* EZThreadPool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZThreadPool.m; sourceTree = "<group>"; };
+		18893D5E15EB289A000A1216 /* Child.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Child.h; sourceTree = "<group>"; };
+		18893D5F15EB289C000A1216 /* Child.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Child.m; sourceTree = "<group>"; };
+		18893D6115EB28A0000A1216 /* Parent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Parent.h; sourceTree = "<group>"; };
+		18893D6215EB28A4000A1216 /* Parent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Parent.m; sourceTree = "<group>"; };
 		188CFDC2158D88F8008ACCB8 /* EZPickerWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZPickerWrapper.h; sourceTree = "<group>"; };
 		188CFDC3158D88F8008ACCB8 /* EZPickerWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZPickerWrapper.m; sourceTree = "<group>"; };
 		188CFDC6158DE887008ACCB8 /* EZTableSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTableSelector.h; sourceTree = "<group>"; };
@@ -538,6 +547,8 @@
 				188CFDF815974D42008ACCB8 /* EZQueue.m */,
 				188CFDFA15975126008ACCB8 /* EZLRUMap.h */,
 				188CFDFB15975126008ACCB8 /* EZLRUMap.m */,
+				18893D5B15EA15CA000A1216 /* EZThreadPool.h */,
+				18893D5C15EA15CA000A1216 /* EZThreadPool.m */,
 			);
 			name = Utility;
 			sourceTree = "<group>";
@@ -650,10 +661,12 @@
 				18A0F0F315A98DAA00671E53 /* EZCanvas.h */,
 				18A0F0F415A98DAA00671E53 /* EZCanvas.m */,
 				18893D4915E61E20000A1216 /* TestModel.xcdatamodeld */,
-				18893D5215E6233C000A1216 /* Parent.h */,
-				18893D5315E6233C000A1216 /* Parent.m */,
-				18893D4F15E6233B000A1216 /* Child.h */,
-				18893D5015E6233B000A1216 /* Child.m */,
+				18893D5815E8C43E000A1216 /* EZTestDotRoller.h */,
+				18893D5915E8C43F000A1216 /* EZTestDotRoller.m */,
+				18893D5E15EB289A000A1216 /* Child.h */,
+				18893D5F15EB289C000A1216 /* Child.m */,
+				18893D6115EB28A0000A1216 /* Parent.h */,
+				18893D6215EB28A4000A1216 /* Parent.m */,
 			);
 			name = TestCases;
 			sourceTree = "<group>";
@@ -759,6 +772,8 @@
 				18BDFCA015A6D90400F7ACE3 /* EZPageControl.xib */,
 				18A0F0E015A81D2900671E53 /* EZCycleDraw.h */,
 				18A0F0E115A81D2900671E53 /* EZCycleDraw.m */,
+				18893D5515E88ED5000A1216 /* EZDotRoller.h */,
+				18893D5615E88ED6000A1216 /* EZDotRoller.m */,
 			);
 			name = "Home Made Control";
 			sourceTree = "<group>";
@@ -990,8 +1005,11 @@
 				18A0F72815AF052D00671E53 /* EZBaseChartItem.m in Sources */,
 				18A0F72D15AFD55000671E53 /* EZGraphHelper.m in Sources */,
 				18893D4B15E61E20000A1216 /* TestModel.xcdatamodeld in Sources */,
-				18893D5115E6233B000A1216 /* Child.m in Sources */,
-				18893D5415E6233C000A1216 /* Parent.m in Sources */,
+				18893D5715E88ED6000A1216 /* EZDotRoller.m in Sources */,
+				18893D5A15E8C43F000A1216 /* EZTestDotRoller.m in Sources */,
+				18893D5D15EA15CB000A1216 /* EZThreadPool.m in Sources */,
+				18893D6015EB289C000A1216 /* Child.m in Sources */,
+				18893D6315EB28A6000A1216 /* Parent.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

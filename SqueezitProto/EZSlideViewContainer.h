@@ -26,7 +26,7 @@
 //During startup what's the first page will be displayed?
 - (NSInteger) firstDisplayPage:(EZSlideViewContainer*)container;
 
-//The purpose of this function call it that
+//The purpose of this function call are:
 //If the container reach the end of the page, it will call this method
 //ask if it have more?
 //If it is, return the next PageCount.
@@ -59,7 +59,7 @@
 //You could control the animation
 - (void) scrollToPage:(NSInteger)page animated:(BOOL)animated;
 
-//Mean will reload all the paged.
+//Mean will reload all the page.
 //Following assumption will be made.
 //Cache will be cleaned
 //CurrentPage will set to zero.
@@ -70,7 +70,7 @@
 //Consider it on next iteration
 - (void) reload;
 
-//Descript the logic in this method
+//Describe the logic in this method
 //1. Get the object from the NSDictionary by the identifier. 
 //2. Make sure it is not contained in current cluster.
 //3. Return it
@@ -83,6 +83,10 @@
 - (EZViewWrapper*) dequeueWithIdentifier:(NSString*)identifier;
 
 //If the page not at display status will return nil;
+//What's the purpos of this method?
+//Fetch page currently in the cache. 
+//In cache mean it will not get recycled. 
+//I don't know why expose this method?
 - (EZViewWrapper*) getViewWrapperByPage:(NSInteger)page;
 
 @end

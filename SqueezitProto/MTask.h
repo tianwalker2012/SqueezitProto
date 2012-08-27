@@ -18,7 +18,10 @@
 @property (nonatomic, retain) NSNumber * duration;
 @property (nonatomic, retain) NSNumber * maxDuration;
 @property (nonatomic, retain) NSDate* createdTime;
-@property (nonatomic, retain) MQuotas*quotas;
+@property (nonatomic, retain) MQuotas* quotas;
+@property (nonatomic, retain) NSNumber* deleted;
+
+//@property (nonatomic, retain) 
 
 
 @end

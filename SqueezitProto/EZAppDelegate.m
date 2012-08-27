@@ -30,6 +30,7 @@
 #import "EZEnvFlag.h"
 #import "EZAlarmUtility.h"
 #import "EZStatisticMainCtrl.h"
+#import "EZTestDotRoller.h"
 
 @interface EZAppDelegate() {
     EZRootTabCtrl* tabCtrl;
@@ -200,8 +201,12 @@
     [[EZTaskStore getInstance] fillTestData];
     
     //For the first time, I will setup the daily notification time
-    NSDate* date = [[NSDate date] combineTime:[NSDate stringToDate:@"HH:mm" dateString:@"21:30"]];
-    [EZAlarmUtility setupDailyNotificationDate:date];
+    //Test daily notification setup for the first time
+    //NSString* timeStr = [[[NSDate date] adjust:50] stringWithFormat:@"HH:mm"];
+    NSDate* date = [[NSDate date] combineTime:[NSDate stringToDate:@"HH:mm" dateString:@"22:30"]];
+    UILocalNotification* notes = [EZAlarmUtility createNotificationFromDate:date];
+    [EZAlarmUtility setupDailyNotification:notes];
+    //EZDEBUG(@"Completed setup the daily notificaiton, time is:%@",[date stringWithFormat:@"dd HH:mm:ss"]);
     //Setup the notification for tomorrow. 
     //Encapsulate all the detail to the AlarmUtility.
     
@@ -286,17 +291,15 @@
     
     //Test related behavior happened in this method
     [self testRelatedActivity];
-   
-    
-    //What's the purpose of this method?
-    //Initialize the persistent 
-    [EZCoreAccessor getInstance];
-    
-    //Why this not take effects?
+  
     //[EZCoreAccessor cleanDB:CoreDBName];
     //EZDEBUG(@"After clean the database");
     //[[EZTaskStore getInstance] setFirstTime:true];
     EZDEBUG(@"initialize staff");
+    [EZCoreAccessor getInstance];
+    //[[EZTaskStore getInstance] setFirstTime:TRUE];
+    //[[EZTaskStore getInstance] fillTestData];
+    
     
     if([[EZTaskStore getInstance] isFirstTime]){
         [self firstTimeCall];
@@ -359,10 +362,13 @@
     //EZViewLayoutTester* viewTester = [[EZViewLayoutTester alloc] initWithName:@"Tester"];
     
     
+    EZTestDotRoller* test = [[EZTestDotRoller alloc] initWithNibName:nil bundle:nil];
+    UINavigationController* dotNav = [[UINavigationController alloc] initWithRootViewController:test];
+    
     EZConfigureCtrl* configurePage = [[EZConfigureCtrl alloc] initWithStyle:UITableViewStyleGrouped];
     UINavigationController* configNav = [[UINavigationController alloc] initWithRootViewController:configurePage];
     
-    tabCtrl.viewControllers = [NSArray arrayWithObjects:scheduledNav, taskNav, timeSettingNav, configNav, nil];
+    tabCtrl.viewControllers = [NSArray arrayWithObjects:scheduledNav, taskNav, timeSettingNav, configNav, dotNav, nil];
     //self.window.rootViewController = tabCtrl;
     [self.rootCtrl addChildViewController:tabCtrl];
     [self.rootCtrl.view addSubview:tabCtrl.view];
