@@ -59,20 +59,22 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemDownloads tag:4];
-          }
-    return self;
-}
-
-- (id) init
-{
-    self = [super init];
-    if (self) {
-        self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemDownloads tag:4];
+        self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Dots" image:[UIImage imageNamed:@"myDice"] tag:10];
     }
     return self;
 }
 
+/**
+- (id) init
+{
+    self = [super init];
+    if (self) {
+        //self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemDownloads tag:4];
+        self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Dots" image:[UIImage imageNamed:@"myDice"] tag:10];
+    }
+    return self;
+}
+**/
 
 - (void)viewDidLoad
 {

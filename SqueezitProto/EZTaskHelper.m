@@ -163,6 +163,20 @@ NSString* doubleString(NSString* str)
     [self setFrame:changed];
 }
 
+- (UIView*) getCoverView:(NSInteger)tag
+{
+    return [self viewWithTag:tag];
+}
+
+- (UIView*) createCoverView:(NSInteger)tag
+{
+    UIView* coverView = [[UIView alloc] initWithFrame:self.frame];
+    coverView.userInteractionEnabled = false;
+    coverView.tag = tag;
+    [self addSubview:coverView];
+    return coverView;
+}
+
 - (CGFloat) bottom
 {
     if(self.superview == nil){
@@ -184,6 +198,7 @@ NSString* doubleString(NSString* str)
     CGFloat red = 0;
     CGFloat green = 0;
     CGFloat blue = 0;
+    CGFloat alpha = 1;
     if(hexStr.length == 3){
         NSString* redStr = [hexStr substringWithRange:NSMakeRange(0,1)];
         redStr = doubleString(redStr);
@@ -207,10 +222,20 @@ NSString* doubleString(NSString* str)
         NSString* blueStr = [hexStr substringWithRange:NSMakeRange(4,2)];
         blue = blueStr.hexToInt/255.0;
         
-    }else{
-        //Will through exception
+    }else if(hexStr.length == 8){
+        NSString* redStr = [hexStr substringWithRange:NSMakeRange(0,2)];
+        red = redStr.hexToInt/255.0;
+        
+        NSString* greenStr = [hexStr substringWithRange:NSMakeRange(2,2)];
+        green = greenStr.hexToInt/255.0;
+        
+        NSString* blueStr = [hexStr substringWithRange:NSMakeRange(4,2)];
+        blue = blueStr.hexToInt/255.0;
+        
+        NSString* alphaStr = [hexStr substringWithRange:NSMakeRange(6,2)];
+        alpha = alphaStr.hexToInt/255.0;
     }
-    return [UIColor colorWithRed:red green:green blue:blue alpha:1.0];
+    return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
 }
 
 - (NSString*) toHexString

@@ -95,6 +95,7 @@
         pureCell.placeHolder = EZLocalizedString(@"Task name ...", nil);
         [pureCell adjustRightPadding:10];
         self.editField = pureCell.editField;
+        [pureCell createCoverView:CoverViewTag];
     }
     //pureCell.isChangeWithCellEdit = true;
     pureCell.isFieldEditable = true;
@@ -162,25 +163,37 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
+    UITableViewCell* res = nil;
+    
     if(indexPath.row >= tasks.count){
-        return [self generateEditCell:indexPath];
+        res = [self generateEditCell:indexPath];
     }
+    else {
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if(cell == nil){
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+        [cell createCoverView:CoverViewTag];
     }
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     EZTask* task = [self.tasks objectAtIndex:indexPath.row];
     cell.textLabel.text = task.name;
     
     if(task.duration == task.maxDuration){
-        cell.detailTextLabel.text = [NSString stringWithFormat:EZLocalizedString(@"Consume %i minutes each time", nil),task.duration];
+        cell.detailTextLabel.text = [NSString stringWithFormat:Local(@"%i minutes"),task.duration];
     }else{
-        cell.detailTextLabel.text = [NSString stringWithFormat:EZLocalizedString(@"Consume %i to %i minutes each time", nil),task.duration, task.maxDuration];
+        cell.detailTextLabel.text = [NSString stringWithFormat:Local(@"%i to %i minutes"),task.duration, task.maxDuration];
         
     }
-    return cell;
+        res = cell;
+    }
+    
+    //if(indexPath.row % 2){
+    //    [res viewWithTag:CoverViewTag].backgroundColor = [UIColor createByHex:EZGapWhiteColor];
+    //}else{
+    //    [res viewWithTag:CoverViewTag].backgroundColor = [UIColor createByHex:EZGapDarkColor];
+    //}
+    return res;
     
 }
 

@@ -304,11 +304,11 @@
             cell.accessoryType = UITableViewCellAccessoryNone;
         }
     }
-    if(indexPath.row % 2){
-        cell.backgroundColor = [UIColor createByHex:EZGapDarkColor];
-    }else{
-        cell.backgroundColor = [UIColor createByHex:EZGapWhiteColor];
-    }
+    //if(indexPath.row % 2){
+    //    cell.backgroundColor = [UIColor createByHex:EZGapDarkColor];
+    //}else{
+    //    cell.backgroundColor = [UIColor createByHex:EZGapWhiteColor];
+    //}
     return cell;
 }
 

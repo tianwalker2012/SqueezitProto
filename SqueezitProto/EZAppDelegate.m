@@ -360,13 +360,13 @@
     //EZViewLayoutTester* viewTester = [[EZViewLayoutTester alloc] initWithName:@"Tester"];
     
     
-    EZTestDotRoller* test = [[EZTestDotRoller alloc] initWithNibName:nil bundle:nil];
-    UINavigationController* dotNav = [[UINavigationController alloc] initWithRootViewController:test];
+    //EZTestDotRoller* test = [[EZTestDotRoller alloc] initWithNibName:nil bundle:nil];
+    //UINavigationController* dotNav = [[UINavigationController alloc] initWithRootViewController:test];
     
     EZConfigureCtrl* configurePage = [[EZConfigureCtrl alloc] initWithStyle:UITableViewStyleGrouped];
     UINavigationController* configNav = [[UINavigationController alloc] initWithRootViewController:configurePage];
     
-    tabCtrl.viewControllers = [NSArray arrayWithObjects:scheduledNav, taskNav, timeSettingNav, configNav, dotNav, nil];
+    tabCtrl.viewControllers = [NSArray arrayWithObjects:scheduledNav, taskNav, timeSettingNav, configNav, nil];
     //self.window.rootViewController = tabCtrl;
     [self.rootCtrl addChildViewController:tabCtrl];
     [self.rootCtrl.view addSubview:tabCtrl.view];

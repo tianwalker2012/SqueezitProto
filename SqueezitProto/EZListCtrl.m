@@ -59,7 +59,11 @@
         // Custom initialization
         //TODO will change it to different icon according to the 
         //Value it is serving.
-        self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemFavorites tag:2];
+        if(tasklist){
+            self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Tasks" image:[UIImage imageNamed:@"myTask"] tag:2];
+        }else{
+            self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Time Setting" image:[UIImage imageNamed:@"timesetting2"] tag:3];
+        }
         self.editButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editClicked:)];
         self.doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(editClicked:)];
         self.navigationItem.rightBarButtonItem = editButton;
@@ -132,7 +136,7 @@
     if(isServeTaskList){
         EZTaskGroup* taskGroup = [values objectAtIndex:path.row];
         tgCell.titleField.text = taskGroup.name;
-        tgCell.groupInfo.text = [NSString stringWithFormat:@"Tasks:%i, displayOrder:%i",[taskGroup.tasks count], taskGroup.displayOrder];
+        tgCell.groupInfo.text = [NSString stringWithFormat:Local(@"Included Tasks:%i"),[taskGroup.tasks count]];
         tgCell.placeholder = Local(@"Task Group Name...");
     }else{
         EZAvailableDay* avDay = [values objectAtIndex:path.row];
@@ -149,11 +153,17 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     EZDEBUG(@"cellForRowAtIndexPath:%@",indexPath);
+    NSInteger coverTag = 99;
+    //UIColor* coverWhiteColor = [UIColor colorWithRed:0.8 green:0.8 blue:0.8 alpha:0.2];
+    //UIColor* coverDarkColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.2];
+    
+    UITableViewCell* res = nil;
     if(indexPath.row >= [values count]){
         static NSString* insertIdentifier = @"PureEdit";
         EZPureEditCell *cell = [tableView dequeueReusableCellWithIdentifier:insertIdentifier];
         if(!cell){
             cell = [EZEditLabelCellHolder createPureEditCellWithDelegate:self];
+            [cell createCoverView:coverTag];
         }
         if(isServeTaskList){
             cell.placeHolder = Local(@"Task Group Name...");
@@ -165,18 +175,32 @@
         
         //Found the reason, there is identWhileEdit.
         [cell adjustRightPadding:41];
+        //EZDEBUG(@"Setup the cell background color");
         
-        return cell;
+        res = cell;
+    }else{
+    
+        static NSString *CellIdentifier = @"TaskGroup";
+        EZTaskGroupCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if(!cell){
+            cell = [EZEditLabelCellHolder createTaskGroupCellWithDelegate:self];
+            //cell.editingStyle = UITableViewCellEditingStyleDelete;
+            [cell createCoverView:coverTag];
+        }
+        [self setCellContent:cell path:indexPath];
+        res = cell;
+    
     }
     
-    static NSString *CellIdentifier = @"TaskGroup";
-    EZTaskGroupCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if(!cell){
-        cell = [EZEditLabelCellHolder createTaskGroupCellWithDelegate:self];
-        //cell.editingStyle = UITableViewCellEditingStyleDelete;
+    if(indexPath.row != values.count){
+        //if(indexPath.row % 2){
+        //    [res viewWithTag:coverTag].backgroundColor = [UIColor createByHex:EZGapDarkColor];
+        //}else{
+        //    [res viewWithTag:coverTag].backgroundColor = [UIColor createByHex:EZGapWhiteColor];
+        //}
     }
-    [self setCellContent:cell path:indexPath];
-    return cell;
+        
+    return res;
 }
 
 

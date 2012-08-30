@@ -43,9 +43,11 @@ EZDEBUG(xx, ##__VA_ARGS__); \
 #define EZNotificationKey @"taskURL"
 #define EZAssignNotificationKey @"assignedDate"
 
-#define EZGapDarkColor @"E1E1E1"
+#define EZGapDarkColor @"80808032"
 
-#define EZGapWhiteColor @"EEEEEE"
+#define EZGapWhiteColor @"B0B0B032"
+
+#define CoverViewTag 989
 
 
 

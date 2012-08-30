@@ -29,8 +29,10 @@
 {
     self = [super initWithStyle:style];
     if (self) {
-        self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemMore tag:4];
-        self.tabBarItem.title = Local(@"Setting"); 
+       // self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemMore tag:4];
+       // self.tabBarItem.title = Local(@"Setting"); 
+        self.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Setting" image:[UIImage imageNamed:@"settings"] tag:4];
+        
     }
     return self;
 }

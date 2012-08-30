@@ -105,7 +105,7 @@
     roller.frame = CGRectMake(0, self.view.frame.size.height - frame.size.height, frame.size.width, frame.size.height);
     //pageControl.backgroundColor = [UIColor blackColor];
     roller.backgroundColor = [UIColor clearColor];
-    roller.currentDotColor = [UIColor greenColor];//[UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:0.5];
+    roller.currentDotColor = [UIColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:0.5];//[UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:0.5];
     roller.otherDotColor = [UIColor colorWithRed:0.6 green:0.6 blue:0.6 alpha:0.5];
     roller.dotsNumber = 10;
     [self.view addSubview:roller];
@@ -137,8 +137,11 @@
     todaySchedule.scheduledDate = today;
     [scheduledDates addObject:todaySchedule];
     todayPage = scheduledDates.count - 1;
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(rescheduleTasks)];
-    self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemRecents tag:1];
+    //self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(rescheduleTasks)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"random"] style:UIBarButtonItemStyleBordered target:self action:@selector(rescheduleTasks)];
+    
+    //self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemRecents tag:1];
+    self.tabBarItem = [[UITabBarItem alloc] initWithTitle:Local(@"Scheduled") image:[UIImage imageNamed:@"schtask"] tag:1];
     self.navigationItem.title = [self titleForPage:todayPage];
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:Local(@"Today") style:UIBarButtonItemStyleBordered target:self action:@selector(scroll2Today)];

@@ -52,7 +52,6 @@ typedef void  (^ IterateOperation)(id obj);
 
 @end
 
-
 @interface UIView(EZPrivate)
 
 - (void) setLeft:(CGFloat)distance;
@@ -67,6 +66,11 @@ typedef void  (^ IterateOperation)(id obj);
 
 - (void) setBottom:(CGFloat)distance;
 - (CGFloat) bottom;
+
+
+- (UIView*) getCoverView:(NSInteger)tag;
+
+- (UIView*) createCoverView:(NSInteger)tag;
 
 @end
 

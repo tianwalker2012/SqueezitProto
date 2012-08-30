@@ -87,7 +87,7 @@
     scrollView.scrollsToTop = NO;
     scrollView.delegate = self;
     //scrollView.scrollEnabled = false;
-    self.view.backgroundColor = [UIColor redColor];
+    //self.view.backgroundColor = [UIColor redColor];
     //[self.view setFrame:scrollView.frame];
 	[self.view addSubview:scrollView];
     currentPage = 0;
@@ -221,7 +221,6 @@
         EZViewWrapper* removeView = [cachedPage setObject:viewWrapper forKey:[[NSNumber alloc] initWithInteger:page]];
         removeView.isInCache = NO;
         viewWrapper.isInCache = YES;
-        
     }
     [self putView:viewWrapper.view atPage:page];
 }
@@ -292,8 +291,9 @@
 -(void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.view.backgroundColor = [UIColor yellowColor];
+    //self.view.backgroundColor = [UIColor yellowColor];
     [scrollView setFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+
     if(!initailized){
         initailized = true;
         [self reload];
