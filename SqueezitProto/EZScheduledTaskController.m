@@ -28,6 +28,8 @@
 #import "EZActivityLayer.h"
 #import "EZDotRoller.h"
 #import "EZThreadPool.h"
+#import "EZScheduledTaskSlider.h"
+#import "EZAppDelegate.h"
 
 @interface EZNumberWrapper : NSObject 
 
@@ -141,6 +143,7 @@
     //Why do we have this?
     //I guess it is to display the day on the slider window, right?
     //Should we check if we already have this date or not right?
+    EZDEBUG(@"Caused by null date:%@",[currentDate stringWithFormat:@"yyyyMMdd"]);
     EZScheduledDay* schDay = [[EZTaskStore getInstance] createDayNotExist:currentDate];
     schDay.scheduledDate = currentDate;
     [[EZTaskStore getInstance] storeObject:schDay];
@@ -151,6 +154,17 @@
 {
     self.tableView.scrollEnabled = true;
     [noTasklayer removeFromSuperview];
+}
+
+//This method is created for the purpose of testing today bug fixing
+//Once this called I will start the time counter.
+//Once the time counter started it will start and found out today is passed,
+//Then it will call updateToday on the Slider, The slider will change the setting accordingly.
+//My key observation is that the page will get refreshed.
+- (void) startTimeCounter
+{
+   // EZDEBUG(@"Time counter is:%@", counter);
+    [counter start:1];
 }
 
 - (void) showActivityLayer
@@ -196,14 +210,25 @@
 //Is this deprecated code.
 - (void) reloadScheduledTask:(NSDate *)date
 {
+    self.currentDate = date;
+    EZDEBUG(@"About to load task for date:%@",[date stringWithFormat:@"yyyyMMdd"]);
+    if([date equalWith:[NSDate date] format:@"yyyyMMdd"]){
+        [counter start:1];
+    }else{
+        [counter stop];
+    }
     [self showActivityLayer];
     [self executeBlockInBackground:^(){
-        [self  loadWithTask:[[EZTaskStore getInstance]getScheduledTaskByDate:date] date:date];
+        NSArray* tasks = [[EZTaskStore getInstance]getScheduledTaskByDate:date];
+        EZDEBUG(@"Task count:%i for date %@", tasks.count, [date stringWithFormat:@"yyyyMMdd"]);
         [self executeBlockInMainThread:^(){
             [self hideActivityLayer];
-            if(scheduledTasks.count == 0){
+            if(tasks.count == 0){
                 [self showNoTaskLayout];
+                self.scheduledTasks = nil;
             }else{
+                self.scheduledTasks = tasks;
+                [self.tableView reloadData];
                 [self hideNoTaskLayout];
             }
         }];
@@ -213,10 +238,19 @@
 
 - (void) loadWithTask:(NSArray *)tasks date:(NSDate *)date
 {
-    currentDate = date;
+    
+    if(tasks.count > 0){
+        [self hideNoTaskLayout];
+    }else{
+        [self showNoTaskLayout];
+        return;
+    }
+    [self showActivityLayer];
+    //currentDate = date;
     scheduledTasks = [NSMutableArray arrayWithArray:tasks];
     //EZDEBUG(@"Before reload");
     [self.tableView reloadData];
+    [self hideActivityLayer];
     EZDEBUG(@"task count:%i for date:%@",scheduledTasks.count,[currentDate stringWithFormat:@"yyyyMMdd"]);
 }
 
@@ -280,6 +314,26 @@
     }
     return -1;
 }
+
+
+//Another error causd by the block.
+//What am I suspecting?
+//The block keep the temporary data for reference. 
+//Mean it will hold a copy of that data?
+- (NSInteger) findOngoingTaskEx
+{
+    //EZDEBUG(@"Total count:%i",scheduledTasks.count);
+    for(int i = 0; i < scheduledTasks.count; i++){
+        EZScheduledTask* st = [scheduledTasks objectAtIndex:i];
+        NSDate* endDate = [st.startTime adjustMinutes:st.duration];
+        //EZDEBUG(@"%@: %@ - %@",st.task.name, [st.startTime stringWithFormat:@"dd-HHmmss"], [endDate stringWithFormat:@"dd-HHmmss"]);
+        if([[NSDate date] InBetween:st.startTime end:endDate]){
+            return i;
+        }
+    }
+    return -1;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -294,18 +348,31 @@
     counter.isCounting = false;
     __weak EZScheduledTaskController* weakSelf = self;
     counter.tickBlock = ^(EZTimeCounter* ct){
+        //EZDEBUG("isCounting: %@", ct.isCounting?@"TRUE":@"FALSE");
         if(!ct.isCounting){
-            counter.ongoingTaskPos = [weakSelf findOngoingTask:weakSelf.scheduledTasks];
-            //EZDEBUG(@"Any task going on:%i",nowPos);
+            //Why this is the right place?
+            NSDate* endDay = currentDate.ending;
+            
+            //If endOfDay is before the current Date, mean today is over.
+            if([endDay isPassed:[NSDate date]]){
+                EZDEBUG(@"today is passed, switch to another day");
+                [ct stop];
+                EZAppDelegate* delegate = (EZAppDelegate*)[UIApplication sharedApplication].delegate;
+                [delegate.taskSlider updateToday:[NSDate date]];
+                return;
+            }
+            counter.ongoingTaskPos = [weakSelf findOngoingTaskEx];
+            //EZDEBUG(@"Any task going on:%i",counter.ongoingTaskPos);
             if(counter.ongoingTaskPos < 0){//Quit if no task is showing
                 return;
             }
             
             EZScheduledTask* st = [weakSelf.scheduledTasks objectAtIndex:counter.ongoingTaskPos];
+            //EZDEBUG(@"Ongoing task name:%@",st.task.name);
             NSDate* endTime = [st.startTime adjustMinutes:st.duration];
             ct.remainTime = endTime.timeIntervalSinceNow;
             ct.isCounting = true;
-            EZDEBUG(@"remainTime:%f, startTime:%@, duration:%i",ct.remainTime,[st.startTime stringWithFormat:@"HH:mm:ss"], st.duration);
+            //EZDEBUG(@"remainTime:%f, startTime:%@, duration:%i",ct.remainTime,[st.startTime stringWithFormat:@"HH:mm:ss"], st.duration);
             [ct update];
             EZScheduledV2Cell* cell = (EZScheduledV2Cell*)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:counter.ongoingTaskPos inSection:0]]; 
             [cell setStatus:EZ_NOW nowSign:counterView];
@@ -430,6 +497,7 @@
             self.scheduledTasks = mutArr;
             NSIndexPath* indexPath = [NSIndexPath indexPathForRow:pos inSection:0];
             [self performSelector:@selector(deleteRow:) withObject:indexPath afterDelay:0.3];
+            counter.isCounting = false;
         }
     };
     

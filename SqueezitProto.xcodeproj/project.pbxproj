@@ -89,6 +89,17 @@
 		18893DDF15EDCC23000A1216 /* myTask@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18893DDE15EDCC21000A1216 /* myTask@2x.png */; };
 		18893DE615EE0209000A1216 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18893DE515EE0207000A1216 /* Icon@2x.png */; };
 		18893DE815EE0211000A1216 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 18893DE715EE0210000A1216 /* Icon.png */; };
+		18893DEA15EF1725000A1216 /* EZHTaskGroupCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18893DE915EF1724000A1216 /* EZHTaskGroupCell.xib */; };
+		18893DEC15EF1E6F000A1216 /* EZHPureEditCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18893DEB15EF1E6E000A1216 /* EZHPureEditCell.xib */; };
+		18893DF215EF9853000A1216 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 18893DF115EF984C000A1216 /* Default.png */; };
+		18893DF415EF987D000A1216 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18893DF315EF9872000A1216 /* Default@2x.png */; };
+		18893DFC15EF9DE4000A1216 /* EZGradientControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 18893DFB15EF9DE4000A1216 /* EZGradientControl.m */; };
+		18893E0315EFA611000A1216 /* GradientControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 18893E0215EFA610000A1216 /* GradientControl.m */; };
+		18893E0615EFA62D000A1216 /* CustomGradientButon.m in Sources */ = {isa = PBXBuildFile; fileRef = 18893E0515EFA62D000A1216 /* CustomGradientButon.m */; };
+		18893E0815EFB561000A1216 /* EZGradientButtonCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18893E0715EFB55F000A1216 /* EZGradientButtonCell.xib */; };
+		18893E0B15EFB63C000A1216 /* EZGradientButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18893E0A15EFB639000A1216 /* EZGradientButtonCell.m */; };
+		18893E1315F0BEFA000A1216 /* testicon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18893E1215F0BEF2000A1216 /* testicon@2x.png */; };
+		18893E1815F0BF51000A1216 /* testicon.png in Resources */ = {isa = PBXBuildFile; fileRef = 18893E1715F0BF4E000A1216 /* testicon.png */; };
 		188CFDC4158D88F8008ACCB8 /* EZPickerWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDC3158D88F8008ACCB8 /* EZPickerWrapper.m */; };
 		188CFDC8158DE888008ACCB8 /* EZTableSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDC7158DE887008ACCB8 /* EZTableSelector.m */; };
 		188CFDCB158ED73F008ACCB8 /* EZAvTimeDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = 188CFDCA158ED73E008ACCB8 /* EZAvTimeDetail.m */; };
@@ -135,7 +146,6 @@
 		18A0F0FD15AD1D3400671E53 /* EZStatisticMainCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A0F0FC15AD1D3400671E53 /* EZStatisticMainCtrl.m */; };
 		18A0F10015AD250400671E53 /* EZScheduleStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A0F0FF15AD250400671E53 /* EZScheduleStats.m */; };
 		18A0F10315AD7C8000671E53 /* EZAllTaskStatsCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A0F10215AD7C7F00671E53 /* EZAllTaskStatsCtrl.m */; };
-		18A0F71115AEB5EC00671E53 /* libCorePlot-CocoaTouch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18A0F70E15AEB5C800671E53 /* libCorePlot-CocoaTouch.a */; };
 		18A0F72515AF050700671E53 /* EZBarChartItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A0F72415AF050700671E53 /* EZBarChartItem.m */; };
 		18A0F72815AF052D00671E53 /* EZBaseChartItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A0F72715AF052D00671E53 /* EZBaseChartItem.m */; };
 		18A0F72A15AFC91200671E53 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18A0F72915AFC91000671E53 /* QuartzCore.framework */; };
@@ -161,25 +171,8 @@
 		18E035EC15836161003B3D3E /* EZKeyBoardHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E035EB15836161003B3D3E /* EZKeyBoardHolder.m */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		18A0F70D15AEB5C800671E53 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 18A0F70415AEB5C700671E53 /* CorePlot-CocoaTouch.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = BC9B83470FB8A0A40035D8DA;
-			remoteInfo = "CorePlot-CocoaTouch";
-		};
-		18A0F70F15AEB5E000671E53 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 18A0F70415AEB5C700671E53 /* CorePlot-CocoaTouch.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = BC9B83460FB8A0A40035D8DA;
-			remoteInfo = "CorePlot-CocoaTouch";
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
-		184C29551569E19900852B35 /* SqueezitProto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SqueezitProto.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		184C29551569E19900852B35 /* Grab Essence.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Grab Essence.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		184C29591569E19900852B35 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		184C295B1569E19900852B35 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		184C295D1569E19900852B35 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -311,6 +304,21 @@
 		18893DDE15EDCC21000A1216 /* myTask@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "myTask@2x.png"; path = "../../../icons/squzzit/myTask@2x.png"; sourceTree = "<group>"; };
 		18893DE515EE0207000A1216 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "../../../icons/squzzit/Icon@2x.png"; sourceTree = "<group>"; };
 		18893DE715EE0210000A1216 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = ../../../icons/squzzit/Icon.png; sourceTree = "<group>"; };
+		18893DE915EF1724000A1216 /* EZHTaskGroupCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZHTaskGroupCell.xib; sourceTree = "<group>"; };
+		18893DEB15EF1E6E000A1216 /* EZHPureEditCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZHPureEditCell.xib; sourceTree = "<group>"; };
+		18893DF115EF984C000A1216 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		18893DF315EF9872000A1216 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		18893DFA15EF9DE3000A1216 /* EZGradientControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZGradientControl.h; sourceTree = "<group>"; };
+		18893DFB15EF9DE4000A1216 /* EZGradientControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZGradientControl.m; sourceTree = "<group>"; };
+		18893E0115EFA605000A1216 /* GradientControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GradientControl.h; sourceTree = "<group>"; };
+		18893E0215EFA610000A1216 /* GradientControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GradientControl.m; sourceTree = "<group>"; };
+		18893E0415EFA620000A1216 /* CustomGradientButon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomGradientButon.h; sourceTree = "<group>"; };
+		18893E0515EFA62D000A1216 /* CustomGradientButon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomGradientButon.m; sourceTree = "<group>"; };
+		18893E0715EFB55F000A1216 /* EZGradientButtonCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EZGradientButtonCell.xib; sourceTree = "<group>"; };
+		18893E0915EFB637000A1216 /* EZGradientButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZGradientButtonCell.h; sourceTree = "<group>"; };
+		18893E0A15EFB639000A1216 /* EZGradientButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZGradientButtonCell.m; sourceTree = "<group>"; };
+		18893E1215F0BEF2000A1216 /* testicon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "testicon@2x.png"; sourceTree = "<group>"; };
+		18893E1715F0BF4E000A1216 /* testicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = testicon.png; sourceTree = "<group>"; };
 		188CFDC2158D88F8008ACCB8 /* EZPickerWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZPickerWrapper.h; sourceTree = "<group>"; };
 		188CFDC3158D88F8008ACCB8 /* EZPickerWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZPickerWrapper.m; sourceTree = "<group>"; };
 		188CFDC6158DE887008ACCB8 /* EZTableSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZTableSelector.h; sourceTree = "<group>"; };
@@ -395,7 +403,6 @@
 		18A0F0FF15AD250400671E53 /* EZScheduleStats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZScheduleStats.m; sourceTree = "<group>"; };
 		18A0F10115AD7C7F00671E53 /* EZAllTaskStatsCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAllTaskStatsCtrl.h; sourceTree = "<group>"; };
 		18A0F10215AD7C7F00671E53 /* EZAllTaskStatsCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAllTaskStatsCtrl.m; sourceTree = "<group>"; };
-		18A0F70415AEB5C700671E53 /* CorePlot-CocoaTouch.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "CorePlot-CocoaTouch.xcodeproj"; path = "../CorePlot_1.0/Source/framework/CorePlot-CocoaTouch.xcodeproj"; sourceTree = "<group>"; };
 		18A0F72315AF050700671E53 /* EZBarChartItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZBarChartItem.h; sourceTree = "<group>"; };
 		18A0F72415AF050700671E53 /* EZBarChartItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZBarChartItem.m; sourceTree = "<group>"; };
 		18A0F72615AF052D00671E53 /* EZBaseChartItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZBaseChartItem.h; sourceTree = "<group>"; };
@@ -441,7 +448,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				18A0F72A15AFC91200671E53 /* QuartzCore.framework in Frameworks */,
-				18A0F71115AEB5EC00671E53 /* libCorePlot-CocoaTouch.a in Frameworks */,
 				184C2A7A15770F7F00852B35 /* CoreData.framework in Frameworks */,
 				184C295A1569E19900852B35 /* UIKit.framework in Frameworks */,
 				184C295C1569E19900852B35 /* Foundation.framework in Frameworks */,
@@ -455,6 +461,10 @@
 		184C294A1569E19800852B35 = {
 			isa = PBXGroup;
 			children = (
+				18893E1715F0BF4E000A1216 /* testicon.png */,
+				18893E1215F0BEF2000A1216 /* testicon@2x.png */,
+				18893DF315EF9872000A1216 /* Default@2x.png */,
+				18893DF115EF984C000A1216 /* Default.png */,
 				184C295F1569E19900852B35 /* SqueezitProto */,
 				184C29581569E19900852B35 /* Frameworks */,
 				184C29561569E19900852B35 /* Products */,
@@ -464,7 +474,7 @@
 		184C29561569E19900852B35 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				184C29551569E19900852B35 /* SqueezitProto.app */,
+				184C29551569E19900852B35 /* Grab Essence.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -473,7 +483,6 @@
 			isa = PBXGroup;
 			children = (
 				18A0F72915AFC91000671E53 /* QuartzCore.framework */,
-				18A0F70415AEB5C700671E53 /* CorePlot-CocoaTouch.xcodeproj */,
 				184C2A7915770F7E00852B35 /* CoreData.framework */,
 				184C29591569E19900852B35 /* UIKit.framework */,
 				184C295B1569E19900852B35 /* Foundation.framework */,
@@ -760,6 +769,11 @@
 				18BDFC7C15A3FC8200F7ACE3 /* PrematureCell.xib */,
 				18BDFC7F15A3FCE400F7ACE3 /* EZPrematureCell.h */,
 				18BDFC8015A3FCE400F7ACE3 /* EZPrematureCell.m */,
+				18893DE915EF1724000A1216 /* EZHTaskGroupCell.xib */,
+				18893DEB15EF1E6E000A1216 /* EZHPureEditCell.xib */,
+				18893E0715EFB55F000A1216 /* EZGradientButtonCell.xib */,
+				18893E0915EFB637000A1216 /* EZGradientButtonCell.h */,
+				18893E0A15EFB639000A1216 /* EZGradientButtonCell.m */,
 			);
 			name = "Customized Cells";
 			sourceTree = "<group>";
@@ -803,14 +817,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		18A0F70515AEB5C700671E53 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				18A0F70E15AEB5C800671E53 /* libCorePlot-CocoaTouch.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		18A0F72215AF04B900671E53 /* Graph Tools */ = {
 			isa = PBXGroup;
 			children = (
@@ -827,6 +833,10 @@
 		18BDFC9C15A6D10800F7ACE3 /* Home Made Control */ = {
 			isa = PBXGroup;
 			children = (
+				18893E0515EFA62D000A1216 /* CustomGradientButon.m */,
+				18893E0415EFA620000A1216 /* CustomGradientButon.h */,
+				18893E0215EFA610000A1216 /* GradientControl.m */,
+				18893E0115EFA605000A1216 /* GradientControl.h */,
 				188CFDEB1595D93D008ACCB8 /* EZSlideViewContainer.h */,
 				188CFDEC1595D93D008ACCB8 /* EZSlideViewContainer.m */,
 				18BDFC9D15A6D16700F7ACE3 /* EZPageControl.h */,
@@ -836,6 +846,8 @@
 				18A0F0E115A81D2900671E53 /* EZCycleDraw.m */,
 				18893D5515E88ED5000A1216 /* EZDotRoller.h */,
 				18893D5615E88ED6000A1216 /* EZDotRoller.m */,
+				18893DFA15EF9DE3000A1216 /* EZGradientControl.h */,
+				18893DFB15EF9DE4000A1216 /* EZGradientControl.m */,
 			);
 			name = "Home Made Control";
 			sourceTree = "<group>";
@@ -864,9 +876,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		184C29541569E19900852B35 /* SqueezitProto */ = {
+		184C29541569E19900852B35 /* Grab Essence */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 184C29791569E19900852B35 /* Build configuration list for PBXNativeTarget "SqueezitProto" */;
+			buildConfigurationList = 184C29791569E19900852B35 /* Build configuration list for PBXNativeTarget "Grab Essence" */;
 			buildPhases = (
 				184C29511569E19900852B35 /* Sources */,
 				184C29521569E19900852B35 /* Frameworks */,
@@ -875,11 +887,10 @@
 			buildRules = (
 			);
 			dependencies = (
-				18A0F71015AEB5E000671E53 /* PBXTargetDependency */,
 			);
-			name = SqueezitProto;
+			name = "Grab Essence";
 			productName = SqueezitProto;
-			productReference = 184C29551569E19900852B35 /* SqueezitProto.app */;
+			productReference = 184C29551569E19900852B35 /* Grab Essence.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -904,30 +915,16 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 18A0F70515AEB5C700671E53 /* Products */;
-					ProjectRef = 18A0F70415AEB5C700671E53 /* CorePlot-CocoaTouch.xcodeproj */;
-				},
-				{
 					ProductGroup = 188CFE2115A3E729008ACCB8 /* Products */;
 					ProjectRef = 188CFE2015A3E729008ACCB8 /* SqueezitProto.xcodeproj */;
 				},
 			);
 			projectRoot = "";
 			targets = (
-				184C29541569E19900852B35 /* SqueezitProto */,
+				184C29541569E19900852B35 /* Grab Essence */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		18A0F70E15AEB5C800671E53 /* libCorePlot-CocoaTouch.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libCorePlot-CocoaTouch.a";
-			remoteRef = 18A0F70D15AEB5C800671E53 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		184C29531569E19900852B35 /* Resources */ = {
@@ -980,6 +977,13 @@
 				18893DDF15EDCC23000A1216 /* myTask@2x.png in Resources */,
 				18893DE615EE0209000A1216 /* Icon@2x.png in Resources */,
 				18893DE815EE0211000A1216 /* Icon.png in Resources */,
+				18893DEA15EF1725000A1216 /* EZHTaskGroupCell.xib in Resources */,
+				18893DEC15EF1E6F000A1216 /* EZHPureEditCell.xib in Resources */,
+				18893DF215EF9853000A1216 /* Default.png in Resources */,
+				18893DF415EF987D000A1216 /* Default@2x.png in Resources */,
+				18893E0815EFB561000A1216 /* EZGradientButtonCell.xib in Resources */,
+				18893E1315F0BEFA000A1216 /* testicon@2x.png in Resources */,
+				18893E1815F0BF51000A1216 /* testicon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1090,18 +1094,14 @@
 				18893D6015EB289C000A1216 /* Child.m in Sources */,
 				18893D6315EB28A6000A1216 /* Parent.m in Sources */,
 				18893D6615EB7611000A1216 /* MEnvFlag.m in Sources */,
+				18893DFC15EF9DE4000A1216 /* EZGradientControl.m in Sources */,
+				18893E0315EFA611000A1216 /* GradientControl.m in Sources */,
+				18893E0615EFA62D000A1216 /* CustomGradientButon.m in Sources */,
+				18893E0B15EFB63C000A1216 /* EZGradientButtonCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		18A0F71015AEB5E000671E53 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "CorePlot-CocoaTouch";
-			targetProxy = 18A0F70F15AEB5E000671E53 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		184C29621569E19900852B35 /* InfoPlist.strings */ = {
@@ -1129,7 +1129,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Tian Xie (GC586ZT7D3)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Tian Xie (GC586ZT7D3)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1143,7 +1144,9 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				PROVISIONING_PROFILE = "D2EF59E1-5C2F-4D14-8A28-01928931E03F";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D2EF59E1-5C2F-4D14-8A28-01928931E03F";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1154,17 +1157,19 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Tian Xie";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Tian Xie";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PROVISIONING_PROFILE = "47884BEC-5EC2-4A88-BDDD-4CFA980D5645";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "47884BEC-5EC2-4A88-BDDD-4CFA980D5645";
 				SDKROOT = iphoneos;
-				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
@@ -1175,12 +1180,14 @@
 				GCC_PREFIX_HEADER = "SqueezitProto/SqueezitProto-Prefix.pch";
 				"HEADER_SEARCH_PATHS[arch=*]" = /Users/apple/work_foot/ios/CorePlot_1.0/Source/framework/Source;
 				INFOPLIST_FILE = "SqueezitProto/SqueezitProto-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REZ_SEARCH_PATHS = "";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1192,15 +1199,60 @@
 				GCC_PREFIX_HEADER = "SqueezitProto/SqueezitProto-Prefix.pch";
 				"HEADER_SEARCH_PATHS[arch=*]" = /Users/apple/work_foot/ios/CorePlot_1.0/Source/framework/Source;
 				INFOPLIST_FILE = "SqueezitProto/SqueezitProto-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_LDFLAGS = (
 					"-all_load",
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REZ_SEARCH_PATHS = "";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
+		};
+		188CCE9615F20C8200DB1540 /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Tian Xie";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Tian Xie";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PROVISIONING_PROFILE = "D1B446AD-3938-4796-B0E2-80B3710699E3";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D1B446AD-3938-4796-B0E2-80B3710699E3";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = AppStore;
+		};
+		188CCE9715F20C8200DB1540 /* AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SqueezitProto/SqueezitProto-Prefix.pch";
+				"HEADER_SEARCH_PATHS[arch=*]" = /Users/apple/work_foot/ios/CorePlot_1.0/Source/framework/Source;
+				INFOPLIST_FILE = "SqueezitProto/SqueezitProto-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-ObjC",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REZ_SEARCH_PATHS = "";
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
+				WRAPPER_EXTENSION = app;
+			};
+			name = AppStore;
 		};
 /* End XCBuildConfiguration section */
 
@@ -1210,15 +1262,17 @@
 			buildConfigurations = (
 				184C29771569E19900852B35 /* Debug */,
 				184C29781569E19900852B35 /* Release */,
+				188CCE9615F20C8200DB1540 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		184C29791569E19900852B35 /* Build configuration list for PBXNativeTarget "SqueezitProto" */ = {
+		184C29791569E19900852B35 /* Build configuration list for PBXNativeTarget "Grab Essence" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				184C297A1569E19900852B35 /* Debug */,
 				184C297B1569E19900852B35 /* Release */,
+				188CCE9715F20C8200DB1540 /* AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

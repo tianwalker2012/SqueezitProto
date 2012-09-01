@@ -26,7 +26,7 @@
 // Each fire will get called
 - (void) timeTick
 {
-    //EZDEBUG(@"Time tick get called");
+    //EZDEBUG(@"Time tick get called, tickBlock:%@", tickBlock);
     if(tickBlock){
         tickBlock(self);
     }
@@ -92,6 +92,7 @@
     }
     //timer = [NSTimer timerWithTimeInterval:intervel target:self selector:@selector(timeTick) userInfo:nil repeats:YES];
     timer = [NSTimer scheduledTimerWithTimeInterval:intervel target:self selector:@selector(timeTick) userInfo:nil repeats:YES];
+    //EZDEBUG(@"Start completed");
 }
 
 - (void) stop

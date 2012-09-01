@@ -10,6 +10,7 @@
 #import "EZTaskHelper.h"
 
 @class EZScheduledTask;
+@class EZScheduledTaskSlider;
 
 @interface EZScheduledTaskController : UITableViewController<UIAlertViewDelegate> {
     NSDate* currentDate;
@@ -43,12 +44,25 @@
 //Will be called by Container.
 - (void) loadWithTask:(NSArray*)tasks date:(NSDate*)date;
 
+//This method is created for the purpose of testing today bug fixing
+//Once this called I will start the time counter.
+//Once the time counter started it will start and found out today is passed,
+//Then it will call updateToday on the Slider, The slider will change the setting accordingly.
+//My key observation is that the page will get refreshed.
+- (void) startTimeCounter;
+
 @property (strong, nonatomic) NSDate* currentDate;
 @property (strong, nonatomic) NSArray* scheduledTasks;
 
 //This will be executed the in the viewDidAppear. and only executed once.
 @property (strong, nonatomic) EZOperationBlock viewAppearBlock;
 @property (strong, nonatomic) UIViewController* superController;
+
+//Why do we need to refer to this one.
+//It is to address the issue, when it is no more today, How could we switch to other page.
+//We need to get the page show off and get the time counter started.
+//Normally the time counter will not get started.
+//@property (weak, nonatomic) EZScheduledTaskSlider* taskSlider;
 
 //Why do I add this view?
 //To solve the problem, some time the tableView will cover the no Task View. 

@@ -162,6 +162,15 @@
     [self scrollToPage:cp animated:NO];
 }
 
+//Doing the same thing as setCurrentPage, it will reload the current page.
+- (void) setCurrentPage:(NSInteger)cp isReload:(BOOL)reload
+{
+    if(reload){
+        [cachedPage removeObjectForKey:[[NSNumber alloc] initWithInt:cp]];
+    }
+    [self setCurrentPage:cp];
+}
+
 - (void) scrollToPage:(NSInteger)cp animated:(BOOL)animated
 {
     //assert(cp < pageCount);

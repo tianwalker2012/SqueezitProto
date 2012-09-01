@@ -15,6 +15,8 @@
 #import "EZEditLabelCellHolder.h"
 #import "EZButtonCell.h"
 #import "EZBeginEndTimeCell.h"
+#import "EZGradientButtonCell.h"
+#import "GradientControl.h"
 
 @interface EZScheduledDetail ()
 
@@ -106,19 +108,25 @@
             break;
         case 3:
         case 4:{
-            EZButtonCell* buttonCell = [tableView dequeueReusableCellWithIdentifier:@"Button"];
+            EZGradientButtonCell* buttonCell = [tableView dequeueReusableCellWithIdentifier:@"GradientButton"];
             if(buttonCell == nil){
-                buttonCell = [EZEditLabelCellHolder createButtonCell];
+                buttonCell = [EZEditLabelCellHolder createGradientButtonCell];
             }
             
             if(indexPath.section == 4 || [schTask.startTime isPassed:[NSDate date]]){
-                [buttonCell.button setTitle:Local(@"Delete") forState:UIControlStateNormal];
+                //[buttonCell.button setTitle:Local(@"Delete") forState:UIControlStateNormal];
+                buttonCell.buttonTitle.text = Local(@"Delete");
+                [buttonCell.gradientCtrl changeToRed];
+                EZDEBUG(@"Refresh get called");
+
             }else{
-                [buttonCell.button setTitle:Local(@"Re-Schedule") forState:UIControlStateNormal];
+                buttonCell.buttonTitle.text = Local(@"Re-Schedule");
             }
             
             
-            buttonCell.clickedOps = ^(id sender){
+            buttonCell.clickedOps = ^(){
+                //Confirm, is this a timming issue or not. 
+                EZDEBUG(@"Get clicked, gradientCtrl:%@",buttonCell.gradientCtrl);
                 [self.navigationController popViewControllerAnimated:YES];
                 if(indexPath.section==4 || [schTask.startTime isPassed:[NSDate date]]){
                     if(deleteBlock){

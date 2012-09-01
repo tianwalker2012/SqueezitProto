@@ -8,11 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+@class EZScheduledTaskSlider;
+
 @interface EZAppDelegate : UIResponder <UIApplicationDelegate, UIAlertViewDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
 @property (strong, nonatomic) UIViewController* rootCtrl;
+
+@property (strong, nonatomic) EZScheduledTaskSlider* taskSlider;
 
 //All component could check this see if user start the application for the first time. 
 //One thing is that, if user never close our application, should we treat this as first time also?

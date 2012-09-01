@@ -151,6 +151,7 @@
     if(padDay > 0){
         taskTime += (task.quotas.quotasPerCycle/task.quotas.cycleLength) * padDay;
     }
+    EZDEBUG(@"taskTime:%i",taskTime);
     return taskTime;
 }
 
@@ -320,8 +321,9 @@
     [self addExclusive:exclusiveMut tasks:qres.scheduledTasks];
     
     [res addObjectsFromArray:qres.scheduledTasks];
+    EZDEBUG(@"Schedudled Tasks:%i",qres.scheduledTasks.count);
     [res addObjectsFromArray:[self scheduleRandomTask:date avDay:day exclusiveList:exclusiveMut]];
-    
+    EZDEBUG(@"After scheduleRandomTask:%i",res.count);
     return [self sort:res];
     
 }
@@ -475,10 +477,7 @@
     EZDEBUG(@"Removed tasks count:%i, remaining task count:%i, adjustedDate:%@", sfr.removedTasks.count, sfr.remainingTasks.count, [sfr.adjustedDate stringWithFormat:@"yyyyMMdd-HH:mm"]);
     [[EZTaskStore getInstance] removeObjects:sfr.removedTasks];
     [EZAlarmUtility cancelAlarmBulk:sfr.removedTasks];
-    
-    //[sfr.removedTasks iterate:^(EZScheduledTask* tk){
-    //    EZDEBUG(@"Removed:%@,Time:%@,Duration:%i",tk.task.name, [tk.startTime stringWithFormat:@"DD-HH:mm"], tk.duration);
-    //}];
+
     
     //I defined a recreate method on the NSArray.
     //Basically what's the purpose of this method?

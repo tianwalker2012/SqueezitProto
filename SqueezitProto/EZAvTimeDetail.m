@@ -74,6 +74,7 @@
     [super viewDidLoad];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
+    self.navigationItem.title = Local(@"Available Time Span");
     curStartTime = avTime.start;
     curEndTime = [avTime.start adjustMinutes:avTime.duration];
     
@@ -120,7 +121,7 @@
         res = timeCell;
     }else{
         res = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"EnvCell"];
-        res.textLabel.text = Local(@"Environment");
+        res.textLabel.text = Local(@"Tags");
         res.detailTextLabel.text = envTraitsToString(avTime.envTraits);
         res.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }

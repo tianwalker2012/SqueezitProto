@@ -17,9 +17,10 @@
 #import "EZButtonCell.h"
 #import "EZScheduledV2Cell.h"
 #import "EZPrematureCell.h"
+#import "EZGradientButtonCell.h"
 
 @implementation EZEditLabelCellHolder
-@synthesize editCell, groupCell, pureEditCell, settingCell, flagCell, timeCell, scheduledCell, avTimeCell, avTimeHeader, beginEndTimeCell, scheduledTaskCell, timeCounterView, buttonCell, scheduleV2Cell;
+@synthesize editCell, groupCell, pureEditCell, settingCell, flagCell, timeCell, scheduledCell, avTimeCell, avTimeHeader, beginEndTimeCell, scheduledTaskCell, timeCounterView, buttonCell, scheduleV2Cell, gradientButton;
 
 
 @synthesize prematureCell;
@@ -89,6 +90,15 @@
 
 }
 
++ (EZTaskGroupCell*) createHigherTaskGroupCellWithDelegate:(id<UITextFieldDelegate>)deleg
+{
+    EZEditLabelCellHolder* cellHolder = [[EZEditLabelCellHolder alloc] init];
+    
+    [[NSBundle mainBundle] loadNibNamed:@"EZHTaskGroupCell" owner:cellHolder options:nil];
+    cellHolder.groupCell.titleField.delegate = deleg;
+    return cellHolder.groupCell;
+}
+
 //Generate the pure Edit cell from the XIB file
 + (EZPureEditCell*) createPureEditCellWithDelegate:(id<UITextFieldDelegate>)deleg
 {
@@ -98,6 +108,17 @@
     cellHolder.pureEditCell.editField.delegate = deleg;
     return cellHolder.pureEditCell;
 }
+
+//Generate the pure Edit cell from the XIB file
++ (EZPureEditCell*) createHigherPureEditCellWithDelegate:(id<UITextFieldDelegate>)deleg
+{
+    EZEditLabelCellHolder* cellHolder = [[EZEditLabelCellHolder alloc] init];
+    
+    [[NSBundle mainBundle] loadNibNamed:@"EZHPureEditCell" owner:cellHolder options:nil];
+    cellHolder.pureEditCell.editField.delegate = deleg;
+    return cellHolder.pureEditCell;
+}
+
 
 //Why I set the space to empty here?
 //Because I need the original text in the Xib file to demostrate the effect.
@@ -163,5 +184,16 @@
     [[NSBundle mainBundle] loadNibNamed:@"PrematureCell" owner:cellHolder options:nil];
     return cellHolder.prematureCell; 
 }
+
+
++ (EZGradientButtonCell*) createGradientButtonCell
+{
+    EZEditLabelCellHolder* cellHolder = [EZEditLabelCellHolder getInstance];
+    [[NSBundle mainBundle] loadNibNamed:@"EZGradientButtonCell" owner:cellHolder options:nil];
+    return cellHolder.gradientButton;
+    
+}
+
+
 
 @end

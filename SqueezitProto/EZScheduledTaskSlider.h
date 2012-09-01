@@ -17,6 +17,11 @@
 
 - (void) scheduleForTomorrow;
 
+//What's the purpose of this function?
+//Tell us today have changed.
+//The timecounter will call this method to indicate that today is over.
+- (void) updateToday:(NSDate*)today;
+
 @property (strong, nonatomic) EZOperationBlock viewAppearBlock;
 
 @end

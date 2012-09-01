@@ -443,7 +443,7 @@ NSString* doubleString(NSString* str)
             int endDay = [date convertDays];
             int gapDays = (endDay - beginDay) % quotas.cycleLength;
             beginDate = [date adjustDays:-gapDays];
-            EZDEBUG(@"Cycle start days:%i,endDay:%i,gapDays:%i,beginDate:%@, date:%@",beginDay, endDay, gapDays, [beginDate stringWithFormat:@"yyyyMMdd"], [date stringWithFormat:@"yyyyMMdd"]);
+            //EZDEBUG(@"Cycle start days:%i,endDay:%i,gapDays:%i,beginDate:%@, date:%@",beginDay, endDay, gapDays, [beginDate stringWithFormat:@"yyyyMMdd"], [date stringWithFormat:@"yyyyMMdd"]);
             break;  
         }
         case WeekCycle: {
@@ -472,6 +472,7 @@ NSString* doubleString(NSString* str)
     EZCycleResult* res = [[EZCycleResult alloc] init];
     res.beginDate = beginDate;
     res.paddingDays = paddingDay;
+    //EZDEBUG(@"quotas:CyleType:%i, current cycle beginDate:%@, currentDate:%@, paddingDay:%i", quotas.cycleType, [beginDate stringWithFormat:@"yyyyMMdd"],[date stringWithFormat:@"yyyyMMdd"], paddingDay);
     return res;
 }
 

@@ -20,6 +20,8 @@
 #import "EZButtonCell.h"
 #import "EZEnvFlag.h"
 #import "EZButtonCell.h"
+#import "EZGradientButtonCell.h"
+#import "GradientControl.h"
 
 @interface EZTaskDetailCtrl ()
 {
@@ -72,6 +74,8 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelClicked)];
     //self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonItemStyleDone target:self action:@selector(doneClicked)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:EZLocalizedString(@"Done", nil) style:UIBarButtonItemStyleDone target:self action:@selector(doneClicked)];
+    
+    self.navigationItem.title = Local(@"Task Detail");
 
 }
 
@@ -198,20 +202,20 @@
                 eLabelCell.textLabel.text = Local(@"Tags");
                 eLabelCell.detailTextLabel.text = [[EZTaskStore getInstance] StringForFlags:task.envTraits];
             } else { // == 3
+                 eLabelCell.textLabel.text = Local(@"Goal");
                 if(task.quotas == nil){
-                    eLabelCell.textLabel.text = Local(@"No Minimum");
                     eLabelCell.detailTextLabel.text = Local(@"None");
                 }
                 else if(task.quotas.cycleType == WeekCycle){
-                    eLabelCell.textLabel.text = Local(@"Each Week's quotas");
-                    eLabelCell.detailTextLabel.text = [NSString stringWithFormat:Local(@"%i hours %i minutes"),task.quotas.quotasPerCycle/60, task.quotas.quotasPerCycle%60];
+                    //eLabelCell.textLabel.text = Local(@"Each Week's quotas");
+                    eLabelCell.detailTextLabel.text = [NSString stringWithFormat:Local(@"Weekly:%i hours"),task.quotas.quotasPerCycle/60];
                 }else if(task.quotas.cycleType == MonthCycle){
-                    eLabelCell.textLabel.text = Local(@"Each Month's quotas");
-                    eLabelCell.detailTextLabel.text = [NSString stringWithFormat:Local(@"%i hours %i minutes"),task.quotas.quotasPerCycle/60, task.quotas.quotasPerCycle%60];
+                    //eLabelCell.textLabel.text = Local(@"Each Month's quotas");
+                    eLabelCell.detailTextLabel.text = [NSString stringWithFormat:Local(@"Monthly:%i hours"),task.quotas.quotasPerCycle/60];
                     
                 }else if(task.quotas.cycleType == CustomizedCycle){
-                    eLabelCell.textLabel.text = Local(@"Each Cycle's quotas");
-                    eLabelCell.detailTextLabel.text = [NSString stringWithFormat:Local(@"%i hours %i minutes per %i days"),task.quotas.quotasPerCycle/60, task.quotas.quotasPerCycle%60, task.quotas.cycleLength];
+                    //eLabelCell.textLabel.text = Local(@"Each Cycle's quotas");
+                    eLabelCell.detailTextLabel.text = [NSString stringWithFormat:Local(@"Every %i days:%i hours"),task.quotas.cycleLength,task.quotas.quotasPerCycle/60];
                 }
             }
             eLabelCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -219,13 +223,14 @@
         }
             
         case 4:{
-            NSString* cellIdentifier = @"Button";
-            EZButtonCell* deleteCell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            NSString* cellIdentifier = @"GradientButton";
+            EZGradientButtonCell* deleteCell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
             if(deleteCell == nil){
-                deleteCell = [EZEditLabelCellHolder createButtonCell];
+                deleteCell = [EZEditLabelCellHolder createGradientButtonCell];
+                [deleteCell.gradientCtrl changeToRed];
             }
-            deleteCell.button.titleLabel.text = Local(@"Delete");
-            deleteCell.clickedOps = ^(id cell){
+            deleteCell.buttonTitle.text = Local(@"Delete");
+            deleteCell.clickedOps = ^(){
                 UIActionSheet* action = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:Local(@"Cancel") destructiveButtonTitle:Local(@"Delete") otherButtonTitles:nil];
                 self.deleteBlock = ^(BOOL deleted){
                     if(deleted){

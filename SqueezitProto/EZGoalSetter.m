@@ -46,6 +46,8 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelClicked)];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneClicked)];
+    
+    self.navigationItem.title = Local(@"Goal Setting");
 
 }
 
@@ -133,7 +135,7 @@
                 cell.accessoryType = UITableViewCellAccessoryNone;
             }
         }else if(indexPath.row == 3){
-            cell.textLabel.text = Local(@"None");
+            cell.textLabel.text = Local(@"No Goal");
             if(quotas.cycleType == QuotasNone){
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;
             }else{

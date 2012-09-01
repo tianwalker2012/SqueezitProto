@@ -94,8 +94,10 @@
     [super viewDidLoad];
     if(isServeTaskList){
         values = [NSMutableArray arrayWithArray:[[EZTaskStore getInstance] fetchAllWithVO:[EZTaskGroup class] PO:[MTaskGroup class] sortField:@"displayOrder"]];
+        self.navigationItem.title = Local(@"Task Groups");
     }else{
         values = [NSMutableArray arrayWithArray:[[EZTaskStore getInstance]fetchAllWithVO:[EZAvailableDay class] PO:[MAvailableDay class] sortField:@"displayOrder"]];
+        self.navigationItem.title = Local(@"Available Time Setting");
     }
 
 }
@@ -148,7 +150,6 @@
             tgCell.groupInfo.text = [EZTaskHelper weekFlagToWeekString:avDay.assignedWeeks];
         }
     }
-
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -162,7 +163,7 @@
         static NSString* insertIdentifier = @"PureEdit";
         EZPureEditCell *cell = [tableView dequeueReusableCellWithIdentifier:insertIdentifier];
         if(!cell){
-            cell = [EZEditLabelCellHolder createPureEditCellWithDelegate:self];
+            cell = [EZEditLabelCellHolder createHigherPureEditCellWithDelegate:self];
             [cell createCoverView:coverTag];
         }
         if(isServeTaskList){
@@ -183,7 +184,7 @@
         static NSString *CellIdentifier = @"TaskGroup";
         EZTaskGroupCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if(!cell){
-            cell = [EZEditLabelCellHolder createTaskGroupCellWithDelegate:self];
+            cell = [EZEditLabelCellHolder createHigherTaskGroupCellWithDelegate:self];
             //cell.editingStyle = UITableViewCellEditingStyleDelete;
             [cell createCoverView:coverTag];
         }
@@ -203,6 +204,10 @@
     return res;
 }
 
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 55;
+}
 
 //Check if some cell is moveable or not.
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath 
@@ -423,6 +428,7 @@
             EZTaskGroup* tgrp = [values objectAtIndex:indexPath.row];
             EZTaskGroupDetailCtrl* tgc = [[EZTaskGroupDetailCtrl alloc] initWithStyle:UITableViewStylePlain];
             tgc.taskGroup = tgrp;
+            tgc.title = tgrp.name;
             tgc.superUpdateBlock = ^(){
                 [tgrp refresh];
                 [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:NO];

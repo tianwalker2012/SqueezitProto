@@ -62,8 +62,8 @@
     self.navigationItem.rightBarButtonItem = editButton;
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:Local(@"Back") style:UIBarButtonItemStyleBordered target:self action:@selector(back)];
-    
-    
+    //Add a tag icon later.
+    self.navigationItem.title = Local(@"Tags Editting");
 }
 
 - (void) editClicked

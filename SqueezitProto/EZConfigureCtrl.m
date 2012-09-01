@@ -78,7 +78,7 @@
         if(cell == nil){
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
         }
-        cell.textLabel.text = Local(@"Environment Tags");
+        cell.textLabel.text = Local(@"Tags Setting");
     } else {
         NSString* cellID = @"ValueSetting";
         cell = [self.tableView dequeueReusableCellWithIdentifier:cellID];
@@ -86,7 +86,7 @@
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellID];
         }
         UILocalNotification* notification = [[EZTaskStore getInstance] getDailyNotification];
-        cell.textLabel.text = Local(@"Daily schedule reminder");
+        cell.textLabel.text = Local(@"Daily Schedule Reminder");
         cell.detailTextLabel.text = [notification.fireDate stringWithFormat:@"HH:mm"];
     }
     

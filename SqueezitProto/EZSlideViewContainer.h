@@ -59,6 +59,10 @@
 //You could control the animation
 - (void) scrollToPage:(NSInteger)page animated:(BOOL)animated;
 
+
+//Doing the same thing as setCurrentPage, it will reload the current page.
+- (void) setCurrentPage:(NSInteger)currentPage isReload:(BOOL)reload;
+
 //Mean will reload all the page.
 //Following assumption will be made.
 //Cache will be cleaned

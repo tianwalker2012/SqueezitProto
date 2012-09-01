@@ -31,20 +31,21 @@
 #import "EZAlarmUtility.h"
 #import "EZStatisticMainCtrl.h"
 #import "EZTestDotRoller.h"
+#import "EZThreadPool.h"
 
 @interface EZAppDelegate() {
     EZRootTabCtrl* tabCtrl;
     UINavigationController* scheduledNav;
     UINavigationController* taskNav;
     UINavigationController* timeSettingNav;
-    EZScheduledTaskSlider* taskSlider;
+    //EZScheduledTaskSlider* taskSlider;
     EZOperationBlock notificationBlock;
     NSTimer* tomorrowTimer;
     
     //What's the purpose of this flag?
     //Used to differentiate the notification case 1 from case 2. Case 2 should be like Case 3. 
     BOOL notifiedInBackground;
-    
+    NSTimer* dataSyncupTimer;
 }
 
 - (void) scheduleForTomorrow;
@@ -56,6 +57,9 @@
 //This will be called for the first time the application started
 - (void) firstTimeCall;
 
+- (void) createDataSyncupTimer;
+
+- (void) dataSyncup;
 
 @end
 
@@ -63,9 +67,30 @@
 @implementation EZAppDelegate
 
 @synthesize window = _window;
-@synthesize rootCtrl;
+@synthesize rootCtrl, taskSlider;
 
 
+//What's the purpose of this method. 
+//The only place I will sync up so far in when process get into background. 
+//If crash happened, the data will lost. 
+//I don't like this happen to me. 
+//So I will get it fixed. 
+- (void) createDataSyncupTimer
+{
+    if(dataSyncupTimer){
+        [dataSyncupTimer invalidate];
+    }
+    dataSyncupTimer = [NSTimer scheduledTimerWithTimeInterval:DataSyncupInterval target:self selector:@selector(dataSyncup) userInfo:nil repeats:YES];
+    
+}
+
+- (void) dataSyncup
+{
+    EZDEBUG(@"Data Syncup started");
+    [self executeBlockInBackground:^(){
+        [[EZCoreAccessor getInstance] saveContext];
+    } inThread:[EZThreadPool getWorkerThread]];
+}
 //What's the purpose of this function?
 //When a notification recieved, this method will get called. 
 //What will happen?
@@ -292,8 +317,8 @@
     //Test related behavior happened in this method
     [self testRelatedActivity];
   
-    [EZCoreAccessor cleanDB:CoreDBName];
-    [[EZTaskStore getInstance] fillTestData];
+    //[EZCoreAccessor cleanDB:CoreDBName];
+    //[[EZTaskStore getInstance] fillTestData];
     //EZDEBUG(@"After clean the database");
     //[[EZTaskStore getInstance] setFirstTime:true];
     EZDEBUG(@"initialize staff");
@@ -338,7 +363,8 @@
             [taskSlider scheduleForTomorrow];
         };
     }
-    
+    EZDEBUG(@"Setup datasyncup timer");
+    [self createDataSyncupTimer];
     //stc.currentDate = [NSDate date];
     scheduledNav = [[UINavigationController alloc] initWithRootViewController:taskSlider];
     
@@ -370,6 +396,8 @@
     //self.window.rootViewController = tabCtrl;
     [self.rootCtrl addChildViewController:tabCtrl];
     [self.rootCtrl.view addSubview:tabCtrl.view];
+    //Why?
+    //So my data could be stored safely
     // Override point for customization after application launch.
     return YES;
 }
@@ -424,14 +452,14 @@
     return [[EZTaskStore getInstance] getScheduledTaskByDate:date].count > 0;
 }
 
-- (void) scheduleForTomorrow
-{
-    if([self haveScheduled:[[NSDate date] adjustDays:1]]){
-        EZDEBUG(@"Quit since already scheduled");
-    }
-    
-    
-}
+//Who will call this?
+//Since it did nothing. 
+//- (void) scheduleForTomorrow
+//{
+//   if([self haveScheduled:[[NSDate date] adjustDays:1]]){
+//        EZDEBUG(@"Quit since already scheduled");
+//    }
+//}
 //I will take case of the case, if date already passed.
 - (void) setTimerForTomorrowSchedule:(NSDate*)date
 {

@@ -77,6 +77,9 @@
     [self changeSettingForPage:page];
 }
 
+
+//What's the purpose of this method?
+//Mean I need to change the todayPage accordingly.
 - (void) scroll2Today
 {
     self.currentPage = todayPage;
@@ -165,6 +168,17 @@
 }
 
 
+//What's the purpose of this function?
+//Tell us today have changed.
+//The timecounter will call this method to indicate that today is over.
+- (void) updateToday:(NSDate*)date
+{
+    EZDEBUG(@"updateToday get called");
+    todayPage = [self dateToPage:date];
+    //Why I force the reload, I want to make sure the timecounter is restarted.
+    [self setCurrentPage:todayPage isReload:TRUE];
+}
+
 //What I will do in this method?
 //Add tomorrow into the scheduledDay.
 //Call scheduleForDate.
@@ -180,16 +194,32 @@
         //Tomorrow not read out doesn't mean it is not exist right?
         //Fix it now
         EZScheduledDay* day = [[EZTaskStore getInstance] createDayNotExist:tomorrow];
+        //This assumption was wrong right?
+        //How could you assume tomorrow was the last?
         [scheduledDates addObject:day];
-        page = scheduledDates.count - 1;
+        [scheduledDates sortUsingComparator:^(EZScheduledDay* day1, EZScheduledDay* day2){
+            return [day1.scheduledDate compare:day2.scheduledDate];}];
+        page = [self dateToPage:tomorrow];
+         
     }
     
     NSArray* schTasks = [[EZTaskStore getInstance] getScheduledTaskByDate:tomorrow];
     if(schTasks.count == 0){
-       schTasks = [[[EZTaskScheduler alloc] init] scheduleTaskByDate:tomorrow.beginning exclusiveList:nil];
-        [[EZTaskStore getInstance] storeObjects:schTasks];
+       //schTasks = [[[EZTaskScheduler alloc] init] scheduleTaskByDate:tomorrow.beginning exclusiveList:nil];
+       // [[EZTaskStore getInstance] storeObjects:schTasks];
+        schTasks = [[[EZTaskScheduler alloc] init] rescheduleAll:nil date:tomorrow.beginning];
+        //Why call this?
+        //It have the storage and get rest of the job done. 
     }
+    //This have move tomorrow page to be current page.
     self.currentPage = page;
+    
+    //Why have this call?
+    //If any controller availabel?
+    //One thing is missing.
+    //What's that?
+    //Setup the alarm. 
+    EZDEBUG(@"schTasks count:%i",schTasks.count);
     EZViewWrapper* wrapper = [self getViewWrapperByPage:page];
     EZScheduledTaskController* stc = (EZScheduledTaskController*)wrapper.controller;
     [stc loadWithTask:schTasks date:tomorrow];
@@ -215,6 +245,8 @@
     EZViewWrapper* wrapper = [self getViewWrapperByPage:self.currentPage];
     EZScheduledTaskController* stc = (EZScheduledTaskController*)wrapper.controller;
     [stc rescheduleTasks];
+    //EZDEBUG(@"Started the time counter");
+    //[stc startTimeCounter];
     
 }
 
@@ -262,7 +294,9 @@
     EZScheduledTaskController* taskController = (EZScheduledTaskController*)res.controller;
 
     //taskController.currentDate = [self pageToDate:page];
+    EZDEBUG(@"Call reloadScheduledTask for %@, controller:%@",[[self pageToDate:page] stringWithFormat:@"yyyyMMdd"], taskController);
     [taskController reloadScheduledTask:[self pageToDate:page]];
+    EZDEBUG(@"End of calling");
     return res;
     
 }
@@ -279,7 +313,7 @@
     [self changeSettingForPage:page];
 }
 
-- (void) changeSettingForPage:(NSInteger)page
+- (void) changeSettingForPage:(NSInteger)page 
 {
     EZDEBUG(@"Page displayed:%i, date is:%@",page,[[self pageToDate:page] stringWithFormat:@"yyyyMMdd"]);
     self.navigationItem.title = [self titleForPage:page];   
@@ -294,6 +328,7 @@
     }else{
         self.navigationItem.rightBarButtonItem.enabled = true;
     }
+    //self.navigationItem.rightBarButtonItem.enabled = true;
     //pageControl.currentPage = page;
     [roller adjustCurPage:page];
     
