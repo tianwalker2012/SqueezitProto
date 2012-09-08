@@ -9,7 +9,7 @@
 #import "EZStatisticMainCtrl.h"
 #import "EZGlobalLocalize.h"
 #import "EZTaskHelper.h"
-#import "EZAllTaskStatsCtrl.h"
+//#import "EZAllTaskStatsCtrl.h"
 
 @interface EZStatisticMainCtrl ()
 
@@ -126,9 +126,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    EZAllTaskStatsCtrl* taskStats = [[EZAllTaskStatsCtrl alloc] init];
+    //EZAllTaskStatsCtrl* taskStats = [[EZAllTaskStatsCtrl alloc] init];
     self.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    [self presentModalViewController:taskStats animated:YES];
+    //[self presentModalViewController:taskStats animated:YES];
 }
 
 @end

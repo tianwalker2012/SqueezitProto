@@ -17,7 +17,9 @@
 #import "EZTaskHelper.h"
 
 @interface EZTaskGroupDetailCtrl ()
-
+{
+    EZOperationBlock tmpBlock;
+}
 - (UITableViewCell*) generateEditCell:(NSIndexPath*)indexPath;
 
 - (void) addClicked;
@@ -57,8 +59,10 @@
 
 - (void) addClicked 
 {
-    EZDEBUG(@"Add clicked");
-    [self.editField becomeFirstResponder]; 
+    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:tasks.count inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    [self performBlock:^(){[self.editField becomeFirstResponder];
+        EZDEBUG(@"self field have become firstResponder.%@",self.editField);
+    } withDelay:0.3];
 }
 
 - (void)viewDidUnload

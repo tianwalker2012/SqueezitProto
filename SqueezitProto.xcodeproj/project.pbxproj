@@ -145,11 +145,7 @@
 		18A0F0F515A98DAA00671E53 /* EZCanvas.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A0F0F415A98DAA00671E53 /* EZCanvas.m */; };
 		18A0F0FD15AD1D3400671E53 /* EZStatisticMainCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A0F0FC15AD1D3400671E53 /* EZStatisticMainCtrl.m */; };
 		18A0F10015AD250400671E53 /* EZScheduleStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A0F0FF15AD250400671E53 /* EZScheduleStats.m */; };
-		18A0F10315AD7C8000671E53 /* EZAllTaskStatsCtrl.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A0F10215AD7C7F00671E53 /* EZAllTaskStatsCtrl.m */; };
-		18A0F72515AF050700671E53 /* EZBarChartItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A0F72415AF050700671E53 /* EZBarChartItem.m */; };
-		18A0F72815AF052D00671E53 /* EZBaseChartItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A0F72715AF052D00671E53 /* EZBaseChartItem.m */; };
 		18A0F72A15AFC91200671E53 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18A0F72915AFC91000671E53 /* QuartzCore.framework */; };
-		18A0F72D15AFD55000671E53 /* EZGraphHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A0F72C15AFD55000671E53 /* EZGraphHelper.m */; };
 		18BDFC7D15A3FC8200F7ACE3 /* PrematureCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18BDFC7C15A3FC8200F7ACE3 /* PrematureCell.xib */; };
 		18BDFC8115A3FCE400F7ACE3 /* EZPrematureCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BDFC8015A3FCE400F7ACE3 /* EZPrematureCell.m */; };
 		18BDFC8815A5B88B00F7ACE3 /* EZScheduledLayer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18BDFC8715A5B88B00F7ACE3 /* EZScheduledLayer.xib */; };
@@ -401,15 +397,7 @@
 		18A0F0FC15AD1D3400671E53 /* EZStatisticMainCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZStatisticMainCtrl.m; sourceTree = "<group>"; };
 		18A0F0FE15AD250400671E53 /* EZScheduleStats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZScheduleStats.h; sourceTree = "<group>"; };
 		18A0F0FF15AD250400671E53 /* EZScheduleStats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZScheduleStats.m; sourceTree = "<group>"; };
-		18A0F10115AD7C7F00671E53 /* EZAllTaskStatsCtrl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZAllTaskStatsCtrl.h; sourceTree = "<group>"; };
-		18A0F10215AD7C7F00671E53 /* EZAllTaskStatsCtrl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZAllTaskStatsCtrl.m; sourceTree = "<group>"; };
-		18A0F72315AF050700671E53 /* EZBarChartItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZBarChartItem.h; sourceTree = "<group>"; };
-		18A0F72415AF050700671E53 /* EZBarChartItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZBarChartItem.m; sourceTree = "<group>"; };
-		18A0F72615AF052D00671E53 /* EZBaseChartItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZBaseChartItem.h; sourceTree = "<group>"; };
-		18A0F72715AF052D00671E53 /* EZBaseChartItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZBaseChartItem.m; sourceTree = "<group>"; };
 		18A0F72915AFC91000671E53 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		18A0F72B15AFD54F00671E53 /* EZGraphHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZGraphHelper.h; sourceTree = "<group>"; };
-		18A0F72C15AFD55000671E53 /* EZGraphHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZGraphHelper.m; sourceTree = "<group>"; };
 		18BDFC7C15A3FC8200F7ACE3 /* PrematureCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PrematureCell.xib; sourceTree = "<group>"; };
 		18BDFC7F15A3FCE400F7ACE3 /* EZPrematureCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZPrematureCell.h; sourceTree = "<group>"; };
 		18BDFC8015A3FCE400F7ACE3 /* EZPrematureCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZPrematureCell.m; sourceTree = "<group>"; };
@@ -494,7 +482,6 @@
 		184C295F1569E19900852B35 /* SqueezitProto */ = {
 			isa = PBXGroup;
 			children = (
-				18A0F72215AF04B900671E53 /* Graph Tools */,
 				18BDFC9C15A6D10800F7ACE3 /* Home Made Control */,
 				18E035E4158350F4003B3D3E /* Customize popup */,
 				184C2B0D157E4D6F00852B35 /* Resources */,
@@ -645,8 +632,6 @@
 				188CFE11159C12AB008ACCB8 /* EZEnvTagCtrl.m */,
 				18A0F0FB15AD1D3300671E53 /* EZStatisticMainCtrl.h */,
 				18A0F0FC15AD1D3400671E53 /* EZStatisticMainCtrl.m */,
-				18A0F10115AD7C7F00671E53 /* EZAllTaskStatsCtrl.h */,
-				18A0F10215AD7C7F00671E53 /* EZAllTaskStatsCtrl.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -815,19 +800,6 @@
 		188CFE2115A3E729008ACCB8 /* Products */ = {
 			isa = PBXGroup;
 			name = Products;
-			sourceTree = "<group>";
-		};
-		18A0F72215AF04B900671E53 /* Graph Tools */ = {
-			isa = PBXGroup;
-			children = (
-				18A0F72315AF050700671E53 /* EZBarChartItem.h */,
-				18A0F72415AF050700671E53 /* EZBarChartItem.m */,
-				18A0F72615AF052D00671E53 /* EZBaseChartItem.h */,
-				18A0F72715AF052D00671E53 /* EZBaseChartItem.m */,
-				18A0F72B15AFD54F00671E53 /* EZGraphHelper.h */,
-				18A0F72C15AFD55000671E53 /* EZGraphHelper.m */,
-			);
-			name = "Graph Tools";
 			sourceTree = "<group>";
 		};
 		18BDFC9C15A6D10800F7ACE3 /* Home Made Control */ = {
@@ -1083,10 +1055,6 @@
 				18A0F0F515A98DAA00671E53 /* EZCanvas.m in Sources */,
 				18A0F0FD15AD1D3400671E53 /* EZStatisticMainCtrl.m in Sources */,
 				18A0F10015AD250400671E53 /* EZScheduleStats.m in Sources */,
-				18A0F10315AD7C8000671E53 /* EZAllTaskStatsCtrl.m in Sources */,
-				18A0F72515AF050700671E53 /* EZBarChartItem.m in Sources */,
-				18A0F72815AF052D00671E53 /* EZBaseChartItem.m in Sources */,
-				18A0F72D15AFD55000671E53 /* EZGraphHelper.m in Sources */,
 				18893D4B15E61E20000A1216 /* TestModel.xcdatamodeld in Sources */,
 				18893D5715E88ED6000A1216 /* EZDotRoller.m in Sources */,
 				18893D5A15E8C43F000A1216 /* EZTestDotRoller.m in Sources */,
@@ -1147,7 +1115,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PROVISIONING_PROFILE = "D2EF59E1-5C2F-4D14-8A28-01928931E03F";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D2EF59E1-5C2F-4D14-8A28-01928931E03F";
-				SDKROOT = iphoneos;
+				SDKROOT = iphoneos5.1;
 			};
 			name = Debug;
 		};
@@ -1169,7 +1137,7 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "47884BEC-5EC2-4A88-BDDD-4CFA980D5645";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "47884BEC-5EC2-4A88-BDDD-4CFA980D5645";
-				SDKROOT = iphoneos;
+				SDKROOT = iphoneos5.1;
 			};
 			name = Release;
 		};
@@ -1229,7 +1197,7 @@
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "D1B446AD-3938-4796-B0E2-80B3710699E3";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D1B446AD-3938-4796-B0E2-80B3710699E3";
-				SDKROOT = iphoneos;
+				SDKROOT = iphoneos5.1;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = AppStore;
